@@ -39,6 +39,25 @@ export const getJsonData = (url,params) => {
 
 }
 
+// 获取省份code 
+export const province = params => {
+    return axios.post('dataMaintain/listProvince').then(res => res.data)
+}
+
+// 资质列表查询
+export const queryList = params => {
+    return axios.post('qual/list', params).then(res => res.data)
+}
+
+//添加 修改得
+export const curd = params => {
+    return axios.post('qual/add', params).then(res => res.data)
+}
+//删除资质
+export const deleteApi = params => {
+    return axios.post('qual/del', params).then(res => res.data)
+}
+
 // 朱帅端口
 // const baseURL = 'http://192.168.1.133:8080/'
 // axios.defaults.baseURL = baseURL
