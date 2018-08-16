@@ -121,8 +121,6 @@
                         }
                         //console.log(res)
 
-
-
                     },error=>{
                         console.log(error)
                     })
@@ -290,8 +288,6 @@
 
 
                     }})
-
-
             },
             updata(node, data) {
                  this.$prompt('请输入修改的内容', '提示', {

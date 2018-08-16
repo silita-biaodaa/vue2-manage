@@ -10,7 +10,13 @@
         
           <el-row>
             <el-col :span="12" class="line">
-            
+                <!-- <div class="select">
+                  <p>请选择资质类型:</p>
+                  <el-cascader
+                    :options="options"
+                    change-on-select
+                  ></el-cascader>
+                </div>  -->
               <el-row>
                 <el-col :span='24'>
                     <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -53,7 +59,7 @@
                       style="width: 33.3%">
                       <template slot-scope="scope">
                         <el-popover trigger="hover" placement="top">
-                          <p>名称: {{ scope.row.name }}</p>
+                          <p>姓名: {{ scope.row.name }}</p>
                           <div slot="reference" class="name-wrapper">
                             <span size="medium">{{ scope.row.name }}</span>
                           </div>
@@ -98,55 +104,31 @@
                       </input>
                     </div>
                     <div class="right-search">
-    
-                          <p>{{searchname}}:</p>
-                      
-                          <el-input placeholder="请输入搜索或添加的名称...." v-model="aliaput" class="search-put" v-show='changebut'>
-                          </el-input>
-                             
-                          
-                       
-                        <el-select v-model="svalue" placeholder="请选择" v-show='!changebut'>
-                          <el-option v-for="item in single" :key="item.value" :label="item.label" :value="item.value">
-                          </el-option>
-                        </el-select>
+                      <p>{{searchname}}:</p>
+                      <el-input placeholder="请输入搜索或添加的名称...." v-model="aliaput" class="search-put">
+                      </el-input>
+                      <el-button type="primary" icon="el-icon-search">搜索</el-button>
+                      <el-button type="primary" icon="el-icon-edit" @click='addNewalias'>添加</el-button>
 
-                        <el-select v-model="mvalue" multiple collapse-tags style="margin-left: 20px;" placeholder="请选择" v-show='!changebut'>
-                          <el-option v-for="item in multiple" :key="item.value" :label="item.label" :value="item.value">
-                          </el-option>
-                        </el-select>
-                                
-
-                            
-                      
                     </div>
 
                     <!--文件上传的控件 -->
-                     <div class="right-search">
-                        
-                        <el-button type="primary" icon="el-icon-edit" @click='addNewalias'>添加</el-button>
-                       <transition name="my">
-                        <el-button type="primary" icon="el-icon-search" v-show='changebut' >搜索</el-button>
-                       </transition>
-                          <el-upload
-                            class="updown-list"
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                            :on-preview="handlePreview"  
-                            :on-remove="handleRemove"
-                            :before-remove="beforeRemove"
-                            :show-file-list='false'
-                            multiple
-                            :limit="3"
-                            v-show='changebut'
-                            :on-exceed="handleExceed"
-                            :file-list="fileList">        
-                            <el-button type="primary" >
-                              <i class="el-icon-upload el-icon--right"></i>
-                              上传
-                            </el-button>
-                          </el-upload>
-                             
-                      </div> 
+                      <el-upload
+                        class="updown-list"
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        :on-preview="handlePreview"  
+                        :on-remove="handleRemove"
+                        :before-remove="beforeRemove"
+                        :show-file-list='false'
+                        multiple
+                        :limit="3"
+                        :on-exceed="handleExceed"
+                        :file-list="fileList">        
+                         <el-button type="primary" v-show='notice'>
+                           <i class="el-icon-upload el-icon--right"></i>
+                           上传
+                         </el-button>
+                      </el-upload>
 
                     <el-table :data="tableData" style="width: 100%">
                       <el-table-column :label="searchname" width="310">
@@ -157,7 +139,7 @@
                       </el-table-column>
                       <el-table-column label="操作">
                         <template slot-scope="scope">
-                          <el-button size="mini" type="primary" :disabled='!changebut' @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                          <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                           <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                         </template>
                       </el-table-column>
@@ -231,8 +213,6 @@ import { checkUser } from "@/api/index";
 export default {
   data () {
     return {
-      changebut: true,
-      // 资质类型下拉列表        
       //  上传文件
       fileList:[],
       // 资质选择的
@@ -275,48 +255,6 @@ export default {
       new_name:'',
       old_name:''
     },
-    // 单选下拉框
-      single:[
-          {
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }
-      ],
-      svalue:'',
-      //多选下拉框
-      multiple:[
-        {
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }
-      ],
-      mvalue:'',
-
-
     //  树形结构数据
     tableName:[
       {
@@ -388,6 +326,7 @@ export default {
         username: '',
         email: ''
       },
+      notice:true,
       searchname:'资质别名'
 
     }
@@ -403,10 +342,10 @@ export default {
     },
     // 页面挂架初始化的
       initList() {
-        checkUser().then(res => {
-          console.log(res);
-          
-        })
+          checkUser().then(res => {
+            console.log(res);
+            
+          })
       },
 
     //删除
@@ -451,20 +390,17 @@ export default {
     amendSubmit() {
       
     },
-    //点击公告资质等级
      noticeLevel() {
        this.searchname = '公告等级'
-       this.changebut = false
+       this.notice = false 
      },
-     // 点击的资质别名
      noticeAlias() {
        this.searchname = '资质别名'
-       this.changebut = true
+        this.notice = true 
      },
-      // 点击的企业等级
      noticeFirm() {
        this.searchname = '企业等级'
-       this.changebut = false       
+       this.notice = false 
      },
      // 添加的资质别.....
      addNewalias() {
@@ -501,19 +437,9 @@ export default {
 </script>
 <style lang="less" scoped>
 
-.my-enter,
-.my-leave-to {
-  opacity: 0;
-  transform: translateX(250px);
-}
-.my-enter-active,
-.my-leave-active {
-  transition: all 0.8 ease;
-}
-
-.bg-purple-dark {
-  background: #99a9bf;
-}
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
   
 .grid-content {
   border-radius: 4px;
@@ -559,7 +485,6 @@ export default {
       background: none;
       border: 0;
       font-size:16px;
-      padding-left: 10px;
     }
     p {
       margin-right: 10px;
@@ -570,23 +495,18 @@ export default {
     }
   }
   .right-search {
-    margin-bottom: 20px;
     display: flex;
     justify-content: flex-start;
+    margin-bottom: 20px;
     p {
       margin-right: 5px;
       box-sizing: border-box;
-      height: 40px;
+      width: 130px;
       line-height: 40px;
       font-size: 12px;
-      width: 75px;
-      float: left;
-
     }
     .search-put {
-      margin-left: -5px;
-      
-      width: 100%;
+      margin-right: 10px;
     }
   }
   .updown-list {

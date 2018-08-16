@@ -48,45 +48,46 @@
 		},
 		mounted(){
 			this.showLogin = true;
-			
-			
+
+
 		},
 		computed: {
 
 		},
 		methods: {
 			...mapActions(['getAdminData']),
-		    submitForm(formName) {
-				this.$refs[formName].validate(valide => {
-					// 只有校验通过，才执行函数
-					if (valide) {
-						register({ userName: this.loginForm.username, password: this.loginForm.password }).then(res => {
-							// 如果成功要跳转至首页, 将token保存到localStorage, 将username保存到vuex的state中
-							if (res.code === 1) {
-								localStorage.setItem('Authorization', res.data)
-								this.$router.push({ name: 'home' })
-							} else {
-								// 如果失败，展示提示信息
-								this.$message({
-									type: 'error',
-									message: res.msg
-								})
-							}
-						})
-					} else {
-						console.log('校验不通过')
-					}
-				})
-			},
-			// submitForm(formName) {
+		  //   loginSubmit(formName) {
 			// 	this.$refs[formName].validate(valide => {
-			// 		if(valide) {
-			// 			register({ userName: this.loginForm.username,password:this.loginForm.password}).then(res => {
-			// 				console.log(res)
+			// 		// 只有校验通过，才执行函数
+			// 		if (valide) {
+			// 			checkUser(this.form).then(res => {
+			// 				// 如果成功要跳转至首页, 将token保存到localStorage, 将username保存到vuex的state中
+			// 				if (res.meta.status === 200) {
+			// 					localStorage.setItem('mytoken', res.data.token)
+			// 					this.$store.commit('setUsername', res.data.username)
+			// 					this.$router.push({ name: 'Home' })
+			// 				} else {
+			// 					// 如果失败，展示提示信息
+			// 					this.$message({
+			// 						type: 'error',
+			// 						message: res.meta.msg
+			// 					})
+			// 				}
 			// 			})
+			// 		} else {
+			// 			console.log('校验不通过')
 			// 		}
 			// 	})
-			// }
+			// },
+			submitForm(formName) {
+//				this.$refs[formName].validate(valide => {
+//					if(valide) {
+//						register({ userName: this.loginForm.username,password:this.loginForm.password}).then(res => {
+//							console.log(res)
+//						})
+//					}
+//				})
+			}
 		},
 		watch: {
 

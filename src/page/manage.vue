@@ -18,15 +18,8 @@
 				active-text-color="#ffd04b">			
 						<div class="logo">
 							<img src="../assets/img/download_logo.png">
-						</div>						
-						<el-submenu index="1">
-							<template slot="title">
-								<i class="el-icon-plus"></i>
-								<span>首页</span>
-							</template>
-							<el-menu-item index="home">首页</el-menu-item>
-						</el-submenu>
-						<el-submenu index="2">
+						</div>
+						<el-submenu index="3">
 							<template slot="title">
 								<i class="el-icon-plus"></i>
 								<span>业务</span>			
@@ -37,7 +30,7 @@
 							<el-menu-item index="userList">企信</el-menu-item>
 							<el-menu-item index="service">金融服务</el-menu-item>
 						</el-submenu>
-						<el-submenu index="3">
+						<el-submenu index="4">
 							<template slot="title">
 								<i class="el-icon-star-on"></i>
 								<span>运营</span>
@@ -48,7 +41,7 @@
 							<el-menu-item index="visitor">意见反馈</el-menu-item>
 							<!-- <el-menu-item index="newMember">用户数据</el-menu-item> -->
 						</el-submenu>
-						<el-submenu index="4">
+						<el-submenu index="5">
 							<template slot="title">
 								<i class="el-icon-edit"></i>
 								<span>应用工具</span>
@@ -56,7 +49,7 @@
 							<!-- <el-menu-item index="uploadImg">上传图片</el-menu-item> -->
 							<el-menu-item index="vueEdit">评标预测</el-menu-item>
 						</el-submenu>
-						<el-submenu index="5">
+						<el-submenu index="6">
 							<template slot="title">
 								<i class="el-icon-setting"></i>
 								<span>用户管理</span>
@@ -64,7 +57,7 @@
 							<el-menu-item index="adminSet">管理员设置</el-menu-item>
 							<!-- <el-menu-item index="sendMessage">发送通知</el-menu-item> -->
 						</el-submenu>
-						<el-submenu index="6">
+						<el-submenu index="7">
 							<template slot="title">
 								<i class="el-icon-warning"></i>
 								<span>设置</span>
