@@ -15,6 +15,7 @@
           <el-button
               type="text"
               size="mini"
+              v-show="node.level<3"
               @click="() => append(node,data)"
               >
                 增加
@@ -183,7 +184,7 @@
                     //this.loadNode(node,resolve)
                        console.log(res)
 
-                       const newChild = { id: '12421', label: value, children: [] };
+                       const newChild = { id: '12421', label: value};
                     if (!data.children) {
                          this.$set(data, 'children', []);
                      }
@@ -196,7 +197,7 @@
                     }else if(node.level==2){
                       let dataModel=new Object();
                     dataModel.name = value;
-                    dataModel.stdCode = node.data.stdCode;
+                    dataModel.stdCode = node.data.code;
                     dataModel.desc = "";
                     dataModel.remark = "";
                     let dataParam = JSON.stringify(dataModel);
@@ -217,7 +218,7 @@
                     }
                     getJsonData('/dataMaintain/insertPbModeAlias',dataParam).then(res=>{
                        console.log(res)
-                        const newChild = { id: '2', label: value, children: [] };
+                        const newChild = { id: '2', label: value};
                     if (!data.children) {
                          this.$set(data, 'children', []);
                      }
@@ -256,7 +257,6 @@
 
                         getJsonData('/dataMaintain/deletePbMode', param).then(res => {
                             console.log(res);
-
                             if (res.code == 1) {
                                 this.$message({
                                     type: 'success',
@@ -272,8 +272,6 @@
                                     message: res.msg
                                 });
                             }
-
-
                         }, error => {
                             this.$message({
                                 type: 'fail',
@@ -284,14 +282,39 @@
                                 type: 'info',
                                 message: '已取消删除'
                             });
-
-
                         });
+                    }else if(node.level === 3) {
+                        let param = JSON.stringify({"idsStr": node.data.id});
 
-
+                        getJsonData('/dataMaintain/deletePbModeAlias', param).then(res => {
+                            console.log(res);
+                            if (res.code == 1) {
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                            const parent = node.parent;
+                            const children = parent.childNodes;
+                            const index = children.findIndex(d => d.data.id === data.id);
+                            children.splice(index, 1);
+                            } else {
+                                this.$message({
+                                    type: 'fail',
+                                    message: res.msg
+                                });
+                            }
+                        }, error => {
+                            this.$message({
+                                type: 'fail',
+                                message: '删除失败'
+                            });
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消删除'
+                            });
+                        });
                     }})
-
-
             },
             updata(node, data) {
                  this.$prompt('请输入修改的内容', '提示', {
@@ -342,6 +365,34 @@
                     let dataParamT = JSON.stringify(dataModelT);
                 
                     getJsonData('/dataMaintain/updatePbMode',dataParamT).then(res=>{
+                       console.log(res)
+                            const parent = node.parent;
+                            const children = parent.childNodes;
+                             dataModelT.label = value;
+                             const newChild = {id: dataModelT.id, label: value};
+                             data.id = dataModelT.id;
+                             data.label = value;
+                   // data.children.push(newChild);
+                    
+                            //const index = children.findIndex(d => d.data.id === data.id);
+                          
+                         
+                       this.$message({
+                        type: 'success',
+                        message: '您修改的内容是: ' + value
+                    });
+                    },error=>{
+                        console.log(error)
+                    })
+                    }else if(node.level==3){
+                      var dataModelT=new Object();
+                    dataModelT.id = node.data.id;
+                    dataModelT.name = value;
+                    dataModelT.remark ="";
+                    dataModelT.desc = "";
+                    let dataParamT = JSON.stringify(dataModelT);
+                
+                    getJsonData('/dataMaintain/updatePbModeAlias',dataParamT).then(res=>{
                        console.log(res)
                             const parent = node.parent;
                             const children = parent.childNodes;
