@@ -121,6 +121,8 @@
                         }
                         //console.log(res)
 
+
+
                     },error=>{
                         console.log(error)
                     })
@@ -288,6 +290,8 @@
 
 
                     }})
+
+
             },
             updata(node, data) {
                  this.$prompt('请输入修改的内容', '提示', {
@@ -305,6 +309,23 @@
                     dataModel.orderNo = "2";
                     dataModel.desc = "";
                     var dataParam = JSON.stringify(dataModel);
+                    if (!data.children) {
+                         this.$set(data, 'children', []);
+                     }
+
+                     if(node.childNodes&&node.childNodes.length>0){
+                        let childrenArr = new Array();
+                        for(let i=0;i<node.childNodes.length;i++){
+                            var bean = node.childNodes[i];
+                            let childBean = new Object();
+                            childBean.id = bean.id;
+                            childBean.label = bean.label;
+                            childBean.children = [];
+                            childrenArr.push(childBean);
+                        }
+                        data.children=childrenArr;
+                    }
+
 
                     getJsonData('/dataMaintain/updatePbMode',data).then(res=>{
                        console.log(res)
@@ -313,19 +334,26 @@
                     })
                     }else if(node.level==2){
                       var dataModelT=new Object();
-                      dataModelT.id = node.data.id;
+                    dataModelT.id = node.data.id;
                     dataModelT.name = value;
-                    dataModelT.stdCode = node.data.stdCode;
+                    dataModelT.type = node.data.type;
+                    dataModelT.orderNo = "2";
                     dataModelT.desc = "";
-                    dataModelT.remark = "";
                     let dataParamT = JSON.stringify(dataModelT);
-                    getJsonData('/dataMaintain/updatePbModeAlias',dataParamT).then(res=>{
+                
+                    getJsonData('/dataMaintain/updatePbMode',dataParamT).then(res=>{
                        console.log(res)
                             const parent = node.parent;
                             const children = parent.childNodes;
-                            const index = children.findIndex(d => d.data.id === data.id);
-                            dataModelT.label = value
-                            children.splice(index, 1,dataModelT);
+                             dataModelT.label = value;
+                             const newChild = {id: dataModelT.id, label: value};
+                             data.id = dataModelT.id;
+                             data.label = value;
+                   // data.children.push(newChild);
+                    
+                            //const index = children.findIndex(d => d.data.id === data.id);
+                          
+                         
                        this.$message({
                         type: 'success',
                         message: '您修改的内容是: ' + value
