@@ -10,6 +10,7 @@
             :expand-on-click-node="false">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
+        <span v-show="node.id==0">{{ node.id }}</span>
         <span class='bdd_aids'>
           <el-button
               type="text"
@@ -78,6 +79,7 @@
                 if (node.level === 0) {
 //          var data = JSON.stringify({"type":"江西省"});
                     getJsonData('/dataMaintain/listProvince',null).then(res=>{
+                        console.log(res);
                         let dataMap = res.data;//所有的省份
                         let provinceArr = new Array();
                         let provinceEngArr = new Array();
@@ -101,9 +103,9 @@
 
                 }else if(node.level === 1){
 
-                    let data = JSON.stringify({"type":node.data.value});
+                    let dataParam = JSON.stringify({"type":node.data.value});
 
-                    getJsonData('/dataMaintain/listPbMode',data).then(res=>{
+                    getJsonData('/dataMaintain/listPbMode',dataParam).then(res=>{
 
                         let dataArray = res.data;
                         if(dataArray&&dataArray.length>0) {
@@ -126,9 +128,9 @@
                     })
 
                 }else if(node.level === 2){
-                    let data = JSON.stringify({"stdCode":node.data.code});
+                    let dataParam = JSON.stringify({"stdCode":node.data.code});
 
-                    getJsonData('/dataMaintain/listPbModeAlias',data).then(res=>{
+                    getJsonData('/dataMaintain/listPbModeAlias',dataParam).then(res=>{
 
                         let dataArray = res.data;
                         if(dataArray&&dataArray.length>0) {
@@ -162,10 +164,32 @@
                     dataModel.orderNo = "2";
                     dataModel.desc = "";
                     let dataParam = JSON.stringify(dataModel);
-
+                     if (!data.children) {
+                         this.$set(data, 'children', []);
+                     }
+                    if(node.childNodes&&node.childNodes.length>0){
+                        let childrenArr = new Array();
+                        for(let i=0;i<node.childNodes.length;i++){
+                            var bean = node.childNodes[i];
+                            let childBean = new Object();
+                            childBean.id = bean.id;
+                            childBean.label = bean.label;
+                             childBean.children = [];
+                            childrenArr.push(childBean);
+                        }
+                        data.children=childrenArr;
+                    }
                     getJsonData('/dataMaintain/insertPbMode',dataParam).then(res=>{
                     //this.loadNode(node,resolve)
                        console.log(res)
+
+                       const newChild = { id: '12421', label: value, children: [] };
+                    if (!data.children) {
+                         this.$set(data, 'children', []);
+                     }
+                    data.children.push(newChild);
+
+
                     },error=>{
                         console.log(error)
                     })
@@ -176,8 +200,29 @@
                     dataModel.desc = "";
                     dataModel.remark = "";
                     let dataParam = JSON.stringify(dataModel);
+                     if (!data.children) {
+                         this.$set(data, 'children', []);
+                     }
+                     if(node.childNodes&&node.childNodes.length>0){
+                        let childrenArr = new Array();
+                        for(let i=0;i<node.childNodes.length;i++){
+                            var bean = node.childNodes[i];
+                            let childBean = new Object();
+                            childBean.id = bean.id;
+                            childBean.label = bean.label;
+                            childBean.children = [];
+                            childrenArr.push(childBean);
+                        }
+                        data.children=childrenArr;
+                    }
                     getJsonData('/dataMaintain/insertPbModeAlias',dataParam).then(res=>{
                        console.log(res)
+                        const newChild = { id: '2', label: value, children: [] };
+                    if (!data.children) {
+                         this.$set(data, 'children', []);
+                     }
+                    data.children.push(newChild);
+
                     },error=>{
                         console.log(error)
                     })
@@ -218,8 +263,8 @@
                                     message: '删除成功!'
                                 });
                             const parent = node.parent;
-                            const children = parent.data.children || parent.data;
-                            const index = children.findIndex(d => d.id === data.id);
+                            const children = parent.childNodes;
+                            const index = children.findIndex(d => d.data.id === data.id);
                             children.splice(index, 1);
                             } else {
                                 this.$message({
@@ -257,13 +302,13 @@
                 }).then(({ value }) => {
 
                        if(node.level==1){
-                    let dataModel=new Object();
+                    var dataModel=new Object();
                     dataModel.id = node.data.id;
                     dataModel.name = value;
                     dataModel.type = node.data.value;
                     dataModel.orderNo = "2";
                     dataModel.desc = "";
-                    let dataParam = JSON.stringify(dataModel);
+                    var dataParam = JSON.stringify(dataModel);
 
                     getJsonData('/dataMaintain/updatePbMode',data).then(res=>{
                        console.log(res)
@@ -271,15 +316,20 @@
                         console.log(error)
                     })
                     }else if(node.level==2){
-                      let dataModel=new Object();
-                      dataModel.id = node.data.id;
-                    dataModel.name = value;
-                    dataModel.stdCode = node.data.stdCode;
-                    dataModel.desc = "";
-                    dataModel.remark = "";
-                    let dataParam = JSON.stringify(dataModel);
-                    getJsonData('/dataMaintain/updatePbModeAlias',dataParam).then(res=>{
+                      var dataModelT=new Object();
+                      dataModelT.id = node.data.id;
+                    dataModelT.name = value;
+                    dataModelT.stdCode = node.data.stdCode;
+                    dataModelT.desc = "";
+                    dataModelT.remark = "";
+                    let dataParamT = JSON.stringify(dataModelT);
+                    getJsonData('/dataMaintain/updatePbModeAlias',dataParamT).then(res=>{
                        console.log(res)
+                            const parent = node.parent;
+                            const children = parent.childNodes;
+                            const index = children.findIndex(d => d.data.id === data.id);
+                            dataModelT.label = value
+                            children.splice(index, 1,dataModelT);
                        this.$message({
                         type: 'success',
                         message: '您修改的内容是: ' + value

@@ -10,7 +10,6 @@ import Edit from '@/page/edit'
 import Aptitudes from '@/page/aptitudes'
 import Method from '@/page/method'
 import Maintenance from '@/page/maintenance'
-import Home from '@/page/home'
 
  
 Vue.use(Router)
@@ -31,13 +30,7 @@ const routes = [
 			path:'/manage',
 			component:Manage,
 			name:'manage',
-			redirect:{path:'/home'},
-			children:[
-					{
-						path:'/home',
-						component:Home,
-						name:'home'
-					},	
+			children:[		
 					{
 						path:'/addshop',
 					component: addShop,
