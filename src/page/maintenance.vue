@@ -5,6 +5,8 @@
             show-checkbox
             node-key="id"
             default-expand-all
+            :load="loadNode"
+            lazy
             :expand-on-click-node="false">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
@@ -14,19 +16,19 @@
               size="mini"
               @click="() => append(data)"
               v-if="node.id<3">
-            增加
+              增加
           </el-button>
           <el-button
               type="text"
               size="mini"
               @click="() => updata(data)">
-            修改
+              修改
           </el-button>
           <el-button
               type="text"
               size="mini"
               @click="() => remove(node, data)">
-            删除
+              删除
           </el-button>
         </span>
       </span>
@@ -49,10 +51,10 @@
 
 <script>
     import axios from 'axios'
-
+    import {getJsonData} from '../api/index.js'
     let id = 1000;
     export default {
-        name:"app",
+        name: "app",
         data() {
             const data = [{
                 id: 1,
@@ -71,32 +73,19 @@
             },
             ];
             return {
-                data5: JSON.parse(JSON.stringify(data))
+                data5: JSON.parse(JSON.stringify(data)),
+                filterText: '',
+                threeDataArray: new Array()
             }
         },
-        mounted() {
-            this.getAjax();
-        },
         methods: {
+
             append(data) {
                 const newChild = {id: id++, label: 'testtest', children: []};
                 if (!data.children) {
                     this.$set(data, 'children', []);
                 }
                 data.children.push(newChild);
-            },
-            getAjax: function () {
-
-//          var data = JSON.stringify({"type":"江西省"});
-                axios.post('/biaodaa-back/dataMaintain/listProvince',
-//                  data,
-                    {
-                        headers: {'Content-Type': 'application/json'}
-                    }).then(function (response) {
-                    console.log(response);
-                }).catch(function (error) {
-                    console.log(error);
-                });
             },
             remove(node, data) {
                 const parent = node.parent;
@@ -117,18 +106,20 @@
 
 
 </script>
+
+
 <style lang="less" scoped>
     @import '../style/mixin.less';
 
     .bdd_mian {
         margin-left: 15%;
-        margin-right: 15%;
+        margin-right: 15%;}
 
     .bdd_aids {
         margin-rigth: 1300px;
     }
 
-    .el-input {
+    .el-input{
         margin-top: 30px;
     }
 
@@ -137,6 +128,5 @@
         margin-right: 15%;
     }
 
-    }
 
 </style>
