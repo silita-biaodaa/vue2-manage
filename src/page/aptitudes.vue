@@ -43,7 +43,7 @@
             <el-table-column label="资质名称" style="width: 33.3%">
               <template slot-scope="scope">
                 <el-popover trigger="hover" placement="top">
-                  <p>名称: {{ scope.row.name }}</p>
+                  <p>资质名称: {{ scope.row.quaName }}</p>
                   <div slot="reference" class="name-wrapper">
                     <span size="medium">{{ scope.row.quaName }}</span>
                   </div>
@@ -71,7 +71,7 @@
         <div class="alia">
           <div class="right-apti">
             <p>资&nbsp&nbsp&nbsp质:</p>
-            <input placeholder="曾丹是个傻子" v-model="input2" disabled class="disappear">
+            <input placeholder="曾丹是个傻子" v-model="selectApti" disabled class="disappear">
             </input>
           </div>
           <div class="right-search">
@@ -82,7 +82,7 @@
             </el-input>
 
             <el-select v-model="svalue" placeholder="请选择" v-show='!changebut'>
-              <el-option v-for="item in single" :key="item.value" :label="item.label" :value="item.value">
+              <el-option v-for="item in single" :key="item.value" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
 
@@ -98,9 +98,9 @@
 
             <el-button type="primary" icon="el-icon-edit" @click='addNewalias'>添加</el-button>
             <transition name="my">
-              <el-button type="primary" icon="el-icon-search" v-show='changebut'>搜索</el-button>
+              <el-button type="primary" icon="el-icon-search" v-show='changebut' @click='selectWord'>搜索</el-button>
             </transition>
-            <el-upload class="updown-list" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" :show-file-list='false' multiple :limit="3" v-show='changebut' :on-exceed="handleExceed" :file-list="fileList">
+            <el-upload class="updown-list" action="http://192.168.1.133:8080/upload/quaAlias/" :on-preview="handlePreview" :data="sendCode()" :on-success="handleSuccess"  :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :limit="3" v-show='changebut' :on-exceed="handleExceed" :file-list="fileList" >
               <el-button type="primary">
                 <i class="el-icon-upload el-icon--right"></i>
                 上传
@@ -113,7 +113,7 @@
             <el-table-column :label="searchname" width="310">
               <template slot-scope="scope">
                 <i class="el-icon-caret-right"></i>
-                <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                <span style="margin-left: 10px">{{ scope.row.name }}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -150,12 +150,12 @@
     <!-- 修改资质弹框 -->
 
     <el-dialog title="修改资质" :visible.sync="amendFormVisible">
-      <el-form :model="amendForm" label-width="100px" :rules="rules" ref="amendForm">
+      <el-form :model="amendForm" label-width="100px" :rules="newapti" ref="amendForm">
         <el-form-item label="原资质名称:">
-          <el-cascader :options="option" change-on-select :props="props" @change="handleChange"></el-cascader>
+          <el-input v-model="amendForm.old_name" auto-complete="off" disabled></el-input>
         </el-form-item>
 
-        <el-form-item label="新资质名称:" prop="new_aptitudes">
+        <el-form-item label="新资质名称:" prop="new_apti">
           <el-input v-model="amendForm.new_name" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -186,7 +186,7 @@
   </div>
 </template>
 <script>
-import { checkUser, queryList, curd, deleteApi } from "@/api/index";
+import { checkType, queryList, curd, deleteApi, addAlias, uploadAlias, delectAlias, showAlias, showLevel, addLevel, showtLevel, addtAlias, selectAlias, amendAlias,firstLevel,secondLevel } from "@/api/index";
 
 export default {
   data() {
@@ -225,6 +225,11 @@ export default {
           { required: true, message: '请输入新资质名称', trigger: 'blur' }
         ]
       },
+      newapti: {  
+        new_apti:[
+          { required: true, message: '资质不能为空', trigger: 'blur'}
+        ]
+      },
       //  修改资质弹框
       amendFormVisible: false,
       amendForm: {
@@ -234,26 +239,12 @@ export default {
       redactFormVisible: false,
       redactForm: {
         new_name: '',
-        old_name: ''
+        old_name: '',
+        id:''
       },
       // 单选下拉框
       single: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }
+       
       ],
       svalue: '',
       //多选下拉框
@@ -287,25 +278,18 @@ export default {
         children: 'children',
         label: 'label'
       },
-      input2: '',
+      selectApti: '',
       input2: '',
       aliaput: '',
-      tableData: [{
-        date: '建筑工程施工总承包',
-      }, {
-        date: '建筑工程总承包',
-      }, {
-        date: '建筑总承包',
-      }, {
-        date: '别名4',
-      }],
+      tableData: [],
       editDialogFormVisible: false,
       editForm: {
         username: '',
         email: ''
       },
-      searchname: '资质别名'
-
+      searchname: '资质别名',
+      stdCode:'',
+      parentId:''
     }
   },
   components: {
@@ -314,12 +298,15 @@ export default {
     this.initList()
   },
   methods: {
+    sendCode() {
+      return {quaCode:this.stdCode}
+    },
     handleChange(value) {
       console.log(value)
     },
     // 页面挂架初始化的
     initList() {
-      checkUser().then(res => {
+      checkType().then(res => {
         if (res.code === 1) {
           this.type = res.data
         }
@@ -337,24 +324,19 @@ export default {
               queryList({ parentId: this.addForm.fatherid }).then(res => {
                 if (res.code === 1) {
                   this.tableName = res.data
-                  //  console.log(res.data)
-                  //  console.log(res.data)
                 }
               })
-              // this.tableName = res.data
-              //  console.log(res.data)
             }
-            // console.log(res)
           })
         } else {
           console.log('error submit!!');
           return false;
         }
       });
+      this.addDialogFormVisible = false
     },
     //删除
     deleteapti(index, row) {
-
 
       this.$confirm('此操作将永久删除该资质, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -362,11 +344,18 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteApi({ id: row.id }).then(res => {
-          console.log(res)
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          // console.log(res)
+            if(res.code ===1){
+               this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }
+            queryList({ quaName: this.formInline.user, parentId: this.formInline.region }).then(res => {
+            if (res.code === 1) {
+              this.tableName = res.data
+            }
+          })
         })
 
       }).catch(() => {
@@ -387,8 +376,6 @@ export default {
           queryList({ quaName: this.formInline.user, parentId: this.formInline.region }).then(res => {
             if (res.code === 1) {
               this.tableName = res.data
-              //  console.log(res.data)
-              //  console.log(res.data)
             }
           })
         } else {
@@ -400,43 +387,142 @@ export default {
     handleSelect() {
 
     },
-    handleEdit(index, row) {
-      console.log(index, row);
+    handleEdit(index, row) {    
       this.redactFormVisible = true
-      this.redactForm.old_name = row.date
+      this.redactForm.old_name = row.name
+      this.redactForm.id= row.id
+    },
+    redactSubmit(){
+            
+      amendAlias({ id: this.redactForm.id, name : this.redactForm.new_name}).then(res => {
+         if(res.code ===1) {
+           this.$message({
+             type: 'success',
+             message: res.msg
+           });
+           selectAlias({ stdCode: this.stdCode, name: this.aliaput, stdType: '1' }).then(res => {
+             console.log(res.data)
+             if (res.code === 1) {
+               this.tableData = res.data
+             }
+           }) 
+         } else {
+            this.$message({
+             type: 'info',
+             message: res.msg
+           });
+         }
+      })
+          
+      this.redactFormVisible = false
+      this.redactForm.new_name = ''
     },
     handleDelete(index, row) {
-      console.log(index, row);
+      this.$confirm('此操作将永久删除该资质, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delectAlias({ idsStr: row.id }).then(res => {
+          if (res.code === 1) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          }
+          selectAlias({ stdCode: this.stdCode, name: this.aliaput, stdType: '1' }).then(res => {
+            if (res.code === 1) {
+              this.tableData = res.data
+            }
+          })
+        })
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+      
     },
     editUserSubmit(editAliasForm) {
 
     },
     //  修改资质的确定框
-    amendaptitudes() {
+    amendaptitudes(index,row) {
       this.amendFormVisible = true
+      this.amendForm.old_name = row.quaName
+      this.amendForm.parentId = row.parentId
+      this.amendForm.id = row.id
     },
     amendSubmit() {
-
+      curd({ quaName: this.amendForm.new_name, parentId: this.amendForm.parentId, id: this.amendForm.id }).then(res => {
+        if (res.code === 1) {
+          this.$message({
+            type: 'success',
+            message: '修改成功!'
+          });
+        }
+        queryList({ quaName: this.formInline.user, parentId: this.formInline.region }).then(res => {
+          if (res.code === 1) {
+            this.tableName = res.data
+          }
+        })
+      })
+      this.amendForm.new_name = ''
+      this.amendFormVisible = false
     },
     //点击公告资质等级
     noticeLevel() {
       this.searchname = '公告等级'
       this.changebut = false
+
+      //  firstLevel().then(res => {
+      //   // if(res.code === 1) {
+      //   //   this.single = res.data
+      //   // }
+      //   console.log(res)
+      // })
     },
     // 点击的资质别名
     noticeAlias() {
       this.searchname = '资质别名'
       this.changebut = true
+      
     },
     // 点击的企业等级
     noticeFirm() {
       this.searchname = '企业等级'
       this.changebut = false
     },
-    // 添加的资质别.....
+    // 添加的资质别名 
     addNewalias() {
+     if (this.selectApti) { 
+      if(this.searchname === '资质别名') {
+          addAlias({stdCode:this.stdCode,name:this.aliaput}).then(res => {
+            //  console.log(res)
+           
+            if(res.code ===1 )  {
+                selectAlias({ stdCode: this.stdCode, name: '', stdType: '1' }).then(res => {
+                if (res.code === 1) {
+                  this.tableData = res.data
+                }
+              })
+            }
+             this.aliaput = ''
+          })
+        } else if (this.searchname === '公告等级') {
+          // addLevel({ stdCode: this.stdCode, bizType:"1",})
+        }  
+      } else {
+          this.$message({
+            message: '请先选择资质名称或需要搜索的名称',
+            type: 'warning'
+          });
+        }
+        
+      },
 
-    },
     //   上传文件等方法
     //  文件列表移除文件时的钩子
     handleRemove(file, fileList) {
@@ -444,8 +530,20 @@ export default {
     },
     //  点击文件列表已上传的文件时的钩子的
     handlePreview(file) {
-      console.log(file);
+
     },
+    handleSuccess(response, file, fileList) {
+      if (response.code === 1) {
+        this.$message({
+          type: 'success',
+          message: response.msg
+        })
+      }
+    },
+    setHeader() {
+       let token = localStorage.getItem('mytoken')
+       return { Authorization: token }
+     },
     //  文件超出个数限制时的钩子 
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
@@ -459,9 +557,32 @@ export default {
     },
     //点击行调转的
     delivery(row, column) {
-      console.log(row);
-      this.input2 = row.name
-
+      this.selectApti = row.quaName
+      this.stdCode = row.quaCode
+      if(this.searchname ==='资质别名') {
+        //展示列表
+         selectAlias({stdCode:this.stdCode,name:'',stdType:'1'}).then(res => {
+            if(res.code ===1 ) {
+              this.tableData = res.data
+            }
+         })
+      } 
+    },
+    //获取等级列表
+    // gainlevel() {
+    //   firstLevel().then(res => {
+    //     // if(res.code === 1) {
+    //     //   this.single = res.data
+    //     // }
+    //     console.log(res)
+    //   })
+    // },
+    selectWord(){
+       selectAlias({ stdCode: this.stdCode, name:this.aliaput , stdType: '1' }).then(res => {
+        if (res.code === 1) {
+          this.tableData = res.data
+        }
+      })
     }
   }
 }

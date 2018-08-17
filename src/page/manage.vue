@@ -81,7 +81,7 @@
 							<img src="../assets/img/2.png" class="avator">
 							<el-dropdown-menu slot="dropdown">
 								<el-dropdown-item command="home">首页</el-dropdown-item>
-								<el-dropdown-item command="singout">退出</el-dropdown-item>
+								<el-dropdown-item command="singout" ><el-button type="text" @click="logout">退出</el-button></el-dropdown-item>
 							</el-dropdown-menu>
 						</el-dropdown>
 
@@ -115,10 +115,8 @@
 			this.isCollapse = !this.isCollapse
 		},
 		logout() {
-			// 清除登录状态，即保存在localStorage中的token
-			localStorage.removeItem('mytoken')
-			// 跳转到登录页面
-			this.$router.push({ name: 'Login' })
+			localStorage.removeItem('Authorization')
+			this.$router.push({ name: 'login' })
 		}
 	},
 	mounted() {
