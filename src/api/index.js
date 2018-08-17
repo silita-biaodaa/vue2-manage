@@ -21,7 +21,7 @@ export const getJsonData = (url,params) => {
     return new Promise((resolve,reject)=>{
         if(params!=null) {
             axios.post(url, params, {
-                headers: {'Content-Type': 'application/json'}
+                headers	:{'Content-Type': 'application/json'},
             }).then(res => {
                 resolve(res.data)
             }).catch(error => {
@@ -39,7 +39,7 @@ export const getJsonData = (url,params) => {
 
 }
 
-// 获取省份code 
+// 获取省份code
 export const province = params => {
     return axios.post('dataMaintain/listProvince').then(res => res.data)
 }
