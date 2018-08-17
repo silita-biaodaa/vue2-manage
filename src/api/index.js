@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const baseURL = 'http://192.168.1.133:8080/'
-// const baseURL = 'http://120.79.116.245:19004/'
+// const baseURL = 'http://192.168.1.133:8080/'
+const baseURL = 'http://120.79.116.245:19004/'
 axios.defaults.baseURL = baseURL
 
 
