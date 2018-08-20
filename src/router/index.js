@@ -11,11 +11,7 @@ import Aptitudes from '@/page/aptitudes'
 import Method from '@/page/method'
 import Maintenance from '@/page/maintenance'
 import Home from '@/page/first'
-
-
- 
 Vue.use(Router)
-
 
 const routes = [
 		{
@@ -32,7 +28,7 @@ const routes = [
 			path:'/manage',
 			component:Manage,
 			name:'manage',
-			children:[		
+			children:[
 					{
 						path:'/addshop',
 					component: addShop,
@@ -56,28 +52,28 @@ const routes = [
 					{
 						path:'/userlist',
 						component:userList,
-						name:'userList'			
+						name:'userList'
 					},
 					{
 						path:'/aptitudes',
 						component:Aptitudes,
-						name:'aptitudes'		
-					}
-					// {
-					// 	path:'/maintenance',
-					// 	component:Maintenance,
-					// 	name:'maintenance'
-					// },
-					// {
-					// 	path:'/method',
-					// 	component:Method,
-					// 	name:'method'
-					// }
-			]
+						name:'aptitudes'
+					},
+					{
+                        path:'/maintenance',
+                        component:Maintenance,
+                        name:'maintenance'
+                    },
+                    {
+                        path:'/method',
+                        component:Method,
+                        name:'method'
+                    }
+]
 		}
-		
-			
-]	
+
+
+]
 
 
 export default new Router({
