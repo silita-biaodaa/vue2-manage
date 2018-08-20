@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Login from '@/page/login'
 import Manage from '@/page/manage'
 import addShop from '@/page/addShop'
-// import addGoods from '@/page/addGoods'
 import Bin from '@/page/bin'
 import userList from '@/page/userlist'
 import Edit from '@/page/edit'
@@ -58,17 +57,17 @@ const routes = [
 						path:'/aptitudes',
 						component:Aptitudes,
 						name:'aptitudes'
-					},
+				  },
 					{
-                        path:'/maintenance',
-                        component:Maintenance,
-                        name:'maintenance'
-                    },
-                    {
-                        path:'/method',
-                        component:Method,
-                        name:'method'
-                    }
+              path:'/maintenance',
+              component:Maintenance,
+              name:'maintenance'
+          },
+          {
+              path:'/method',
+              component:Method,
+              name:'method'
+          }
 ]
 		}
 

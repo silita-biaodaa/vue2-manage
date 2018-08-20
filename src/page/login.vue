@@ -80,15 +80,7 @@ export default {
 				}
 			})
 		},
-		// submitForm(formName) {
-		// 	this.$refs[formName].validate(valide => {
-		// 		if(valide) {
-		// 			register({ userName: this.loginForm.username,password:this.loginForm.password}).then(res => {
-		// 				console.log(res)
-		// 			})
-		// 		}
-		// 	})
-		// }
+
 	},
 	watch: {
 
