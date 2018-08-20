@@ -1,6 +1,12 @@
 <template>
     <div class="custom-tree-container bdd_main">
-        <el-tree :data="data5" show-checkbox node-key="id" default-expand-all :load="loadNode" lazy :expand-on-click-node="false">
+          <el-input placeholder="输入关键字进行查看" v-model="filterText">
+        </el-input>
+        <el-tree :data="data5"
+        show-checkbox
+        node-key="id"
+        :load="loadNode"
+        lazy :expand-on-click-node="false">
             <span class="custom-tree-node" slot-scope="{ node, data }">
             <span>{{ node.label }}</span>
             <span v-show="node.id==0">{{ node.id }}</span>
@@ -16,22 +22,20 @@
               <el-button
                   type="text"
                   size="mini"
-                  v-if="node.level>1"
+                  v-if="node.level>3"
                   @click="() => remove(node, data)">
                刪除
               </el-button>
                <el-button
                    type="text"
                    size="mini"
-                   v-if="node.level>1"
                    @click="() =>updata(node,data)">
                   修改
               </el-button>
             </span>
             </span>
         </el-tree>
-        <el-input placeholder="输入关键字进行查看" v-model="filterText">
-        </el-input>
+
     </div>
 </template>
 
@@ -57,18 +61,36 @@
                         label: '别名'
                     }]
                 }]
-            }, ];
+            },
+
+            ];
+
             return {
                 data4: JSON.parse(JSON.stringify(data)),
                 data5: JSON.parse(JSON.stringify(data)),
-                filterText: ''
+                filterText: '',
+                resolve:new Object(),
+                node:new Object()
             }
         },
         /*  mounted() {
               this.loadNode();
           },*/
+          watch:{
+              filterText:{
+                   handler:function(){
+                        var textValue = this.filterText;
+
+                        console.log(this.node)
+                         console.log(this.resolve)
+
+                    }
+              }
+          },
         methods: {
             loadNode: function(node, resolve) { //进入页面懒加载方法
+                this.resolve = resolve;
+                this.node = node;
                 if (node.level === 0) { //如果是0级树节点，则为省份节点
                     getJsonData('/dataMaintain/listProvince', null).then(res => { //调用省份查询接口
                         console.log(res);
@@ -151,6 +173,14 @@
                 }).then(({
                     value
                 }) => {
+                    if(value==null || value.trim()==""){
+                        this.$message({
+                                type: 'success',
+                                message: '您输入的内容为空，请重新输入'
+                            });
+                            return;
+                    }
+
                     if (node.level == 1) { //增加评标办法
                         let dataModel = new Object();
                         dataModel.name = value;
@@ -158,33 +188,13 @@
                         dataModel.orderNo = "2";
                         dataModel.desc = "";
                         let dataParam = JSON.stringify(dataModel);
-                        if (!data.children) {
-                            this.$set(data, 'children', []);
-                        }
-                        if (node.childNodes && node.childNodes.length > 0) {
-                            let childrenArr = new Array();
-                            for (let i = 0; i < node.childNodes.length; i++) {
-                                var bean = node.childNodes[i];
-                                let childBean = new Object();
-                                childBean.id = bean.id;
-                                childBean.label = bean.label;
-                                childBean.children = [];
-                                childrenArr.push(childBean);
-                            }
-                            data.children = childrenArr;
-                        }
+
                         getJsonData('/dataMaintain/insertPbMode', dataParam).then(res => {
                             //this.loadNode(node,resolve)
                             console.log(res)
+                            this.loadNode(this.node,this.resolve);
+                             console.log(this.$refs.tree.getCheckedNodes());
 
-                            const newChild = {
-                                id: '12421',
-                                label: value
-                            };
-                            if (!data.children) {
-                                this.$set(data, 'children', []);//设置监听器，监听children数据变化，否则页面不会局部刷新
-                            }
-                            data.children.push(newChild);
                         }, error => {
                             console.log(error)
                         })
@@ -198,32 +208,40 @@
                         if (!data.children) {
                             this.$set(data, 'children', []);
                         }
-                        if (node.childNodes && node.childNodes.length > 0) {
-                            let childrenArr = new Array();
-                            for (let i = 0; i < node.childNodes.length; i++) {
-                                var bean = node.childNodes[i];
-                                let childBean = new Object();
-                                childBean.id = bean.id;
-                                childBean.label = bean.label;
-                                childBean.children = [];
-                                childrenArr.push(childBean);
-                            }
-                            data.children = childrenArr;
-                        }
+                        // if (node.childNodes && node.childNodes.length > 0) {
+                        //     let childrenArr = new Array();
+                        //     for (let i = 0; i < node.childNodes.length; i++) {
+                        //         var bean = node.childNodes[i];
+                        //         let childBean = new Object();
+                        //         childBean.id = bean.id;
+                        //         childBean.label = bean.label;
+                        //         childBean.children = [];
+                        //         childrenArr.push(childBean);
+                        //     }
+                        //     data.children = childrenArr;
+                        // }
                         getJsonData('/dataMaintain/insertPbModeAlias', dataParam).then(res => {
                             console.log(res)
+                            if(res.id){
                             const newChild = {
-                                id: '2',
+                                id: res.id,
                                 label: value
                             };
-                            if (!data.children) {
-                                this.$set(data, 'children', []);
-                            }
-                            data.children.push(newChild);
 
+                             this.loadNode(this.node,this.resolve);
+                             //  console.log(this.$refs.tree.getCheckedNodes());
+                            }else{
+                                if(res.code==0){
+                                   this.$message({
+                                    type: 'fail',
+                                    message: res.msg
+                                     });
+                                }
+                            }
                         }, error => {
                             console.log(error)
                         })
+
                     }
                 }).catch(() => {
                     this.$message({
@@ -307,6 +325,17 @@
                     }
                 })
             },
+
+                reload(){
+                    this.isRouterAlive = false
+                    this.$nextTick(function(){
+                        this.isRouterAlive = true
+                    })
+                },
+
+
+
+
             updata(node, data) {
                 this.$prompt('请输入修改的内容', '提示', {
                     confirmButtonText: '确定',
@@ -316,8 +345,16 @@
                 }).then(({
                     value
                 }) => {
+                    if(value==null || value.trim()==""){
+                        this.$message({
+                                type: 'success',
+                                message: '您输入的内容为空，请重新输入'
+                            });
+                            return;
+                    }
 
                     if (node.level == 1) {
+
                         var dataModel = new Object();
                         dataModel.id = node.data.id;
                         dataModel.name = value;
@@ -341,7 +378,7 @@
                             }
                             data.children = childrenArr;
                         }
-                        getJsonData('/dataMaintain/updatePbMode', data).then(res => {
+                        getJsonData('/dataMaintain/updatePbMode', dataParam).then(res => {
                             console.log(res)
                         }, error => {
                             console.log(error)
@@ -408,6 +445,42 @@
                 });
                 // children.splice(index, 1);
             },
+            /** 树重新获取节点数据
+                * @type:1/2/3 1:当前文件夹/父级/爷爷级
+                * @id:文件夹id
+                * @idtype:1/2:传入的id是当前/父级
+                */
+            getPhotoNodeData(type, id, idtype) {
+            console.log(type, id, idtype)
+            let grandId, grandnode, parentnode, parentId, nownode;
+            // 爷级都需要传父级id
+            if (type == 3 && idtype == 2) {
+                parentnode = this.$refs.phototree.getNode(id);
+                if (parentnode) {
+                grandId = parentnode.data.parentFolderId || 0;
+                console.log(grandId)
+                grandnode = this.$refs.phototree.getNode(grandId);
+                this.loadNodephoto(grandnode, this.tmpResolvephoto);
+                }
+            } else if (type == 2 && idtype == 2) {
+                parentnode = this.$refs.phototree.getNode(id);
+                if (parentnode) {
+                this.loadNodephoto(parentnode, this.tmpResolvephoto);
+                }
+            } else if (type == 2 && idtype == 1) {
+                // 父级传入自己的id
+                nownode = this.$refs.phototree.getNode(id);
+
+                if (nownode) {
+                parentId = nownode.data.parentFolderId || 0;
+                this.photoExpend([parentId])
+                parentnode = this.$refs.phototree.getNode(parentId);
+                this.loadNodephoto(parentnode, this.tmpResolvephoto);
+                }
+            } else {
+                console.log(type, idtype);
+            }
+            }
 
         },
 
