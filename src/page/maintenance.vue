@@ -70,14 +70,16 @@
         },
 
         methods:{
-            loadNode:function(node, resolve){
+            loadNode: function(node, resolve) {
+                this.resolve = resolve;
+                this.node = node;
                 if(node.level===0){
-                    getJsonData('/grade/list').then(res => {
-                        console.log(res);
+                    getJsonData('/grade/list',null).then(res=>{
+                        console.log(res)
                     })
                 }
 
-                },
+            },
             open3() {
                 this.$prompt('请修改', '提示', {
                     confirmButtonText: '确定',

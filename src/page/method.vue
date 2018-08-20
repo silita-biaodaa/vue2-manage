@@ -22,7 +22,6 @@
               <el-button
                   type="text"
                   size="mini"
-                  v-if="node.level>3"
                   @click="() => remove(node, data)">
                刪除
               </el-button>
@@ -92,7 +91,7 @@
                 this.resolve = resolve;
                 this.node = node;
                 if (node.level === 0) { //如果是0级树节点，则为省份节点
-                    getJsonData('/dataMaintain/listProvince', null).then(res => { //调用省份查询接口
+                    getJsonData('/dataMaintain/listProvince', null).then(res =>{ //调用省份查询接口
                         console.log(res);
                         let dataMap = res.data; //所有的省份
                         let provinceArr = new Array();
