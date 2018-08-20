@@ -10,6 +10,8 @@ import Edit from '@/page/edit'
 import Aptitudes from '@/page/aptitudes'
 import Method from '@/page/method'
 import Maintenance from '@/page/maintenance'
+import Home from '@/page/first'
+
 
  
 Vue.use(Router)
@@ -47,6 +49,11 @@ const routes = [
 						name:'bin'
 					},
 					{
+						path:'/home',
+						component:Home,
+						name:'home'
+					},
+					{
 						path:'/userlist',
 						component:userList,
 						name:'userList'			
@@ -55,17 +62,17 @@ const routes = [
 						path:'/aptitudes',
 						component:Aptitudes,
 						name:'aptitudes'		
-					},
-					{
-						path:'/maintenance',
-						component:Maintenance,
-						name:'maintenance'
-					},
-					{
-						path:'/method',
-						component:Method,
-						name:'method'
 					}
+					// {
+					// 	path:'/maintenance',
+					// 	component:Maintenance,
+					// 	name:'maintenance'
+					// },
+					// {
+					// 	path:'/method',
+					// 	component:Method,
+					// 	name:'method'
+					// }
 			]
 		}
 		

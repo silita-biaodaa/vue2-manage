@@ -190,7 +190,7 @@ export default {
     return {
       type: [],
       changebut: true,
-      // 资质类型下拉列表        
+      // 资质类型下拉列表
       //  上传文件
       fileList: [],
       // 资质选择的
@@ -222,7 +222,7 @@ export default {
           { required: true, message: '请输入新资质名称', trigger: 'blur' }
         ]
       },
-      newapti: {  
+      newapti: {
         new_apti:[
           { required: true, message: '资质不能为空', trigger: 'blur'}
         ]
@@ -241,7 +241,7 @@ export default {
       },
       // 单选下拉框
       single: [
-       
+
       ],
       svalue: '',
       //多选下拉框
@@ -383,13 +383,13 @@ export default {
     handleSelect() {
 
     },
-    handleEdit(index, row) {    
+    handleEdit(index, row) {
       this.redactFormVisible = true
       this.redactForm.old_name = row.name
       this.redactForm.id= row.id
     },
     redactSubmit(){
-            
+
       amendAlias({ id: this.redactForm.id, name : this.redactForm.new_name}).then(res => {
          if(res.code ===1) {
            this.$message({
@@ -401,7 +401,7 @@ export default {
              if (res.code === 1) {
                this.tableData = res.data
              }
-           }) 
+           })
          } else {
             this.$message({
              type: 'info',
@@ -409,7 +409,7 @@ export default {
            });
          }
       })
-          
+
       this.redactFormVisible = false
       this.redactForm.new_name = ''
     },
@@ -439,7 +439,7 @@ export default {
           message: '已取消删除'
         });
       });
-      
+
     },
     editUserSubmit(editAliasForm) {
 
@@ -478,20 +478,20 @@ export default {
     noticeAlias() {
       this.searchname = '资质别名'
       this.changebut = true
-      
+
     },
     // 点击的企业等级
     noticeFirm() {
       this.searchname = '企业等级'
       this.changebut = false
     },
-    // 添加的资质别名 
+    // 添加的资质别名
     addNewalias() {
-     if (this.selectApti) { 
+     if (this.selectApti) {
       if(this.searchname === '资质别名') {
           addAlias({stdCode:this.stdCode,name:this.aliaput}).then(res => {
             //  console.log(res)
-           
+
             if(res.code ===1 )  {
                 selectAlias({ stdCode: this.stdCode, name: '', stdType: '1' }).then(res => {
                 if (res.code === 1) {
@@ -503,14 +503,14 @@ export default {
           })
         } else if (this.searchname === '公告等级') {
           // addLevel({ stdCode: this.stdCode, bizType:"1",})
-        }  
+        }
       } else {
           this.$message({
             message: '请先选择资质名称或需要搜索的名称',
             type: 'warning'
           });
         }
-        
+
       },
 
     //   上传文件等方法
@@ -534,7 +534,7 @@ export default {
        let token = localStorage.getItem('mytoken')
        return { Authorization: token }
      },
-    //  文件超出个数限制时的钩子 
+    //  文件超出个数限制时的钩子
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
@@ -556,7 +556,7 @@ export default {
               this.tableData = res.data
             }
          })
-      } 
+      }
     },
 
     selectWord(){
@@ -604,7 +604,7 @@ export default {
   .menu {
     margin-bottom: 20px;
   }
-  
+
 }
 
 .alia {
