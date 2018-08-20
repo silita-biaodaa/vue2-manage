@@ -11,11 +11,7 @@ import Aptitudes from '@/page/aptitudes'
 import Method from '@/page/method'
 import Maintenance from '@/page/maintenance'
 import Home from '@/page/first'
-
-
-
 Vue.use(Router)
-
 
 const routes = [
 		{
@@ -74,19 +70,6 @@ const routes = [
                         name:'method'
                     }
 ]
-						name:'aptitudes'
-					},
-					{
-						path:'/maintenance',
-						component:Maintenance,
-						name:'maintenance'
-					},
-					{
-						path:'/method',
-						component:Method,
-						name:'method'
-					}
-			]
 		}
 
 
