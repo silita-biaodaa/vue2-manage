@@ -23,7 +23,7 @@
               <el-form-item label="资质名称">
                 <el-input v-model="formInline.user" placeholder="资质名称"></el-input>
               </el-form-item>
-              <el-button type="primary" @click="addCategory">添加分类</el-button>
+              <el-button type="primary" @click="addCategory">添加资质</el-button>
               <el-button type="primary" @click="query('ruleForm')">查询资质</el-button>
             </el-form>
           </el-col>
@@ -188,7 +188,7 @@ export default {
     return {
       type: [],
       changebut: true,
-      // 资质类型下拉列表        
+      // 资质类型下拉列表
       //  上传文件
       fileList: [],
       // 资质选择的
@@ -291,7 +291,7 @@ export default {
     },
     seList(val) {
         secondLevel({parentId:val}).then(res => {
-       
+
             if(res.code === 1 ) {
               this.multiple = res.data
             }
@@ -316,22 +316,34 @@ export default {
     addCateSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          curd({ parentId: this.addForm.fatherid, quaName: this.addForm.cat_name }).then(res => {
-            if (res.code === 1) {
-              queryList({ parentId: this.addForm.fatherid }).then(res => {
-                if (res.code === 1) {
-                  this.tableName = res.data
-                }
-              })
-            }
-          })
+         if(this.addForm.fatherid) {
+            curd({ parentId: this.addForm.fatherid, quaName: this.addForm.cat_name }).then(res => {
+              if (res.code === 1) {
+                queryList({ parentId: this.addForm.fatherid }).then(res => {
+                  if (res.code === 1) {
+                    this.tableName = res.data
+                  }
+                })
+              }
+            })
+            this.addDialogFormVisible = false 
+             this.addForm.cat_name = ''
+         } else {
+           this.$message({
+             type: 'warning',
+             message: '请选择父级资质!'
+           });
+         }
+          
         } else {
-          console.log('error submit!!');
-          return false;
+           this.$message({
+            type: 'warning',
+            message: '请输入资质名称!'
+          });
         }
       });
-      this.addDialogFormVisible = false
-      this.addForm.cat_name = ''
+      
+     
     },
     //删除
     deleteapti(index, row) {
@@ -342,20 +354,20 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteApi({ id: row.id }).then(res => {
-          // console.log(res)
           if (res.code === 1) {
             this.$message({
               type: 'success',
               message: '删除成功!'
             });
+            this.tableData = []
+            this.selectApti = ''
           }
           queryList({ quaName: this.formInline.user, parentId: this.formInline.region }).then(res => {
             if (res.code === 1) {
               this.tableName = res.data
             }
           })
-        })
-
+        })  
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -454,11 +466,11 @@ export default {
                 this.tableData = res.data
                 console.log(res)
               })
-            }  
-            }) 
-           
+            }
+            })
+
         }
-        
+
 
       }).catch(() => {
         this.$message({
@@ -485,6 +497,11 @@ export default {
             type: 'success',
             message: '修改成功!'
           });
+          if(this.selectApti) {
+            this.selectApti = this.amendForm.new_name
+          } else {
+            this.amendForm.new_name = ''
+          }
         }
         queryList({ quaName: this.formInline.user, parentId: this.formInline.region }).then(res => {
           if (res.code === 1) {
@@ -492,7 +509,7 @@ export default {
           }
         })
       })
-      this.amendForm.new_name = ''
+      
       this.amendFormVisible = false
     },
     //点击公告资质等级
@@ -534,20 +551,24 @@ export default {
       })
       // this.mvalue = ''
     },
-    // 添加的资质别名 
+    // 添加的资质别名
     addNewalias() {
-      
+
         if (this.searchname === '资质别名') {
 
-              if (this.aliaput) { 
+              if (this.aliaput) {
                 addAlias({ stdCode: this.stdCode, name: this.aliaput }).then(res => {
-
                   if (res.code === 1) {
                     selectAlias({ stdCode: this.stdCode, name: '', stdType: '1' }).then(res => {
                       if (res.code === 1) {
                         this.tableData = res.data
                       }
                     })
+                  } else {
+                    this.$message({
+                      message: res.msg,
+                      type: 'warning'
+                    });
                   }
                   this.aliaput = ''
                 })
@@ -569,13 +590,13 @@ export default {
                      }
                      this.noticeLevel()
                   })
-                   
+
               } else {
               this.$message({
                   message: '请选择要添加得等级和资质',
                   type: 'warning'
-                });    
-              }      
+                });
+              }
         } else {
            if (this.mvalue.length) {
             addtLevel({ quaCode: this.stdCode, bizType: 2, gradeCode: this.newmvalue }).then(res => {
@@ -586,7 +607,7 @@ export default {
                    message: '添加成功!'
                  });
                }
-               
+
               //  showgrade({quaCode:this.stdCode,bizType:2}).then(res => {
               //    this.tableData = res.data
               //   console.log(res)
@@ -594,13 +615,13 @@ export default {
               // this.mvalue = ''
                this.noticeFirm()
             })
-           
+
           } else {
             this.$message({
               message: '请选择要添加得等级和资质',
               type: 'warning'
             });
-          }      
+          }
         }
 
     },
@@ -626,7 +647,7 @@ export default {
       let token = localStorage.getItem('mytoken')
       return { Authorization: token }
     },
-    //  文件超出个数限制时的钩子 
+    //  文件超出个数限制时的钩子
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
