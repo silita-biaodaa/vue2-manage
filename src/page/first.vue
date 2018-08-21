@@ -4,7 +4,6 @@
     </div>
 </template>
 <script>
-import { firstgrade, secondLevel } from "@/api/index";
 export default {
   data () {
     return {
@@ -12,14 +11,10 @@ export default {
     }
   },
   created () {
-    // this.inLinst()
+
   },
   methods: {
-    // inLinst() {
-    //   secondLevel({parentId:'0dcda0caeec649c2ab6ba7bd977d5ea6'}).then( res => {
-    //     console.log(res)
-    //   })  
-    // }
+
   },
   components: {
   }

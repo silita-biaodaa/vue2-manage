@@ -107,9 +107,9 @@ export const amendAlias = params => {
     return axios.post('qual/alias/update', params).then(res => res.data)
 }
 // 等级一级查询
-export const firstgrade = params => {
-    return axios.post('grade/cate/list', params).then(res => res.data)
-}
+// export const firstgrade = params => {
+//     return axios.post('grade/cate/list', params).then(res => res.data)
+// }
 //等级二级查询
 export const secondLevel = params => {
     return axios.post('grade/sec/list', params).then(res => res.data)
