@@ -22,21 +22,20 @@ export const getJsonData = (url,params) => {
         let token = localStorage.getItem("Authorization")
         if(params!=null) {
             axios.post(url, params, {
-                headers: {'Content-Type': 'application/json'}//,'Authorization': token}
+                headers: {'Content-Type': 'application/json','Authorization':token}
             }).then(res => {
                 resolve(res.data)
             }).catch(error => {
                 reject(error)
             })
         }else{
-            axios.post(url,null, {headers: {'Content-Type': 'application/json'}//,'Authorization': token}
+            axios.post(url,null, {headers: {'Content-Type': 'application/json','Authorization':token}
             }).then(res => {
                 resolve(res.data)
             }).catch(error => {
                 reject(error)
             })
         }
-
     })
 
 }
