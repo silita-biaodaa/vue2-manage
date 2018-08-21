@@ -1,6 +1,6 @@
 <template>
     <div class="first">
-          测试的环境的发布的
+          测试环境的界面，数据接口测试在控制台中展示
     </div>
 </template>
 <script>
