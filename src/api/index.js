@@ -18,19 +18,19 @@ axios.interceptors.request.use(function (config) {
     return Promise.reject(error)
 })
 
-axios.interceptors.response.use(function (response) { // ①10010 token过期（30天） ②10011 token无效
-    if (response.data.code === 402 || response.data.code === 401) {
-        localStorage.removeItem('Authorization')
-        router.replace({
-            path: '/login' // 到登录页重新获取token
-        })
-    } else if (response.data.token) { // 判断token是否存在，如果存在说明需要更新token
-        localStorage.setItem('Authorization',response.data.token) // 覆盖原来的token(默认一天刷新一次)
-    }
-    return response
-}, function (error) {
-    return Promise.reject(error)
-})
+// axios.interceptors.response.use(function (response) { // ①10010 token过期（30天） ②10011 token无效
+//     if (response.data.code === 402 || response.data.code === 401) {
+//         localStorage.removeItem('Authorization')
+//         router.replace({
+//             path: '/login' // 到登录页重新获取token
+//         })
+//     } else if (response.data.token) { // 判断token是否存在，如果存在说明需要更新token
+//         localStorage.setItem('Authorization',response.data.token) // 覆盖原来的token(默认一天刷新一次)
+//     }
+//     return response
+// }, function (error) {
+//     return Promise.reject(error)
+// })
 
 
 // 资质类型接口

@@ -12,14 +12,14 @@ export default {
     }
   },
   created () {
-    this.inLinst()
+    // this.inLinst()
   },
   methods: {
-    inLinst() {
-      secondLevel({parentId:'0dcda0caeec649c2ab6ba7bd977d5ea6'}).then( res => {
-        console.log(res)
-      })  
-    }
+    // inLinst() {
+    //   secondLevel({parentId:'0dcda0caeec649c2ab6ba7bd977d5ea6'}).then( res => {
+    //     console.log(res)
+    //   })  
+    // }
   },
   components: {
   }
