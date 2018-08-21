@@ -200,6 +200,41 @@
                         }, error => {
                             console.log(error)
                         })
+                    }else if (node.level == 2) { //增加别名
+                        let dataModel = new Object();
+                         dataModel.name = value;
+                         dataModel.stdCode = node.data.code;
+                        let dataParam = JSON.stringify(dataModel);
+                        getJsonData('/grade/alias/add', dataParam).then(res => {
+                            console.log(res)
+                            console.log(888);
+                            let dataParam = JSON.stringify({
+                                "stdCode": node.data.code
+                            });
+                            getJsonData('/grade/alias/add', dataParam).then(res => {
+                                let dataArray = res.data;
+                                if (dataArray && dataArray.length > 0) {
+                                    let newDataArray = new Array();
+                                    for (let i = 0; i < dataArray.length; i++) {
+                                        let dataBean = dataArray[i];
+                                        dataBean.label = dataBean.name;
+                                        dataBean.isLeaf = false;
+                                        newDataArray.push(dataBean);
+                                    }
+                                    this.$refs.tree.updateKeyChildren(node.data.id, newDataArray);
+                                } else {
+
+                                }
+                            }, error => {
+                                console.log(error)
+                            })
+
+                            //  console.log(this.$refs.tree.getCheckedNodes());
+
+                        }, error => {
+                            console.log(error)
+                        })
+
                     }
                 }).catch(() => {
                     this.$message({
