@@ -183,7 +183,7 @@
   </div>
 </template>
 <script>
-import { checkType, queryList, curd, deleteApi, addAlias, uploadAlias, delectAlias, showAlias, showLevel, addLevel, showtLevel, addtAlias, selectAlias, amendAlias, secondLevel, addtLevel, showgrade, delgrade } from "@/api/index";
+import { checkType, queryList, curd, deleteApi, addAlias, uploadAlias, delectAlias, showAlias, showLevel, addLevel, showtLevel, addtAlias, selectAlias, amendAlias, secondLevel, addtLevel, showgrade, delgrade, firstgrade } from "@/api/index";
 
 export default {
   data() {
@@ -500,12 +500,12 @@ export default {
     noticeLevel() {
       this.searchname = '公告等级'
       this.changebut = false
-      // firstgrade({}).then(res => {
-      //   if (res.code === 1) {
-      //     this.single = res.data
-      //   }
-      //   this.seList(this.svalue)
-      // })
+      firstgrade({}).then(res => {
+        if (res.code === 1) {
+          this.single = res.data
+        }
+        this.seList(this.svalue)
+      })
       showgrade({ quaCode: this.stdCode, bizType: 1 }).then(res => {
         this.tableData = res.data
       })
@@ -524,12 +524,12 @@ export default {
     noticeFirm() {
       this.searchname = '企业等级'
       this.changebut = false
-      //   firstgrade({}).then(res => {
-      //   if (res.code === 1) {
-      //     this.single = res.data
-      //   }
-      //   this.seList(this.svalue)
-      // })
+        firstgrade({}).then(res => {
+        if (res.code === 1) {
+          this.single = res.data
+        }
+        this.seList(this.svalue)
+      })
       showgrade({ quaCode: this.stdCode, bizType: 2 }).then(res => {
         this.tableData = res.data
       })
