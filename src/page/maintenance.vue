@@ -20,14 +20,14 @@
                           size="mini"
                           v-if="node.level>1"
                           @click="() => remove(node, data)">
-                        刪除
+                            刪除
                       </el-button>
                        <el-button
                            type="text"
                            size="mini"
                            v-if="node.level>1"
                            @click="() =>updata(node,data)">
-                          修改
+                            修改
                       </el-button>
                     </span>
             </span>
@@ -151,6 +151,7 @@
                 return data.label.indexOf(value) !== -1;
             },
             append(node, data) {
+
                 this.$prompt('请输入增加的内容', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -173,9 +174,9 @@
                         dataModel.parentId = node.data.parentId;
                         //dataModel.id = node.data.id;
                         let dataParam = JSON.stringify(dataModel);
-                        getJsonData('/grade/alias/add', dataParam).then(res => {
+                        getJsonData('/grade/save', dataParam).then(res => {
                               let parentId = node.data.currentId;
-                              let dataParam = JSON.stringify({
+                          let dataParam = JSON.stringify({
                                 "parentId": parentId
                             });
 
@@ -205,7 +206,8 @@
                         type: 'info',
                         message: '取消输入'
                     });
-                });
+                }
+                );
             },
             remove(node, data) {
                 this.$confirm('此操作删除该文件, 是否继续?', '提示', {
@@ -259,12 +261,14 @@
                 })
             },
 
+
             updataByNode(node,resolve){
-                let dataModel = new Object();
-                dataModel.name = value;
-                dataModel.id = node.data.id;
-                let dataParam = JSON.stringify(dataModel);
-                            getJsonData('/grade/save', dataParam).then(res => { //调用评标办法列表接口
+                let parentId = node.data.id;
+                let dataParam = JSON.stringify({
+                                "parentId": parentId
+                            });
+
+                            getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
                                 console.log(3333)
                                 let dataArray = res.data;
                                 if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
@@ -290,8 +294,8 @@
                 this.$prompt('请输入修改的内容', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
-                    //inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-                    //inputErrorMessage: '格式不正确'
+                    //                    inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+                    //                    inputErrorMessage: '格式不正确'
                 }).then(({
                     value
                 }) => {
@@ -304,13 +308,36 @@
                     }
 
                    if (node.level == 2) {
-                        var dataModelT = new Object();
-                        dataModelT.id = node.data.id;
-                        dataModelT.name = value;
-                        let dataParamT = JSON.stringify(dataModelT);
+                         let dataModel = new Object();
+                        dataModel.name = value;
+                        //dataModel.parentId = node.data.parentId;
+                        dataModel.id = node.data.id;
+                        let dataParam = JSON.stringify(dataModel);
+                        getJsonData('/grade/save', dataParam).then(res => {
+                             console.log(res)
+                               let parentId = node.parent.data.currentId;
+                               let dataParam = JSON.stringify({
+                                "parentId": parentId
+                            });
 
-                        getJsonData('/alias/update', dataParamT).then(res => {
-                            this.updataByNode(node)
+                            getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
+                                console.log(3333)
+                                let dataArray = res.data;
+                                if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
+                                    let newDataArray = new Array();
+                                    for (let i = 0; i < dataArray.length; i++) { //封装数组，塞给树控件，让树控件绘制
+                                        let dataBean = dataArray[i];
+                                        dataBean.label = dataBean.name;
+                                        dataBean.isLeaf = true;
+                                        newDataArray.push(dataBean);
+                                    }
+
+                                    this.$refs.tree.updateKeyChildren(node.parent.data.id, newDataArray);
+
+                                }
+                            }, error => {
+                                console.log(error)
+                            })
                         }, error => {
                             console.log(error)
                         })
