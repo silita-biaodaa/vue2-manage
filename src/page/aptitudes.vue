@@ -437,15 +437,14 @@ export default {
               })
             })
         } else {
-              delgrade({ id: row.id }).then(res => {
-                if (res.code === 1) {
-                  this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                  });
-                }
-              }) 
-            if(this.searchname === '公告等级') {
+            delgrade({ id: row.id }).then(res => {
+              if (res.code === 1) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+              }
+             if(this.searchname === '公告等级') {
                 showgrade({ quaCode: this.stdCode, bizType: 1 }).then(res => {
                   this.tableData = res.data
                   console.log(res)
@@ -455,7 +454,9 @@ export default {
                 this.tableData = res.data
                 console.log(res)
               })
-            }
+            }  
+            }) 
+           
         }
         
 
@@ -559,15 +560,16 @@ export default {
         } else if (this.searchname === '公告等级') {
               if(this.mvalue.length){
                 addtLevel({quaCode:this.stdCode,bizType:1,gradeCode:this.newmvalue}).then(res => {
-                      console.log(res)
+                      // console.log(res)
                      if(res.code === 1 ) {
                          this.$message({
                          type: 'success',
                          message: '添加成功!'
                        });
                      }
-                    this.noticeLevel()
+                     this.noticeLevel()
                   })
+                   
               } else {
               this.$message({
                   message: '请选择要添加得等级和资质',
@@ -577,20 +579,22 @@ export default {
         } else {
            if (this.mvalue.length) {
             addtLevel({ quaCode: this.stdCode, bizType: 2, gradeCode: this.newmvalue }).then(res => {
-              console.log(res)
+              // console.log(res)
                if(res.code === 1 ) {
                    this.$message({
                    type: 'success',
                    message: '添加成功!'
                  });
                }
-               this.noticeFirm()
+               
               //  showgrade({quaCode:this.stdCode,bizType:2}).then(res => {
               //    this.tableData = res.data
               //   console.log(res)
               //  })
               // this.mvalue = ''
+               this.noticeFirm()
             })
+           
           } else {
             this.$message({
               message: '请选择要添加得等级和资质',

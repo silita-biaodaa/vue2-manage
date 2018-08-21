@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-// const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
-// const baseURL = 'http://192.168.1.133:8080/'
 const baseURL = 'http://120.79.116.245:19004/'
 axios.defaults.baseURL = baseURL
 
@@ -37,17 +35,14 @@ axios.interceptors.request.use(function (config) {
 export const checkUser = params => {
     return axios.post('dataMaintain/listPbMode').then(res => res.data)
 }
-
 // 资质类别接口
 export const checkType = params => {
     return axios.post('qual/qualCate').then(res => res.data)
 }
-
 //
 export const register = params => {
     return axios.post('authorize/login', params).then(res => res.data)
 }
-
 // 获取省份code
 export const province = params => {
     return axios.post('dataMaintain/listProvince').then(res => res.data)
@@ -64,7 +59,6 @@ export const delectAlias = params => {
 export const showAlias = params => {
     return axios.post('dataMaintain/deletePbModeAlias', params).then(res => res.data)
 }
-
 // 资质列表查询
 export const queryList = params => {
     return axios.post('qual/list', params).then(res => res.data)
@@ -110,10 +104,6 @@ export const amendAlias = params => {
  export const firstgrade = params => {
      return axios.post('grade/cate/list', params).then(res => res.data)
  }
-// 等级一级查询
-export const firstgrade = params => {
-    return axios.post('grade/cate/list', params).then(res => res.data)
-}
 //等级二级查询
 export const secondLevel = params => {
     return axios.post('grade/sec/list', params).then(res => res.data)
@@ -136,25 +126,23 @@ export const delgrade = params => {
 export const getJsonData = (url, params) => {
     return new Promise((resolve, reject) => {
         let token = localStorage.getItem("Authorization")
-        if (params != null) {
-            axios.post(url, params, {
-                headers: { 'Content-Type': 'application/json', 'Authorization': token }
-            }).then(res => {
-                resolve(res.data)
-            }).catch(error => {
-                reject(error)
-            })
-        } else {
-            axios.post(url, null, {
-                headers: { 'Content-Type': 'application/json', 'Authorization': token }
-            }).then(res => {
-                resolve(res.data)
-            }).catch(error => {
-                reject(error)
-            })
-        }
+            if (params != null) {
+                axios.post(url, params, {
+                    headers: { 'Content-Type': 'application/json', 'Authorization': token }
+                }).then(res => {
+                    resolve(res.data)
+                }).catch(error => {
+                    reject(error)
+                })
+            } else {
+                axios.post(url, null, {
+                    headers: { 'Content-Type': 'application/json', 'Authorization': token }
+                }).then(res => {
+                    resolve(res.data)
+                }).catch(error => {
+                    reject(error)
+                })
+            }
     })
-
-}
 
 }
