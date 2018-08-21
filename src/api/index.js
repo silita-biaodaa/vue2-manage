@@ -1,19 +1,21 @@
 import axios from 'axios'
 
 // const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
-const baseURL = 'http://192.168.1.133:8080/'
-// const baseURL = 'http://120.79.116.245:19004/'
+// const baseURL = 'http://192.168.1.133:8080/'
+const baseURL = 'http://120.79.116.245:19004/'
 axios.defaults.baseURL = baseURL
 
 axios.interceptors.request.use(function (config) {
     // 将token给到一个前后台约定好的key中，作为请求发送
     let token = localStorage.getItem('Authorization')
+
     if (token) {
         config.headers['Authorization'] = token
     }
     return config
 }, function (error) {
     // Do something with request error
+    localStorage.removeItem('Authorization')
     this.$router.push({ name: 'login' })
     return Promise.reject(error)
 })
@@ -103,7 +105,17 @@ export const secondLevel = params => {
     return axios.post('grade/sec/list', params).then(res => res.data)
 }
 
+export const addtLevel = params => {
+    return axios.post('qual/grade/add', params).then(res => res.data)
+}
 
+export const showgrade = params => {
+    return axios.post('qual/grade/list', params).then(res => res.data)
+}
+
+export const delgrade = params => {
+    return axios.post('qual/grade/del', params).then(res => res.data)
+}
 
 export const getJsonData = (url, params) => {
     return new Promise((resolve, reject) => {
