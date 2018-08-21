@@ -145,7 +145,7 @@
                         let dataModel = new Object();
                         dataModel.name = value;
                         dataModel.parentId = node.data.parentId;
-                        dataModel.id = node.data.id;
+//                        dataModel.id = node.data.id;
                         let dataParam = JSON.stringify(dataModel);
                         getJsonData('/grade/save', dataParam).then(res => {
                              this.updataByNode(node)
