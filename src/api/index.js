@@ -106,6 +106,10 @@ export const selectAlias = params => {
 export const amendAlias = params => {
     return axios.post('qual/alias/update', params).then(res => res.data)
 }
+ //等级一级查询
+ export const firstgrade = params => {
+     return axios.post('grade/cate/list', params).then(res => res.data)
+ }
 // 等级一级查询
 export const firstgrade = params => {
     return axios.post('grade/cate/list', params).then(res => res.data)
@@ -150,5 +154,7 @@ export const getJsonData = (url, params) => {
             })
         }
     })
+
+}
 
 }

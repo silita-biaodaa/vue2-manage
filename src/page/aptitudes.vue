@@ -87,8 +87,6 @@
               <el-option v-for="item in multiple" :key="item.id" :label="item.name" :value="item.code">
               </el-option>
             </el-select>
-            <!-- <div>{{mvalue}}</div>
-            <div>{{newmvalue}}</div> -->
           </div>
 
           <!--文件上传的控件 -->

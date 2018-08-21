@@ -4,9 +4,7 @@
 		<el-container>
 			<!-- 侧边栏 -->
 			<el-aside width="auto">
-				<!-- <div class="logo">
-					<img src="../assets/img/download_logo.png">
-				</div> -->
+
 				<el-menu 
 				:router="true" 
 				:collapse="isCollapse" 
