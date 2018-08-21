@@ -20,14 +20,14 @@
                           size="mini"
                           v-if="node.level>1"
                           @click="() => remove(node, data)">
-                            刪除
+                        刪除
                       </el-button>
                        <el-button
                            type="text"
                            size="mini"
                            v-if="node.level>1"
                            @click="() =>updata(node,data)">
-                            修改
+                          修改
                       </el-button>
                     </span>
             </span>
@@ -142,6 +142,28 @@
                             }, error => {
                                 console.log(error)
                             })
+                }else if (node.level === 2) { //如果是1级树节点，则为评标办法
+                    console.log(1111)
+                     let dataParam = JSON.stringify({
+                        "stdCode": node.data.code
+                    });
+                    getJsonData('/dataMaintain/listPbModeAlias', dataParam).then(res => {
+                        let dataArray = res.data;
+                        if (dataArray && dataArray.length > 0) {
+                            let newDataArray = new Array();
+                            for (let i = 0; i < dataArray.length; i++) {
+                                let dataBean = dataArray[i];
+                                dataBean.label = dataBean.name;
+                                dataBean.isLeaf = false;
+                                newDataArray.push(dataBean);
+                            }
+                            return resolve(newDataArray); //树控件绘制数据
+                        } else {
+                            return resolve(new Array()); //树控件绘制空数据，否则会转圈
+                        }
+                    }, error => {
+                        console.log(error)
+                    })
                 }else{
                      return resolve(new Array());
                 }
@@ -167,7 +189,6 @@
                         });
                         return;
                     }
-
                     if (node.level == 1) { //增加评标办法
                         let dataModel = new Object();
                         dataModel.name = value;
@@ -176,10 +197,9 @@
                         let dataParam = JSON.stringify(dataModel);
                         getJsonData('/grade/save', dataParam).then(res => {
                               let parentId = node.data.currentId;
-                          let dataParam = JSON.stringify({
+                let dataParam = JSON.stringify({
                                 "parentId": parentId
                             });
-
                             getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
                                 console.log(3333)
                                 let dataArray = res.data;
@@ -202,16 +222,16 @@
                         })
                     }else if (node.level == 2) { //增加别名
                         let dataModel = new Object();
-                         dataModel.name = value;
-                         dataModel.stdCode = node.data.code;
+                        dataModel.name = value;
+                        dataModel.stdCode = node.data.code;
+                        dataModel.desc = "";
+                        dataModel.remark = "";
                         let dataParam = JSON.stringify(dataModel);
-                        getJsonData('/grade/alias/add', dataParam).then(res => {
-                            console.log(res)
-                            console.log(888);
+                        getJsonData('/dataMaintain/insertPbModeAlias', dataParam).then(res => {
                             let dataParam = JSON.stringify({
                                 "stdCode": node.data.code
                             });
-                            getJsonData('/grade/alias/add', dataParam).then(res => {
+                            getJsonData('/dataMaintain/listPbModeAlias', dataParam).then(res => {
                                 let dataArray = res.data;
                                 if (dataArray && dataArray.length > 0) {
                                     let newDataArray = new Array();
@@ -241,8 +261,7 @@
                         type: 'info',
                         message: '取消输入'
                     });
-                }
-                );
+                });
             },
             remove(node, data) {
                 this.$confirm('此操作删除该文件, 是否继续?', '提示', {
@@ -273,7 +292,6 @@
                                 });
                             }
 
-
                         }, error => {
                             this.$message({
                                 type: 'fail',
@@ -285,6 +303,30 @@
                                 message: '已取消删除'
                             });
                         });
+                    }else if(node.level === 3){
+
+                        let param = JSON.stringify({
+                            "idsStr": node.data.id
+                        });
+
+                        getJsonData('/dataMaintain/deletePbModeAlias', param).then(res => {
+                            console.log(res);
+                            if (res.code == 1) {
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                                const parent = node.parent;
+                                const children = parent.childNodes;
+                                const index = children.findIndex(d => d.data.id === data.id);
+                                children.splice(index, 1);
+                            } else {
+                                this.$message({
+                                    type: 'fail',
+                                    message: res.msg
+                                });
+                            }
+                        })
                     }
                 })
             },
@@ -373,6 +415,32 @@
                             }, error => {
                                 console.log(error)
                             })
+                        }, error => {
+                            console.log(error)
+                        })
+                    } else if (node.level == 3) {
+                        var dataModelT = new Object();
+                        dataModelT.id = node.data.id;
+                        dataModelT.name = value;
+                        dataModelT.remark = "";
+                        dataModelT.desc = "";
+                        let dataParamT = JSON.stringify(dataModelT);
+
+                        getJsonData('/dataMaintain/updatePbModeAlias', dataParamT).then(res => {
+                            console.log(res)
+                            const parent = node.parent;
+                            const children = parent.childNodes;
+                            dataModelT.label = value;
+                            const newChild = {
+                                id: dataModelT.id,
+                                label: value
+                            };
+                            data.id = dataModelT.id;
+                            data.label = value;
+                            this.$message({
+                                type: 'success',
+                                message: '您修改的内容是: ' + value
+                            });
                         }, error => {
                             console.log(error)
                         })
