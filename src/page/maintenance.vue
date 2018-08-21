@@ -144,9 +144,10 @@
                     if (node.level == 1) { //增加评标办法
                         let dataModel = new Object();
                         dataModel.name = value;
-                        dataModel.stdCode = node.data.code;
+                        dataModel.parentId = node.data.parentId;
+                        dataModel.id = node.data.id;
                         let dataParam = JSON.stringify(dataModel);
-                        getJsonData('/grade/alias/add', dataParam).then(res => {
+                        getJsonData('/grade/save', dataParam).then(res => {
                              this.updataByNode(node)
                         }, error => {
                             console.log(error)
@@ -197,8 +198,9 @@
 
 
             updataByNode(node,resolve){
+                let parentId = node.data.id;
                 let dataParam = JSON.stringify({
-                                "parentId": node.data.id
+                                "parentId": parentId
                             });
 
                             getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
@@ -210,7 +212,6 @@
                                         let dataBean = dataArray[i];
                                         dataBean.label = dataBean.name;
                                         dataBean.isLeaf = true;
-
                                         newDataArray.push(dataBean);
                                     }
                                     if(resolve){

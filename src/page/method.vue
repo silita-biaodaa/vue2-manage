@@ -32,7 +32,7 @@
                 </span>
             </span>
         </el-tree>
-    
+
     </div>
 </template>
 
@@ -59,9 +59,9 @@
                         }]
                     }]
                 },
-    
+
             ];
-    
+
             return {
                 data4: JSON.parse(JSON.stringify(data)),
                 data5: JSON.parse(JSON.stringify(data)),
@@ -73,8 +73,8 @@
         /*  mounted() {
               this.loadNode();
           },*/
-    
-    
+
+
         watch: {
             filterText(val) {
                 this.$refs.tree.filter(val);
@@ -104,29 +104,31 @@
                             dataBean.isLeaf = true;
                             dataBean.show = true;
                             dataBeanArr.push(dataBean);
-    
+
                         }
                         // data = dataBeanArr;
                         return resolve(dataBeanArr);
-    
+
                     }, error => {
                         console.log(error)
                     })
-    
+
                 } else if (node.level === 1) { //如果是1级树节点，则为评标办法
-    
+
                     let dataParam = JSON.stringify({
                         "type": node.data.value
                     });
-    
+
                     getJsonData('/dataMaintain/listPbMode', dataParam).then(res => { //调用评标办法列表接口
-    
+
                         let dataArray = res.data;
                         if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
                             let newDataArray = new Array();
                             for (let i = 0; i < dataArray.length; i++) { //封装数组，塞给树控件，让树控件绘制
                                 let dataBean = dataArray[i];
                                 dataBean.label = dataBean.name;
+                                dataBean.proviceCode = node.data.value
+                                dataBean.proviceId = node.id
                                 dataBean.isLeaf = true;
                                 newDataArray.push(dataBean);
                             }
@@ -137,7 +139,7 @@
                     }, error => {
                         console.log(error)
                     })
-    
+
                 } else if (node.level === 2) { //如果是2级节点，则为别名
                     let dataParam = JSON.stringify({
                         "stdCode": node.data.code
@@ -168,7 +170,7 @@
                 return data.label.indexOf(value) !== -1;
             },
             append(node, data) {
-    
+
                 this.$prompt('请输入增加的内容', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -184,7 +186,7 @@
                         });
                         return;
                     }
-    
+
                     if (node.level == 1) { //增加评标办法
                         let dataModel = new Object();
                         dataModel.name = value;
@@ -192,17 +194,15 @@
                         dataModel.orderNo = "2";
                         dataModel.desc = "";
                         let dataParam = JSON.stringify(dataModel);
-    
+
                         getJsonData('/dataMaintain/insertPbMode', dataParam).then(res => {
                             //this.loadNode(node,resolve)
-    
-    
                             let dataParam = JSON.stringify({
                                 "type": node.data.value
                             });
-    
+
                             getJsonData('/dataMaintain/listPbMode', dataParam).then(res => { //调用评标办法列表接口
-    
+
                                 let dataArray = res.data;
                                 if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
                                     let newDataArray = new Array();
@@ -214,14 +214,14 @@
                                     }
                                     this.$refs.tree.updateKeyChildren(node.id, newDataArray);
                                 } else {
-    
+
                                 }
                             }, error => {
                                 console.log(error)
                             })
-    
-    
-    
+
+
+
                         }, error => {
                             console.log(error)
                         })
@@ -234,8 +234,8 @@
                         let dataParam = JSON.stringify(dataModel);
                         getJsonData('/dataMaintain/insertPbModeAlias', dataParam).then(res => {
                             console.log(res)
-    
-    
+
+
                             console.log(22222);
                             let dataParam = JSON.stringify({
                                 "stdCode": node.data.code
@@ -252,18 +252,18 @@
                                     }
                                     this.$refs.tree.updateKeyChildren(node.data.id, newDataArray);
                                 } else {
-    
+
                                 }
                             }, error => {
                                 console.log(error)
                             })
-    
+
                             //  console.log(this.$refs.tree.getCheckedNodes());
-    
+
                         }, error => {
                             console.log(error)
                         })
-    
+
                     }
                 }).catch(() => {
                     this.$message({
@@ -282,7 +282,7 @@
                         let param = JSON.stringify({
                             "idsStr": node.data.id
                         });
-    
+
                         getJsonData('/dataMaintain/deletePbMode', param).then(res => {
                             console.log(res);
                             if (res.code == 1) {
@@ -315,7 +315,7 @@
                         let param = JSON.stringify({
                             "idsStr": node.data.id
                         });
-    
+
                         getJsonData('/dataMaintain/deletePbModeAlias', param).then(res => {
                             console.log(res);
                             if (res.code == 1) {
@@ -347,17 +347,37 @@
                     }
                 })
             },
-    
+
             reload() {
                 this.isRouterAlive = false
                 this.$nextTick(function() {
                     this.isRouterAlive = true
                 })
             },
-    
-    
-    
-    
+            updataByNode(node,proviceId){
+                  let dataParam = JSON.stringify({
+                                "type": node.data.value
+                            });
+
+                            getJsonData('/dataMaintain/listPbMode', dataParam).then(res => { //调用评标办法列表接口
+
+                                let dataArray = res.data;
+                                if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
+                                    let newDataArray = new Array();
+                                    for (let i = 0; i < dataArray.length; i++) { //封装数组，塞给树控件，让树控件绘制
+                                        let dataBean = dataArray[i];
+                                        dataBean.label = dataBean.name;
+                                        dataBean.isLeaf = true;
+                                        newDataArray.push(dataBean);
+                                    }
+                                    this.$refs.tree.updateKeyChildren(node.parent.data.id, newDataArray);
+                                } else {
+
+                                }
+                            }, error => {
+                                console.log(error)
+                            })
+            },
             updata(node, data) {
                 this.$prompt('请输入修改的内容', '提示', {
                     confirmButtonText: '确定',
@@ -374,61 +394,18 @@
                         });
                         return;
                     }
-    
-                    if (node.level == 1) {
-    
-                        var dataModel = new Object();
-                        dataModel.id = node.data.id;
-                        dataModel.name = value;
-                        dataModel.type = node.data.value;
-                        dataModel.orderNo = "2";
-                        dataModel.desc = "";
-                        var dataParam = JSON.stringify(dataModel);
-                        if (!data.children) {
-                            this.$set(data, 'children', []);
-                        }
-    
-                        if (node.childNodes && node.childNodes.length > 0) {
-                            let childrenArr = new Array();
-                            for (let i = 0; i < node.childNodes.length; i++) {
-                                var bean = node.childNodes[i];
-                                let childBean = new Object();
-                                childBean.id = bean.id;
-                                childBean.label = bean.label;
-                                childBean.children = [];
-                                childrenArr.push(childBean);
-                            }
-                            data.children = childrenArr;
-                        }
-                        getJsonData('/dataMaintain/updatePbMode', dataParam).then(res => {
-                            console.log(res)
-                        }, error => {
-                            console.log(error)
-                        })
-                    } else if (node.level == 2) {
+
+                   if (node.level == 2) {
                         var dataModelT = new Object();
                         dataModelT.id = node.data.id;
                         dataModelT.name = value;
-                        dataModelT.type = node.data.type;
+                        dataModelT.type = node.data.proviceCode;
                         dataModelT.orderNo = "2";
                         dataModelT.desc = "";
                         let dataParamT = JSON.stringify(dataModelT);
-    
-                        getJsonData('/dataMaintain/updatePbMode', dataParamT).then(res => {
-                            console.log(res)
-                            const parent = node.parent;
-                            const children = parent.childNodes;
-                            dataModelT.label = value;
-                            const newChild = {
-                                id: dataModelT.id,
-                                label: value
-                            };
-                            data.id = dataModelT.id;
-                            data.label = value;
-                            this.$message({
-                                type: 'success',
-                                message: '您修改的内容是: ' + value
-                            });
+                        let proviceId = node.data.proviceId
+                        getJsonData('/dataMaintain/updatePbMode', dataParamT,proviceId).then(res => {
+                             this.updataByNode(node,proviceId)
                         }, error => {
                             console.log(error)
                         })
@@ -439,7 +416,7 @@
                         dataModelT.remark = "";
                         dataModelT.desc = "";
                         let dataParamT = JSON.stringify(dataModelT);
-    
+
                         getJsonData('/dataMaintain/updatePbModeAlias', dataParamT).then(res => {
                             console.log(res)
                             const parent = node.parent;
@@ -466,46 +443,10 @@
                     });
                 });
                 // children.splice(index, 1);
-            },
-            /** 树重新获取节点数据
-             * @type:1/2/3 1:当前文件夹/父级/爷爷级
-             * @id:文件夹id
-             * @idtype:1/2:传入的id是当前/父级
-             */
-            getPhotoNodeData(type, id, idtype) {
-                console.log(type, id, idtype)
-                let grandId, grandnode, parentnode, parentId, nownode;
-                // 爷级都需要传父级id
-                if (type == 3 && idtype == 2) {
-                    parentnode = this.$refs.phototree.getNode(id);
-                    if (parentnode) {
-                        grandId = parentnode.data.parentFolderId || 0;
-                        console.log(grandId)
-                        grandnode = this.$refs.phototree.getNode(grandId);
-                        this.loadNodephoto(grandnode, this.tmpResolvephoto);
-                    }
-                } else if (type == 2 && idtype == 2) {
-                    parentnode = this.$refs.phototree.getNode(id);
-                    if (parentnode) {
-                        this.loadNodephoto(parentnode, this.tmpResolvephoto);
-                    }
-                } else if (type == 2 && idtype == 1) {
-                    // 父级传入自己的id
-                    nownode = this.$refs.phototree.getNode(id);
-    
-                    if (nownode) {
-                        parentId = nownode.data.parentFolderId || 0;
-                        this.photoExpend([parentId])
-                        parentnode = this.$refs.phototree.getNode(parentId);
-                        this.loadNodephoto(parentnode, this.tmpResolvephoto);
-                    }
-                } else {
-                    console.log(type, idtype);
-                }
             }
-    
+
         },
-    
+
     }
 </script>
 
@@ -518,20 +459,20 @@
         justify-content: space-between;
         font-size: 16px;
     }
-    
+
     .el-tree-node__loading-icon {
         display: none;
     }
-    
+
     .bdd_aids {
         margin-right: 1400px;
     }
-    
+
     .bdd_main {
         margin-left: 15%;
         margin-right: 15%;
     }
-    
+
     .el-input {
         margin-top: 30px;
     }
