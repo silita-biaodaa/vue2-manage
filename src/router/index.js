@@ -58,16 +58,16 @@ const routes = [
 						component:Aptitudes,
 						name:'aptitudes'
 				  },
-          {
-               path:'/maintenance',
-               component:Maintenance,
-               name:'maintenance'
-           },
-           {
-               path:'/method',
-               component:Method,
-               name:'method'
-           }
+                  {
+                       path:'/maintenance',
+                       component:Maintenance,
+                       name:'maintenance'
+                   },
+                   {
+                       path:'/method',
+                       component:Method,
+                       name:'method'
+                   }
 ]
 		}
 
