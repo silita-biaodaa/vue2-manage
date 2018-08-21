@@ -94,10 +94,13 @@
                         //封装对象并将对象放入数组中，塞给树控件，让树控件绘制
                         let i = 0;
                         for (let i = 0; i < dataArr.length; i++) {
+
                             let dataBean = dataArr[i];
                             let newdataBean = new Object();
                             newdataBean.label = dataBean.name
-                            newdataBean.id = dataBean.id
+                            i++;
+                            newdataBean.id = i
+                            newdataBean.currentId = dataBean.id
                             newdataBean.gradeList = dataBean.gradeList;
                             newdataBean.parentId = dataBean.parentId
                             newdataBean.code = dataBean.code
@@ -114,7 +117,31 @@
 
                 } else if (node.level === 1) { //如果是1级树节点，则为评标办法
                     console.log(1111)
-                    this.updataByNode(node,resolve)
+                     let parentId = node.data.currentId;
+                let dataParam = JSON.stringify({
+                                "parentId": parentId
+                            });
+                    getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
+                                console.log(3333)
+                                let dataArray = res.data;
+                                if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
+                                    let newDataArray = new Array();
+                                    for (let i = 0; i < dataArray.length; i++) { //封装数组，塞给树控件，让树控件绘制
+                                         let dataBean = dataArray[i];
+                                        dataBean.label = dataBean.name;
+                                        dataBean.proviceCode = node.data.value
+                                        dataBean.proviceId = node.id
+                                        dataBean.isLeaf = true;
+                                        newDataArray.push(dataBean);
+                                    }
+                                    resolve(newDataArray);
+
+                                }else{
+                                      resolve(new Array());
+                                }
+                            }, error => {
+                                console.log(error)
+                            })
                 }else{
                      return resolve(new Array());
                 }
@@ -124,7 +151,6 @@
                 return data.label.indexOf(value) !== -1;
             },
             append(node, data) {
-
                 this.$prompt('请输入增加的内容', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -145,10 +171,31 @@
                         let dataModel = new Object();
                         dataModel.name = value;
                         dataModel.parentId = node.data.parentId;
-//                        dataModel.id = node.data.id;
+                        //dataModel.id = node.data.id;
                         let dataParam = JSON.stringify(dataModel);
-                        getJsonData('/grade/save', dataParam).then(res => {
-                             this.updataByNode(node)
+                        getJsonData('/grade/alias/add', dataParam).then(res => {
+                              let parentId = node.data.currentId;
+                              let dataParam = JSON.stringify({
+                                "parentId": parentId
+                            });
+
+                            getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
+                                console.log(3333)
+                                let dataArray = res.data;
+                                if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
+                                    let newDataArray = new Array();
+                                    for (let i = 0; i < dataArray.length; i++) { //封装数组，塞给树控件，让树控件绘制
+                                        let dataBean = dataArray[i];
+                                        dataBean.label = dataBean.name;
+                                        dataBean.isLeaf = true;
+                                        newDataArray.push(dataBean);
+                                    }
+                                    this.$refs.tree.updateKeyChildren(node.data.id, newDataArray);
+
+                                }
+                            }, error => {
+                                console.log(error)
+                            })
                         }, error => {
                             console.log(error)
                         })
@@ -173,7 +220,23 @@
 
                         getJsonData('/grade/del', param).then(res => {
                             console.log(res);
-                           this.updataByNode(node)
+                            if (res.code == 1) {
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                                const parent = node.parent;
+                                const children = parent.childNodes;
+                                const index = children.findIndex(d => d.data.id === data.id);
+                                children.splice(index, 1);
+                            } else {
+                                this.$message({
+                                    type: 'fail',
+                                    message: res.msg
+                                });
+                            }
+
+
                         }, error => {
                             this.$message({
                                 type: 'fail',
@@ -196,14 +259,12 @@
                 })
             },
 
-
             updataByNode(node,resolve){
-                let parentId = node.data.id;
-                let dataParam = JSON.stringify({
-                                "parentId": parentId
-                            });
-
-                            getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
+                let dataModel = new Object();
+                dataModel.name = value;
+                dataModel.id = node.data.id;
+                let dataParam = JSON.stringify(dataModel);
+                            getJsonData('/grade/save', dataParam).then(res => { //调用评标办法列表接口
                                 console.log(3333)
                                 let dataArray = res.data;
                                 if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
@@ -217,7 +278,7 @@
                                     if(resolve){
                                             resolve(newDataArray);
                                     }else{
-                                    this.$refs.tree.updateKeyChildren(node.data.id, newDataArray);
+                                    this.$refs.tree.updateKeyChildren(node.parent.data.id, newDataArray);
                                     }
                                 }
                             }, error => {
@@ -229,8 +290,8 @@
                 this.$prompt('请输入修改的内容', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
-                    //                    inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-                    //                    inputErrorMessage: '格式不正确'
+                    //inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+                    //inputErrorMessage: '格式不正确'
                 }).then(({
                     value
                 }) => {

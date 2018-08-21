@@ -234,8 +234,6 @@
                         let dataParam = JSON.stringify(dataModel);
                         getJsonData('/dataMaintain/insertPbModeAlias', dataParam).then(res => {
                             console.log(res)
-
-
                             console.log(22222);
                             let dataParam = JSON.stringify({
                                 "stdCode": node.data.code
@@ -358,9 +356,7 @@
                   let dataParam = JSON.stringify({
                                 "type": node.data.value
                             });
-
                             getJsonData('/dataMaintain/listPbMode', dataParam).then(res => { //调用评标办法列表接口
-
                                 let dataArray = res.data;
                                 if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
                                     let newDataArray = new Array();
