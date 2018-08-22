@@ -4,6 +4,7 @@
     </div>
 </template>
 <script>
+import { checkType } from '@/api/index'
 export default {
   data () {
     return {
@@ -11,10 +12,14 @@ export default {
     }
   },
   created () {
-
+    // this.inList()
   },
   methods: {
-
+      // inList() {
+      //     checkType().then(res => {
+      //       console.log(res)
+      //     })
+      // }
   },
   components: {
   }
