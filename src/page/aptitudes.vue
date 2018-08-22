@@ -502,6 +502,12 @@ export default {
       this.amendForm.id = row.id
     },
     amendSubmit() {
+        if(!this.amendForm.new_name) {
+            return   this.$message({
+                    type: 'warning',
+                    message: '请输入新资质名称'
+                  });
+        }
       curd({ quaName: this.amendForm.new_name, parentId: this.amendForm.parentId, id: this.amendForm.id }).then(res => {
         
         if (res.code === 1) {
