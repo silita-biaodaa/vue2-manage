@@ -522,5 +522,6 @@
     }
     .bdd_color{
         color: #999999;
+        margin-left:10px;
     }
 </style>
