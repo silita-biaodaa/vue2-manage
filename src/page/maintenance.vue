@@ -13,21 +13,21 @@
                               v-if="node.level<3"
                               @click="() => append(node,data)"
                               >
-                                增加
+                            <i class="el-icon-circle-plus-outline bdd_color"></i>
                           </el-button>
                           <el-button
                               type="text"
                               size="mini"
                               v-if="node.level>1"
                               @click="() => remove(node, data)">
-                            刪除
+                           <i class="el-icon-delete bdd_color"></i>
                           </el-button>
                            <el-button
                                type="text"
                                size="mini"
                                v-if="node.level>1"
                                @click="() =>updata(node,data)">
-                              修改
+                             <i class="el-icon-edit bdd_color"></i>
                           </el-button>
                         </span>
             </span>
