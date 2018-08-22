@@ -411,7 +411,6 @@
                         });
                         return;
                     }
-
                     if (node.level == 2) {
                         var dataModelT = new Object();
                         dataModelT.id = node.data.id;
