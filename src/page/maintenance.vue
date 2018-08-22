@@ -4,35 +4,35 @@
         </el-input>
         <el-tree :data="data5" node-key="id" ref="tree" :load="loadNode" lazy :expand-on-click-node="false" :filter-node-method="filterNode">
             <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <span>{{ node.label }}</span>
+                        <span>{{ node.label }}</span>
             <span v-show="node.id==0">{{ node.id }}</span>
             <span class='bdd_aids'>
-                      <el-button
-                          type="text"
-                          size="mini"
-                          v-if="node.level<3"
-                          @click="() => append(node,data)"
-                          >
-                            增加
-                      </el-button>
-                      <el-button
-                          type="text"
-                          size="mini"
-                          v-if="node.level>1"
-                          @click="() => remove(node, data)">
-                        刪除
-                      </el-button>
-                       <el-button
-                           type="text"
-                           size="mini"
-                           v-if="node.level>1"
-                           @click="() =>updata(node,data)">
-                          修改
-                      </el-button>
-                    </span>
+                          <el-button
+                              type="text"
+                              size="mini"
+                              v-if="node.level<3"
+                              @click="() => append(node,data)"
+                              >
+                                增加
+                          </el-button>
+                          <el-button
+                              type="text"
+                              size="mini"
+                              v-if="node.level>1"
+                              @click="() => remove(node, data)">
+                            刪除
+                          </el-button>
+                           <el-button
+                               type="text"
+                               size="mini"
+                               v-if="node.level>1"
+                               @click="() =>updata(node,data)">
+                              修改
+                          </el-button>
+                        </span>
             </span>
         </el-tree>
-
+    
     </div>
 </template>
 
@@ -59,9 +59,9 @@
                         }]
                     }]
                 },
-
+    
             ];
-
+    
             return {
                 data4: JSON.parse(JSON.stringify(data)),
                 data5: JSON.parse(JSON.stringify(data)),
@@ -73,8 +73,8 @@
         /*  mounted() {
               this.loadNode();
           },*/
-
-
+    
+    
         watch: {
             filterText(val) {
                 this.$refs.tree.filter(val);
@@ -94,7 +94,7 @@
                         //封装对象并将对象放入数组中，塞给树控件，让树控件绘制
                         let i = 0;
                         for (let i = 0; i < dataArr.length; i++) {
-
+    
                             let dataBean = dataArr[i];
                             let newdataBean = new Object();
                             newdataBean.label = dataBean.name
@@ -105,46 +105,46 @@
                             newdataBean.parentId = dataBean.parentId
                             newdataBean.code = dataBean.code
                             dataBeanArr.push(newdataBean);
-
+    
                         }
-
+    
                         // data = dataBeanArr;
                         return resolve(dataBeanArr);
-
+    
                     }, error => {
                         console.log(error)
                     })
-
+    
                 } else if (node.level === 1) { //如果是1级树节点，则为评标办法
                     console.log(1111)
-                     let parentId = node.data.currentId;
-                let dataParam = JSON.stringify({
-                                "parentId": parentId
-                            });
+                    let parentId = node.data.currentId;
+                    let dataParam = JSON.stringify({
+                        "parentId": parentId
+                    });
                     getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
-                                console.log(3333)
-                                let dataArray = res.data;
-                                if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
-                                    let newDataArray = new Array();
-                                    for (let i = 0; i < dataArray.length; i++) { //封装数组，塞给树控件，让树控件绘制
-                                         let dataBean = dataArray[i];
-                                        dataBean.label = dataBean.name;
-                                        dataBean.proviceCode = node.data.value
-                                        dataBean.proviceId = node.id
-                                        dataBean.isLeaf = true;
-                                        newDataArray.push(dataBean);
-                                    }
-                                    resolve(newDataArray);
-
-                                }else{
-                                      resolve(new Array());
-                                }
-                            }, error => {
-                                console.log(error)
-                            })
-                }else if (node.level === 2) { //如果是1级树节点，则为评标办法
+                        console.log(3333)
+                        let dataArray = res.data;
+                        if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
+                            let newDataArray = new Array();
+                            for (let i = 0; i < dataArray.length; i++) { //封装数组，塞给树控件，让树控件绘制
+                                let dataBean = dataArray[i];
+                                dataBean.label = dataBean.name;
+                                dataBean.proviceCode = node.data.value
+                                dataBean.proviceId = node.id
+                                dataBean.isLeaf = true;
+                                newDataArray.push(dataBean);
+                            }
+                            resolve(newDataArray);
+    
+                        } else {
+                            resolve(new Array());
+                        }
+                    }, error => {
+                        console.log(error)
+                    })
+                } else if (node.level === 2) { //如果是1级树节点，则为评标办法
                     console.log(1111)
-                     let dataParam = JSON.stringify({
+                    let dataParam = JSON.stringify({
                         "stdCode": node.data.code
                     });
                     getJsonData('/dataMaintain/listPbModeAlias', dataParam).then(res => {
@@ -164,8 +164,8 @@
                     }, error => {
                         console.log(error)
                     })
-                }else{
-                     return resolve(new Array());
+                } else {
+                    return resolve(new Array());
                 }
             },
             filterNode(value, data) {
@@ -173,7 +173,7 @@
                 return data.label.indexOf(value) !== -1;
             },
             append(node, data) {
-
+    
                 this.$prompt('请输入增加的内容', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -189,6 +189,7 @@
                         });
                         return;
                     }
+    
                     if (node.level == 1) { //增加评标办法
                         let dataModel = new Object();
                         dataModel.name = value;
@@ -196,10 +197,18 @@
                         //dataModel.id = node.data.id;
                         let dataParam = JSON.stringify(dataModel);
                         getJsonData('/grade/save', dataParam).then(res => {
-                              let parentId = node.data.currentId;
-                let dataParam = JSON.stringify({
+                            if (res.code == 0) {
+                                this.$message({
+                                    type: 'fail',
+                                    message: res.msg
+                                });
+                                return;
+                             }
+                            let parentId = node.data.currentId;
+                            let dataParam = JSON.stringify({
                                 "parentId": parentId
                             });
+    
                             getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
                                 console.log(3333)
                                 let dataArray = res.data;
@@ -212,7 +221,7 @@
                                         newDataArray.push(dataBean);
                                     }
                                     this.$refs.tree.updateKeyChildren(node.data.id, newDataArray);
-
+    
                                 }
                             }, error => {
                                 console.log(error)
@@ -220,7 +229,7 @@
                         }, error => {
                             console.log(error)
                         })
-                    }else if (node.level == 2) { //增加别名
+                    } else if (node.level == 2) { //增加别名
                         let dataModel = new Object();
                         dataModel.name = value;
                         dataModel.stdCode = node.data.code;
@@ -228,6 +237,13 @@
                         dataModel.remark = "";
                         let dataParam = JSON.stringify(dataModel);
                         getJsonData('/dataMaintain/insertPbModeAlias', dataParam).then(res => {
+                            if (res.code == 0) {
+                                this.$message({
+                                    type: 'fail',
+                                    message: res.msg
+                                });
+                                return;
+                             }
                             let dataParam = JSON.stringify({
                                 "stdCode": node.data.code
                             });
@@ -243,18 +259,18 @@
                                     }
                                     this.$refs.tree.updateKeyChildren(node.data.id, newDataArray);
                                 } else {
-
+    
                                 }
                             }, error => {
                                 console.log(error)
                             })
-
+    
                             //  console.log(this.$refs.tree.getCheckedNodes());
-
+    
                         }, error => {
                             console.log(error)
                         })
-
+    
                     }
                 }).catch(() => {
                     this.$message({
@@ -273,7 +289,7 @@
                         let param = JSON.stringify({
                             "id": node.data.id
                         });
-
+    
                         getJsonData('/grade/del', param).then(res => {
                             console.log(res);
                             if (res.code == 1) {
@@ -291,7 +307,8 @@
                                     message: res.msg
                                 });
                             }
-
+    
+    
                         }, error => {
                             this.$message({
                                 type: 'fail',
@@ -303,12 +320,12 @@
                                 message: '已取消删除'
                             });
                         });
-                    }else if(node.level === 3){
-
+                    } else if (node.level === 3) {
+    
                         let param = JSON.stringify({
                             "idsStr": node.data.id
                         });
-
+    
                         getJsonData('/dataMaintain/deletePbModeAlias', param).then(res => {
                             console.log(res);
                             if (res.code == 1) {
@@ -330,43 +347,43 @@
                     }
                 })
             },
-
+    
             reload() {
                 this.isRouterAlive = false
                 this.$nextTick(function() {
                     this.isRouterAlive = true
                 })
             },
-
-
-            updataByNode(node,resolve){
+    
+    
+            updataByNode(node, resolve) {
                 let parentId = node.data.id;
                 let dataParam = JSON.stringify({
-                                "parentId": parentId
-                            });
-
-                            getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
-                                console.log(3333)
-                                let dataArray = res.data;
-                                if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
-                                    let newDataArray = new Array();
-                                    for (let i = 0; i < dataArray.length; i++) { //封装数组，塞给树控件，让树控件绘制
-                                        let dataBean = dataArray[i];
-                                        dataBean.label = dataBean.name;
-                                        dataBean.isLeaf = true;
-                                        newDataArray.push(dataBean);
-                                    }
-                                    if(resolve){
-                                            resolve(newDataArray);
-                                    }else{
-                                    this.$refs.tree.updateKeyChildren(node.parent.data.id, newDataArray);
-                                    }
-                                }
-                            }, error => {
-                                console.log(error)
-                            })
+                    "parentId": parentId
+                });
+    
+                getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
+                    console.log(3333)
+                    let dataArray = res.data;
+                    if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
+                        let newDataArray = new Array();
+                        for (let i = 0; i < dataArray.length; i++) { //封装数组，塞给树控件，让树控件绘制
+                            let dataBean = dataArray[i];
+                            dataBean.label = dataBean.name;
+                            dataBean.isLeaf = true;
+                            newDataArray.push(dataBean);
+                        }
+                        if (resolve) {
+                            resolve(newDataArray);
+                        } else {
+                            this.$refs.tree.updateKeyChildren(node.parent.data.id, newDataArray);
+                        }
+                    }
+                }, error => {
+                    console.log(error)
+                })
             },
-
+    
             updata(node, data) {
                 this.$prompt('请输入修改的内容', '提示', {
                     confirmButtonText: '确定',
@@ -383,20 +400,26 @@
                         });
                         return;
                     }
-
-                   if (node.level == 2) {
-                         let dataModel = new Object();
+    
+                    if (node.level == 2) {
+                        let dataModel = new Object();
                         dataModel.name = value;
                         //dataModel.parentId = node.data.parentId;
                         dataModel.id = node.data.id;
                         let dataParam = JSON.stringify(dataModel);
                         getJsonData('/grade/save', dataParam).then(res => {
-                             console.log(res)
-                               let parentId = node.parent.data.currentId;
-                               let dataParam = JSON.stringify({
+                            console.log(res)
+                            let parentId = node.parent.data.currentId;
+                            let dataParam = JSON.stringify({
                                 "parentId": parentId
                             });
-
+                        if (res.code == 0) {
+                                this.$message({
+                                    type: 'fail',
+                                    message: res.msg
+                                });
+                                return;
+                             }
                             getJsonData('/grade/sec/list', dataParam).then(res => { //调用评标办法列表接口
                                 console.log(3333)
                                 let dataArray = res.data;
@@ -408,9 +431,9 @@
                                         dataBean.isLeaf = true;
                                         newDataArray.push(dataBean);
                                     }
-
+    
                                     this.$refs.tree.updateKeyChildren(node.parent.data.id, newDataArray);
-
+    
                                 }
                             }, error => {
                                 console.log(error)
@@ -425,9 +448,16 @@
                         dataModelT.remark = "";
                         dataModelT.desc = "";
                         let dataParamT = JSON.stringify(dataModelT);
-
+    
                         getJsonData('/dataMaintain/updatePbModeAlias', dataParamT).then(res => {
                             console.log(res)
+                            if (res.code == 0) {
+                                this.$message({
+                                    type: 'fail',
+                                    message: res.msg
+                                });
+                                return;
+                             }
                             const parent = node.parent;
                             const children = parent.childNodes;
                             dataModelT.label = value;
@@ -453,9 +483,9 @@
                 });
                 // children.splice(index, 1);
             }
-
+    
         },
-
+    
     }
 </script>
 
@@ -468,20 +498,20 @@
         justify-content: space-between;
         font-size: 16px;
     }
-
+    
     .el-tree-node__loading-icon {
         display: none;
     }
-
+    
     .bdd_aids {
         margin-right: 1400px;
     }
-
+    
     .bdd_main {
         margin-left: 15%;
         margin-right: 15%;
     }
-
+    
     .el-input {
         margin-top: 30px;
     }
