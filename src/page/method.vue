@@ -536,6 +536,6 @@
     }
     .bdd_color{
         color: #999999;
-        margin-left:10PX;
+        margin-left:12PX;
     }
 </style>
