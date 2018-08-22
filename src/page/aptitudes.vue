@@ -142,15 +142,15 @@
         <el-button type="primary" @click="addCateSubmit('addCateForm')">确 定</el-button>
       </div>
     </el-dialog>
-    <!-- 修改资质弹框 -->
 
+    <!-- 修改资质弹框 -->
     <el-dialog title="修改资质" :visible.sync="amendFormVisible">
-      <el-form :model="amendForm" label-width="100px" :rules="newapti" ref="amendForm">
+      <el-form :model="amendForm" label-width="100px"  ref="amendForm">
         <el-form-item label="原资质名称:">
           <el-input v-model="amendForm.old_name" auto-complete="off" disabled></el-input>
         </el-form-item>
 
-        <el-form-item label="新资质名称:" prop="new_apti">
+        <el-form-item label="新资质名称:" >
           <el-input v-model="amendForm.new_name" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -161,7 +161,6 @@
     </el-dialog>
 
     <!-- 编辑资质别名弹框 -->
-
     <el-dialog title="编辑" :visible.sync="redactFormVisible">
       <el-form :model="redactForm" label-width="100px" :rules="rules" ref="amendForm">
         <el-form-item label="原名称:">
@@ -220,11 +219,7 @@ export default {
           { required: true, message: '请输入新资质名称', trigger: 'blur' }
         ]
       },
-      newapti: {
-        new_apti: [
-          { required: true, message: '资质不能为空', trigger: 'blur' }
-        ]
-      },
+  
       //  修改资质弹框
       amendFormVisible: false,
       amendForm: {
@@ -413,7 +408,13 @@ export default {
       this.redactForm.id = row.id
     },
     redactSubmit() {
-
+        if(!this.redactForm.new_name) {
+          return this.$message({
+                    type: 'warning',
+                    message: '请先添写新别名'
+                  });
+        }
+      
       amendAlias({ id: this.redactForm.id, name: this.redactForm.new_name }).then(res => {
         if (res.code === 1) {
           this.$message({
@@ -514,6 +515,7 @@ export default {
             this.amendForm.new_name = ''
             
           }
+          this.amendForm.new_name = ''
           this.amendFormVisible = false
         } else {
            this.$message({
@@ -656,15 +658,21 @@ export default {
 
     },
     handleSuccess(response, file, fileList) {
+      console.log(response)
       if (response.code === 1) {
         this.$message({
           type: 'success',
           message: response.msg
         })
+      }else {
+         this.$message({
+          type: 'warning',
+          message: response.msg
+        })
       }
     },
     setHeader() {
-      let token = localStorage.getItem('mytoken')
+      let token = localStorage.getItem('Authorization')
       return { Authorization: token }
     },
     //  文件超出个数限制时的钩子
