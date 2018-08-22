@@ -520,4 +520,7 @@
     .custom-tree-node[data-v-5dd82063]{
         font-size: 14px;
     }
+    .bdd_color{
+        color: #999999;
+    }
 </style>
