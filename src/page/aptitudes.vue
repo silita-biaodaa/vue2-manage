@@ -579,7 +579,7 @@ export default {
                 });
               }
         } else if (this.searchname === '公告等级') {
-              if(this.mvalue.length){
+              if(this.newmvalue){
                 addtLevel({quaCode:this.stdCode,bizType:1,gradeCode:this.newmvalue}).then(res => {
                       // console.log(res)
                      if(res.code === 1 ) {
@@ -589,6 +589,7 @@ export default {
                        });
                      }
                      this.noticeLevel()
+                     this.newmvalue = ''
                   })
 
               } else {
@@ -598,7 +599,7 @@ export default {
                 });
               }
         } else {
-           if (this.mvalue.length) {
+           if (this.newmvalue) {
             addtLevel({ quaCode: this.stdCode, bizType: 2, gradeCode: this.newmvalue }).then(res => {
               // console.log(res)
                if(res.code === 1 ) {
@@ -614,6 +615,7 @@ export default {
               //  })
               // this.mvalue = ''
                this.noticeFirm()
+                this.newmvalue = ''
             })
 
           } else {
