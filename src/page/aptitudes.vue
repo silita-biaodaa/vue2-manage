@@ -127,7 +127,7 @@
     <!-- 添加分类弹框 -->
     <el-dialog title="添加资质" :visible.sync="addDialogFormVisible">
       <el-form :model="addForm" label-width="80px" :rules="rules" ref="addCateForm">
-        <el-form-item label="分类名称" prop="cat_name">
+        <el-form-item label="资质名称" prop="cat_name">
           <el-input v-model="addForm.cat_name" auto-complete="off"></el-input>
 
         </el-form-item>
@@ -275,7 +275,6 @@ export default {
   },
   created() {
     this.initList()
-
   },
   watch: {
     svalue: function(newId,oldId){
@@ -309,7 +308,11 @@ export default {
         if (res.code === 1) {
           this.type = res.data
         }
-
+      }),
+      queryList({ quaName: '', parentId: '' }).then(res => {
+        if (res.code === 1) {
+          this.tableName = res.data
+        }
       })
     },
     // 弹框得添加分类
@@ -318,16 +321,23 @@ export default {
         if (valid) {
          if(this.addForm.fatherid) {
             curd({ parentId: this.addForm.fatherid, quaName: this.addForm.cat_name }).then(res => {
+              // console.log(res)
               if (res.code === 1) {
                 queryList({ parentId: this.addForm.fatherid }).then(res => {
                   if (res.code === 1) {
                     this.tableName = res.data
                   }
                 })
+                 this.addDialogFormVisible = false
+                 this.addForm.cat_name = ''
+              }else {
+                  this.$message({
+                  type: 'warning',
+                  message: res.msg
+                });
               }
             })
-            this.addDialogFormVisible = false 
-             this.addForm.cat_name = ''
+           
          } else {
            this.$message({
              type: 'warning',
@@ -492,6 +502,7 @@ export default {
     },
     amendSubmit() {
       curd({ quaName: this.amendForm.new_name, parentId: this.amendForm.parentId, id: this.amendForm.id }).then(res => {
+        
         if (res.code === 1) {
           this.$message({
             type: 'success',
@@ -501,7 +512,14 @@ export default {
             this.selectApti = this.amendForm.new_name
           } else {
             this.amendForm.new_name = ''
+            
           }
+          this.amendFormVisible = false
+        } else {
+           this.$message({
+            type: 'warning',
+            message: res.msg
+          });
         }
         queryList({ quaName: this.formInline.user, parentId: this.formInline.region }).then(res => {
           if (res.code === 1) {
@@ -510,7 +528,7 @@ export default {
         })
       })
       
-      this.amendFormVisible = false
+      
     },
     //点击公告资质等级
     noticeLevel() {
@@ -594,7 +612,7 @@ export default {
 
               } else {
               this.$message({
-                  message: '请选择要添加得等级和资质',
+                  message: '请选择先添加得等级或者资质',
                   type: 'warning'
                 });
               }
@@ -620,7 +638,7 @@ export default {
 
           } else {
             this.$message({
-              message: '请选择要添加得等级和资质',
+              message: '请选择先添加得等级或资质',
               type: 'warning'
             });
           }
