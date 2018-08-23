@@ -1,7 +1,7 @@
 <template>
     <div class="custom-tree-container bdd_main">
-        <el-input placeholder="输入关键字进行查看" v-model="filterText">
-        </el-input>
+        <!--<el-input placeholder="输入关键字进行查看" v-model="filterText">-->
+        <!--</el-input>-->
         <el-tree :data="data5" node-key="id" ref="tree" :load="loadNode" lazy :expand-on-click-node="false" :filter-node-method="filterNode">
             <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>{{ node.label }}</span>
