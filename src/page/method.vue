@@ -411,7 +411,6 @@
                         });
                         return;
                     }
-
                     if (node.level == 2) {
                         var dataModelT = new Object();
                         dataModelT.id = node.data.id;
@@ -537,5 +536,6 @@
     }
     .bdd_color{
         color: #999999;
+        margin-left:12PX;
     }
 </style>
