@@ -28,47 +28,47 @@ const routes = [
 			component:Manage,
 			name:'manage',
 			children:[
-					// {
-					// 	path:'/addshop',
-					// component: addShop,
-					// 	name:'addShop'
-					// },
-					// {
-					// 	path:'/addgoods',
-					// 	component: () => import('@/page/addGoods'),
-					// 	name:'addGoods'
-					// },
-					// {
-					// 	path:'/bin',
-					// 	component:Bin,
-					// 	name:'bin'
-					// },
-					{
-						path:'/home',
-						component:Home,
-						name:'home'
-					},
-					// {
-					// 	path:'/userlist',
-					// 	component:userList,
-					// 	name:'userList'
-					// },
-					{
-						path:'/aptitudes',
-						component:Aptitudes,
-						name:'aptitudes'
-				  },
-                  {
-                       path:'/maintenance',
-                       component:Maintenance,
-                       name:'maintenance'
-                   },
-                   {
-                       path:'/method',
-                       component:Method,
-                       name:'method'
-                   }
-]
+							// {
+							// 	path:'/addshop',
+							// component: addShop,
+							// 	name:'addShop'
+							// },
+							// {
+							// 	path:'/addgoods',
+							// 	component: () => import('@/page/addGoods'),
+							// 	name:'addGoods'
+							// },
+							// {
+							// 	path:'/bin',
+							// 	component:Bin,
+							// 	name:'bin'
+							// },
+							{
+								path:'/home',
+								component:Home,
+								name:'home'
+							},
+							// {
+							// 	path:'/userlist',
+							// 	component:userList,
+							// 	name:'userList'
+							// },
+							{
+								path:'/aptitudes',
+								component:Aptitudes,
+								name:'aptitudes'
+				  		},
+          		{
+          		     path:'/maintenance',
+          		     component:Maintenance,
+          		     name:'maintenance'
+          		 },
+          		 {
+          		     path:'/method',
+          		     component:Method,
+          		     name:'method'
+          		 }
+					]
 		}
 
 

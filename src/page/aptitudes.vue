@@ -96,7 +96,7 @@
             <transition name="my">
               <el-button type="primary" icon="el-icon-search" v-show='changebut' @click='selectWord'>搜索</el-button>
             </transition>
-            <el-upload class="updown-list" action="http://120.79.116.245:19004/upload/quaAlias/" :on-preview="handlePreview" :data="sendCode()" :on-success="handleSuccess" :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :limit="3" v-show='changebut' :on-exceed="handleExceed" :file-list="fileList">
+            <el-upload class="updown-list" action="http://120.79.116.245:19004/upload/quaAlias/" :on-preview="handlePreview" :data="sendCode()" :on-success="handleSuccess" :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :limit="100" v-show='changebut' :on-exceed="handleExceed" :file-list="fileList">
               <el-button type="primary">
                 <i class="el-icon-upload el-icon--right"></i>
                 上传
@@ -241,7 +241,7 @@ export default {
       //多选下拉框
       multiple: [
       ],
-      mvalue: '',
+      mvalue: [],
       newmvalue:'',
 
       //  查询列表的数据
@@ -290,6 +290,7 @@ export default {
               this.multiple = res.data
             }
             this.newmvalue = ''
+            this.mvalue= []
         })
     },
     sendCode() {
@@ -322,8 +323,8 @@ export default {
     // 弹框得添加分类
     addCateSubmit(formName) {
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-         if(this.addForm.fatherid) {
+        if (valid && this.addForm.cat_name.trim()) {
+         if(this.addForm.fatherid ) {
             curd({ parentId: this.addForm.fatherid, quaName: this.addForm.cat_name }).then(res => {
               // console.log(res)
               if (res.code === 1) {
@@ -638,6 +639,7 @@ export default {
                      }
                      this.noticeLevel()
                      this.newmvalue = ''
+                     this.mvalue = []
                   })
 
               } else {
@@ -664,6 +666,7 @@ export default {
 
                this.noticeFirm()
                 this.newmvalue = ''
+                this.mvalue = []
             })
 
           } else {
@@ -716,8 +719,11 @@ export default {
     },
     //点击行调转的
     delivery(row, column) {
+
+
       this.selectApti = row.quaName
       this.stdCode = row.quaCode
+
       if (this.searchname === '资质别名') {
         //展示列表
         selectAlias({ stdCode: this.stdCode, name: '', stdType: '1' }).then(res => {
@@ -725,7 +731,17 @@ export default {
             this.tableData = res.data
           }
         })
+      } else if (this.searchname === '公共等级') {
+          showgrade({ quaCode: this.stdCode, bizType: 1 }).then(res => {
+            this.tableData = res.data
+          })
+      } else {
+           showgrade({ quaCode: this.stdCode, bizType: 1 }).then(res => {
+            this.tableData = res.data
+          })
       }
+      
+      
     },
 
     selectWord() {
