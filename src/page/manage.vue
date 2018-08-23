@@ -73,7 +73,7 @@
 				<!-- header部分 -->
 				<el-header>
 					<i class="myicon myicon-menu toggle-btn" @click="toggleCollapse"></i>
-					<div class="system-title">标大大后台管理系统</div>
+					<div class="system-title">后台运营系统</div>
 					
 						<el-dropdown  menu-align='start'>
 							<img src="../assets/img/2.png" class="avator">
