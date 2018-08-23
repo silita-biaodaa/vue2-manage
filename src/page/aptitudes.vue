@@ -32,7 +32,7 @@
         <hr/>
 
         <div class="form-type">
-          <el-table height="480" @row-click='delivery' :data="tableName" style="width: 100%">
+          <el-table height="950" @row-click='delivery' :data="tableName" style="width: 100%">
             <el-table-column label="资质类型" style="width: 33.3%">
               <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ scope.row.parentName }}</span>
@@ -105,7 +105,7 @@
 
           </div>
 
-          <el-table :data="tableData" style="width: 100%" max-height='312'>
+          <el-table :data="tableData" style="width: 100%" max-height='760'>
             <el-table-column :label="searchname" width="310">
               <template slot-scope="scope">
                 <i class="el-icon-caret-right"></i>
@@ -114,7 +114,7 @@
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button size="mini" type="primary" :disabled='!changebut' @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                <el-button size="mini" type="primary" v-show='changebut' @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                 <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
               </template>
             </el-table-column>
@@ -129,13 +129,14 @@
       <el-form :model="addForm" label-width="80px" :rules="rules" ref="addCateForm">
         <el-form-item label="资质名称" prop="cat_name">
           <el-input v-model="addForm.cat_name" auto-complete="off"></el-input>
-
         </el-form-item>
-        <el-form-item label="父级名称">
+
+        <el-form-item label="父级名称" prop="cat_name" >
           <el-select v-model="addForm.fatherid" placeholder="资质类型">
             <el-option v-for="item in type" :key="item.id" :label="item.quaName" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addDialogFormVisible = false">取 消</el-button>
@@ -285,10 +286,10 @@ export default {
     },
     seList(val) {
         secondLevel({parentId:val}).then(res => {
-
             if(res.code === 1 ) {
               this.multiple = res.data
             }
+            this.newmvalue = ''
         })
     },
     sendCode() {
@@ -307,6 +308,14 @@ export default {
       queryList({ quaName: '', parentId: '' }).then(res => {
         if (res.code === 1) {
           this.tableName = res.data
+          this.selectApti = this.tableName[0].quaName
+          this.stdCode = this.tableName[0].quaCode
+            selectAlias({ stdCode: this.stdCode, name: '', stdType: '1' }).then(res => {
+              if (res.code === 1) {
+                this.tableData = res.data
+              }
+            })
+          
         }
       })
     },
@@ -582,36 +591,49 @@ export default {
 
         if (this.searchname === '资质别名') {
 
-              if (this.aliaput) {
-                addAlias({ stdCode: this.stdCode, name: this.aliaput }).then(res => {
-                  if (res.code === 1) {
-                    selectAlias({ stdCode: this.stdCode, name: '', stdType: '1' }).then(res => {
+              if (this.selectApti) {
+                if(this.aliaput) {
+                      addAlias({ stdCode: this.stdCode, name: this.aliaput }).then(res => {
                       if (res.code === 1) {
-                        this.tableData = res.data
+                        selectAlias({ stdCode: this.stdCode, name: '', stdType: '1' }).then(res => {
+                          if (res.code === 1) {
+                            this.tableData = res.data
+                          }
+                        })
+                      } else {
+                        this.$message({
+                          message: res.msg,
+                          type: 'warning'
+                        });
                       }
+                      this.aliaput = ''
                     })
-                  } else {
-                    this.$message({
-                      message: res.msg,
-                      type: 'warning'
-                    });
-                  }
-                  this.aliaput = ''
-                })
+                } else {
+                   this.$message({
+                    message: '请输入要添加的别名',
+                    type: 'warning'
+                  });
+                }
+                
               } else {
                 this.$message({
-                  message: '请先选择资质名称或需要搜索的名称',
+                  message: '请先选择资质名称',
                   type: 'warning'
                 });
               }
         } else if (this.searchname === '公告等级') {
               if(this.newmvalue){
                 addtLevel({quaCode:this.stdCode,bizType:1,gradeCode:this.newmvalue}).then(res => {
-                      // console.log(res)
+                      console.log(res)
                      if(res.code === 1 ) {
                          this.$message({
                          type: 'success',
                          message: '添加成功!'
+                       });
+                     }  else {
+                         this.$message({
+                         type: 'warning',
+                         message: res.msg
                        });
                      }
                      this.noticeLevel()
@@ -620,26 +642,26 @@ export default {
 
               } else {
               this.$message({
-                  message: '请选择先添加得等级或者资质',
+                  message: '请选择添加等级或者资质',
                   type: 'warning'
                 });
               }
         } else {
            if (this.newmvalue) {
             addtLevel({ quaCode: this.stdCode, bizType: 2, gradeCode: this.newmvalue }).then(res => {
-              // console.log(res)
-               if(res.code === 1 ) {
+              console.log(res)
+               if( res.code === 1 ) {
                    this.$message({
                    type: 'success',
                    message: '添加成功!'
                  });
+               } else {
+                   this.$message({
+                   type: 'warning',
+                   message: res.msg
+                 });
                }
 
-              //  showgrade({quaCode:this.stdCode,bizType:2}).then(res => {
-              //    this.tableData = res.data
-              //   console.log(res)
-              //  })
-              // this.mvalue = ''
                this.noticeFirm()
                 this.newmvalue = ''
             })
@@ -734,6 +756,7 @@ export default {
 }
 
 .aptitudes {
+  height: 1150px;
   .bg-purple-dark {
     background: #99a9bf;
   }
@@ -746,7 +769,7 @@ export default {
   .line {
     border-right: 1px dashed #000;
     padding: 10px;
-    height: 600px;
+    height: 1100px;
   }
 
 
