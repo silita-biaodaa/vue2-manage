@@ -719,8 +719,6 @@ export default {
     },
     //点击行调转的
     delivery(row, column) {
-
-
       this.selectApti = row.quaName
       this.stdCode = row.quaCode
 
@@ -731,7 +729,7 @@ export default {
             this.tableData = res.data
           }
         })
-      } else if (this.searchname === '公共等级') {
+      } else if (this.searchname === '公告等级') {
           showgrade({ quaCode: this.stdCode, bizType: 1 }).then(res => {
             this.tableData = res.data
           })
@@ -740,8 +738,7 @@ export default {
             this.tableData = res.data
           })
       }
-      
-      
+
     },
 
     selectWord() {
