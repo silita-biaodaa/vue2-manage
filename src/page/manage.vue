@@ -1,26 +1,26 @@
 <template>
-		
+
 	<div class="home">
 		<el-container>
 			<!-- 侧边栏 -->
 			<el-aside width="auto">
 
-				<el-menu 
-				:router="true" 
-				:collapse="isCollapse" 
-				class="el-menu-admin" 
-				@open="handleOpen" 
-				@close="handleClose" 
-				background-color="#545c64" 
-				text-color="#fff" 
-				active-text-color="#ffd04b">			
+				<el-menu
+				:router="true"
+				:collapse="isCollapse"
+				class="el-menu-admin"
+				@open="handleOpen"
+				@close="handleClose"
+				background-color="#545c64"
+				text-color="#fff"
+				active-text-color="#ffd04b">
 						<div class="logo">
 							<img src="../assets/img/download_logo.png">
 						</div>
 						<el-submenu index="3">
 							<template slot="title">
 								<i class="el-icon-plus"></i>
-								<span>业务</span>			
+								<span>业务</span>
 							</template>
 							<el-menu-item index="addShop">招标</el-menu-item>
 							<el-menu-item index="addGoods">中标</el-menu-item>
@@ -74,7 +74,7 @@
 				<el-header>
 					<i class="myicon myicon-menu toggle-btn" @click="toggleCollapse"></i>
 					<div class="system-title">后台运营系统</div>
-					
+
 						<el-dropdown  menu-align='start'>
 							<img src="../assets/img/2.png" class="avator">
 							<el-dropdown-menu slot="dropdown">
@@ -176,7 +176,7 @@
 	{
 		color: white;
 	}
-	
+
 	.avator {
 		height: 36px;
 		width: 36px;
@@ -186,5 +186,5 @@
 
 }
 
-	
+
 </style>

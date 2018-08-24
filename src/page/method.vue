@@ -13,21 +13,21 @@
                           v-if="node.level<3"
                           @click="() => append(node,data)"
                           >
-                          <i class="el-icon-circle-plus-outline bdd_color"></i>
+                          <i class="el-icon-circle-plus-outline"></i>
                       </el-button>
                       <el-button
                           type="text"
                           size="mini"
                           v-if="node.level>1"
                           @click="() => remove(node, data)">
-                       <i class="el-icon-delete bdd_color"></i>
+                       <i class="el-icon-delete"></i>
                       </el-button>
                        <el-button
                            type="text"
                            size="mini"
                            v-if="node.level>1"
                            @click="() =>updata(node,data)">
-                         <i class="el-icon-edit bdd_color"></i>
+                         <i class="el-icon-edit"></i>
                       </el-button>
                     </span>
             </span>
@@ -221,6 +221,8 @@
                                         newDataArray.push(dataBean);
                                     }
                                     this.$refs.tree.updateKeyChildren(node.id, newDataArray);
+                                     this.$refs.tree.store.nodesMap[data.id].expanded=true;
+                                     data.unfold=true;
                                 } else {
 
                                 }
@@ -265,6 +267,8 @@
                                         newDataArray.push(dataBean);
                                     }
                                     this.$refs.tree.updateKeyChildren(node.data.id, newDataArray);
+                                      this.$refs.tree.store.nodesMap[data.id].expanded=true;
+                                     data.unfold=true;
                                 } else {
 
                                 }
@@ -411,6 +415,7 @@
                         });
                         return;
                     }
+
                     if (node.level == 2) {
                         var dataModelT = new Object();
                         dataModelT.id = node.data.id;
@@ -529,13 +534,9 @@
         margin-top: 30px;
     }
     .el-tree{
-       margin-top: 30px;
+        margin-top:30px;
     }
-    .custom-tree-node[data-v-cf6fa87e]{
+    .custom-tree-node[data-v-3740fcef]{
         font-size: 14px;
-    }
-    .bdd_color{
-        color: #999999;
-        margin-left:12PX;
     }
 </style>
