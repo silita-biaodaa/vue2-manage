@@ -17,7 +17,7 @@
   <el-tag>昨日新增：1000</el-tag>
   <el-tag>今日新增：1000</el-tag>
   <el-tag>总数：1000</el-tag>
-  
+
  </el-row>
  <el-row class='baa_ai baa_ui'>
 	<el-tag  type="success">筛选</el-tag>
@@ -36,15 +36,15 @@
     </el-option>
   </el-select>
     </el-tag>
-    
-     
+
+
  </el-row>
  <el-row class="bdd_so">
-  
+
    <el-button type="primary">增加企业</el-button>
     <el-button type="primary">批量数据维护</el-button>
 
-   
+
   </el-row>
   <el-table class='baa_ai'
     :data="tableData"
@@ -70,7 +70,7 @@
     </el-table-column>
     <el-table-column
       label="最后更新日期"
-      width="100"> 
+      width="100">
       <template slot-scope="scope">
         <span>{{ scope.row.stort }}</span>
       </template></el-table-column>
@@ -82,7 +82,7 @@
            <el-button
           size="mini"
           @click="handleEdit(scope.$index, scope.row)">详情</el-button>
-        
+
       </template>
     </el-table-column>
   </el-table>
@@ -104,7 +104,7 @@
 
 <script>
 
-    
+
  export default {
     data() {
       return {
@@ -113,25 +113,25 @@
           date: '2018-7-28',
           news:'http://www.biaodaa.com/neirong/1846263',
           stort:'未处理',
-         
+
         }, {
           name: '湖南耀邦建设有限公司',
           date: '2018-7-28',
           news:'http://www.biaodaa.com/neirong/1846263',
            stort:'未处理',
-         
+
         }, {
           name: '湖南耀邦建设有限公司',
           date: '2018-7-28',
           news:'http://www.biaodaa.com/neirong/1846263',
            stort:'未处理',
-         
+
         }, {
           name: '湖南耀邦建设有限公司',
           date: '2018-7-28',
           news:'http://www.biaodaa.com/neirong/1846263',
            stort:'未处理',
-         
+
         }]
       }
     },
@@ -185,19 +185,19 @@
 		margin-left:50px;
 		margin-right:50px;
 		margin: 30px auto;
-   
-   
+
+
     }
     .baa_ai{
  border: 1px solid #ccc;
     }
 	.el-select>.el-input{
-		width: 100px;	
-	}	
+		width: 100px;
+	}
 	.el-select{
 		line-height:px;
 		margin-left:20px;
-	}	
+	}
 	.bdd_yo{
 		margin-left:125px;
 	}
@@ -217,7 +217,7 @@
   margin-top: 10px;
   line-height:20px;
   margin-left: 10px;
- 
+
 }
 .el-cascader__label{
   line-height: 50px;
@@ -229,7 +229,7 @@
 .bdd_mi{
   width: 300px;
   padding-left: -60px;
-  
+
 }
 .bdd_so{
   text-align:right;
