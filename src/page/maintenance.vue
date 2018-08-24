@@ -13,21 +13,21 @@
                               v-if="node.level<3"
                               @click="() => append(node,data)"
                               >
-                            <i class="el-icon-circle-plus-outline bdd_color"></i>
+                                增加
                           </el-button>
                           <el-button
                               type="text"
                               size="mini"
                               v-if="node.level>1"
                               @click="() => remove(node, data)">
-                           <i class="el-icon-delete bdd_color"></i>
+                            刪除
                           </el-button>
                            <el-button
                                type="text"
                                size="mini"
                                v-if="node.level>1"
                                @click="() =>updata(node,data)">
-                             <i class="el-icon-edit bdd_color"></i>
+                              修改
                           </el-button>
                         </span>
             </span>
@@ -220,7 +220,8 @@
                                         newDataArray.push(dataBean);
                                     }
                                     this.$refs.tree.updateKeyChildren(node.data.id, newDataArray);
-
+                                    this.$refs.tree.store.nodesMap[data.id].expanded=true;
+                                     data.unfold=true;
                                 }
                             }, error => {
                                 console.log(error)
@@ -256,7 +257,10 @@
                                         dataBean.isLeaf = false;
                                         newDataArray.push(dataBean);
                                     }
+
                                     this.$refs.tree.updateKeyChildren(node.data.id, newDataArray);
+                                    this.$refs.tree.store.nodesMap[data.id].expanded=true;
+                                     data.unfold=true;
                                 } else {
 
                                 }
@@ -412,7 +416,7 @@
                             let dataParam = JSON.stringify({
                                 "parentId": parentId
                             });
-                        if (res.code ==400) {
+                        if (res.code == 0) {
                                 this.$message({
                                     type: 'fail',
                                     message: res.msg
@@ -513,15 +517,5 @@
 
     .el-input {
         margin-top: 30px;
-    }
-    .el-tree{
-        margin-top: 30px;
-    }
-    .custom-tree-node[data-v-5dd82063]{
-        font-size: 14px;
-    }
-    .bdd_color{
-        color: #999999;
-        margin-left:12px;
     }
 </style>

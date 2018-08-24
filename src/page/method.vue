@@ -13,26 +13,26 @@
                           v-if="node.level<3"
                           @click="() => append(node,data)"
                           >
-                          <i class="el-icon-circle-plus-outline bdd_color"></i>
+                            增加
                       </el-button>
                       <el-button
                           type="text"
                           size="mini"
                           v-if="node.level>1"
                           @click="() => remove(node, data)">
-                       <i class="el-icon-delete bdd_color"></i>
+                        刪除
                       </el-button>
                        <el-button
                            type="text"
                            size="mini"
                            v-if="node.level>1"
                            @click="() =>updata(node,data)">
-                         <i class="el-icon-edit bdd_color"></i>
+                          修改
                       </el-button>
                     </span>
             </span>
         </el-tree>
-
+    
     </div>
 </template>
 
@@ -59,9 +59,9 @@
                         }]
                     }]
                 },
-
+    
             ];
-
+    
             return {
                 data4: JSON.parse(JSON.stringify(data)),
                 data5: JSON.parse(JSON.stringify(data)),
@@ -73,8 +73,8 @@
         /*  mounted() {
               this.loadNode();
           },*/
-
-
+    
+    
         watch: {
             filterText(val) {
                 this.$refs.tree.filter(val);
@@ -104,23 +104,23 @@
                             dataBean.isLeaf = true;
                             dataBean.show = true;
                             dataBeanArr.push(dataBean);
-
+    
                         }
                         // data = dataBeanArr;
                         return resolve(dataBeanArr);
-
+    
                     }, error => {
                         console.log(error)
                     })
-
+    
                 } else if (node.level === 1) { //如果是1级树节点，则为评标办法
-
+    
                     let dataParam = JSON.stringify({
                         "type": node.data.value
                     });
-
+    
                     getJsonData('/dataMaintain/listPbMode', dataParam).then(res => { //调用评标办法列表接口
-
+    
                         let dataArray = res.data;
                         if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
                             let newDataArray = new Array();
@@ -139,7 +139,7 @@
                     }, error => {
                         console.log(error)
                     })
-
+    
                 } else if (node.level === 2) { //如果是2级节点，则为别名
                     let dataParam = JSON.stringify({
                         "stdCode": node.data.code
@@ -170,7 +170,7 @@
                 return data.label.indexOf(value) !== -1;
             },
             append(node, data) {
-
+    
                 this.$prompt('请输入增加的内容', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -186,7 +186,7 @@
                         });
                         return;
                     }
-
+    
                     if (node.level == 1) { //增加评标办法
                         let dataModel = new Object();
                         dataModel.name = value;
@@ -194,10 +194,10 @@
                         dataModel.orderNo = "2";
                         dataModel.desc = "";
                         let dataParam = JSON.stringify(dataModel);
-
+    
                         getJsonData('/dataMaintain/insertPbMode', dataParam).then(res => {
                             //this.loadNode(node,resolve)
-
+    
                              if (res.code == 0) {
                                 this.$message({
                                     type: 'fail',
@@ -208,9 +208,9 @@
                             let dataParam = JSON.stringify({
                                 "type": node.data.value
                             });
-
+    
                             getJsonData('/dataMaintain/listPbMode', dataParam).then(res => { //调用评标办法列表接口
-
+    
                                 let dataArray = res.data;
                                 if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
                                     let newDataArray = new Array();
@@ -221,15 +221,17 @@
                                         newDataArray.push(dataBean);
                                     }
                                     this.$refs.tree.updateKeyChildren(node.id, newDataArray);
+                                     this.$refs.tree.store.nodesMap[data.id].expanded=true;
+                                     data.unfold=true;
                                 } else {
-
+    
                                 }
                             }, error => {
                                 console.log(error)
                             })
-
-
-
+    
+    
+    
                         }, error => {
                             console.log(error)
                         })
@@ -249,7 +251,7 @@
                                 });
                                 return;
                              }
-
+    
                             console.log(22222);
                             let dataParam = JSON.stringify({
                                 "stdCode": node.data.code
@@ -265,19 +267,21 @@
                                         newDataArray.push(dataBean);
                                     }
                                     this.$refs.tree.updateKeyChildren(node.data.id, newDataArray);
+                                      this.$refs.tree.store.nodesMap[data.id].expanded=true;
+                                     data.unfold=true;
                                 } else {
-
+    
                                 }
                             }, error => {
                                 console.log(error)
                             })
-
+    
                             //  console.log(this.$refs.tree.getCheckedNodes());
-
+    
                         }, error => {
                             console.log(error)
                         })
-
+    
                     }
                 }).catch(() => {
                     this.$message({
@@ -296,7 +300,7 @@
                         let param = JSON.stringify({
                             "idsStr": node.data.id
                         });
-
+    
                         getJsonData('/dataMaintain/deletePbMode', param).then(res => {
                             console.log(res);
                             if (res.code == 1) {
@@ -329,7 +333,7 @@
                         let param = JSON.stringify({
                             "idsStr": node.data.id
                         });
-
+    
                         getJsonData('/dataMaintain/deletePbModeAlias', param).then(res => {
                             console.log(res);
                             if (res.code == 1) {
@@ -361,23 +365,23 @@
                     }
                 })
             },
-
+    
             reload() {
                 this.isRouterAlive = false
                 this.$nextTick(function() {
                     this.isRouterAlive = true
                 })
             },
-
-
-
+    
+    
+    
             updataByNode(node, proviceId) {
                 let dataParam = JSON.stringify({
                     "type": node.data.value
                 });
-
+    
                 getJsonData('/dataMaintain/listPbMode', dataParam).then(res => { //调用评标办法列表接口
-
+    
                     let dataArray = res.data;
                     if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
                         let newDataArray = new Array();
@@ -389,7 +393,7 @@
                         }
                         this.$refs.tree.updateKeyChildren(node.parent.data.id, newDataArray);
                     } else {
-
+    
                     }
                 }, error => {
                     console.log(error)
@@ -411,6 +415,7 @@
                         });
                         return;
                     }
+    
                     if (node.level == 2) {
                         var dataModelT = new Object();
                         dataModelT.id = node.data.id;
@@ -431,9 +436,9 @@
                             let dataParam = JSON.stringify({
                                 "type": node.parent.data.value
                             });
-
+    
                             getJsonData('/dataMaintain/listPbMode', dataParam).then(res => { //调用评标办法列表接口
-
+    
                                 let dataArray = res.data;
                                 if (dataArray && dataArray.length > 0) { //判断省份下面是否有评标办法
                                     let newDataArray = new Array();
@@ -445,12 +450,12 @@
                                     }
                                     this.$refs.tree.updateKeyChildren(node.parent.data.id, newDataArray);
                                 } else {
-
+    
                                 }
                             }, error => {
                                 console.log(error)
                             })
-
+    
                         }, error => {
                             console.log(error)
                         })
@@ -461,7 +466,7 @@
                         dataModelT.remark = "";
                         dataModelT.desc = "";
                         let dataParamT = JSON.stringify(dataModelT);
-
+    
                         getJsonData('/dataMaintain/updatePbModeAlias', dataParamT).then(res => {
                             console.log(res)
                             if (res.code == 0) {
@@ -496,9 +501,9 @@
                 });
                 // children.splice(index, 1);
             }
-
+    
         },
-
+    
     }
 </script>
 
@@ -511,31 +516,21 @@
         justify-content: space-between;
         font-size: 16px;
     }
-
+    
     .el-tree-node__loading-icon {
         display: none;
     }
-
+    
     .bdd_aids {
         margin-right: 1400px;
     }
-
+    
     .bdd_main {
         margin-left: 15%;
         margin-right: 15%;
     }
-
+    
     .el-input {
         margin-top: 30px;
-    }
-    .el-tree{
-       margin-top: 30px;
-    }
-    .custom-tree-node[data-v-cf6fa87e]{
-        font-size: 14px;
-    }
-    .bdd_color{
-        color: #999999;
-        margin-left:12PX;
     }
 </style>
