@@ -88,11 +88,6 @@ export const addtAlias = params => {
 export const delectAlias = params => {
     return axios.post('dataMaintain/deletePbModeAlias', params).then(res => res.data)
 }
-//获取别名
-export const showAlias = params => {
-    return axios.post('dataMaintain/deletePbModeAlias', params).then(res => res.data)
-}
-
 
 
 //删除资质

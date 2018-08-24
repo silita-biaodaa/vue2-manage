@@ -96,7 +96,7 @@
             <transition name="my">
               <el-button type="primary" icon="el-icon-search" v-show='changebut' @click='selectWord'>搜索</el-button>
             </transition>
-            <el-upload class="updown-list" action="http://120.79.116.245:19004/upload/quaAlias/" :on-preview="handlePreview" :data="sendCode()" :on-success="handleSuccess" :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :limit="100" v-show='changebut' :on-exceed="handleExceed" :file-list="fileList">
+            <el-upload class="updown-list" action="http://120.79.116.245:19004/upload/quaAlias/" :on-preview="handlePreview" :data="sendCode()" :on-success="handleSuccess" :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple  v-show='changebut' :on-exceed="handleExceed" :file-list="fileList">
               <el-button type="primary">
                 <i class="el-icon-upload el-icon--right"></i>
                 上传
@@ -695,6 +695,11 @@ export default {
           type: 'success',
           message: response.msg
         })
+          selectAlias({ stdCode: this.stdCode, name: '', stdType: '1' }).then(res => {
+            if (res.code === 1) {
+              this.tableData = res.data
+            }
+          })
       }else {
          this.$message({
           type: 'warning',
