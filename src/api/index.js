@@ -22,7 +22,7 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) { // ①10010 token过期（30天） ②10011 token无效
     if (response.data.code === 402 || response.data.code === 401) {
         localStorage.removeItem('Authorization')
-        router.replace({
+        this.$route.replace({ 
             path: '/login' // 到登录页重新获取token
         })
     }
@@ -92,8 +92,6 @@ export const delectAlias = params => {
 export const showAlias = params => {
     return axios.post('dataMaintain/deletePbModeAlias', params).then(res => res.data)
 }
-
-
 
 //删除资质
 export const deleteApi = params => {
