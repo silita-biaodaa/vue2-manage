@@ -512,7 +512,7 @@ export default {
       this.amendForm.id = row.id
     },
     amendSubmit() {
-        if(!this.amendForm.new_name) {
+        if(this.amendForm.new_name.trim()==='') {
             return   this.$message({
                     type: 'warning',
                     message: '请输入新资质名称'
@@ -736,7 +736,7 @@ export default {
             this.tableData = res.data
           })
       } else {
-           showgrade({ quaCode: this.stdCode, bizType: 1 }).then(res => {
+           showgrade({ quaCode: this.stdCode, bizType: 2 }).then(res => {
             this.tableData = res.data
           })
       }
