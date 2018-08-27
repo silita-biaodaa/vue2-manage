@@ -2,7 +2,7 @@
     <el-container>
         <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item><a href="Increase">添加</a></el-breadcrumb-item>
+            <el-breadcrumb-item><a href="/">添加</a></el-breadcrumb-item>
             <el-breadcrumb-item>活动列表</el-breadcrumb-item>
             <el-breadcrumb-item>活动详情</el-breadcrumb-item>
         </el-breadcrumb>
@@ -17,53 +17,44 @@
                 :props="props"
             ></el-cascader></span></div>
         </el-header>
-        <el-main style="width: 100%;text-align:left;margin-left:340px;">
+        <div style="width:100%;text-align:right;">
             <div style="margin-top: 15px;">
-                <div style="display: inline-block" class="demo-input-size">
-                    <el-input
-                        placeholder="请输入内容"
-                        suffix-icon="el-icon-search"
-                        v-model="input6">
-                    </el-input>
-                </div>
+                <el-input placeholder="请按照企业名称模糊搜索" v-model="input5" class="input-with-select">
+
+                    <el-button slot="append" icon="el-icon-search"></el-button>
+                </el-input>
                 <el-button  type="primary">查询</el-button>
                 <el-button type="primary">增加企业</el-button>
-                <el-button  type="primary">批量数据维护</el-button>
+                <el-button type="primary">批量数据维护</el-button>
 
             </div>
+
+            </div>
+        </div>
+        <el-main style="width: 100%;text-align:right;">
+
         </el-main>
+
         <el-table
             :data="tableData"
-            style="width:100%;border: 1px solid #ccc;margin: 0 auto">
+            style="width: 100%;border: 1px solid #ccc">
             <el-table-column
+                prop="corporate"
                 label="公司名称"
-                width="220">
-                <template slot-scope="scope">
-                    <span>{{ scope.row.corporate }}</span>
-                </template>
+               >
             </el-table-column>
             <el-table-column
+                prop="name"
                 label="所属地区"
-                width="180">
-                <template slot-scope="scope">
-                    <span>{{ scope.row.Area}}</span>
-                </template>
+               >
             </el-table-column>
             <el-table-column
-                label="创建日期"
-                width="180">
-                <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                    <span>{{ scope.row.time }}</span>
-                </template>
+                prop="time"
+                label="创建日期">
             </el-table-column>
             <el-table-column
-                label="最后更新日期"
-                width="180">
-                <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                    <span>{{ scope.row.date }}</span>
-                </template>
+                prop="address"
+                label="最后更近日期">
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -96,26 +87,24 @@
             return {
                 tableData: [{
                     corporate: '湖南耀邦建设有限公司',
-                    Area:'湖南长沙',
-                    time:'2018年8月27日',
-                    date:'2018年9月10日',
+                    name: '湖南长沙',
+                    time: '2018年8月27日',
+                    address:'2018年9月10日'
                 }, {
                     corporate: '湖南耀邦建设有限公司',
-                    Area:'湖南长沙',
-                    time:'2018年8月27日',
-                    date:'2018年9月10日',
-
+                    name: '湖南长沙',
+                    time: '2018年8月27日',
+                    address:'2018年9月10日'
                 }, {
                     corporate: '湖南耀邦建设有限公司',
-                    Area:'湖南长沙',
-                    time:'2018年8月27日',
-                    date:'2018年9月10日',
+                    name: '湖南长沙',
+                   time: '2018年8月27日',
+                    address:'2018年9月10日'
                 }, {
                     corporate: '湖南耀邦建设有限公司',
-                    Area:'湖南长沙',
-                    time:'2018年8月27日',
-                    date:'2018年9月10日',
-
+                    name: '湖南长沙',
+                    time: '2018年8月27日',
+                    address:'2018年9月10日'
                 }],
                 options2: [{
                     label: '江苏',
@@ -208,4 +197,7 @@
    .el-input[data-v-e47dfd12]{
        width: 100%;
    }
+    .el-input[data-v-e47dfd12][data-v-e47dfd12]{
+        width: 30%;
+    }
 </style>

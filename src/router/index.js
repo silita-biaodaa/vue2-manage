@@ -3,13 +3,14 @@ import Router from 'vue-router'
 import Login from '@/page/login'
 import Manage from '@/page/manage'
 import addShop from '@/page/addShop'
-// import Bin from '@/page/bin'
+import Bin from '@/page/bin'
 import userList from '@/page/userlist'
 import Edit from '@/page/edit'
 import Aptitudes from '@/page/aptitudes'
 import Method from '@/page/method'
 import Maintenance from '@/page/maintenance'
 import Home from '@/page/first'
+
 Vue.use(Router)
 
 const routes = [
@@ -38,11 +39,11 @@ const routes = [
 							// 	component: () => import('@/page/addGoods'),
 							// 	name:'addGoods'
 							// },
-							// {
-							// 	path:'/bin',
-							// 	component:Bin,
-							// 	name:'bin'
-							// },
+							{
+								path:'/bin',
+								component:Bin,
+								name:'bin'
+							},
 							{
 								path:'/home',
 								component:Home,
