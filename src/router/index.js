@@ -4,7 +4,7 @@ import Login from '@/page/login'
 import Manage from '@/page/manage'
 import addShop from '@/page/addShop'
 // import Bin from '@/page/bin'
-// import userList from '@/page/userlist'
+import userList from '@/page/userlist'
 import Edit from '@/page/edit'
 import Aptitudes from '@/page/aptitudes'
 import Method from '@/page/method'
@@ -48,11 +48,11 @@ const routes = [
 								component:Home,
 								name:'home'
 							},
-							// {
-							// 	path:'/userlist',
-							// 	component:userList,
-							// 	name:'userList'
-							// },
+							{
+								path:'/userlist',
+								component:userList,
+								name:'userList'
+							},
 							{
 								path:'/aptitudes',
 								component:Aptitudes,
