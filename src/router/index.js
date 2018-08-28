@@ -12,6 +12,8 @@ import Maintenance from '@/page/maintenance'
 import Home from '@/page/first'
 import Compile from '@/page/compile'
 const Addgoods = resolve => require(['@/page/addGoods'],resolve)
+import Editer from '@/page/editer'
+import Rease from '@/page/rease'
 
 Vue.use(Router)
 
@@ -75,7 +77,18 @@ const routes = [
 							 	path: '/compile',
 							 	component: Compile,
 							 	name: 'compile'
+							 },
+							 {
+								 path:'/editer',
+								 component:Editer,
+								 name:'editer'
+							 },
+							 {
+								path:'/rease',
+								component:Rease,
+								name:'rease'
 							 }
+
 					]
 		}
 		
