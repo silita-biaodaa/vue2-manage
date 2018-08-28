@@ -3,8 +3,8 @@
         <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item><a href="/">添加</a></el-breadcrumb-item>
-            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+            <el-breadcrumb-item>编辑</el-breadcrumb-item>
+            <el-breadcrumb-item>详情</el-breadcrumb-item>
         </el-breadcrumb>
         <el-header>
             <div><span>所属地区：<el-cascader
@@ -37,7 +37,7 @@
 
         <el-table
             :data="tableData"
-            style="width: 100%;border: 1px solid #ccc">
+            style="width: 100%;border: 1px solid #ccc;">
             <el-table-column
                 prop="corporate"
                 label="公司名称"
@@ -46,17 +46,21 @@
             <el-table-column
                 prop="name"
                 label="所属地区"
+
                >
             </el-table-column>
             <el-table-column
                 prop="time"
                 label="创建日期">
+
             </el-table-column>
             <el-table-column
                 prop="address"
-                label="最后更近日期">
+                label="最后更近日期"
+              >
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作"
+                             >
                 <template slot-scope="scope">
                     <el-button
                         size="mini"
@@ -200,4 +204,5 @@
     .el-input[data-v-e47dfd12][data-v-e47dfd12]{
         width: 30%;
     }
+
 </style>

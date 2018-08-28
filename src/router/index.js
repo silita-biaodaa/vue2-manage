@@ -10,6 +10,8 @@ import Aptitudes from '@/page/aptitudes'
 import Method from '@/page/method'
 import Maintenance from '@/page/maintenance'
 import Home from '@/page/first'
+import Editer from '@/page/editer'
+
 
 Vue.use(Router)
 
@@ -68,7 +70,12 @@ const routes = [
           		     path:'/method',
           		     component:Method,
           		     name:'method'
-          		 }
+          		 },{
+                    path:'/editer',
+                    component:Editer,
+                    name:'editer'
+                }
+
 					]
 		}
 
