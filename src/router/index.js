@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/page/login'
 import Manage from '@/page/manage'
-import addShop from '@/page/addShop'
+import Tender from '@/page/tender'
 import Bin from '@/page/bin'
 import userList from '@/page/userlist'
 import Edit from '@/page/edit'
@@ -10,8 +10,9 @@ import Aptitudes from '@/page/aptitudes'
 import Method from '@/page/method'
 import Maintenance from '@/page/maintenance'
 import Home from '@/page/first'
-import Editer from '@/page/editer'
-import Rease from '@/page/rease'
+import Compile from '@/page/compile'
+const Addgoods = resolve => require(['@/page/addGoods'],resolve)
+
 Vue.use(Router)
 
 const routes = [
@@ -30,16 +31,16 @@ const routes = [
 			component:Manage,
 			name:'manage',
 			children:[
-							// {
-							// 	path:'/addshop',
-							// component: addShop,
-							// 	name:'addShop'
-							// },
-							// {
-							// 	path:'/addgoods',
-							// 	component: () => import('@/page/addGoods'),
-							// 	name:'addGoods'
-							// },
+							{
+								path:'/tender',
+							component: Tender,	
+								name:'tender'
+							},
+							{
+								path:'/addgoods',
+								component: Addgoods,
+								name:'addGoods'
+							},
 							{
 								path:'/bin',
 								component:Bin,
@@ -69,18 +70,15 @@ const routes = [
           		     path:'/method',
           		     component:Method,
           		     name:'method'
-          		 },{
-                    path:'/editer',
-                    component:Editer,
-                    name:'editer'
-                },{
-                    path:'/rease',
-                    component:Rease,
-                    name:'rease'
-                }
-
+							 },
+							 {
+							 	path: '/compile',
+							 	component: Compile,
+							 	name: 'compile'
+							 }
 					]
 		}
+		
 
 
 ]

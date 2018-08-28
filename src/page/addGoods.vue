@@ -176,8 +176,6 @@
 		margin-left:50px;
 		margin-right:50px;
 		margin: 30px auto;
-   
-   
     }
     .baa_ai{
      border: 1px solid #ccc;

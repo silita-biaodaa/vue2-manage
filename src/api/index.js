@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 // const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
-
+// const baseURL = 'http://192.168.1.133:8080/'
 const baseURL = 'http://120.79.116.245:19004/'
 axios.defaults.baseURL = baseURL
 
@@ -19,17 +19,36 @@ axios.interceptors.request.use(function (config) {
     return Promise.reject(error)
 })
 
-axios.interceptors.response.use(function (response) { // ①10010 token过期（30天） ②10011 token无效
-    if (response.data.code === 402 || response.data.code === 401) {
-        localStorage.removeItem('Authorization')
-        router.replace({
-            path: '/login' // 到登录页重新获取token
-        })
-    }
-    return response
-}, function (error) {
-    return Promise.reject(error)
-})
+// axios.interceptors.response.use(response => { // ①10010 token过期（30天） ②10011 token无效
+//     if (response.data.code === 402 || response.data.code === 401) {
+//         localStorage.removeItem('Authorization')
+//         this.$router.replace({ 
+//             path: '/login' // 到登录页重新获取token
+//         })
+//     }
+//     return response
+// }, function (error) {
+//     return Promise.reject(error)
+// })
+
+axios.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    // 返回 401 清除token信息并跳转到登录页面
+                    localStorage.removeItem('Authorization')
+                    router.replace({
+                        path: 'login'
+        
+                    })
+            }
+        }
+        return Promise.reject(error.response.data)   // 返回接口返回的错误信息
+    });
 
 export const getJsonData = (url, params) => {
     return new Promise((resolve, reject) => {
@@ -88,7 +107,10 @@ export const addtAlias = params => {
 export const delectAlias = params => {
     return axios.post('dataMaintain/deletePbModeAlias', params).then(res => res.data)
 }
-
+//获取别名
+export const showAlias = params => {
+    return axios.post('dataMaintain/deletePbModeAlias', params).then(res => res.data)
+}
 
 //删除资质
 export const deleteApi = params => {

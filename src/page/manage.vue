@@ -22,7 +22,7 @@
 								<i class="el-icon-plus"></i>
 								<span>业务</span>
 							</template>
-							<el-menu-item index="addShop">招标</el-menu-item>
+							<el-menu-item index="tender">招标</el-menu-item>
 							<el-menu-item index="addGoods">中标</el-menu-item>
 							<el-menu-item index="bin">回收站</el-menu-item>
 							<el-menu-item index="userList">企信</el-menu-item>
@@ -35,11 +35,10 @@
 								<i class="el-icon-star-on"></i>
 								<span>运营</span>
 							</template>
-							<el-menu-item index="visitor">行业资质</el-menu-item>
+							<el-menu-item index="compile">行业资质</el-menu-item>
 							<el-menu-item index="visitor">平台公示</el-menu-item>
 							<el-menu-item index="addgoods">消息中心</el-menu-item>
 							<el-menu-item index="visitor">意见反馈</el-menu-item>
-							<!-- <el-menu-item index="newMember">用户数据</el-menu-item> -->
 						</el-submenu>
 						<el-submenu index="5">
 							<template slot="title">
