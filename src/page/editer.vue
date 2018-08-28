@@ -17,7 +17,14 @@
                 <div class="grid-content bg-purple">程序处理：11111111111111111111111111111</div>
             </el-col>
             <el-col :span="12">
-                <div class="grid-content bg-purple">人工处理：
+                <div class="grid-content bg-purple">人工处理：1111111111111111111111111111
+
+                </div>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
+            <el-col :span="12">
+                <div class="grid-content bg-purple">人工编辑：
                     <el-input
                         placeholder="请输入内容"
                         v-model="input10"
@@ -25,6 +32,7 @@
                     </el-input>
                 </div>
             </el-col>
+
         </el-row>
         <el-row class="bdd_hr"></el-row>
         <el-row style="margin-top: 30px">

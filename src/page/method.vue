@@ -166,9 +166,13 @@
                     return resolve(new Array()); //树控件绘制空数据，否则会转圈
                 }
             },
-            filterNode(value, data) {
+            filterNode(value, data,node) {
                 if (!value) return true;
-                return data.label.indexOf(value) !== -1;
+                if(data.label.indexOf(value) !== -1
+                ||(node.level==2&&node.parent.data.label.indexOf(value) !== -1)
+                ||(node.level==3&&node.parent.parent.data.label.indexOf(value) !== -1)){
+                 return true;
+                }
             },
             append(node, data) {
 

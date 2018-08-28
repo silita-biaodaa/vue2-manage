@@ -12,12 +12,6 @@ import Maintenance from '@/page/maintenance'
 import Home from '@/page/first'
 import Editer from '@/page/editer'
 import Rease from '@/page/rease'
-
-
-
-
-
-
 Vue.use(Router)
 
 const routes = [

@@ -131,9 +131,8 @@
     }
   }
 </script>
-
 <style lang="less" scoped>
-  @import '../style/mixin';
+    @import '../style/mixin.less';
 
 
 	.baa_ai,.baa_ai_n{
