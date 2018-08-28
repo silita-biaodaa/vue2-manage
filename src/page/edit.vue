@@ -13,7 +13,7 @@
   
     </el-upload>
     <button @click="save">点击获取保存</button>
-    <div class="box ql-editor" ref="htmlContainer"></div>
+    <!-- <div class="box ql-editor" ref="htmlContainer"></div> -->
   </div>
 </template>
 
