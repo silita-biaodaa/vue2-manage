@@ -13,21 +13,21 @@
                           v-if="node.level<3"
                           @click="() => append(node,data)"
                           >
-                          <i class="el-icon-circle-plus-outline"></i>
+                          <i class="el-icon-circle-plus-outline bdd_color"></i>
                       </el-button>
                       <el-button
                           type="text"
                           size="mini"
                           v-if="node.level>1"
                           @click="() => remove(node, data)">
-                       <i class="el-icon-delete"></i>
+                       <i class="el-icon-delete bdd_color"></i>
                       </el-button>
                        <el-button
                            type="text"
                            size="mini"
                            v-if="node.level>1"
                            @click="() =>updata(node,data)">
-                         <i class="el-icon-edit"></i>
+                         <i class="el-icon-edit bdd_color"></i>
                       </el-button>
                     </span>
             </span>
@@ -80,6 +80,7 @@
                 this.$refs.tree.filter(val);
             }
         },
+
         methods: {
             loadNode: function(node, resolve) { //进入页面懒加载方法
                 this.resolve = resolve;
@@ -165,9 +166,13 @@
                     return resolve(new Array()); //树控件绘制空数据，否则会转圈
                 }
             },
-            filterNode(value, data) {
+            filterNode(value, data,node) {
                 if (!value) return true;
-                return data.label.indexOf(value) !== -1;
+                if(data.label.indexOf(value) !== -1
+                ||(node.level==2&&node.parent.data.label.indexOf(value) !== -1)
+                ||(node.level==3&&node.parent.parent.data.label.indexOf(value) !== -1)){
+                 return true;
+                }
             },
             append(node, data) {
 
@@ -220,7 +225,7 @@
                                         dataBean.isLeaf = true;
                                         newDataArray.push(dataBean);
                                     }
-                                    this.$refs.tree.updateKeyChildren(node.id, newDataArray);
+                                    this.$refs.tree.updateKeyChildren(node.id,newDataArray);
                                      this.$refs.tree.store.nodesMap[data.id].expanded=true;
                                      data.unfold=true;
                                 } else {
@@ -538,5 +543,9 @@
     }
     .custom-tree-node[data-v-3740fcef]{
         font-size: 14px;
+    }
+    .bdd_color{
+        color: #999999;
+        margin-left:30px;
     }
 </style>

@@ -521,4 +521,11 @@
     .custom-tree-node[data-v-4d38dbf5]{
         font-size: 14px;
     }
+    .bdd_color{
+        color: #999999;
+        margin-left:30px;
+    }
+    .el-tree{
+        margin-top:30px;
+    }
 </style>
