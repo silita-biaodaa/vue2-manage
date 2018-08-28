@@ -178,7 +178,7 @@
         <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
             <el-col :span="8">
                 <div class="block">
-                    <span class="demonstration">增加资质</span>
+                    <span class="demonstration">增加资质：</span>
                     <el-cascader
                         :options="options"
                         v-model="selectedOptions"
@@ -288,6 +288,59 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-row class="bdd_hr"></el-row>
+        <el-row style="margin-top: 30px">
+            <el-col :span="12">
+                <div class="grid-content bg-purple">安许认证：</div>
+            </el-col>
+            <el-col :span="12">
+                <div style="text-align: right" class="grid-content bg-purple-light">
+                    <el-button type="primary">保存</el-button>
+                </div>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
+            <el-col :span="8">
+                <div class="grid-content bg-purple">程序处理：安许认证 省级 湖南省</div>
+            </el-col>
+            <el-col :span="8">
+                <div class="grid-content bg-purple">安全认证等级：合格</div>
+            </el-col>
+            <el-col :span="8">
+                <div class="grid-content bg-purple">有效期：2019年9月10日
+
+                </div>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
+            <el-col :span="8">
+                <div class="grid-content bg-purple">人工处理：安许认证 省级 湖南省</div>
+            </el-col>
+            <el-col :span="8">
+                <div class="grid-content bg-purple">安全认证等级：合格</div>
+            </el-col>
+            <el-col :span="8">
+                <div class="grid-content bg-purple">有效期：2019年9月10日
+
+                </div>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
+            <el-col :span="12">
+                <div class="grid-content bg-purple">人工编辑：
+
+                </div>
+            </el-col>
+            <el-col :span="12">
+                <div class="grid-content bg-purple">变更时间：
+                    <el-date-picker
+                        v-model="value1"
+                        type="date"
+                        placeholder="选择日期">
+                    </el-date-picker>
+                </div>
+            </el-col>
+        </el-row>
         <el-row class="bdd_hr"></el-row>
     </el-container>
 </template>

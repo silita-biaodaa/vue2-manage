@@ -35,7 +35,7 @@ const routes = [
 			children:[
 							{
 								path:'/tender',
-							component: Tender,	
+							component: Tender,
 								name:'tender'
 							},
 							{
@@ -63,15 +63,15 @@ const routes = [
 								component:Aptitudes,
 								name:'aptitudes'
 				  		},
-          		{
-          		     path:'/maintenance',
-          		     component:Maintenance,
-          		     name:'maintenance'
-          		 },
-          		 {
-          		     path:'/method',
-          		     component:Method,
-          		     name:'method'
+          		        {
+          		             path:'/maintenance',
+          		             component:Maintenance,
+          		             name:'maintenance'
+          		         },
+          		         {
+          		            path:'/method',
+          		            component:Method,
+          		            name:'method'
 							 },
 							 {
 							 	path: '/compile',
@@ -91,7 +91,7 @@ const routes = [
 
 					]
 		}
-		
+
 
 
 ]
