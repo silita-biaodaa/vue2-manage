@@ -84,8 +84,12 @@
                     </el-table-column>
                     <el-table-column
                         prop="name"
-                        label="历史名称"
+                        label="变更前名称"
                     >
+                    </el-table-column>
+                    <el-table-column
+                        prop="address"
+                        label="变更后名称">
                     </el-table-column>
                     <el-table-column
                         prop="address"
@@ -125,7 +129,7 @@
                         <div class="grid-content bg-purple">程序处理：安许证号（湘jz安许证字000000000000）</div>
                     </el-col>
                     <el-col :span="12">
-                        <div class="grid-content bg-purple">有效期：2019年9月10日
+                        <div class="grid-content bg-purple">&nbsp;&nbsp;&nbsp;有效期：2019年9月10日
 
                         </div>
                     </el-col>
@@ -166,7 +170,7 @@
                 <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
                     <el-col :span="8">
                         <div class="block">
-                            <span class="demonstration">资质：</span>
+                            <span class="demonstration bg-purple">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资质：</span>
                             <el-cascader
                                 :options="options"
                                 v-model="selectedOptions"
@@ -184,7 +188,7 @@
                         </div>
                     </el-col>
                     <el-col :span="8">
-                        <div class="grid-content bg-purples">发证机关：
+                        <div class="grid-content bg-purple">发证机关：
                             <el-input
                                 placeholder="请输入发证机关"
                                 v-model="input10"
@@ -204,7 +208,7 @@
                         </div>
                     </el-col>
                     <el-col :span="8">
-                        <div class="grid-content bg-purple">有效期：
+                        <div class="grid-content bg-purple">&nbsp;&nbsp;&nbsp;有效期：
                             <el-date-picker
                                 v-model="value1"
                                 type="date"
@@ -377,7 +381,10 @@
                         prop="address"
                         label="评定省份">
                     </el-table-column>
-
+                    <el-table-column
+                        prop="key"
+                        label="操作">
+                    </el-table-column>
                 </el-table>
             </el-container>
         </template>
@@ -692,7 +699,8 @@
                             date: '1',
                             name: '湖南耀邦建设有限公司',
                             address: '2018年9月10日',
-                            news: '程序'
+                            news: '程序',
+
 
 
                         }],
