@@ -1,16 +1,15 @@
 <template>
 <el-row>
- <el-row class="bdd_so">
+ <el-row class="bdd_so" style="overflow: hidden">
   <el-input placeholder="请输入项目名称" v-model="input5" class="input-with-select bdd_mi">
     <template slot="append"><el-button slot="append" icon="el-icon-search"></el-button></template>
   </el-input>
-
- <el-button type="primary">查询</el-button>
+     <span style="float: right">
+         <el-button type="primary">批量删除</el-button>
+         <el-button type="primary">批量恢复</el-button>
+     </span>
   </el-row>
-    <el-row style="text-align: right;margin-top: 30px;">
-    <el-button type="primary">批量删除</el-button>
-    <el-button type="primary">批量恢复</el-button>
-    </el-row>
+
   <el-table class='baa_ai'
     ref="multipleTable"
     :data="tableData3"
@@ -29,11 +28,13 @@
     <el-table-column
       prop="date"
       label="公布时间"
+      width="100"
       >
     </el-table-column>
       <el-table-column
           prop="num"
           label="公告类型"
+          width="100"
       >
       </el-table-column>
     <el-table-column
@@ -41,7 +42,8 @@
       label="公告来源网站"
       show-overflow-tooltip >
     </el-table-column>
-    <el-table-column label="操作"  >
+    <el-table-column label="操作"
+    width="150">
       <template slot-scope="scope">
         <el-button
           size="mini"
@@ -186,8 +188,8 @@
 
 }
 .bdd_so{
-  text-align:right;
-  margin-top: 50px;
+    margin-top:50px;
+
 }
 .icon-list li i {
     display: block;

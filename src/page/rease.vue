@@ -1,7 +1,7 @@
 <template>
 
     <el-container>
-        <el-header style="margin-top: 50px;"><el-row :gutter="20">
+        <el-header style="margin-top: 30px;"><el-row :gutter="20">
             <el-col :span="10"><div class="grid-content bg-purple">
                 <el-input
                     placeholder="请输入完整正确的企业名称"
@@ -12,7 +12,7 @@
             </div></el-col>
             <el-col :span="10"><div class="grid-content bg-purple">
                 <el-input
-                    placeholder="请输入"
+                    placeholder="请输入社会统一信用代码"
                     v-model="input10"
                     clearable>
                 </el-input>
@@ -35,19 +35,36 @@
                 <el-table-column
                     prop="name"
                     label="信用代码"
+                    width="220"
                     >
                 </el-table-column>
                 <el-table-column
                     prop="address"
-                    label="提交时间">
+                    label="提交时间"
+                    width="180">
                 </el-table-column>
                 <el-table-column label="操作"
-                >
+                width="200">
                     <template slot-scope="scope">
-                        <el-button
-                            size="mini"
-                            @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-                        <el-button
+
+                            <el-button type="mini"  @click="dialogFormVisible = true">修改</el-button>
+
+                            <el-dialog style="text-align: center" title="请修改" :visible.sync="dialogFormVisible">
+                                <el-form :model="form">
+                                    <el-form-item label="企业名称：" :label-width="formLabelWidth">
+                                        <el-input v-model="form.name" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="信用代码：" :label-width="formLabelWidth">
+                                        <el-input v-model="form.name" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                </el-form>
+                                <div slot="footer" class="dialog-footer">
+                                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                                </div>
+                            </el-dialog>
+
+                        <el-button class="bdd_btn"
                             size="mini"
                             type="danger"
                             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -61,22 +78,35 @@
     export default {
         data() {
             return {
+                dialogTableVisible: false,
+                dialogFormVisible: false,
+                form: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
+                },
+                formLabelWidth: '120px',
                 tableData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
+                    date: '湖南省耀邦建设有限公司',
+                    name: '123456789456123456',
+                    address: '2015.5.10'
                 }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
+                    date: '湖南省耀邦建设有限公司',
+                    name: '123456789456123456',
+                    address: '2015.5.10'
                 }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄'
+                    date: '湖南省耀邦建设有限公司',
+                    name: '123456789456123456',
+                    address: '2015.5.10'
                 }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
+                    date: '湖南省耀邦建设有限公司',
+                    name: '123456789456123456',
+                    address: '2015.5.10'
                 }]
             }
         }
@@ -106,4 +136,5 @@
         padding: 10px 0;
         background-color: #f9fafc;
     }
+
 </style>
