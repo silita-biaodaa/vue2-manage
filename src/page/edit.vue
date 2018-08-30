@@ -3,17 +3,42 @@
   
     <!-- quill-editor插件标签 分别绑定各个事件-->
   
-    <quill-editor v-model="content" ref="myQuillEditor" :options="editorOption" @change="onEditorChange($event)"></quill-editor>
+    <quill-editor 
+    v-model="content" 
+    ref="myQuillEditor" 
+    :options="editorOption" 
+    @change="onEditorChange($event)">
+    </quill-editor>
   
     <!-- 文件上传input 将它隐藏-->
   
-    <el-upload class="upload-demo" action="http://192.168.0.97:8383/v1/base/image_upload" :before-upload='beforeUpload' :data="uploadData" :on-success='upScuccess' name="files" :on-error="handleAvatarFail" :headers="headers" ref="upload" style="display:none">
+   <!-- action='http://120.79.116.245:19004/upload/quaAlias/' -->
+
+    <el-upload 
+    class="upload-demo" 
+    action="http://192.168.0.97:8383/v1/base/image_upload"
   
-      <el-button size="small" type="primary" id="imgInput" element-loading-text="插入中,请稍候">点击上传</el-button>
+    :before-upload='beforeUpload' 
+    :data="uploadData" 
+    :on-success='upScuccess' 
+    name="files" 
+    :on-error="handleAvatarFail" 
+    :headers="headers" 
+    ref="upload" 
+    style="display:none">
+  
+      <el-button 
+      size="small" 
+      type="primary" 
+      id="imgInput" 
+      element-loading-text="插入中,请稍候">
+      点击上传</el-button>
   
     </el-upload>
-    <button @click="save">点击获取保存</button>
-    <!-- <div class="box ql-editor" ref="htmlContainer"></div> -->
+    <!-- <button @click="save">点击获取保存</button> -->
+
+    <el-button type="primary" @click="save" class="content-btn" >保存</el-button>
+    <!-- <div class="box ql-editor" ref="htmlContainer"></div>   富文本预览效果  --> 
   </div>
 </template>
 
@@ -28,15 +53,15 @@ import Quill from "quill";
 export default {
   props: {
     editcontent: "",
-
     propId: ""
   },
 
   data() {
     return {
-      loading: false,
-      headers: {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjE5Mi4xNjguMC4xNjciLCJleHAiOjE1MzU2ODM3MTgsImp0aSI6Im02IiwibmJmIjoxNTMzMDkxNzE4LCJzdWIiOiI0YWIzNmMxNi0xYTM0LTQ5MzktODFjYi01YTRmYzNlOGJkNjAifQ.bNslyfoKdVxjlcHUW-PajMVHa4XbGwo326gaDHdm478'}, 
-      content: "", // 文章内容
+      loading: false, //图片上传状态来确定是否显示得 loading 动画 
+      headers: {token: localStorage.getItem('Authorization')}, 
+      //图片上传得请求头得token值
+      content: "", // 文章内容，这里可以输入要传进去得文章内容得
       editorOption: {
         placeholder: "请输入内容",
         modules: {
@@ -80,7 +105,7 @@ export default {
 
     // 这个钩子还支持 promise
 
-    beforeUpload(file) {
+    beforeUpload(file) {   //上传图片前操作
       return this.qnUpload(file);
     },
 
@@ -196,7 +221,7 @@ export default {
 
     // 获取html
 
-    onEditorChange({
+    onEditorChange({  //内容发生改变得事件  
       editor,
 
       html,
@@ -205,7 +230,8 @@ export default {
     }) {
       this.$emit("transferuser", html);
       // 转换空格
-      this.$refs.htmlContainer.innerHTML = html.replace(/(?=[^>]*(?=<))\s/g, "&nbsp;");
+      // this.$refs.htmlContainer.innerHTML = html.replace(/(?=[^>]*(?=<))\s/g, "&nbsp;");
+      //上面 这一行 代码给注释
     },
 
     // 点击视频ICON触发事件
@@ -280,3 +306,12 @@ export default {
   }
 };
 </script>
+<style lang="less" >
+ .quillEditor {
+   text-align: right;
+   .el-button {
+     margin-top: 10px;
+   }
+ }
+</style>
+

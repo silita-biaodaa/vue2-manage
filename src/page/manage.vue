@@ -37,7 +37,7 @@
 								<span>运营</span>
 							</template>
 							<el-menu-item index="compile">行业资质</el-menu-item>
-							<el-menu-item index="visitor">平台公示</el-menu-item>
+							<el-menu-item index="quillediter">平台公示</el-menu-item>
 							<el-menu-item index="addgoods">消息中心</el-menu-item>
 							<el-menu-item index="visitor">意见反馈</el-menu-item>
 						</el-submenu>
