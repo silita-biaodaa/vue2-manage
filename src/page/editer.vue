@@ -381,9 +381,29 @@
                         prop="address"
                         label="评定省份">
                     </el-table-column>
-                    <el-table-column
-                        prop="key"
-                        label="操作">
+                    <el-table-column label="操作"
+                                     width="200">
+                        <template slot-scope="scope">
+                            <el-button type="text" @click="dialogFormVisible = true">修改</el-button>
+
+                            <el-dialog style="text-align: center" title="2017年公路信用评价等级修改" :visible.sync="dialogFormVisible">
+                                <el-form :model="form">
+                                    <el-form-item label="" :label-width="formLabelWidth">
+                                        <el-select v-model="form.region" placeholder="空值">
+                                            <el-option label="A" value="shanghai"></el-option>
+                                            <el-option label="B" value="beijing"></el-option>
+                                            <el-option label="C" value="beijing"></el-option>
+                                            <el-option label="D" value="beijing"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-form>
+                                <div slot="footer" class="dialog-footer">
+                                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                                </div>
+                            </el-dialog>
+
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-container>
@@ -392,6 +412,19 @@
             export default {
                 data() {
                     return {
+                        dialogTableVisible: false,
+                        dialogFormVisible: false,
+                        form: {
+                            name: '',
+                            region: '',
+                            date1: '',
+                            date2: '',
+                            delivery: false,
+                            type: [],
+                            resource: '',
+                            desc: ''
+                        },
+                        formLabelWidth: '120px',
                         optionsWithDisabled: [{
                             value: 'zhinan',
                             label: '一致',

@@ -146,14 +146,13 @@
 
                 }, 300);
             }
-        },  handleEdit(index,row) {  // 编辑框的跳转
+        }, handleEdit(index,row) {  // 编辑框的跳转
             const { href } = this.$router.resolve({
                 name:'editer',params: {id:row.name}
             })
 
-
+            window.open(href, '-blank')
         },
-
         handleDelete(index, row) {
             console.log(index, row);
         }
