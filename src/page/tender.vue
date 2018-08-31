@@ -4,10 +4,9 @@
         <el-row class="condition">
             <el-col :span="24" >
                 <el-row>
-                    <el-col :span="7">
+                    <el-col :span="9">
                          省份：
-                       <!-- <el-cascader :options="provinces" v-model="province" change-on-select style="width:80%" placeholder="请选择省市" @active-item-change="handleItemChange" :props="props" ></el-cascader> -->
-                        <el-select v-model="province" placeholder="请选择" style='width:30%'>
+                        <el-select v-model="province" placeholder="请选择" style='width:35%' @change='changetable'>
                            <el-option
                              v-for="item in provinces"
                              :key="item.areaCode"
@@ -16,7 +15,7 @@
                            </el-option>
                          </el-select>
                         市级：
-                        <el-select v-model="city" placeholder="请选择" style='width:30%'>
+                        <el-select v-model="city" placeholder="请选择" style='width:35%' @change='changetable'>
                            <el-option
                              v-for="item in citys"
                              :key="item.areaCode"
@@ -28,7 +27,7 @@
 
                     <el-col :span="5">
                         公共状态：
-                        <el-select v-model="state" placeholder="请选择状态" style='width:60%'>
+                        <el-select v-model="state" placeholder="请选择状态" style='width:60%' @change='changetable' >
                             <el-option v-for="item in states" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
@@ -36,12 +35,9 @@
                     <el-col :span="10">
                         <div class="ma-left">
                             <span >发布日期：</span>
-                            <el-date-picker v-model="times" type="daterange" style='width:80%' align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" value-format="yyyy-MM-dd">
+                            <el-date-picker v-model="times" type="daterange" style='width:80%' align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" value-format="yyyy-MM-dd" @change='changetable'>
                             </el-date-picker>
                         </div>
-                    </el-col>
-                    <el-col :span="2">
-                         <el-button type="primary" @click="selectword">确定</el-button>    
                     </el-col>
                 </el-row>
             </el-col>  
@@ -52,7 +48,7 @@
                 <el-input placeholder="请输入内容" v-model="firm" style="width:30%" @change="firmchange">
                     <i slot="prefix" class="el-input__icon el-icon-search" ></i>
                 </el-input>
-                <el-button type="primary" class="fl-left">导出Excel</el-button >  
+                <el-button type="primary" class="fl-left" @click='exportexcel'>导出Excel</el-button >  
             </el-col>
         </el-row>
 
@@ -115,7 +111,7 @@
     </div>
 </template>
 <script>
-import { listArea,listStatus,listMain } from '@/api/index';
+import { listArea,listStatus,listMain,listExcel,exportE } from '@/api/index';
 export default {
   data () {
     return {
@@ -181,7 +177,7 @@ export default {
           pubDate:'',
           pubEndDate:'',
           pkid:'',
-          code:'hunan',
+          coDe:'guangd',
           pagesize:15, // 当前页面条数
           pagenum: 1  //当前页面数
 
@@ -194,7 +190,7 @@ export default {
      },
      province:function() {
         this.pkid= this.province.substring(0,1)
-        this.code= this.province.substring(1)
+        this.coDe= this.province.substring(1)
         listArea({areaParentId:this.pkid}).then(res => {
             if(res.code === 1) {
                 this.citys = res.data
@@ -224,7 +220,6 @@ export default {
 methods: {
       listTen() {
           listArea({areaParentId:0}).then(res => {
-            //   console.log(res)
               if(res.code === 1 ) {
                  res.data.forEach(itme => {
                     itme.areaCode = itme.pkid + itme.areaCode
@@ -236,18 +231,15 @@ methods: {
 
       },
       listForm() {
-          listMain({source:this.code,proviceCode:this.code,cityCode:this.city,ntStatus:this.state,ntCategory:1,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize}).then(res => {
-              console.log(res)
-            // console.log(第一次测试)
+          listMain({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:1,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize}).then(res => {
+
             if(res.code ===1) {
                 this.tableData = res.data.datas
                 this.total = res.data.total
-                // console.log(this.tableData)
             }
           })
       },
       firmchange() {  // 搜索框变化的方法
-          console.log(this.firm)
           this.listForm()
       },
       handleEdit(index,row) {  // 编辑框的跳转 
@@ -282,12 +274,27 @@ methods: {
          this.pagesize = val  
           this.listForm()
       },
-      selectword() {
-          console.log(this.state)
-          console.log(this.times)
-          console.log(this.pubDate)
-          console.log(this.pubEndDate)
-          this.listForm()
+      changetable() {
+
+          setTimeout(() => {
+              console.log(this.coDe)
+              return this.listForm()
+          }, 100);                    
+      },
+      exportexcel(){
+          exportE({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:1,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize},{responseType: 'blob'}).then(res=> {
+               const blob = new Blob([res]);
+                const fileName = '统计.xlsx';
+                const elink = document.createElement('a');
+                elink.download = fileName;
+                elink.style.display = 'none';
+                elink.href = URL.createObjectURL(blob);
+                document.body.appendChild(elink);
+                elink.click();
+                URL.revokeObjectURL(elink.href); // 释放URL 对象
+                document.body.removeChild(elink);
+          })
+     
       }
 
   },
@@ -295,7 +302,7 @@ methods: {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .tender {
     .condition {
         border: 1px solid #000;
@@ -330,7 +337,12 @@ methods: {
         display: inline-block;
         line-height: 50px;
     }
-
+    .el-button+.el-button {
+        margin-left: 8px;
+    }
+    .el-button--mini, .el-button--mini.is-round {
+        padding: 7px 10px;
+    }
 
 
     

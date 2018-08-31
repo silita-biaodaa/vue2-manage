@@ -161,5 +161,19 @@ export const listStatus = params => {
 export const listMain = params => {
     return axios.post('zhaobiao/listNtMain',params).then(res => res.data)
 }
+//下载excel 表格
+export const listExcel = params => {
+    return axios.post('zhaobiao/listTendersDetail',params).then(res => res.data)
+}
 
-
+export const exportE =  form => {
+        return axios({ // 用axios发送post请求
+            method: 'post',
+            url: 'zhaobiao/listTendersDetail', // 请求地址
+            data: form, // 参数
+            responseType: 'blob', // 表明返回服务器返回的数据类型
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res=> res.data)
+    }
