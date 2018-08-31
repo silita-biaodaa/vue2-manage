@@ -10,18 +10,18 @@
                         <el-select v-model="province" placeholder="请选择" style='width:30%'>
                            <el-option
                              v-for="item in provinces"
-                             :key="item.area_code"
-                             :label="item.area_name"
-                             :value="item.area_code">
+                             :key="item.areaCode"
+                             :label="item.areaName"
+                             :value="item.areaCode">
                            </el-option>
                          </el-select>
                         市级：
                         <el-select v-model="city" placeholder="请选择" style='width:30%'>
                            <el-option
                              v-for="item in citys"
-                             :key="item.area_code"
-                             :label="item.area_name"
-                             :value="item.area_code">
+                             :key="item.areaCode"
+                             :label="item.areaName"
+                             :value="item.areaCode">
                            </el-option>
                          </el-select>
                     </el-col>
@@ -67,17 +67,17 @@
                     </el-table-column>
                     <el-table-column label="发布日期">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.pub_date }}</span>
+                            <span>{{ scope.row.pubDate }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="公告发布网站">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.src_site }}</span>
+                            <span>{{ scope.row.srcSite }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="公告状态" width="100">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.nt_status | sum }}</span>
+                            <span>{{ scope.row.ntStatus | sum }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作">
@@ -176,12 +176,12 @@ export default {
           times: [],  //  时间选择器
           firm:'',    //搜索框得数据得
           tableData:[],
-          total: 600,
+          total: 0,
           id:1111 ,
           pubDate:'',
           pubEndDate:'',
           pkid:'',
-          code:'',
+          code:'hunan',
           pagesize:15, // 当前页面条数
           pagenum: 1  //当前页面数
 
@@ -224,10 +224,11 @@ export default {
 methods: {
       listTen() {
           listArea({areaParentId:0}).then(res => {
+            //   console.log(res)
               if(res.code === 1 ) {
                  res.data.forEach(itme => {
-                    itme.area_code = itme.pkid + itme.area_code
-                 })
+                    itme.areaCode = itme.pkid + itme.areaCode
+                 })                 
                  this.provinces = res.data
                  console.log(this.provinces)
               }
@@ -237,14 +238,17 @@ methods: {
       listForm() {
           listMain({source:this.code,proviceCode:this.code,cityCode:this.city,ntStatus:this.state,ntCategory:1,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize}).then(res => {
               console.log(res)
+            // console.log(第一次测试)
             if(res.code ===1) {
                 this.tableData = res.data.datas
-                console.log(this.tableData)
+                this.total = res.data.total
+                // console.log(this.tableData)
             }
           })
       },
       firmchange() {  // 搜索框变化的方法
           console.log(this.firm)
+          this.listForm()
       },
       handleEdit(index,row) {  // 编辑框的跳转 
         const { href } = this.$router.resolve({
@@ -272,9 +276,11 @@ methods: {
       },
       handleCurrentChange() {  // 当前页改变的函数
          this.pagenum = val
+          this.listForm()
       },
       handleSizeChange() {  // 每页条数发生改变时做出的函数
          this.pagesize = val  
+          this.listForm()
       },
       selectword() {
           console.log(this.state)
