@@ -228,21 +228,39 @@
                            上传招标文件
                          </el-button>
                        </el-upload>
-                       <el-button type="primary" >上传文件下载路径</el-button>
+                       <el-button type="primary" @click="uploadurl" >上传文件下载路径</el-button>
                        <el-button type="primary" >删除招标文件</el-button>
 
                   </div>
 
              </el-tab-pane>
-            <el-tab-pane label="相关公告" name="third">相关公告</el-tab-pane>
+            <el-tab-pane label="相关公告" name="third">
+                  <el-table ref="multipleRela" :data="relation" tooltip-effect="dark" style="width: 100%" @selection-change="handleRelaChange" height="300">
+                    <el-table-column type="selection" style="width:5%">
+                    </el-table-column>
+                    <el-table-column label="相关公告" width="650" >
+                      <template slot-scope="scope">{{ scope.row.date }}</template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="发布日期" >
+                    </el-table-column>
+                    <el-table-column prop="address" label="状态" show-overflow-tooltip >
+                    </el-table-column>
+                  </el-table>
+
+                  <div style="margin-top: 20px">
+                       <el-button type="primary" >编辑公告</el-button>
+                       <el-button type="primary" >新增关联公告</el-button>
+                       <el-button type="primary" >解除关联公告</el-button>                       
+                  </div>
+
+            </el-tab-pane>
           </el-tabs>
 
         </el-col>
       </el-row>
 
       <!-- 修改得招标信息 -->
-      <el-dialog title="设置" :visible.sync="redactFormVisible" width="40%">            
-          
+      <el-dialog title="设置" :visible.sync="redactFormVisible" width="40%">             
           <el-form :model="handleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">          
             <el-form-item label="公告状态" prop="resource">
               <el-radio-group v-model="handleForm.resource">
@@ -250,7 +268,6 @@
                 <el-radio label="已处理"></el-radio>
               </el-radio-group>
             </el-form-item>
-
             
             <el-form-item label="公告类型" prop="type">
               <el-radio-group v-model="handleForm.type">
@@ -258,14 +275,20 @@
                 <el-radio label="中标公告"></el-radio>
               </el-radio-group>
             </el-form-item>
-
             <el-form-item>              
               <el-button @click="resetForm('ruleForm')">取消</el-button>
               <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
             </el-form-item>
-          </el-form>
-       
+          </el-form>       
       </el-dialog>
+        <!-- 上传路路径得弹框 -->
+       <el-dialog title="文件传输" :visible.sync="urlFormVisible">
+          <el-input v-model="urlupload" placeholder="请输入需要上传得下载地址"></el-input>
+         <div slot="footer" class="dialog-footer">
+           <el-button @click="urlFormVisible = false">取 消</el-button>
+           <el-button type="primary" @click="urlSubmit">确 定</el-button>
+         </div>
+    </el-dialog>
 
     </div>
 </template>
@@ -415,7 +438,37 @@ export default {
          address: '上海市普陀区金沙江路 1518 弄'
        }],
        fileSelect:[],  //招标文件  s
-       fileList:[]
+       relation:[
+         {
+         date: '2016-05-03',
+         name: '王小虎',
+         address: '上海市普陀区金沙江路 1518 弄'
+       }, {
+         date: '2016-05-02',
+         name: '王小虎',
+         address: '上海市普陀区金沙江路 1518 弄'
+       }, {
+         date: '2016-05-04',
+         name: '王小虎',
+         address: '上海市普陀区金沙江路 1518 弄'
+       }, {
+         date: '2016-05-01',
+         name: '王小虎',
+         address: '上海市普陀区金沙江路 1518 弄'
+       }, {
+         date: '2016-05-08',
+         name: '王小虎',
+         address: '上海市普陀区金沙江路 1518 弄'
+       }, {
+         date: '2016-05-06',
+         name: '王小虎',
+         address: '上海市普陀区金沙江路 1518 弄'
+       }
+       ],
+       relaSelect:[],
+       fileList:[],
+       urlupload:'',
+       urlFormVisible:false
     }
   },
   methods: {
@@ -469,6 +522,9 @@ export default {
       handleFileChange(val) {   //  招标文件的
 
       },
+      handleRelaChange(val) {   //相关公告得
+
+      },
        //   上传文件等方法
     //  文件列表移除文件时的钩子
     handleRemove(file, fileList) {
@@ -508,6 +564,21 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
+    uploadurl() {  //上传下载路径
+        this.urlFormVisible = true
+    },
+    urlSubmit() { 
+        if(!this.urlupload.trim()==='') {
+          console.log(1)
+           
+       } else {
+         console.log(2)
+         this.$message({
+             type:'warning',
+             message:'地址栏不能为空~'
+           })
+       }   
+    }
   },
   components: {
      Edit
@@ -597,11 +668,11 @@ export default {
   }
   
  ::-webkit-scrollbar {
-   height: 15px;
+   height: 13px;
  }
  
 ::-webkit-scrollbar-thumb {
-  border-radius: none;
+  border-radius: 0;
   background-color: #c4c4c4;
 
 }

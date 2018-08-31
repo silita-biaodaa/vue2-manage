@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 
-// const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
+const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
 
-const baseURL = 'http://120.79.116.245:19004/'
+// const baseURL = 'http://120.79.116.245:19004/'
 axios.defaults.baseURL = baseURL
 
 axios.interceptors.request.use(function (config) {
@@ -147,4 +147,19 @@ export const showgrade = params => {
 export const delgrade = params => {
     return axios.post('qual/grade/del', params).then(res => res.data)
 }
+//地区二级联动下拉框
+export const listArea = params => {
+    return axios.post('zhaobiao/listSysArea', params).then(res => res.data)
+}
+
+// 获取公告状态
+export const listStatus = params => {
+    return axios.post('zhaobiao/listNoticeStatus').then(res => res.data)
+}
+
+// 获取公告列表
+export const listMain = params => {
+    return axios.post('zhaobiao/listNtMain',params).then(res => res.data)
+}
+
 

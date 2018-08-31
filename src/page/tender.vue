@@ -5,8 +5,25 @@
             <el-col :span="24" >
                 <el-row>
                     <el-col :span="7">
-                        地区：
-                        <el-cascader :options="provinces" v-model="province" change-on-select style="width:80%" placeholder="请选择省市"></el-cascader>
+                         省份：
+                       <!-- <el-cascader :options="provinces" v-model="province" change-on-select style="width:80%" placeholder="请选择省市" @active-item-change="handleItemChange" :props="props" ></el-cascader> -->
+                        <el-select v-model="province" placeholder="请选择" style='width:30%'>
+                           <el-option
+                             v-for="item in provinces"
+                             :key="item.area_code"
+                             :label="item.area_name"
+                             :value="item.area_code">
+                           </el-option>
+                         </el-select>
+                        市级：
+                        <el-select v-model="city" placeholder="请选择" style='width:30%'>
+                           <el-option
+                             v-for="item in citys"
+                             :key="item.area_code"
+                             :label="item.area_name"
+                             :value="item.area_code">
+                           </el-option>
+                         </el-select>
                     </el-col>
 
                     <el-col :span="5">
@@ -19,12 +36,12 @@
                     <el-col :span="10">
                         <div class="ma-left">
                             <span >发布日期：</span>
-                            <el-date-picker v-model="times" type="daterange" style='width:80%' align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2">
+                            <el-date-picker v-model="times" type="daterange" style='width:80%' align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" value-format="yyyy-MM-dd">
                             </el-date-picker>
                         </div>
                     </el-col>
                     <el-col :span="2">
-                         <el-button type="primary">确定</el-button>    
+                         <el-button type="primary" @click="selectword">确定</el-button>    
                     </el-col>
                 </el-row>
             </el-col>  
@@ -45,22 +62,22 @@
                 <el-table class='baa_ai' :data="tableData" style="width:90%;">
                     <el-table-column label="公告标题">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.name }}</span>
+                            <span>{{ scope.row.title }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="发布日期">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.date }}</span>
+                            <span>{{ scope.row.pub_date }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="公告发布网站">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.news }}</span>
+                            <span>{{ scope.row.src_site }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="公告状态" width="100">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.stort }}</span>
+                            <span>{{ scope.row.nt_status | sum }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作">
@@ -82,8 +99,8 @@
                         <el-pagination
                          @current-change="handleCurrentChange" 
                          :current-page="1" 
-                         :page-sizes="[100, 200, 300, 400]" 
-                         :page-size="100" 
+                         :page-sizes="[15, 30, 45, 60]" 
+                         :page-size="15" 
                          layout="total, sizes, prev, pager, next, jumper" 
                          :total="total" 
                          @size-change="handleSizeChange">
@@ -98,58 +115,35 @@
     </div>
 </template>
 <script>
+import { listArea,listStatus,listMain } from '@/api/index';
 export default {
   data () {
     return {
-    province:[],
-     provinces: [{  //省市数据
-            value: 'zhinan',
-            label: '指南',
-            children: [{
-                value: 'shejiyuanze',
-                label: '设计原则',
-                children: [{
-                    value: 'yizhi',
-                    label: '一致'
-                }, {
-                    value: 'fankui',
-                    label: '反馈'
-                }, {
-                    value: 'xiaolv',
-                    label: '效率'
-                }, {
-                    value: 'kekong',
-                    label: '可控'
-                }]
-            }, {
-                value: 'daohang',
-                label: '导航',
-                children: [{
-                    value: 'cexiangdaohang',
-                    label: '侧向导航'
-                }, {
-                    value: 'dingbudaohang',
-                    label: '顶部导航'
-                }]
-            }]
-        }],
+    city:'',  //市级数据
+    citys:[],  //   市级请求数据 
+    province:'',
+     provinces: [],
         state:'',  //公共状态数据
         states:[
             {
-                value: '选项1',
-                label: '黄金糕'
+                value: '',
+                label: '全部'
             }, {
-                value: '选项2',
-                label: '双皮奶'
+                value: '0',
+                label: '未编辑'
             }, {
-                value: '选项3',
-                label: '蚵仔煎'
+                value: '1',
+                label: '已编辑'
             }, {
-                value: '选项4',
-                label: '龙须面'
+                value: '2',
+                label: '已审核'
             }, {
-                value: '选项5',
-                label: '北京烤鸭'
+                value: '3',
+                label: '未审核'
+            },
+            {
+                value:'4',
+                label:'审核未通过'
             }
         ],
          pickerOptions2: {
@@ -179,41 +173,76 @@ export default {
                 }
             }]
          },
-          times: '',
-          firm:'',
-          tableData:[{   //表格数据  
-              name: '湖南耀邦建设有限公司',
-              date: '2018-7-28',
-              news: 'http://www.biaodaa.com/neirong/1846263',
-              stort: '未处理',
-
-          }, {
-              name: '湖南耀邦建设有限公司',
-              date: '2018-7-28',
-              news: 'http://www.biaodaa.com/neirong/1846263',
-              stort: '未处理',
-
-          }, {
-              name: '湖南耀邦建设有限公司',
-              date: '2018-7-28',
-              news: 'http://www.biaodaa.com/neirong/1846263',
-              stort: '未处理',
-
-          }, {
-              name: '湖南耀邦建设有限公司',
-              date: '2018-7-28',
-              news: 'http://www.biaodaa.com/neirong/1846263',
-              stort: '未处理',
-
-          }],
+          times: [],  //  时间选择器
+          firm:'',    //搜索框得数据得
+          tableData:[],
           total: 600,
-          id:1111 
+          id:1111 ,
+          pubDate:'',
+          pubEndDate:'',
+          pkid:'',
+          code:'',
+          pagesize:15, // 当前页面条数
+          pagenum: 1  //当前页面数
+
      }  
   },
   watch: {
-   
+     times:function () {
+         this.pubDate = this.times[0]
+         this. pubEndDate = this.times[1]
+     },
+     province:function() {
+        this.pkid= this.province.substring(0,1)
+        this.code= this.province.substring(1)
+        listArea({areaParentId:this.pkid}).then(res => {
+            if(res.code === 1) {
+                this.citys = res.data
+            }
+        })
+     }
   },
-  methods: {
+  created () {
+      this.listTen()
+      this.listForm()
+  }, 
+  filters: {
+     sum:function(value){
+         if(value ==='0') {
+             return '未编辑'
+         } else if(value === '1') {
+             return '已编辑'
+         } else if(value === '2') {
+             return '已审核'
+         } else if(value === '3') {
+             return '未审核'
+         } else  {
+             return '已审核未通过'
+         }
+     }
+  },
+methods: {
+      listTen() {
+          listArea({areaParentId:0}).then(res => {
+              if(res.code === 1 ) {
+                 res.data.forEach(itme => {
+                    itme.area_code = itme.pkid + itme.area_code
+                 })
+                 this.provinces = res.data
+                 console.log(this.provinces)
+              }
+          })
+
+      },
+      listForm() {
+          listMain({source:this.code,proviceCode:this.code,cityCode:this.city,ntStatus:this.state,ntCategory:1,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize}).then(res => {
+              console.log(res)
+            if(res.code ===1) {
+                this.tableData = res.data.datas
+                console.log(this.tableData)
+            }
+          })
+      },
       firmchange() {  // 搜索框变化的方法
           console.log(this.firm)
       },
@@ -242,10 +271,17 @@ export default {
           });
       },
       handleCurrentChange() {  // 当前页改变的函数
-           
+         this.pagenum = val
       },
       handleSizeChange() {  // 每页条数发生改变时做出的函数
-
+         this.pagesize = val  
+      },
+      selectword() {
+          console.log(this.state)
+          console.log(this.times)
+          console.log(this.pubDate)
+          console.log(this.pubEndDate)
+          this.listForm()
       }
 
   },

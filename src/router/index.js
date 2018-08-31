@@ -94,7 +94,7 @@ const routes = [
 								 path:'/quillediter',
 								 component: Quillediter
 							 }
-							 },{
+							 ,{
                     path:'/detail',
                     component:Detail,
                     name:'detail'
