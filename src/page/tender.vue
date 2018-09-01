@@ -189,6 +189,7 @@ export default {
          this. pubEndDate = this.times[1]
      },
      province:function() {
+         this.city = ''
         this.pkid= this.province.substring(0,1)
         this.coDe= this.province.substring(1)
         listArea({areaParentId:this.pkid}).then(res => {
@@ -242,9 +243,9 @@ methods: {
       firmchange() {  // 搜索框变化的方法
           this.listForm()
       },
-      handleEdit(index,row) {  // 编辑框的跳转 
+      handleEdit(index,row) {  // 编辑框的跳转
         const { href } = this.$router.resolve({
-              name:'compile',params: {id:row.name}
+              name:'compile',params: {id:row.pkid,code:this.coDe}
           })
    
           window.open(href, '-blank')

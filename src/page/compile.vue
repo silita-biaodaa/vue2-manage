@@ -264,15 +264,15 @@
           <el-form :model="handleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">          
             <el-form-item label="公告状态" prop="resource">
               <el-radio-group v-model="handleForm.resource">
-                <el-radio label="未处理"></el-radio>
-                <el-radio label="已处理"></el-radio>
+                <el-radio label="1">未处理</el-radio>
+                <el-radio label="2">已处理</el-radio>
               </el-radio-group>
             </el-form-item>
             
             <el-form-item label="公告类型" prop="type">
               <el-radio-group v-model="handleForm.type">
-                <el-radio label="招标公告"></el-radio>
-                <el-radio label="中标公告"></el-radio>
+                <el-radio label="1">招标公告</el-radio>
+                <el-radio label="2">中标公告</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item>              
@@ -295,9 +295,12 @@
 
 <script>
  import  Edit  from "@/page/edit";
+ import { updateStatus } from '@/api/index';
 export default {
   data () {
     return {
+      pkid:this.$route.params.id,
+      code:this.$route.params.code,
        form: {   //编辑变更数据
         number: '',
         name:'',
@@ -471,6 +474,9 @@ export default {
        urlFormVisible:false
     }
   },
+  created () {
+    
+  },
   methods: {
     handlemark() {    //中标设置弹框
       this.redactFormVisible = true
@@ -498,10 +504,24 @@ export default {
     resetForm() {    // 设置页面得操作得
       this.redactFormVisible = false
     },
+    // 公告页面得编辑设置弹框处理
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.handleForm.resource)
+          updateStatus({ntCategory:this.handleForm.type,ntStatus:this.handleForm.resource,pkid:this.pkid,source:this.code}).then(res=> {
+            if(res.code ===1 ) {
+              this.$message({
+                message:res.msg,
+                type:'success'
+              });
+              this.redactFormVisible = false;
+            }            
+          })
+          if(this.handleForm.resource === '1') {
+              this.condition = '未处理'
+            } else {
+              this.condition = '已处理'
+            }
         } else {
           return false;
         }

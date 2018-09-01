@@ -161,10 +161,6 @@ export const listStatus = params => {
 export const listMain = params => {
     return axios.post('zhaobiao/listNtMain',params).then(res => res.data)
 }
-//下载excel 表格
-export const listExcel = params => {
-    return axios.post('zhaobiao/listTendersDetail',params).then(res => res.data)
-}
 
 export const exportE =  form => {
         return axios({ // 用axios发送post请求
@@ -177,3 +173,8 @@ export const exportE =  form => {
             }
         }).then(res=> res.data)
     }
+// 设置变更招中标参数 
+export const updateStatus = params => {
+    return axios.post('zhaobiao/updateNtMainStatus',params).then(res => res.data)
+}
+     
