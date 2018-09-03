@@ -31,13 +31,13 @@
             
           <el-form ref="edit" :model="form" label-width="200px" >
             <el-form-item label="招标编辑编号">
-              <el-input v-model="form.number"></el-input>
+              <el-input v-model="form.editCode"></el-input>
             </el-form-item>
             <el-form-item label="项目名称">
               <el-input v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item label="标段信息">
-              <el-input v-model="form.section"></el-input>
+              <el-input v-model="form.segment"></el-input>
             </el-form-item>
             <el-form-item label="公示日期">
               <el-input v-model="form.public"></el-input>
@@ -46,10 +46,10 @@
               <el-input v-model="form.control"></el-input>
             </el-form-item>
             <el-form-item label="项目金额(万元)">
-              <el-input v-model="form.project"></el-input>
+              <el-input v-model="form.proSum"></el-input>
             </el-form-item>
             <el-form-item label="项目工期">
-              <el-input v-model="form.passage"></el-input>
+              <el-input v-model="form.proDuration"></el-input>
             </el-form-item>
             <el-form-item label="项目地区">             
               <el-select v-model="form.area" filterable placeholder="请选择项目地区" style="width:80%">
@@ -64,32 +64,32 @@
               </el-select>
             </el-form-item>
             <el-form-item label="评标办法">
-              <el-select v-model="form.way" filterable placeholder="请选择评标办法" style="width:80%">
+              <el-select v-model="form.pbMode" filterable placeholder="请选择评标办法" style="width:80%">
                 <el-option v-for="item in ways" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="项目保证金(万元)">
-              <el-input v-model="form.cash"></el-input>
+            <el-form-item label="投标保证金(万元)">
+              <el-input v-model="form.bidBonds"></el-input>
             </el-form-item>            
             <el-form-item label="保证金截至时间">   
               <div class="block">
-                <el-date-picker v-model="form.limit" type="datetime" placeholder="选择日期时间">
+                <el-date-picker v-model="form.bidBondsEndTime" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
               </div>
             </el-form-item>
             <el-form-item label="报名截止时间">
               <div class="block">
-                <el-date-picker v-model="form.limittime" type="datetime" placeholder="选择日期时间">
+                <el-date-picker v-model="form.enrollEndTime" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
               </div>
             </el-form-item>
             <el-form-item label="报名地点">
-              <el-input v-model="form.where"></el-input>
+              <el-input v-model="form.enrollAddr"></el-input>
             </el-form-item>
             <el-form-item label="资格审查截止时间">
               <div class="block">
-                <el-date-picker v-model="form.check" type="datetime" placeholder="选择日期时间">
+                <el-date-picker v-model="form.auditTime" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
               </div>
             </el-form-item>
@@ -98,7 +98,7 @@
             </el-form-item>
             <el-form-item label="投标截止时间">
               <div class="block">
-                <el-date-picker v-model="form.abort" type="datetime" placeholder="选择日期时间">
+                <el-date-picker v-model="form.bidEndTime" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
               </div>
             </el-form-item>
@@ -109,7 +109,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="开标地点">
-              <el-input v-model="form.place"></el-input>
+              <el-input v-model="form.openingAddr"></el-input>
             </el-form-item>
             <el-form-item label="项目类型">
               <el-select v-model="form.type1" filterable placeholder="请选择项目类型" style="width:80%">
@@ -302,24 +302,24 @@ export default {
       pkid:this.$route.params.id,
       code:this.$route.params.code,
        form: {   //编辑变更数据
-        number: '',
-        name:'',
-        section:'',
-        public:'',
+        editCode: '',  // 编辑明细编码
+        name:'',     //标段名称
+        segment:'',  // 标段
+        public:'',   //
         control:'',
-        project:'',
-        passage:'',
+        proSum:'',   //项目金额
+        proDuration:'',  //项目工期
         area:'',
         countie:'',
-        way:'',
-        cash:'',
-        limit:'',
-        limittime:'',
-        where:'',
-        check:'',
-        abort:'',  // 投标截止时间
+        pbMode:'',  //评标办法
+        bidBonds:'', // 投标保证金
+        bidBondsEndTime:'', //投标保证金截止时间
+        enrollEndTime:'',  // 报名截止时间
+        enrollAddr:'',   // 报名地址
+        auditTime:'',   // 资格审查时间
+        bidEndTime:'',  // 投标截止时间
         exploit:'', //开发人员
-        place:'', //开标地点
+        openingAddr:'', //开标地点
         type1:'', //项目类型
         type:'', // 招标类型
         recored:'', //备案要求

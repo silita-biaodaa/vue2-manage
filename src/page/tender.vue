@@ -195,6 +195,8 @@ export default {
         listArea({areaParentId:this.pkid}).then(res => {
             if(res.code === 1) {
                 this.citys = res.data
+                this.citys.unshift({areaName:'全部',areaCode:''})
+                console.log(this.citys)
             }
         })
      }
