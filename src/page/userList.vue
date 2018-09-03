@@ -5,173 +5,208 @@
             <el-breadcrumb-item :to="{ path:'/userlist' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path:'/editer' }">编辑</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path:'/rease' }">增加企业</el-breadcrumb-item>
-            <el-breadcrumb-item>详情</el-breadcrumb-item>
         </el-breadcrumb>
         <!--搜索框-->
         <el-header>
-            <div><span>所属地区：<el-cascader
-                :options="options2"
-                @active-item-change="handleItemChange"
-                :props="props"
-            ></el-cascader></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备案地区：<el-cascader
-                :options="options2"
-                @active-item-change="handleItemChange"
-                :props="props"
-            ></el-cascader></span></div>
+            <div><span>所属地区：
+                      <el-select
+              v-model="province"
+              @change="choseProvince"
+              placeholder="省级地区">
+              <el-option
+                v-for="item in options"
+                :key="item.pkid"
+                :label="item.areaName"
+                :value="item.areaCode">
+              </el-option>
+            </el-select>
+
+            <el-select
+              v-model="shi"
+             @change="queryData"
+              placeholder="市级地区">
+              <el-option
+                v-for="item in shi1"
+                :key="item.pkid"
+                :label="item.areaName"
+                :value="item.areaName">
+              </el-option>
+            </el-select>
+
+
+
+
+
+                    </span>
+                <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备案地区：<el-cascader-->
+                <!--:options="options2"-->
+                <!--@active-item-change="handleItemChange"-->
+                <!--:props="props"-->
+                <!--&gt;</el-cascader></span>-->
+            </div>
         </el-header>
         <div style="width:100%;text-align:left;overflow: hidden">
             <div style="margin-top: 15px;">
-                <el-input placeholder="请按照企业名称模糊搜索" v-model="input5" class="input-with-select">
+                <el-input placeholder="请按照企业名称模糊搜索" v-model="compName" class="input-with-select">
 
-                    <el-button slot="append" icon="el-icon-search"></el-button>
+                    <el-button slot="append" @click="queryData" icon="el-icon-search"></el-button>
                 </el-input>
                 <span style="float: right">
-                <el-button type="primary">增加企业</el-button>
-                <el-button type="primary">批量数据维护</el-button>
-                </span>
+                              <router-link to="/rease"><el-button type="primary">增加企业</el-button></router-link>
+
+
+                        <el-button type="primary">批量数据维护</el-button>
+                        </span>
             </div>
 
         </div>
-        </div>
+
         <el-main style="width: 100%;text-align:right;">
 
         </el-main>
         <!--表格-->
-        <el-table
-            :data="tableData"
-            style="width: 100%;border: 1px solid #ccc;">
-            <el-table-column
-                prop="corporate"
-                label="公司名称"
-            >
+        <el-table :data="companyInfo.list" style="width: 100%;border: 1px solid #ccc;">
+            <el-table-column prop="comName" label="公司名称">
             </el-table-column>
-            <el-table-column
-                prop="name"
-                label="所属地区"
-
-            >
+            <el-table-column prop="regisAddress" label="所属地区">
             </el-table-column>
-            <el-table-column
-                prop="time"
-                label="创建日期"
-            width="150">
+            <el-table-column prop="createDate" label="创建日期" width="150">
 
             </el-table-column>
-            <el-table-column
-                prop="address"
-                label="最后更近日期"
-                width="150"
-            >
+            <el-table-column prop="updateDate" label="最后更近日期" width="150">
             </el-table-column>
-            <el-table-column label="操作"
-            width="200">
+            <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
-                    <el-button
-                        size="mini"
-                        @click="handleEdit(scope.$index, scope.row)">编辑
-                    </el-button>
-                    <el-button
-                        size="mini"
-                        type="danger"
-                        @click="handleDelete(scope.$index, scope.row)">详情
-                    </el-button>
-                </template>
+                            <el-button
+                                size="mini"
+                                @click="handleEdit(scope.$index, scope.row)">编辑
+                            </el-button>
+                            <el-button
+                                size="mini"
+                                type="danger"
+                                @click="handleDelete(scope.$index, scope.row)">详情
+                            </el-button>
+</template>
             </el-table-column>
         </el-table>
         <div class="block" style="margin-top: 30px;">
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage4"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[20, 30, 40,50]"
+                :page-size="pageSize"
+                :page-count="pageCount"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalSize">
             </el-pagination>
         </div>
     </el-container>
 </template>
+
 <script>
+    import axios from "axios";
+    import {
+        getJsonData
+    } from "../api/index.js";
+
     export default {
         data() {
-
             return {
-                tableData: [{
-                    corporate: '湖南耀邦建设有限公司',
-                    name: '湖南长沙',
-                    time: '2018年8月27日',
-                    address: '2018年9月10日'
-                }, {
-                    corporate: '湖南耀邦建设有限公司',
-                    name: '湖南长沙',
-                    time: '2018年8月27日',
-                    address: '2018年9月10日'
-                }, {
-                    corporate: '湖南耀邦建设有限公司',
-                    name: '湖南长沙',
-                    time: '2018年8月27日',
-                    address: '2018年9月10日'
-                }, {
-                    corporate: '湖南耀邦建设有限公司',
-                    name: '湖南长沙',
-                    time: '2018年8月27日',
-                    address: '2018年9月10日'
-                }],
-                options2: [{
-                    label: '江苏',
-                    cities: []
-                }, {
-                    label: '浙江',
-                    cities: []
-                }],
+                tableData: [],
+                options: [],
+                selectedOptions: [],
+                province: '',
+                shi: '',
+                shi1: [],
                 props: {
-                    value: 'label',
-                    children: 'cities'
-                }
-            }
+                    children: "cities"
+                },
+                val: {},
+                vals: [],
+                currentPage:1,
+                companyInfo:{},
+                compName: '',
+                start: 0,
+                pageSize: 20,
+                totalSize:100,
+                pageCount:20
+            };
+        },
+        mounted() {//进入页面调用方法
+            this.getProvinceData();
         },
         methods: {
-            handleItemChange(val) {
-                console.log('active item:', val);
-                setTimeout(_ => {
-                    if (val.indexOf('江苏') > -1 && !this.options2[0].cities.length) {
-                        this.options2[0].cities = [{
-                            label: '南京'
-                        }];
-                    } else if (val.indexOf('浙江') > -1 && !this.options2[1].cities.length) {
-                        this.options2[1].cities = [{
-                            label: '杭州'
-                        }];
+            handleEdit(index, row) {
+                // 编辑框的跳转
+                const {
+                    href
+                } = this.$router.resolve({
+                    name: "editer",
+                    params: {
+                        id: row.name
                     }
+                });
 
-                }, 300);
+                window.open(href, "-blank");
+            },
+            handleSizeChange(val) {
+                console.log(111111);
+             },
+             handleCurrentChange(val) {
+                 this.currentPage=val;
+                 this.queryData();
+
+            },
+            //  企信首页列表接口
+            getProvinceData() {
+                //获取省份列表
+                getJsonData("/common/area").then(res => {
+                    let dataArray = res.data;
+                    this.options = dataArray;
+                });
+                //查询企业列表数据
+               this.queryData();
+            },
+            queryData:function(){
+                let dataModel = new Object();
+                        dataModel.start = this.currentPage;
+                        dataModel.pageSize =20;
+                        dataModel.regisAddress = this.province;
+                        dataModel.city = this.shi;
+                        dataModel.comName =this.compName;
+                        let dataParam = JSON.stringify(dataModel);
+                getJsonData("/company/list",dataParam).then(res => {
+                    let dataObject = res.data;
+                    this.companyInfo = dataObject;
+                    this.totalSize = res.data.total;
+                    this.pageCount = res.data.pageCount;
+                    console.log(8888888888888);
+
+                });
+            },
+            // 选省
+            choseProvince: function(e) {
+                for (var index2 in this.options) {
+                    if (e === this.options[index2].areaCode) {
+                        this.province = this.options[index2].areaName;
+                        this.shi1 = this.options[index2].citys;
+                        this.shi = this.options[index2].citys[0].areaName;
+                         this.queryData();
+                    }
+                }
             }
-        }, handleEdit(index,row) {  // 编辑框的跳转
-            const { href } = this.$router.resolve({
-                name:'editer',params: {id:row.name}
-            })
-
-            window.open(href, '-blank')
-        },
-        handleDelete(index, row) {
-            console.log(index, row);
         }
-
-
     };
-
 </script>
 
 <style lang="less" scoped>
-    @import '../style/mixin.less';
-
+    @import "../style/mixin.less";
     .el-header {
         height: 100px;
         background-color: #f8f8f8;
         margin-top: 30px;
         line-height: 60px;
         width: 100%;
-
     }
 
     .el-row {
@@ -227,5 +262,4 @@
     .el-input[data-v-e47dfd12][data-v-e47dfd12] {
         width: 30%;
     }
-
 </style>

@@ -1,11 +1,15 @@
 <template>
-
     <el-container>
+        <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path:'/userlist' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path:'/editer' }">编辑</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path:'/rease' }">增加企业</el-breadcrumb-item>
+        </el-breadcrumb>
         <el-header style="margin-top: 30px;"><el-row :gutter="20">
             <el-col :span="10"><div class="grid-content bg-purple">
                 <el-input
                     placeholder="请输入完整正确的企业名称"
-                    v-model="input10"
+                    v-model="companyName"
                     clearable>
                 </el-input>
 
@@ -13,27 +17,27 @@
             <el-col :span="10"><div class="grid-content bg-purple">
                 <el-input
                     placeholder="请输入社会统一信用代码"
-                    v-model="input10"
+                    v-model="creditCode"
                     clearable>
                 </el-input>
 
             </div></el-col>
             <el-col :span="1"><div class="grid-content bg-purple">
-                <el-button type="primary">增加</el-button>
+                <el-button  @click='addData'  type="primary">增加</el-button>
             </div></el-col>
         </el-row></el-header>
         <el-main>
             <el-table
-                :data="tableData"
+                :data="dataList"
                 border
                 style="width: 100%">
                 <el-table-column
-                    prop="date"
+                    prop="comName"
                     label="企业名称"
                     >
                 </el-table-column>
                 <el-table-column
-                    prop="name"
+                    prop="creditCode"
                     label="信用代码"
                     width="220"
                     >
@@ -71,15 +75,40 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-row class='baa_ai_n'>
+                <div class="block">
+                    <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :page-sizes="[20, 30, 40, 50]"
+                        :page-size="pageSize"
+                        :page-count="pageCount"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalSize">
+                    </el-pagination>
+                </div>
+            </el-row>
         </el-main>
     </el-container>
 </template>
 <script>
+    import axios from 'axios'
+    import {
+        getJsonData
+    } from '../api/index.js'
+
     export default {
-        data() {
+          data() {
             return {
+                companyName:"",
+                creditCode:"",
                 dialogTableVisible: false,
                 dialogFormVisible: false,
+                start:1,
+                dataList:[],
+                pageSize:20,
+                totalSize:100,
+                pageCount:20,
                 form: {
                     name: '',
                     region: '',
@@ -91,26 +120,55 @@
                     desc: ''
                 },
                 formLabelWidth: '120px',
-                tableData: [{
-                    date: '湖南省耀邦建设有限公司',
-                    name: '123456789456123456',
-                    address: '2015.5.10'
-                }, {
-                    date: '湖南省耀邦建设有限公司',
-                    name: '123456789456123456',
-                    address: '2015.5.10'
-                }, {
-                    date: '湖南省耀邦建设有限公司',
-                    name: '123456789456123456',
-                    address: '2015.5.10'
-                }, {
-                    date: '湖南省耀邦建设有限公司',
-                    name: '123456789456123456',
-                    address: '2015.5.10'
-                }]
+                tableData: []
             }
+        },
+         mounted() {
+     
+            this. getDataList();
+        },
+       
+        methods:{
+             addData(){
+                let dataParam = JSON.stringify({
+                  "comName":this.companyName,
+                  "creditCode":this.creditCode
+                });
+            getJsonData('/company/art/save',dataParam).then(res=>{
+            
+                console.log(res);
+                if(res.code==1){
+                alert("增加成功");
+                }else{
+                  alert("增加失败："+res.msg);  
+                }
+                this.getDataList();
+            })
+        },
+        handleCurrentChange(val){
+            this.start=val;
+            this.getDataList();
+        },
+        getDataList(){
+              console.log(99999);
+             let dataParam = JSON.stringify({
+                  "start":this.start,
+                  "pageSize":20
+                });
+              getJsonData('/company/art/list',dataParam).then(res=>{
+                  this.dataList = res.data.list;
+                  this.totalSize = res.data.total;
+                  this.pageCount = res.data.pageCount;
+                console.log(res)
+            
+            })
         }
+        },
+         
+      
+        
     }
+
 </script>
 
 <style lang="less" scoped>
@@ -136,5 +194,7 @@
         padding: 10px 0;
         background-color: #f9fafc;
     }
-
+    .baa_ai_n{
+        margin-top:30px;
+    }
 </style>

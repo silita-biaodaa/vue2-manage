@@ -1,5 +1,10 @@
         <template>
             <el-container>
+                <el-breadcrumb separator="/">
+                    <el-breadcrumb-item :to="{ path:'/userlist' }">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path:'/editer' }">编辑</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path:'/rease' }">增加企业</el-breadcrumb-item>
+                </el-breadcrumb>
                 <el-header class="bdd_header">湖南耀邦建设有限公司</el-header>
                 <el-row class=" bdd_dv">4252368855555555555555555</el-row>
                 <el-row style="margin-top: 30px">
