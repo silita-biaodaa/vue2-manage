@@ -2,11 +2,14 @@
             <el-container>
                 <el-breadcrumb separator="/">
                     <el-breadcrumb-item :to="{ path:'/userlist' }">首页</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path:'/editer' }">编辑</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path:'/rease' }">增加企业</el-breadcrumb-item>
+                    <!--<el-breadcrumb-item :to="{ path:'/editer' }">编辑</el-breadcrumb-item>-->
+                    <!--<el-breadcrumb-item :to="{ path:'/rease' }">增加企业</el-breadcrumb-item>-->
                 </el-breadcrumb>
                 <el-header class="bdd_header">湖南耀邦建设有限公司</el-header>
                 <el-row class=" bdd_dv">4252368855555555555555555</el-row>
+
+
+                <!--统一社会信用代码-->
                 <el-row style="margin-top: 30px">
                     <el-col :span="12">
                         <div class="grid-content bg-purples">统一社会信用代码：</div>
@@ -33,6 +36,9 @@
                     </el-col>
                 </el-row>
                 <el-row class="bdd_hr"></el-row>
+
+
+                <!--企业名称变更-->
                 <el-row style="margin-top: 30px">
                     <el-col :span="12">
                         <div class="grid-content bg-purples">企业名称变更：</div>
@@ -118,6 +124,8 @@
                     </el-table-column>
                 </el-table>
                 <el-row class="bdd_hr"></el-row>
+
+                <!--安许证号-->
                 <el-row style="margin-top: 30px">
                     <el-col :span="12">
                         <div class="grid-content bg-purples">安许证号：</div>
@@ -161,6 +169,8 @@
                     </el-col>
                 </el-row>
                 <el-row class="bdd_hr"></el-row>
+
+                <!--企业资质-->
                 <el-row style="margin-top: 30px">
                     <el-col :span="12">
                         <div class="grid-content bg-purples">企业资质：</div>
@@ -282,6 +292,8 @@
                     </el-table-column>
                 </el-table>
                 <el-row class="bdd_hr"></el-row>
+
+                <!--安全认证-->
                 <el-row style="margin-top: 30px">
                     <el-col :span="12">
                         <div class="grid-content bg-purples">安全认证：</div>
@@ -306,19 +318,6 @@
                         </div>
                     </el-col>
                 </el-row>
-                <!--<el-row :gutter="20" style="line-height:40px;margin-left: 10%;">-->
-                    <!--<el-col :span="8">-->
-                        <!--<div class="grid-content bg-purple">人工处理：安许认证 省级 湖南省</div>-->
-                    <!--</el-col>-->
-                    <!--<el-col :span="8">-->
-                        <!--<div class="grid-content bg-purple">安全认证等级：合格</div>-->
-                    <!--</el-col>-->
-                    <!--<el-col :span="8">-->
-                        <!--<div class="grid-content bg-purple">有效期：2019年9月10日-->
-
-                        <!--</div>-->
-                    <!--</el-col>-->
-                <!--</el-row>-->
                 <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
                     <el-col :span="8">
                         <div class="grid-content bg-purple">人工编辑：
@@ -327,6 +326,8 @@
                             ></el-cascader>
                         </div>
                     </el-col>
+
+                    <!--公路信用等级-->
                     <el-col :span="8">
                         <div class="grid-content bg-purple">安全认证等级：
                             <el-dropdown>
@@ -414,6 +415,10 @@
             </el-container>
         </template>
         <script>
+            import axios from "axios";
+            import {
+                getJsonData
+            } from "../api/index.js";
             export default {
                 data() {
                     return {

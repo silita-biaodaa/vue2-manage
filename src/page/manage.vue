@@ -26,9 +26,9 @@
 							<el-menu-item index="addGoods">中标</el-menu-item>
 							<el-menu-item index="bin">回收站</el-menu-item>
 							<el-menu-item index="userList">企信</el-menu-item>
-                            <el-menu-item index="editer">企业编辑</el-menu-item>
-                            <el-menu-item index="rease">增加企业</el-menu-item>
-                            <el-menu-item index="detail">详情页</el-menu-item>
+                            <!--<el-menu-item index="editer">企业编辑</el-menu-item>-->
+                            <!--<el-menu-item index="rease">增加企业</el-menu-item>-->
+                            <!--<el-menu-item index="detail">详情页</el-menu-item>-->
 							<el-menu-item index="service">金融服务</el-menu-item>
 						</el-submenu>
 						<el-submenu index="4">

@@ -3,8 +3,8 @@
     <el-container>
         <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path:'/userlist' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path:'/editer' }">编辑</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path:'/rease' }">增加企业</el-breadcrumb-item>
+            <!--<el-breadcrumb-item :to="{ path:'/editer' }">编辑</el-breadcrumb-item>-->
+            <!--<el-breadcrumb-item :to="{ path:'/rease' }">增加企业</el-breadcrumb-item>-->
         </el-breadcrumb>
         <!--搜索框-->
         <el-header>
@@ -32,11 +32,6 @@
                 :value="item.areaName">
               </el-option>
             </el-select>
-
-
-
-
-
                     </span>
                 <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备案地区：<el-cascader-->
                 <!--:options="options2"-->
@@ -47,7 +42,7 @@
         </el-header>
         <div style="width:100%;text-align:left;overflow: hidden">
             <div style="margin-top: 15px;">
-                <el-input placeholder="请按照企业名称模糊搜索" v-model="compName" class="input-with-select">
+                <el-input placeholder="请按照企业名称模糊搜索"  v-model="compName" class="input-with-select">
 
                     <el-button slot="append" @click="queryData" icon="el-icon-search"></el-button>
                 </el-input>
@@ -136,6 +131,7 @@
             this.getProvinceData();
         },
         methods: {
+
             handleEdit(index, row) {
                 // 编辑框的跳转
                 const {

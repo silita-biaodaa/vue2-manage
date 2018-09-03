@@ -2,30 +2,38 @@
     <el-container>
         <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path:'/userlist' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path:'/editer' }">编辑</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path:'/rease' }">增加企业</el-breadcrumb-item>
+            <!--<el-breadcrumb-item :to="{ path:'/editer' }">编辑</el-breadcrumb-item>-->
+            <!--<el-breadcrumb-item :to="{ path:'/rease' }">增加企业</el-breadcrumb-item>-->
         </el-breadcrumb>
-        <el-header style="margin-top: 30px;"><el-row :gutter="20">
-            <el-col :span="10"><div class="grid-content bg-purple">
-                <el-input
-                    placeholder="请输入完整正确的企业名称"
-                    v-model="companyName"
-                    clearable>
-                </el-input>
+        <el-header style="margin-top: 30px;">
+            <el-row :gutter="20">
+                <el-col :span="10">
+                    <div class="grid-content bg-purple">
+                        <el-input
+                            placeholder="请输入完整正确的企业名称"
+                            v-model="companyName"
+                            clearable>
+                        </el-input>
 
-            </div></el-col>
-            <el-col :span="10"><div class="grid-content bg-purple">
-                <el-input
-                    placeholder="请输入社会统一信用代码"
-                    v-model="creditCode"
-                    clearable>
-                </el-input>
+                    </div>
+                </el-col>
+                <el-col :span="10">
+                    <div class="grid-content bg-purple">
+                        <el-input
+                            placeholder="请输入社会统一信用代码"
+                            v-model="creditCode"
+                            clearable>
+                        </el-input>
 
-            </div></el-col>
-            <el-col :span="1"><div class="grid-content bg-purple">
-                <el-button  @click='addData'  type="primary">增加</el-button>
-            </div></el-col>
-        </el-row></el-header>
+                    </div>
+                </el-col>
+                <el-col :span="1">
+                    <div class="grid-content bg-purple">
+                        <el-button @click='addData' type="primary">增加</el-button>
+                    </div>
+                </el-col>
+            </el-row>
+        </el-header>
         <el-main>
             <el-table
                 :data="dataList"
@@ -34,52 +42,48 @@
                 <el-table-column
                     prop="comName"
                     label="企业名称"
-                    >
+                >
                 </el-table-column>
                 <el-table-column
                     prop="creditCode"
                     label="信用代码"
                     width="220"
-                    >
+                >
                 </el-table-column>
                 <el-table-column
-                    prop="address"
+                    updateDate="updateDate"
                     label="提交时间"
                     width="180">
                 </el-table-column>
-                <el-table-column label="操作"
-                width="200">
+                <el-table-column label="操作"   width="200" >
                     <template slot-scope="scope">
 
-                            <el-button type="mini"  @click="dialogFormVisible = true">修改</el-button>
+                        <el-button type="mini" @click="dialogFormVisible=true">修改</el-button>
 
-                            <el-dialog style="text-align: center" title="请修改" :visible.sync="dialogFormVisible">
-                                <el-form :model="form">
-                                    <el-form-item label="企业名称：" :label-width="formLabelWidth">
-                                        <el-input v-model="form.name" auto-complete="off"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="信用代码：" :label-width="formLabelWidth">
-                                        <el-input v-model="form.name" auto-complete="off"></el-input>
-                                    </el-form-item>
-                                </el-form>
-                                <div slot="footer" class="dialog-footer">
-                                    <el-button @click="dialogFormVisible = false">取 消</el-button>
-                                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-                                </div>
-                            </el-dialog>
-
-                        <el-button class="bdd_btn"
-                            size="mini"
-                            type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-dialog style="text-align: center" title="请修改" :visible.sync="dialogFormVisible">
+                            <el-form :model="form">
+                                <el-form-item label="企业名称：" :label-width="formLabelWidth">
+                                    <el-input v-model="credCode" auto-complete="off"></el-input>
+                                </el-form-item>
+                                <el-form-item label="信用代码：" :label-width="formLabelWidth">
+                                    <el-input v-model="crCode" auto-complete="off"></el-input>
+                                </el-form-item>
+                            </el-form>
+                            <div slot="footer" class="dialog-footer">
+                                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                                 <el-button type="primary" @click="redactSubmit(scope.$index, scope.row)" >确 定</el-button>
+                                <!-- <el-button type="primary" @click="dialogFormVisible = false" >确 定</el-button> -->
+                            </div>
+                        </el-dialog>
+                        <el-button  :id='index' type="text" @click="remove(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <el-row class='baa_ai_n'>
                 <div class="block">
                     <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
+                         @size-change="handleSizeChange"
+                         @current-change="handleCurrentChange"
                         :page-sizes="[20, 30, 40, 50]"
                         :page-size="pageSize"
                         :page-count="pageCount"
@@ -88,6 +92,7 @@
                     </el-pagination>
                 </div>
             </el-row>
+
         </el-main>
     </el-container>
 </template>
@@ -98,17 +103,20 @@
     } from '../api/index.js'
 
     export default {
-          data() {
+        data() {
             return {
-                companyName:"",
-                creditCode:"",
-                dialogTableVisible: false,
+                credCode: '',
+                crCode: '',
+                companyName: "",
+                creditCode: "",
+                pkid:"",
+                // dialogTableVisible: false,
                 dialogFormVisible: false,
-                start:1,
-                dataList:[],
-                pageSize:20,
-                totalSize:100,
-                pageCount:20,
+                start: 1,
+                dataList: [],
+                pageSize: 20,
+                totalSize: 100,
+                pageCount: 20,
                 form: {
                     name: '',
                     region: '',
@@ -120,53 +128,133 @@
                     desc: ''
                 },
                 formLabelWidth: '120px',
-                tableData: []
+                tableData: [],
+                conname: '',
+                condata: ''
+
             }
         },
-         mounted() {
-     
-            this. getDataList();
-        },
-       
-        methods:{
-             addData(){
-                let dataParam = JSON.stringify({
-                  "comName":this.companyName,
-                  "creditCode":this.creditCode
-                });
-            getJsonData('/company/art/save',dataParam).then(res=>{
-            
-                console.log(res);
-                if(res.code==1){
-                alert("增加成功");
-                }else{
-                  alert("增加失败："+res.msg);  
-                }
-                this.getDataList();
-            })
-        },
-        handleCurrentChange(val){
-            this.start=val;
+        mounted() {
             this.getDataList();
         },
-        getDataList(){
-              console.log(99999);
-             let dataParam = JSON.stringify({
-                  "start":this.start,
-                  "pageSize":20
+//
+
+        methods: {
+//              修改
+            dialogFormVisible() {
+                this.credCode = ""
+                this.crCode = ""
+
+            },
+            //编辑
+            redactSubmit(index, row){
+                 if(!this.credCode) {
+                  return this.$message({
+                            type: 'warning',
+                            message: '请先添写企业名称'
+                          });
+                }
+
+                 let dataParam = JSON.stringify({
+                    "pkid": row.pkid,
+                    "comName": this.credCode,
+                    "creditCode": this.crCode,
+
                 });
-              getJsonData('/company/art/list',dataParam).then(res=>{
-                  this.dataList = res.data.list;
-                  this.totalSize = res.data.total;
-                  this.pageCount = res.data.pageCount;
-                console.log(res)
-            
-            })
-        }
+                getJsonData('/company/art/save', dataParam).then(res => {
+                    console.log(dataParam)
+                     console.log(res.code)
+                    dialogFormVisible = true
+                     if (res.code == 0) {
+                         this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        this.getDataList();
+                     }else{
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                     }
+
+                })
+            },
+//              删除
+            remove(index, row) {
+                let dataParam = JSON.stringify({
+                    "pkid":  row.pkid,
+
+                });
+
+                    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+
+                        });
+                         getJsonData('/company/art/del', dataParam).then(res => {
+                            console.log(res);
+
+                            if (res.code == 0) {
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                            }
+                    this.getDataList();
+
+                        })
+
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+            },
+
+            addData() {
+                let dataParam = JSON.stringify({
+                    "comName": this.companyName,
+                    "creditCode": this.creditCode
+                });
+                getJsonData('/company/art/save', dataParam).then(res => {
+                    console.log(res);
+                    if (res.code == 1) {
+                        alert("增加成功");
+                    } else {
+                        alert("增加失败：" + res.msg);
+                    }
+                    this.getDataList();
+                });
+
+            },
+            handleCurrentChange(val) {
+                this.start = val;
+                this.getDataList();
+            },
+//            分页
+            getDataList() {
+                let dataParam = JSON.stringify({
+                    "start": this.start,
+                    "pageSize": 20
+                });
+                getJsonData('/company/art/list', dataParam).then(res => {
+                    this.dataList = res.data.list;
+                    this.totalSize = res.data.total;
+                    this.pageCount = res.data.pageCount;
+                    console.log(res)
+
+                })
+            }
         },
-         
-      
-        
+
+
     }
 
 </script>
@@ -177,24 +265,30 @@
     .el-col {
         border-radius: 4px;
     }
+
     .bg-purple-dark {
         background: #99a9bf;
     }
+
     .bg-purple {
         background: #d3dce6;
     }
+
     .bg-purple-light {
         background: #e5e9f2;
     }
+
     .grid-content {
         border-radius: 4px;
         min-height: 36px;
     }
+
     .row-bg {
         padding: 10px 0;
         background-color: #f9fafc;
     }
-    .baa_ai_n{
-        margin-top:30px;
+
+    .baa_ai_n {
+        margin-top: 30px;
     }
 </style>
