@@ -165,7 +165,7 @@ export const listMain = params => {
 export const exportE =  form => {
         return axios({ // 用axios发送post请求
             method: 'post',
-            url: 'zhaobiao/listTendersDetail', // 请求地址
+            url: 'zhaobiao/exportTendersExcel', // 请求地址
             data: form, // 参数
             responseType: 'blob', // 表明返回服务器返回的数据类型
             headers: {

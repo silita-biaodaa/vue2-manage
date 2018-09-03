@@ -65,7 +65,7 @@ export default {
 					register({ userName: this.loginForm.username, password: this.loginForm.password }).then(res => {
 						// 如果成功要跳转至首页, 将token保存到localStorage, 将username保存到vuex的state中
 						if (res.code === 1) {
-							localStorage.setItem('Authorization', res.data)
+							localStorage.setItem('Authorization', res.data) 
 							this.$router.push({ name: 'home' })
 						} else {
 							// 如果失败，展示提示信息
