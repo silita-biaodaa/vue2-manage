@@ -29,7 +29,7 @@
         </el-col>
         <el-col :span="12" class="redact-c">
             
-          <el-form ref="edit" :model="form" label-width="200px" >
+          <el-form ref="edits" :model="form" label-width="200px" class="demo-ruleForm" >
             <el-form-item label="招标编辑编号">
               <el-input v-model="form.editCode"></el-input>
             </el-form-item>
@@ -136,10 +136,10 @@
               </el-select>
             </el-form-item>                        
 
-            <div class="btn">
-              <el-button @click="emptyForm('edit')">清空</el-button>
-              <el-button type="primary" @click="onSubmit('edit')">保存</el-button>
-            </div>  
+            <el-form-item class="btn">
+              <el-button @click="emptyForm('edits')">清空</el-button>
+              <el-button type="primary" @click="onSubmit('edits')">保存</el-button>
+            </el-form-item>  
           </el-form>
 
         </el-col>
@@ -531,7 +531,9 @@ export default {
       console.log('submit!');
     },
      emptyForm(formName) {  // 清空按钮
-        this.$refs[formName].resetFields();
+        for (let key in this.form) {
+          this.form[key] = ''
+        }
     },
      handleClick(tab, event) {  // 被选中tab标签实例
        console.log(tab, event);

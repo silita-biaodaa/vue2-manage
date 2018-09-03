@@ -269,11 +269,12 @@ methods: {
               });
           });
       },
-      handleCurrentChange() {  // 当前页改变的函数
+      handleCurrentChange(val) {  // 当前页改变的函数
          this.pagenum = val
           this.listForm()
       },
-      handleSizeChange() {  // 每页条数发生改变时做出的函数
+      handleSizeChange(val) {  // 每页条数发生改变时做出的函数
+        console.log(val)
          this.pagesize = val  
           this.listForm()
       },
