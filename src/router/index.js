@@ -16,6 +16,7 @@ import Editer from '@/page/editer'
 import Rease from '@/page/rease'
 import Quillediter from '@/page/QuillEditor'
 import Detail from '@/page/detail'
+import Relevance from '@/page/relevance'
 
 Vue.use(Router)
 
@@ -99,7 +100,12 @@ const routes = [
                     component:Detail,
                     name:'detail'
 
-                }
+								},
+								{
+									path:'/relevance',
+									component: Relevance,
+									name:'relevance'
+								}
 
 
 					]

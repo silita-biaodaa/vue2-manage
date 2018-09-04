@@ -25,6 +25,13 @@
       </el-row>
       <el-row>
         <el-col :span="12" class="edit-c">
+           <div class="edit-l">
+             <i class="el-icon-arrow-left"></i>
+           </div>
+           <div class="edit-r">
+             <i class="el-icon-arrow-right"></i>
+           </div>
+
             <Edit></Edit>
         </el-col>
         <el-col :span="12" class="redact-c">
@@ -104,7 +111,7 @@
             </el-form-item>
             <el-form-item label="开标人员">
               <el-select v-model="form.exploit" filterable placeholder="请选择开标人员" style="width:80%">
-                <el-option v-for="item in exploits" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in exploits" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -113,32 +120,32 @@
             </el-form-item>
             <el-form-item label="项目类型">
               <el-select v-model="form.type1" filterable placeholder="请选择项目类型" style="width:80%">
-                <el-option v-for="item in type1s" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in type1s" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="招标类型">
               <el-select v-model="form.type" filterable placeholder="请选择招标类型" style="width:80%">
-                <el-option v-for="item in types" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in types" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="平台备案要求">
                <el-select v-model="form.record" filterable placeholder="请选择备案要求" style="width:80%">
-                <el-option v-for="item in records" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in records" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="招标状态">
               <el-select v-model="form.statu" filterable placeholder="请选择招标状态" style="width:80%">
-                <el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in status" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>                        
 
             <el-form-item class="btn">
               <el-button @click="emptyForm('edits')">清空</el-button>
-              <el-button type="primary" @click="onSubmit('edits')">保存</el-button>
+              <el-button type="primary" @click="onSubmit">保存</el-button>
             </el-form-item>  
           </el-form>
 
@@ -159,37 +166,37 @@
                       </el-table-column>
                       <el-table-column prop="date" label="项目名称" width="300">
                       </el-table-column>
-                      <el-table-column prop="name" label="标段信息" width="100">
+                      <el-table-column prop="segment" label="标段信息" width="100">
                       </el-table-column>
                       <el-table-column prop="province" label="发布日期" width="150">
                       </el-table-column>
                       <el-table-column prop="city" label="招标控制价" width="120">
                       </el-table-column>
-                      <el-table-column prop="address" label="项目金额" width="120" show-overflow-tooltip>
+                      <el-table-column prop="proSum" label="项目金额" width="120" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column prop="zip" label="项目工期" width="120" show-overflow-tooltip>
+                      <el-table-column prop="proDuration" label="项目工期" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column prop="address" label="项目地区" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column prop="address" label="项目县市" width="120" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column prop="address" label="评标办法" width="150" show-overflow-tooltip>
+                      <el-table-column prop="pbMode" label="评标办法" width="150" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column prop="address" label="项目保证金(万元)" width="150" show-overflow-tooltip>
+                      <el-table-column prop="bidBonds" label="项目保证金(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column prop="address" label="保证金截至时间" width="120" show-overflow-tooltip> 
+                      <el-table-column prop="bidBondsEndTime" label="保证金截至时间" width="120" show-overflow-tooltip> 
                       </el-table-column>
-                      <el-table-column prop="address" label="报名地点" width="120" show-overflow-tooltip>
+                      <el-table-column prop="enrollAddr" label="报名地点" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column prop="address" label="资格审查截止时间" width="150" show-overflow-tooltip>
                       </el-table-column> 
-                      <el-table-column prop="address" label="资格审查地点" width="150" show-overflow-tooltip>
+                      <el-table-column prop="auditTime" label="资格审查地点" width="150" show-overflow-tooltip>
                       </el-table-column> 
-                      <el-table-column prop="address" label="投标截止时间" width="150" show-overflow-tooltip>
+                      <el-table-column prop="bidEndTime" label="投标截止时间" width="150" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column prop="address" label="开标人员" width="120" show-overflow-tooltip>
                       </el-table-column> 
-                      <el-table-column prop="address" label="开标地点" width="120" show-overflow-tooltip>
+                      <el-table-column prop="openingAddr" label="开标地点" width="120" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column prop="address" label="项目类型" width="120" show-overflow-tooltip>
                       </el-table-column> 
@@ -214,22 +221,23 @@
                     <el-table-column type="selection" style="width:5%">
                     </el-table-column>
                     <el-table-column label="招标文件" width="650" >
-                      <template slot-scope="scope">{{ scope.row.date }}</template>
+                      <template slot-scope="scope">{{ scope.row.fileName }}</template>
                     </el-table-column>
-                    <el-table-column prop="name" label="上传日期" >
+                    <el-table-column  label="上传日期" >
+                      <template slot-scope="scope">{{ scope.row.created }}</template>
                     </el-table-column>
                     <el-table-column prop="address" label="状态" show-overflow-tooltip >
                     </el-table-column>
                   </el-table>
 
                   <div style="margin-top: 20px">
-                       <el-upload class="updown-list" action="http://120.79.116.245:19004/upload/quaAlias/" :on-preview="handlePreview"  :on-success="handleSuccess" :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
+                       <el-upload class="updown-list" action="http://120.79.116.245:19004/upload/uploadZhaoBiaoFile/" :data="sendKid()" :on-preview="handlePreview"  :on-success="handleSuccess" name='files' :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
                          <el-button type="primary">
                            上传招标文件
                          </el-button>
                        </el-upload>
                        <el-button type="primary" @click="uploadurl" >上传文件下载路径</el-button>
-                       <el-button type="primary" >删除招标文件</el-button>
+                       <el-button type="primary" @click="deleteurl">删除招标文件</el-button>
 
                   </div>
 
@@ -239,9 +247,9 @@
                     <el-table-column type="selection" style="width:5%">
                     </el-table-column>
                     <el-table-column label="相关公告" width="650" >
-                      <template slot-scope="scope">{{ scope.row.date }}</template>
+                      <template slot-scope="scope">{{ scope.row.fileName }}</template>
                     </el-table-column>
-                    <el-table-column prop="name" label="发布日期" >
+                    <el-table-column prop="created" label="发布日期" >
                     </el-table-column>
                     <el-table-column prop="address" label="状态" show-overflow-tooltip >
                     </el-table-column>
@@ -282,7 +290,7 @@
           </el-form>       
       </el-dialog>
         <!-- 上传路路径得弹框 -->
-       <el-dialog title="文件传输" :visible.sync="urlFormVisible">
+       <el-dialog title="文件下载路径传输" :visible.sync="urlFormVisible">
           <el-input v-model="urlupload" placeholder="请输入需要上传得下载地址"></el-input>
          <div slot="footer" class="dialog-footer">
            <el-button @click="urlFormVisible = false">取 消</el-button>
@@ -295,7 +303,7 @@
 
 <script>
  import  Edit  from "@/page/edit";
- import { updateStatus } from '@/api/index';
+ import { updateStatus, listFixed,listTenders,listFiles,listFilesPath } from '@/api/index';
 export default {
   data () {
     return {
@@ -383,63 +391,11 @@ export default {
        },
        // 编辑明细数据
        compileData:[    
-         {
-           date: '2016-05-03',
-           name: '王小虎',
-           address: '上海市普陀区金沙江路 1518 弄'
-         }, {
-           date: '2016-05-02',
-           name: '王小虎',
-           address: '上海市普陀区金沙江路 1518 弄'
-         }, {
-           date: '2016-05-04',
-           name: '王小虎',
-           address: '上海市普陀区金沙江路 1518 弄'
-         }, {
-           date: '2016-05-01',
-           name: '王小虎',
-           address: '上海市普陀区金沙江路 1518 弄'
-         }, {
-           date: '2016-05-08',
-           name: '王小虎',
-           address: '上海市普陀区金沙江路 1518 弄'
-         }, {
-           date: '2016-05-06',
-           name: '王小虎',
-           address: '上海市普陀区金沙江路 1518 弄'
-         }, {
-           date: '2016-05-07',
-           name: '王小虎',
-           address: '上海市普陀区金沙江路 1518 弄'
-         }
+         
        ],
        multipleSelection: [],
        //招标文件的数据
-       file:[{
-         date: '2016-05-03',
-         name: '王小虎',
-         address: '上海市普陀区金沙江路 1518 弄'
-       }, {
-         date: '2016-05-02',
-         name: '王小虎',
-         address: '上海市普陀区金沙江路 1518 弄'
-       }, {
-         date: '2016-05-04',
-         name: '王小虎',
-         address: '上海市普陀区金沙江路 1518 弄'
-       }, {
-         date: '2016-05-01',
-         name: '王小虎',
-         address: '上海市普陀区金沙江路 1518 弄'
-       }, {
-         date: '2016-05-08',
-         name: '王小虎',
-         address: '上海市普陀区金沙江路 1518 弄'
-       }, {
-         date: '2016-05-06',
-         name: '王小虎',
-         address: '上海市普陀区金沙江路 1518 弄'
-       }],
+       file:[],
        fileSelect:[],  //招标文件  s
        relation:[
          {
@@ -471,18 +427,49 @@ export default {
        relaSelect:[],
        fileList:[],
        urlupload:'',
-       urlFormVisible:false
+       urlFormVisible:false,
+       deurl:[],
+       deleurl:[],
+       deleturl:''
     }
   },
   created () {
-    
+    this.listfixe()
+    this.listTender()
+    this.listFile()
   },
   methods: {
+    listfixe() {
+      listFixed({}).then(res=> {
+        console.log(res)
+        this.exploits = res.data.bidOpeningPersonnel
+        this.types = res.data.biddingType
+        this.type1s = res.data.projectType
+        this.records = res.data.filingRequirements
+        this.status = res.data.biddingStatus
+        
+      })
+        
+    },
+    listTender() {
+        listTenders({ntId:this.pkid,source:this.code}).then(res=> {
+        console.log(res,2)
+        this.compileData = res.data
+        
+      }) 
+    },
+    listFile() {
+      listFiles({bizId:this.pkid}).then(res=> {
+        // console.log(1)
+        console.log(res,1)
+        this.file = res.data
+      })
+    },
     handlemark() {    //中标设置弹框
       this.redactFormVisible = true
     },
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      console.log(key, keyPath); 
     },
     deletemark() {     // 删除操作得弹框 
        this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
@@ -527,8 +514,25 @@ export default {
         }
       });
     },
-      onSubmit(formName) {   //保存按钮
-      console.log('submit!');
+      onSubmit() {   //保存按钮
+       if(this.form.area === '') {
+         return this.$message({
+                message:'请选择项目地区',
+                type:'warning'
+              })
+       } else if (this.form.countie === '') {
+          return this.$message({
+                message:'请选择项目县区',
+                type:'warning'
+              })
+       } else if (this.form.type1 ==='') {
+         return this.$message({
+                message:'请选择项目县区',
+                type:'warning'
+              })
+       } 
+
+       console.log(1)
     },
      emptyForm(formName) {  // 清空按钮
         for (let key in this.form) {
@@ -542,38 +546,37 @@ export default {
           console.log(val)
       },
       handleFileChange(val) {   //  招标文件的
-
+           this.deurl = val  
+           console.log(this.deurl,1)        
       },
       handleRelaChange(val) {   //相关公告得
 
       },
+      sendKid() {
+      return { bizId: this.pkid }
+    },
        //   上传文件等方法
     //  文件列表移除文件时的钩子
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      // console.log(file, fileList);
     },
     //  点击文件列表已上传的文件时的钩子的
     handlePreview(file) {
-
+        console.log(file,1)
     },
     handleSuccess(response, file, fileList) {   //当文件上传成功的时候的回调函数
       console.log(response)
-      // if (response.code === 1) {
-      //   this.$message({
-      //     type: 'success',
-      //     message: response.msg
-      //   })
-      //     selectAlias({ stdCode: this.stdCode, name: '', stdType: '1' }).then(res => {
-      //       if (res.code === 1) {
-      //         this.tableData = res.data
-      //       }
-      //     })
-      // }else {
-      //    this.$message({
-      //     type: 'warning',
-      //     message: response.msg
-      //   })
-      // }
+      if (response.code === 1) {
+        this.$message({
+          type: 'success',
+          message: response.msg
+        })
+      }else {
+         this.$message({
+          type: 'warning',
+          message: response.msg
+        })
+      }
     },
     setHeader() {
       let token = localStorage.getItem('Authorization')
@@ -588,18 +591,28 @@ export default {
     },
     uploadurl() {  //上传下载路径
         this.urlFormVisible = true
+
     },
     urlSubmit() { 
-        if(!this.urlupload.trim()==='') {
-          console.log(1)
-           
-       } else {
-         console.log(2)
-         this.$message({
+       
+        if(this.urlupload.trim()==='') {
+            this.$message({
              type:'warning',
              message:'地址栏不能为空~'
-           })
+           })        
+       } else {
+         listFilesPath({bizId:this.id,filePath:this.urlupload}).then(res=> {
+            console.log(res)
+          })          
        }   
+    },
+    // 删除招标文件
+    deleteurl() {
+      this.deurl.forEach(item => {
+         this.deleurl.push(item.pkid)
+      })
+      this.deleturl = this.deleurl.join('|')
+      console.log(this.deleturl)
     }
   },
   components: {
@@ -679,7 +692,26 @@ export default {
       }
     }
   }
-  .edit-c {   
+  .edit-c {
+    position: relative;
+    .edit-l,
+    .edit-r {
+      color:#fff; 
+      position: absolute;
+       height: 45px;
+       width: 45px;
+       border-radius: 50%;
+       background-color: #000;
+       top: 50%;
+       transform: translateY(-50%);
+       text-align: center;
+       line-height: 45px;
+       font-size: 30px;
+       font-weight: 1000;  
+    }
+    .edit-r {
+      right:0;
+    }   
     .ql-editor {
       height: 815px;
     }

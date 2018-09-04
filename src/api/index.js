@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 // const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
-
+// const baseURL = 'http://192.168.1.131:8080/'
 const baseURL = 'http://120.79.116.245:19004/'
 axios.defaults.baseURL = baseURL
 
@@ -177,4 +177,22 @@ export const exportE =  form => {
 export const updateStatus = params => {
     return axios.post('zhaobiao/updateNtMainStatus',params).then(res => res.data)
 }
-     
+
+// 设置变更招中标参数  
+export const listFixed = params => {
+    return axios.post('zhaobiao/listFixedEditData').then(res => res.data)
+}  
+
+// 获取标段信息 
+export const listTenders = params => {
+    return axios.post('zhaobiao/listNtTenders',params).then(res => res.data)
+}  
+// 获取招标文件列表 
+export const listFiles = params => {
+    return axios.post('zhaobiao/listZhaoBiaoFiles', params).then(res => res.data)
+}  
+
+// 上传招标路径
+export const listFilesPath = params => {
+    return axios.post('zhaobiao/insertZhaoBiaoFilePath', params).then(res => res.data)
+}  

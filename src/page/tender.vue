@@ -309,7 +309,7 @@ methods: {
 <style lang="less">
 .tender {
     .condition {
-        border: 1px solid #000;
+        background-color: #f8f8f8;
         height: 60px;
         line-height: 60px;  
         padding: 0 10px;
