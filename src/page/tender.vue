@@ -140,6 +140,9 @@ export default {
             {
                 value:'4',
                 label:'审核未通过'
+            },{
+                value:'5',
+                label:'已处理'
             }
         ],
          pickerOptions2: {
@@ -177,7 +180,7 @@ export default {
           pubDate:'',
           pubEndDate:'',
           pkid:'',
-          coDe:'guangd',
+          coDe:'hunan',
           pagesize:15, // 当前页面条数
           pagenum: 1  //当前页面数
 
@@ -193,7 +196,9 @@ export default {
         this.pkid= this.province.substring(0,1)
         this.coDe= this.province.substring(1)
         listArea({areaParentId:this.pkid}).then(res => {
+            console.log(this.pkid,1)
             if(res.code === 1) {
+
                 this.citys = res.data
                 this.citys.unshift({areaName:'全部',areaCode:''})
                 console.log(this.citys)
@@ -246,6 +251,10 @@ methods: {
           this.listForm()
       },
       handleEdit(index,row) {  // 编辑框的跳转
+          this.$store.commit("saveProvince",this.pkid)
+          console.log(this.pkid)
+          console.log(this.$store.state.liprovince+1)
+         
         const { href } = this.$router.resolve({
               name:'compile',params: {id:row.pkid,code:this.coDe}
           })

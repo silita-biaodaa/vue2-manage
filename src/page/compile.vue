@@ -41,38 +41,38 @@
               <el-input v-model="form.editCode"></el-input>
             </el-form-item>
             <el-form-item label="项目名称">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.title"></el-input>
             </el-form-item>
             <el-form-item label="标段信息">
               <el-input v-model="form.segment"></el-input>
             </el-form-item>
             <el-form-item label="公示日期">
-              <el-input v-model="form.public"></el-input>
+              <el-input v-model="form.pubDate"></el-input>
             </el-form-item>                  
             <el-form-item label="招标控制价(万元)">
               <el-input v-model="form.control"></el-input>
             </el-form-item>
-            <el-form-item label="项目金额(万元)">
+            <el-form-item label="项目金额(万元)" >
               <el-input v-model="form.proSum"></el-input>
             </el-form-item>
             <el-form-item label="项目工期">
               <el-input v-model="form.proDuration"></el-input>
             </el-form-item>
             <el-form-item label="项目地区">             
-              <el-select v-model="form.area" filterable placeholder="请选择项目地区" style="width:80%">
-                <el-option v-for="item in areas" :key="item.value" :label="item.label" :value="item.value">
+              <el-select v-model="form.cityCode" filterable placeholder="请选择项目地区" style="width:80%">
+                <el-option v-for="item in areas" :key="item.areaCode" :label="item.areaName" :value="item.areaCode">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="项目县区">
-              <el-select v-model="form.countie" filterable placeholder="请选择项目县区" style="width:80%">
-                <el-option v-for="item in counties" :key="item.value" :label="item.label" :value="item.value">
+              <el-select v-model="form.countyCode" filterable placeholder="请选择项目县区" style="width:80%">
+                <el-option v-for="item in counties" :key="item.areaCode" :label="item.areaName" :value="item.areaCode">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="评标办法">
               <el-select v-model="form.pbMode" filterable placeholder="请选择评标办法" style="width:80%">
-                <el-option v-for="item in ways" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in ways" :key="item.code" :label="item.name" :value="item.code">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -101,7 +101,7 @@
               </div>
             </el-form-item>
             <el-form-item label="资格审查地点">
-              <el-input v-model="form.checkplace"></el-input>
+              <el-input v-model="form.certAuditAddr"></el-input>
             </el-form-item>
             <el-form-item label="投标截止时间">
               <div class="block">
@@ -119,25 +119,25 @@
               <el-input v-model="form.openingAddr"></el-input>
             </el-form-item>
             <el-form-item label="项目类型">
-              <el-select v-model="form.type1" filterable placeholder="请选择项目类型" style="width:80%">
+              <el-select v-model="form.ntCategory" filterable placeholder="请选择项目类型" style="width:80%">
                 <el-option v-for="item in type1s" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="招标类型">
-              <el-select v-model="form.type" filterable placeholder="请选择招标类型" style="width:80%">
+              <el-select v-model="form.binessType" filterable placeholder="请选择招标类型" style="width:80%">
                 <el-option v-for="item in types" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="平台备案要求">
-               <el-select v-model="form.record" filterable placeholder="请选择备案要求" style="width:80%">
+               <el-select v-model="form.filingPfm" filterable placeholder="请选择备案要求" style="width:80%">
                 <el-option v-for="item in records" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="招标状态">
-              <el-select v-model="form.statu" filterable placeholder="请选择招标状态" style="width:80%">
+              <el-select v-model="form.ntType" filterable placeholder="请选择招标状态" style="width:80%">
                 <el-option v-for="item in status" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
@@ -303,22 +303,24 @@
 
 <script>
  import  Edit  from "@/page/edit";
- import { updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles } from '@/api/index';
+ import { updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode } from '@/api/index';
 export default {
   data () {
     return {
+      ckpid:'',
+      careaName:'',
       pkid:this.$route.params.id,
       code:this.$route.params.code,
        form: {   //编辑变更数据
         editCode: '',  // 编辑明细编码
-        name:'',     //标段名称
+        title:'',     //标段名称
         segment:'',  // 标段
-        public:'',   //
+        pubDate:'',   // 公示日期
         control:'',
         proSum:'',   //项目金额
         proDuration:'',  //项目工期
-        area:'',
-        countie:'',
+        cityCode:'',    //项目地区
+        countyCode:'',  //项目县区
         pbMode:'',  //评标办法
         bidBonds:'', // 投标保证金
         bidBondsEndTime:'', //投标保证金截止时间
@@ -328,45 +330,15 @@ export default {
         bidEndTime:'',  // 投标截止时间
         exploit:'', //开发人员
         openingAddr:'', //开标地点
-        type1:'', //项目类型
-        type:'', // 招标类型
-        recored:'', //备案要求
-        statu:'',// 招标状态
-        checkplace:'' //资格审查地点 
+        ntCategory:'', //项目类型
+        binessType:'', // 招标类型
+        filingPfm:'', //备案要求
+        ntType:'',// 招标状态
+        certAuditAddr:'' //资格审查地点 
       },
       activeName2:'first',
-       areas: [{  // 项目地区
-         value: '选项1',
-         label: '长沙'
-       }, {
-         value: '选项2',
-         label: '株洲'
-       }, {
-         value: '选项3',
-         label: '湘潭'
-       }, {
-         value: '选项4',
-         label: '衡阳'
-       }, {
-         value: '选项5',
-         label: '常德'
-       }],
-       counties: [{  // 项目县区
-         value: '选项1',
-         label: '我旁边是个傻子'
-       }, {
-         value: '选项2',
-         label: '曾丹是个傻子'
-       }, {
-         value: '选项3',
-         label: '大傻子'
-       }, {
-         value: '选项4',
-         label: '小傻子'
-       }, {
-         value: '选项5',
-         label: '曾丹'
-       }],
+       areas: [],
+       counties: [],
        exploits:[], // 开发人员
        ways:[],  // 评标办法
        type1s:[], //项目类型
@@ -437,8 +409,38 @@ export default {
     this.listfixe()
     this.listTender()
     this.listFile()
+    this.listregion()
+    this.listMode()
+  },
+  watch: {
+    "form.cityCode"(val) {
+        this.cpkid= val.substring(0,1)
+        this.careaName= val.substring(1)
+        listArea({areaParentId:this.cpkid}).then(res => {
+            if(res.code === 1) {
+                this.counties = res.data
+            }
+        })
+    }
   },
   methods: {
+    listregion() {
+        listArea({areaParentId:this.pkid}).then(res => {
+            if(res.code === 1 ) {
+               res.data.forEach(itme => {
+                   itme.areaCode = itme.pkid + itme.areaCode
+                }) 
+               this.areas = res.data
+            }
+        })
+    },
+    listMode() {
+        listPbMode({type:this.code}).then(res => {
+           if(res.code === 1 ) {
+             this.ways = res.data
+           }
+        })
+    },
     listfixe() {
       listFixed({}).then(res=> {
         console.log(res)
@@ -453,15 +455,13 @@ export default {
     },
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-        console.log(res,2)
-        this.compileData = res.data
+          console.log(res,458)
+         this.compileData = res.data
         
       }) 
     },
     listFile() {
       listFiles({bizId:this.pkid}).then(res=> {
-        // console.log(1)
-        // console.log(res,1)
         this.file = res.data
       })
     },
@@ -515,19 +515,19 @@ export default {
       });
     },
       onSubmit() {   //保存按钮
-       if(this.form.area === '') {
+       if(this.form.cityCode === '') {
          return this.$message({
                 message:'请选择项目地区',
                 type:'warning'
               })
-       } else if (this.form.countie === '') {
+       } else if (this.form.countyCode === '') {
           return this.$message({
                 message:'请选择项目县区',
                 type:'warning'
               })
-       } else if (this.form.type1 ==='') {
+       } else if (this.form.ntCategory ==='') {
          return this.$message({
-                message:'请选择项目县区',
+                message:'请选择项目类型',
                 type:'warning'
               })
        } 
@@ -546,8 +546,7 @@ export default {
           console.log(val)
       },
       handleFileChange(val) {   //  招标文件的
-           this.deurl = val  
-           console.log(this.deurl,1)        
+           this.deurl = val       
       },
       handleRelaChange(val) {   //相关公告得
 

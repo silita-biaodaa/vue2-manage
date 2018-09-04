@@ -201,3 +201,8 @@ export const listFilesPath = params => {
 export const deleteFiles = params => {
     return axios.post('zhaobiao/deleteZhaoBiaoFile', params).then(res => res.data)
 }  
+
+// 获取评标办法
+export const listPbMode = params => {
+    return axios.post('zhaobiao/listPbMode',params).then(res => res.data)
+}  
