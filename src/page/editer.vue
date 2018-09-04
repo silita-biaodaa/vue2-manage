@@ -23,10 +23,10 @@
                 </el-row>
                 <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
                     <el-col :span="12">
-                        <div class="grid-content bg-purple">程序处理：11111111111111111111111111111</div>
+                        <div   v-model="order" class="grid-content bg-purple">程序处理:</div>
                     </el-col>
                     <el-col :span="12">
-                        <div class="grid-content bg-purple">人工编辑：
+                        <div class="grid-content bg-purple">人工编辑:
                             <el-input
                                 placeholder="请输入内容"
                                 v-model="input10"
@@ -419,9 +419,24 @@
             import {
                 getJsonData
             } from "../api/index.js";
+
             export default {
+                mounted() {
+                    this.getDataList();
+                },
+                getDataList(row){
+                    let dataParam = JSON.stringify({
+                        "comId":row.id,
+                    });
+                    getJsonData('/company/creditCode/detail',dataParam).then(res=>{
+                        console.log(res);
+                    })
+                },
+
                 data() {
                     return {
+                        order:'',
+                        input10:'',
                         dialogTableVisible: false,
                         dialogFormVisible: false,
                         form: {
