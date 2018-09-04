@@ -279,7 +279,7 @@ methods: {
           this.listForm()
       },
       changetable() {
-
+            this.pagenum = 1
           setTimeout(() => {
               console.log(this.coDe)
               return this.listForm()

@@ -224,7 +224,7 @@
                       <template slot-scope="scope">{{ scope.row.fileName }}</template>
                     </el-table-column>
                     <el-table-column  label="上传日期" >
-                      <template slot-scope="scope">{{ scope.row.created }}</template>
+                      <template slot-scope="scope">{{ scope.row.created | dateFormat }}</template>
                     </el-table-column>
                     <el-table-column prop="address" label="状态" show-overflow-tooltip >
                     </el-table-column>
@@ -303,7 +303,7 @@
 
 <script>
  import  Edit  from "@/page/edit";
- import { updateStatus, listFixed,listTenders,listFiles,listFilesPath } from '@/api/index';
+ import { updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles } from '@/api/index';
 export default {
   data () {
     return {
@@ -461,7 +461,7 @@ export default {
     listFile() {
       listFiles({bizId:this.pkid}).then(res=> {
         // console.log(1)
-        console.log(res,1)
+        // console.log(res,1)
         this.file = res.data
       })
     },
@@ -612,7 +612,27 @@ export default {
          this.deleurl.push(item.pkid)
       })
       this.deleturl = this.deleurl.join('|')
-      console.log(this.deleturl)
+
+       this.$confirm('此操作将永久删除该招标文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteFiles({pkid:this.deleturl}).then(res => {
+           if(res.code ===1) {
+              this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+           }
+        })
+        this.listFile()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     }
   },
   components: {

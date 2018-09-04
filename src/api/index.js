@@ -196,3 +196,8 @@ export const listFiles = params => {
 export const listFilesPath = params => {
     return axios.post('zhaobiao/insertZhaoBiaoFilePath', params).then(res => res.data)
 }  
+
+// 删除招标文件
+export const deleteFiles = params => {
+    return axios.post('zhaobiao/deleteZhaoBiaoFile', params).then(res => res.data)
+}  
