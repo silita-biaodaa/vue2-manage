@@ -22,7 +22,7 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) { // ①10010 token过期（30天） ②10011 token无效
     if (response.data.code === 402 || response.data.code === 401) {
         localStorage.removeItem('Authorization')
-        this.$router.replace({ 
+        this.$router.replace({
             path: '/login' // 到登录页重新获取token
         })
     }
@@ -173,64 +173,64 @@ export const exportE =  form => {
             }
         }).then(res=> res.data)
     }
-// 设置变更招中标参数 
+// 设置变更招中标参数
 export const updateStatus = params => {
     return axios.post('zhaobiao/updateNtMainStatus',params).then(res => res.data)
 }
 
-// 设置变更招中标参数  
+// 设置变更招中标参数
 export const listFixed = params => {
     return axios.post('zhaobiao/listFixedEditData').then(res => res.data)
-}  
+}
 
-// 获取标段信息 
+// 获取标段信息
 export const listTenders = params => {
     return axios.post('zhaobiao/listNtTenders',params).then(res => res.data)
-}  
-// 获取招标文件列表 
+}
+// 获取招标文件列表
 export const listFiles = params => {
     return axios.post('zhaobiao/listZhaoBiaoFiles', params).then(res => res.data)
-}  
+}
 
 // 上传招标路径
 export const listFilesPath = params => {
     return axios.post('zhaobiao/insertZhaoBiaoFilePath', params).then(res => res.data)
-}  
+}
 
 // 删除招标文件
 export const deleteFiles = params => {
     return axios.post('zhaobiao/deleteZhaoBiaoFile', params).then(res => res.data)
-}  
+}
 
 // 获取评标办法
 export const listPbMode = params => {
     return axios.post('zhaobiao/listPbMode',params).then(res => res.data)
-}  
+}
 // 删除编辑明细
 export const deletePkid = params => {
     return axios.post('zhaobiao/deleteNtTendersByPkId', params).then(res => res.data)
-}  
-//获取关联公告列表 
+}
+//获取关联公告列表
 export const listGp = params => {
     return axios.post('common/listRelevantNotice', params).then(res => res.data)
-}  
+}
 // 保存招标公告标段信息
 export const insertNt = params => {
     return axios.post('zhaobiao/insertNtTenders', params).then(res => res.data)
-} 
+}
 
-// 删除公告 
+// 删除公告
 export const delpost = params => {
     return axios.post('zhaobiao/del', params).then(res => res.data)
-} 
+}
 // 获取关联公告列表
 export const listNtgp = params => {
     return axios.post('zhaobiao/listNtAssociateGp', params).then(res => res.data)
-} 
+}
 // 接触关联公告
 export const listreli = params => {
     return axios.post('zhaobiao/deleteNtAssociateGp', params).then(res => res.data)
-} 
+}
 // 添加关联公告
 export const relivan = params => {
     return axios.post('zhaobiao/insertNtAssociateGp', params).then(res => res.data)

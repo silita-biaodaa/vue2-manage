@@ -148,7 +148,7 @@
                 this.crCode = ""
 
             },
-            //编辑
+
             redactSubmit(index, row){
                  if(!this.credCode) {
                   return this.$message({
@@ -158,14 +158,14 @@
                 }
 
                  let dataParam = JSON.stringify({
-                    "pkid": row.pkid,
+                     "pkid":this.selectPkid,
                     "comName": this.credCode,
-                    "creditCode": this.crCode,
+                    "creditCode": this.crCode
 
                 });
                 getJsonData('/company/art/save', dataParam).then(res => {
-                    console.log(dataParam)
                      console.log(res.code)
+                     this.selectPkid=""
                     this.dialogFormVisible = false;
                      if (res.code == 1) {
                          this.$message({
@@ -175,7 +175,7 @@
                         this.getDataList();
                      }else{
                         this.$message({
-                            type: 'fail',
+                            type: 'warning',
                             message: '修改失败'+res.msg
                         });
                      }
@@ -187,6 +187,8 @@
                 this.dialogFormVisible=true;
                 this.credCode=dataBean.comName;
                 this.crCode=dataBean.creditCode;
+                this.selectPkid = dataBean.pkid;
+//
             },
 //              删除
             remove(index, row) {
@@ -195,7 +197,7 @@
 
                 });
 
-                    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    this.$confirm('此操作将删除该条企业, 是否继续?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
@@ -224,11 +226,11 @@
 
             addData() {
                 if(this.companyName==null||this.companyName==""){
-                     alert("增加失败：企业名称为空");
+                    this.$message.error('增加失败：企业名称为空');
                     return;
                 }
                 if(this.creditCode==null||this.creditCode==""){
-                     alert("增加失败：社会信用代码为空");
+                    this.$message.warning('增加失败：社会信用代码为空');
                     return;
                 }
                 let dataParam = JSON.stringify({
@@ -238,9 +240,15 @@
                 getJsonData('/company/art/save', dataParam).then(res => {
                     console.log(res);
                     if (res.code == 1) {
-                        alert("增加成功");
+                        this.$message({
+                            message: '增加企业成功',
+                            type: 'success'
+                        });
                     } else {
-                        alert("增加失败：" + res.msg);
+                        this.$message({
+                            message: '增加企业失败' + res.msg,
+                            type: 'warning'
+                        });
                     }
                     this.getDataList();
                 });
