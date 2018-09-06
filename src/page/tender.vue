@@ -1,6 +1,6 @@
 <template>
     <div class="tender">
-
+        
         <el-row class="condition">
             <el-col :span="24" >
                 <el-row>
@@ -40,15 +40,15 @@
                         </div>
                     </el-col>
                 </el-row>
-            </el-col>
+            </el-col>  
         </el-row>
 
         <el-row>
-            <el-col :span="24" class="fl-right">
+            <el-col :span="24" class="fl-right">                
                 <el-input placeholder="请输入内容" v-model="firm" style="width:30%" @change="firmchange">
                     <i slot="prefix" class="el-input__icon el-icon-search" ></i>
                 </el-input>
-                <el-button type="primary" class="fl-left" @click='exportexcel'>导出Excel</el-button >
+                <el-button type="primary" class="fl-left" @click='exportexcel'>导出Excel</el-button >  
             </el-col>
         </el-row>
 
@@ -85,28 +85,28 @@
                     </el-table-column>
                 </el-table>
             </el-col>
-
+        
         </el-row>
 
-
+            
             <el-row class='baa_ai_n'>
                 <el-col :span="24">
                    <div class="block">
                         <el-pagination
-                         @current-change="handleCurrentChange"
-                         :current-page="1"
-                         :page-sizes="[15, 30, 45, 60]"
-                         :page-size="15"
-                         layout="total, sizes, prev, pager, next, jumper"
-                         :total="total"
+                         @current-change="handleCurrentChange" 
+                         :current-page="1" 
+                         :page-sizes="[15, 30, 45, 60]" 
+                         :page-size="15" 
+                         layout="total, sizes, prev, pager, next, jumper" 
+                         :total="total" 
                          @size-change="handleSizeChange">
                         </el-pagination>
-                    </div>
-                </el-col>
-
+                    </div> 
+                </el-col> 
+                
             </el-row>
 
-
+       
 
     </div>
 </template>
@@ -116,8 +116,8 @@ export default {
   data () {
     return {
     city:'',  //市级数据
-    citys:[],  //   市级请求数据
-    province:'',
+    citys:[],  //   市级请求数据 
+    province:'1hunan',
      provinces: [],
         state:'',  //公共状态数据
         states:[
@@ -184,7 +184,7 @@ export default {
           pagesize:15, // 当前页面条数
           pagenum: 1  //当前页面数
 
-     }
+     }  
   },
   watch: {
      times:function () {
@@ -209,7 +209,7 @@ export default {
   created () {
       this.listTen()
       this.listForm()
-  },
+  }, 
   filters: {
      sum:function(value){
          if(value ==='0') {
@@ -232,7 +232,7 @@ methods: {
               if(res.code === 1 ) {
                  res.data.forEach(itme => {
                     itme.areaCode = itme.pkid + itme.areaCode
-                 })
+                 })                 
                  this.provinces = res.data
                  console.log(this.provinces,236)
               }
@@ -256,11 +256,11 @@ methods: {
             localStorage.removeItem('lipubtime')
             localStorage.setItem('lititle', row.title)
             localStorage.setItem('lipubtime', row.pubDate)
-
+         
         const { href } = this.$router.resolve({
               name:'compile',params: {id:row.pkid,code:this.coDe}
           })
-
+   
           window.open(href, '_blank')
       },
       handleDelete(index,row) {
@@ -289,7 +289,7 @@ methods: {
       },
       handleSizeChange(val) {  // 每页条数发生改变时做出的函数
         console.log(val)
-         this.pagesize = val
+         this.pagesize = val  
           this.listForm()
       },
       changetable() {
@@ -297,7 +297,7 @@ methods: {
           setTimeout(() => {
               console.log(this.coDe)
               return this.listForm()
-          }, 100);
+          }, 100);                    
       },
       exportexcel(){
           exportE({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:1,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize},{responseType: 'blob'}).then(res=> {
@@ -312,7 +312,7 @@ methods: {
                 URL.revokeObjectURL(elink.href); // 释放URL 对象
                 document.body.removeChild(elink);
           })
-
+     
       }
 
   },
@@ -325,7 +325,7 @@ methods: {
     .condition {
         background-color: #f8f8f8;
         height: 60px;
-        line-height: 60px;
+        line-height: 60px;  
         padding: 0 10px;
         margin-bottom: 25px;
         font-size: 14px;
@@ -338,7 +338,7 @@ methods: {
             margin-right: 60px;
         }
     }
-
+    
 	.baa_ai,
 	.baa_ai_n {
 	    width: 90%;
@@ -346,11 +346,11 @@ methods: {
 	    margin-right: 50px;
 	    margin: 30px auto;
     }
-
+    
     .baa_ai {
         border: 1px solid #ccc;
     }
-
+    
     .block {
         display: inline-block;
         line-height: 50px;
@@ -363,6 +363,6 @@ methods: {
     }
 
 
-
+    
 }
 </style>

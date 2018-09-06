@@ -14,10 +14,10 @@
                  </div>
               </el-col>
 
-              <el-col :span="12" class="right-c">
+              <el-col :span="12" class="right-c">                  
                   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color='#000' text-color='#fff' active-text-color='yellow' @select="handleSelect">
                     <el-menu-item index="1" @click='addcompile' >编辑</el-menu-item>
-                    <el-menu-item index="3" @click='toocompile' >变更</el-menu-item>
+                    <el-menu-item index="3" @click='toocompile' >变更</el-menu-item> 
                   </el-menu>
               </el-col>
            </el-row>
@@ -35,7 +35,7 @@
             <Edit></Edit>
         </el-col>
         <el-col :span="12" class="redact-c">
-
+            
           <el-form ref="edits" :model="form" label-width="200px" class="demo-ruleForm" >
             <el-form-item label="招标编辑编号">
               <el-input v-model="form.editCode"></el-input>
@@ -48,7 +48,7 @@
             </el-form-item>
             <el-form-item label="公示日期">
               <el-input v-model="form.pubDate"></el-input>
-            </el-form-item>
+            </el-form-item>                  
             <el-form-item label="招标控制价(万元)">
               <el-input v-model="form.controllSum"></el-input>
               <i class="el-icon-check"></i>
@@ -59,7 +59,7 @@
             <el-form-item label="项目工期">
               <el-input v-model="form.proDuration"></el-input>
             </el-form-item>
-            <el-form-item label="项目地区">
+            <el-form-item label="项目地区">             
               <el-select v-model="form.cityCode" filterable placeholder="请选择项目地区" style="width:80%">
                 <el-option v-for="item in areas" :key="item.areaCode" :label="item.areaName" :value="item.areaCode">
                 </el-option>
@@ -79,8 +79,8 @@
             </el-form-item>
             <el-form-item label="投标保证金(万元)">
               <el-input v-model="form.bidBonds"></el-input>
-            </el-form-item>
-            <el-form-item label="保证金截至时间">
+            </el-form-item>            
+            <el-form-item label="保证金截至时间">   
               <div class="block">
                 <el-date-picker v-model="form.bidBondsEndTime" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
@@ -142,12 +142,12 @@
                 <el-option v-for="item in status" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item>                        
 
             <el-form-item class="btn">
               <el-button @click="emptyForm('edits')">清空</el-button>
               <el-button type="primary" @click="onSubmit">保存</el-button>
-            </el-form-item>
+            </el-form-item>  
           </el-form>
 
         </el-col>
@@ -160,8 +160,8 @@
             <!-- 编辑明细 -->
           <el-tabs v-model="activeName2" @tab-click="handleClick" >
 
-              <el-tab-pane label="编辑明细" name="first" >
-
+              <el-tab-pane label="编辑明细" name="first" >                
+  
                     <el-table style="width: 100%" height="300" @selection-change="handleSelectionChange" ref="multipleTable" :data="compileData">
                       <el-table-column type="selection" width="55">
                       </el-table-column>
@@ -185,41 +185,41 @@
                       </el-table-column>
                       <el-table-column prop="bidBonds" label="项目保证金(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column prop="bidBondsEndTime" label="保证金截至时间" width="120" show-overflow-tooltip>
+                      <el-table-column prop="bidBondsEndTime" label="保证金截至时间" width="120" show-overflow-tooltip> 
                       </el-table-column>
                       <el-table-column prop="enrollAddr" label="报名地点" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column prop="auditTime" label="资格审查截止时间" width="150" show-overflow-tooltip>
-                      </el-table-column>
+                      </el-table-column> 
                       <el-table-column prop="certAuditAddr" label="资格审查地点" width="150" show-overflow-tooltip>
-                      </el-table-column>
+                      </el-table-column> 
                       <el-table-column prop="bidEndTime" label="投标截止时间" width="150" show-overflow-tooltip>
-                      </el-table-column>
+                      </el-table-column> 
                       <el-table-column prop="openingPerson" label="开标人员" width="120" show-overflow-tooltip>
-                      </el-table-column>
+                      </el-table-column> 
                       <el-table-column prop="openingAddr" label="开标地点" width="120" show-overflow-tooltip>
-                      </el-table-column>
+                      </el-table-column> 
                       <el-table-column  label="项目类型" width="120" show-overflow-tooltip>
                          <template slot-scope="scope">{{ scope.row.ntCategory | gory }}</template>
-                      </el-table-column>
+                      </el-table-column> 
                       <el-table-column label="招标类型" width="120" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.binessType | biness }}</template>
-                      </el-table-column>
+                         <template slot-scope="scope">{{ scope.row.binessType | biness }}</template>                        
+                      </el-table-column> 
                       <el-table-column prop="filingPfm" label="平台备案要求" width="120" show-overflow-tooltip>
-                      </el-table-column>
+                      </el-table-column> 
                       <el-table-column prop="ntType" label="招标状态" width="120" show-overflow-tooltip>
-                      </el-table-column>
+                      </el-table-column>     
                     </el-table>
 
                      <div style="margin-top: 20px">
                        <el-button type="primary" @click='addtop' >添加编辑明细</el-button>
                        <el-button type="primary" @click='delcompile' >删除编辑明细</el-button>
                      </div>
-
-
+                    
+                    
             </el-tab-pane>
              <el-tab-pane label="招标文件" name="second">
-
+               
                   <el-table ref="multipleFile" :data="file" tooltip-effect="dark" style="width: 100%" @selection-change="handleFileChange" height="300">
                     <el-table-column type="selection" style="width:5%">
                     </el-table-column>
@@ -261,7 +261,7 @@
                   <div style="margin-top: 20px">
                        <el-button type="primary" >编辑公告</el-button>
                        <el-button type="primary" @click='newurl' >新增关联公告</el-button>
-                       <el-button type="primary" @click='relieve' >解除关联公告</el-button>
+                       <el-button type="primary" @click='relieve' >解除关联公告</el-button>                       
                   </div>
 
             </el-tab-pane>
@@ -271,26 +271,26 @@
       </el-row>
 
       <!-- 修改得招标信息 -->
-      <el-dialog title="设置" :visible.sync="redactFormVisible" width="40%">
-          <el-form :model="handleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-dialog title="设置" :visible.sync="redactFormVisible" width="40%">             
+          <el-form :model="handleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">          
             <el-form-item label="公告状态" prop="resource">
               <el-radio-group v-model="handleForm.resource">
                 <el-radio label="1">未处理</el-radio>
                 <el-radio label="2">已处理</el-radio>
               </el-radio-group>
             </el-form-item>
-
+            
             <el-form-item label="公告类型" prop="type">
               <el-radio-group v-model="handleForm.type">
                 <el-radio label="1">招标公告</el-radio>
                 <el-radio label="2">中标公告</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item>
+            <el-form-item>              
               <el-button @click="resetForm('ruleForm')">取消</el-button>
               <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
             </el-form-item>
-          </el-form>
+          </el-form>       
       </el-dialog>
         <!-- 上传路路径得弹框 -->
        <el-dialog title="文件下载路径传输" :visible.sync="urlFormVisible">
@@ -315,7 +315,7 @@ export default {
       pkid:this.$route.params.id,
       code:this.$route.params.code,
       title: '',
-      pubDate: '',
+      pubDate: '', 
        form: {   //编辑变更数据
         editCode: '',  // 编辑明细编码
         title:'',     //标段名称
@@ -339,7 +339,7 @@ export default {
         binessType:'', // 招标类型
         filingPfm:'', //备案要求
         ntType:'',// 招标状态
-        certAuditAddr:'' //资格审查地点
+        certAuditAddr:'' //资格审查地点 
       },
       activeName2:'first',
        areas: [],
@@ -367,16 +367,16 @@ export default {
          ]
        },
        // 编辑明细数据
-       compileData:[
-
+       compileData:[    
+         
        ],
        multipleSelection: [],
        //招标文件的数据
        file:[],
-       fileSelect:[],  //招标文件
+       fileSelect:[],  //招标文件  
         // 相关公告的名称
        relation:[
-
+         
        ],
        relaSelect:[],
        fileList:[],
@@ -393,17 +393,16 @@ export default {
        reli:[],
        ajson:{},
        list:[],
-       relGp:''
+       releGp:''
     }
   },
   created () {
-    this.listNtgp()
+    this.listNtgpn()
     this.listfixe()
-    this.listTender()
     this.listFile()
     this.listregion()
     this.listMode()
-
+    this.listTender()
   },
   filters: {
     // 项目类型
@@ -422,7 +421,7 @@ export default {
         } else {
           return '政府采购'
         }
-     }
+     } 
   },
   watch: {
     "form.cityCode"(val) {
@@ -443,17 +442,14 @@ export default {
       localStorage.setItem('reliSource', this.code)
       localStorage.setItem('relipkid',this.pkid)
       this.$router.push('/relevance')
-      // console.log(this)
-
     },
     listregion() {
         listArea({areaParentId:this.pkid}).then(res => {
             if(res.code === 1 ) {
                res.data.forEach(itme => {
                    itme.areaCode = itme.pkid + itme.areaCode
-                })
+                }) 
                this.areas = res.data
-
             }
         })
     },
@@ -464,14 +460,11 @@ export default {
            }
         })
     },
-    listNtgp() {
+    listNtgpn() {
         listNtgp({ntId:this.pkid,source:this.code}).then(res => {
+          console.log(1)
           console.log(res,461)
           if(res.code ===1) {
-            console.log(res.data,471)
-            this.relGp = res.data.datas[0].relGp
-
-            console.log(this.relGp,471)
             this.relation =res.data.datas
           }
         })
@@ -488,53 +481,46 @@ export default {
         this.records = res.data.filingRequirements
         this.status = res.data.biddingStatus
       })
-
+        
     },
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-          console.log(res.data[0],484)
          this.state = this.state + res.data[0].url
           this.form = res.data[0]
           this.again = res.data[0]
-         this.compileData = res.data
           this.arrjson(res.data[0])
-
-      })
+      }) 
     },
     listFile() {
       listFiles({bizId:this.pkid}).then(res=> {
-
+        
         this.file = res.data
-
+        
       })
     },
     // 解除相关公告函数
     arrjson(obj) {
       this.ajson.ntId = obj.ntId
-      this.ajson.relGp = this.relGp
+      this.ajson.relGp = this.releGp
       this.ajson.source = this.code
-      // this.ajson = JSON.stringify(this.ajson)
-
-      console.log(this.ajson,504)
       this.list.push(this.ajson)
-      console.log(this.list,   11111111)
+      console.log(this.list,515)
       this.ajson = {}
-      // console.log(this.ajson,508)
     },
     handlemark() {    //中标设置弹框
       this.redactFormVisible = true
     },
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      console.log(key, keyPath); 
     },
-    deletemark() {     // 删除操作得弹框
+    deletemark() {     // 删除操作得弹框 
        this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
-
+        
+        
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -556,7 +542,7 @@ export default {
                 type:'success'
               });
               this.redactFormVisible = false;
-            }
+            }            
           })
           if(this.handleForm.resource === '1') {
               this.condition = '未处理'
@@ -569,7 +555,7 @@ export default {
       });
     },
       onSubmit() {   //保存按钮
-      if(this.typecompile === '编辑') {
+      if(this.typecompile === '编辑') {       
         if(this.form.cityCode === '') {
             return this.$message({
                     message:'请选择项目地区',
@@ -598,7 +584,7 @@ export default {
         for (let key in this.form) {
           this.form[key] = ''
         }
-    },
+    },  
      handleClick(tab, event) {  // 被选中tab标签实例
        console.log(tab, event);
      },
@@ -608,13 +594,15 @@ export default {
           this.form = val[0]
       },
       handleFileChange(val) {   //  招标文件的
-           this.deurl = val
+           this.deurl = val       
       },
-      handleRelaChange(val) {   //相关公告得
-          console.log(val,586)
-          // this.relGp = val[0].relGp
-          // console.log(this.relGp)
+      handleRelaChange(val) {   //相关公告得                   
           this.reli = val
+           if(this.reli.length ===0) {
+             this.releGp = 0 
+           } else {
+             this.releGp = val[0].relGp
+           }
       },
       sendKid() {
       return { bizId: this.pkid }
@@ -657,18 +645,18 @@ export default {
         this.urlFormVisible = true
 
     },
-    urlSubmit() {
-
+    urlSubmit() { 
+       
         if(this.urlupload.trim()==='') {
             this.$message({
              type:'warning',
              message:'地址栏不能为空~'
-           })
+           })        
        } else {
          listFilesPath({bizId:this.id,filePath:this.urlupload}).then(res=> {
             console.log(res)
-          })
-       }
+          })          
+       }   
     },
     // 删除招标文件
     deleteurl() {
@@ -694,7 +682,7 @@ export default {
            this.deleturl = ''
            this.listFile()
         })
-
+        
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -725,7 +713,7 @@ export default {
            this.delcompl = ''
            this.listTender()
         })
-
+        
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -738,29 +726,39 @@ export default {
        this.form.editCode = ''
     },
     addcompile() {
-      this.typecompile = '编辑'
+      this.typecompile = '编辑' 
       this.form = this.again
     },
     toocompile () {
-      this.typecompile = '变更'
+      this.typecompile = '变更' 
       this.form = this.again
     },
     //接触相关的公告
     relieve() {
+      if(this.releGp ==='') {
+        return this.$message({
+            type:'warning',
+            message:'请选择要解除的公告' 
+        })
+      }
+      // console.log(this.list,'没有rel')
+      this.list[0].relGp = this.releGp
+      // console.log(this.list,'有rel')
       this.reli.forEach(item => {
           this.arrjson(item)
       })
-
-      console.log(this.list,739)
+      console.log(this.list,749)
       listreli({list:this.list}).then(res => {
-        console.log(res)
          if(res.code ===1) {
             this.$message({
               type: 'success',
               message: '解除关联成功~'
             });
-            this.listNtgp()
-            this.list = []
+            this.listNtgpn()
+            this.reli = []
+            this.releGp = ''
+            this.list.length = 1  
+            console.log(this.list,760)                        
          } else {
              this.$message({
               type: 'warning',
@@ -769,6 +767,8 @@ export default {
          }
 
       })
+   
+
     }
   },
   components: {
@@ -852,7 +852,7 @@ export default {
     position: relative;
     .edit-l,
     .edit-r {
-      color:#fff;
+      color:#fff; 
       position: absolute;
        height: 45px;
        width: 45px;
@@ -863,11 +863,11 @@ export default {
        text-align: center;
        line-height: 45px;
        font-size: 30px;
-       font-weight: 1000;
+       font-weight: 1000;  
     }
     .edit-r {
       right:0;
-    }
+    }   
     .ql-editor {
       height: 815px;
     }
@@ -876,11 +876,11 @@ export default {
     width: 100%;
     overflow: hidden;
   }
-
+  
  ::-webkit-scrollbar {
    height: 13px;
  }
-
+ 
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
   background-color: #c4c4c4;

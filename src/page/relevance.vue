@@ -5,9 +5,9 @@
             <el-breadcrumb-item :to="{path:'/home'}">业务</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path:'/relevance' }">相关公告</el-breadcrumb-item>
         </el-breadcrumb>
-        <el-row class="rele-title" >
-           <el-col :span='24'  >
-             {{title}}
+        <el-row class="rele-title" v-show='skip' >
+           <el-col :span='24' >
+             相关公告标题:{{title}}
            </el-col>
         </el-row>
         <el-row class="rele-selction" >
@@ -122,12 +122,12 @@ export default {
         this.title = localStorage.getItem('reliTitle') 
         console.log(this.title,118)
         console.log(localStorage.getItem('reliTitle'),119)
-        //  if(localStorage.getItem('reliTitle')) {
-        //      this.skip = false 
-        //  } else {
-        //      this.skip = true
-        //  }       
-        //  console.log(this.skip,127)
+         if(localStorage.getItem('reliTitle')) {
+             this.skip = true 
+         } else {
+             this.skip = false                
+         }       
+         console.log(this.skip,127)
      },
     handleRelevance(val) {
         console.log(val)
@@ -152,6 +152,7 @@ export default {
         })
      },
      firmchange() {  // 搜索框变化的方法
+          this.pagenum = 1
           this.listRele()
       },
       correlation() {
@@ -185,7 +186,8 @@ export default {
         }
       },
       changetab(){
-
+          this.pagenum = 1
+           this.listRele()
       },
       handleCurrentChange(val) {  // 当前页改变的函数
          this.pagenum = val
