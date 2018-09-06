@@ -8,7 +8,8 @@ const state = {
 	adminInfo: {
 		avatar: 'default.jpg'
 	},
-	liprovince:''
+	liprovince:'',
+	lititle:''
 }
 
 const mutations = {
@@ -17,6 +18,9 @@ const mutations = {
 	},
 	saveProvince(state,val) {
 		state.liprovince = val
+	},
+	saveTitle(state,val) {
+		state.lititle = val
 	}
 }
 

@@ -111,7 +111,7 @@
     </div>
 </template>
 <script>
-import { listArea,listStatus,listMain,listExcel,exportE } from '@/api/index';
+import { listArea,listStatus,listMain,listExcel,exportE,delpost } from '@/api/index';
 export default {
   data () {
     return {
@@ -228,12 +228,13 @@ export default {
 methods: {
       listTen() {
           listArea({areaParentId:0}).then(res => {
+              console.log(res,236)
               if(res.code === 1 ) {
                  res.data.forEach(itme => {
                     itme.areaCode = itme.pkid + itme.areaCode
                  })                 
                  this.provinces = res.data
-                 console.log(this.provinces)
+                 console.log(this.provinces,236)
               }
           })
 
@@ -251,15 +252,16 @@ methods: {
           this.listForm()
       },
       handleEdit(index,row) {  // 编辑框的跳转
-          this.$store.commit("saveProvince",this.pkid)
-          console.log(this.pkid)
-          console.log(this.$store.state.liprovince+1)
+            localStorage.removeItem('lititle')
+            localStorage.removeItem('lipubtime')
+            localStorage.setItem('lititle', row.title)
+            localStorage.setItem('lipubtime', row.pubDate)
          
         const { href } = this.$router.resolve({
               name:'compile',params: {id:row.pkid,code:this.coDe}
           })
    
-          window.open(href, '-blank')
+          window.open(href, '_blank')
       },
       handleDelete(index,row) {
            this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
@@ -267,10 +269,13 @@ methods: {
               cancelButtonText: '取消',
               type: 'warning'
           }).then(() => {
-               this.$message({
-                   type: 'success',
-                   message: '删除成功!'
-               });
+              delpost({pkid:row.pkid,source:this.coDe}).then(res => {
+                     this.$message({
+                        type: 'success',
+                        message: res.msg
+                    });
+                    this.listForm()
+              })
           }).catch(() => {
               this.$message({
                   type: 'info',

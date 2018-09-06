@@ -206,3 +206,32 @@ export const deleteFiles = params => {
 export const listPbMode = params => {
     return axios.post('zhaobiao/listPbMode',params).then(res => res.data)
 }  
+// 删除编辑明细
+export const deletePkid = params => {
+    return axios.post('zhaobiao/deleteNtTendersByPkId', params).then(res => res.data)
+}  
+//获取关联公告列表 
+export const listGp = params => {
+    return axios.post('common/listRelevantNotice', params).then(res => res.data)
+}  
+// 保存招标公告标段信息
+export const insertNt = params => {
+    return axios.post('zhaobiao/insertNtTenders', params).then(res => res.data)
+} 
+
+// 删除公告 
+export const delpost = params => {
+    return axios.post('zhaobiao/del', params).then(res => res.data)
+} 
+// 获取关联公告列表
+export const listNtgp = params => {
+    return axios.post('zhaobiao/listNtAssociateGp', params).then(res => res.data)
+} 
+// 接触关联公告
+export const listreli = params => {
+    return axios.post('zhaobiao/deleteNtAssociateGp', params).then(res => res.data)
+} 
+// 添加关联公告
+export const relivan = params => {
+    return axios.post('zhaobiao/insertNtAssociateGp', params).then(res => res.data)
+}
