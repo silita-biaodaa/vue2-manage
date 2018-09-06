@@ -16,7 +16,6 @@ import Editer from '@/page/editer'
 import Rease from '@/page/rease'
 import Quillediter from '@/page/QuillEditor'
 import Detail from '@/page/detail'
-import Relevance from '@/page/relevance'
 
 Vue.use(Router)
 
@@ -82,7 +81,7 @@ const routes = [
 							 	name: 'compile'
 							 },
 							 {
-								 path:'/editer',
+								 path:'/editer/:id',
 								 component:Editer,
 								 name:'editer'
 							 },
@@ -100,12 +99,7 @@ const routes = [
                     component:Detail,
                     name:'detail'
 
-								},
-								{
-									path:'/relevance',
-									component: Relevance,
-									name:'relevance'
-								}
+                }
 
 
 					]
