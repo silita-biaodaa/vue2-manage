@@ -62,6 +62,7 @@
             </el-col>
 
         </el-row>
+
         <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
             <el-col :span="12">
                 <div class="grid-content bg-purple">变更时间：
@@ -75,9 +76,9 @@
 
             <el-table-column type="index" label="序号" header-align="center" align="center">
             </el-table-column>
-            <el-table-column prop="comName" label="变更前名称">
+            <el-table-column prop="changeComName" label="变更前名称">
             </el-table-column>
-            <el-table-column prop="changeComName" label="变更后名称">
+            <el-table-column prop="comName" label="变更后名称">
             </el-table-column>
             <el-table-column prop="changeTime" label="变更时间">
             </el-table-column>
@@ -776,8 +777,8 @@
                     this.creditData = res.data[0];
                     let comDataArray = res.data;
                     this.changeCreditCode = res.data[0].changeCreditCode;
-                    this.beforeComName = res.data[0].comName;
-                    this.afterComName = res.data[0].comNameEx;
+                    this.beforeComName = res.data[0].comNameEx;
+                    this.afterComName = res.data[0].comName;
                     this.changeTime = res.data[0].changeTime;
                     for (let j = 0; j < comDataArray.length; j++) {
                         let comDataBean = comDataArray[j];
