@@ -62,6 +62,7 @@
             </el-col>
 
         </el-row>
+
         <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
             <el-col :span="12">
                 <div class="grid-content bg-purple">变更时间：
@@ -75,9 +76,9 @@
 
             <el-table-column type="index" label="序号" header-align="center" align="center">
             </el-table-column>
-            <el-table-column prop="comName" label="变更前名称">
+            <el-table-column prop="changeComName" label="变更前名称">
             </el-table-column>
-            <el-table-column prop="changeComName" label="变更后名称">
+            <el-table-column prop="comName" label="变更后名称">
             </el-table-column>
             <el-table-column prop="changeTime" label="变更时间">
             </el-table-column>
@@ -159,8 +160,8 @@
                     <el-cascader
                         v-model="elQuality"
                         :options="allQuality"
-                          placeholder="请选择资质"
-                       filterable @change="handleQualityChange"
+                        placeholder="请选择资质"
+                        filterable @change="handleQualityChange"
                         :props="props"
                     >
                     </el-cascader>
@@ -192,7 +193,7 @@
                         v-model="quality.certDate"
                         type="date"
                         format="yyyy-MM-dd"
-                        value-format="yyyy-MM-dd" 
+                        value-format="yyyy-MM-dd"
                         placeholder="选择日期">
                     </el-date-picker>
                 </div>
@@ -202,8 +203,8 @@
                     <el-date-picker
                         v-model="quality.validDate"
                         type="date"
-                         format="yyyy-MM-dd"
-                        value-format="yyyy-MM-dd" 
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
                         placeholder="选择日期">
                     </el-date-picker>
                 </div>
@@ -213,8 +214,8 @@
                     <el-date-picker
                         v-model="quality.certDate"
                         type="date"
-                         format="yyyy-MM-dd"
-                        value-format="yyyy-MM-dd" 
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
                         placeholder="选择日期">
                     </el-date-picker>
                 </div>
@@ -502,13 +503,13 @@
 
                 console.log(3333);
 
-                  let allQualityArr = this.getCascaderObj(this.elQuality, this.allQuality);
-              
+                let allQualityArr = this.getCascaderObj(this.elQuality, this.allQuality);
+
                 if (allQualityArr != null && allQualityArr.length > 0) {
                     this.oneQualityLevel = allQualityArr[0].value;
                     this.twoQualityLevel = allQualityArr[1].value;
                     this.threeQualityLevel = allQualityArr[2].value;
-                    
+
                 }
 
             },
@@ -527,6 +528,8 @@
                 });
                 getJsonData('/company/qual/del', dataParam).then(res => {
                     alert("删除成功");
+
+
                     this.getQuality();
 
                 })
@@ -615,6 +618,12 @@
 
             deleteComZhi() {
 
+                this.quality.certNo ='';
+                this.quality.certOrg='';
+                this.quality.certDate='';
+                this.quality.validDate='';
+                this.quality.certDate='';
+
 
             },
             //添加资质信息
@@ -622,7 +631,6 @@
                 let dataParam = JSON.stringify({
                     comId: this.comId,
                     certNo: this.quality.certNo,
-                    certOrg: this.quality.certOrg,
                     certDate: this.quality.certDate,
                     validDate: this.quality.validDate,
                     quaCode: this.oneQualityLevel,
@@ -644,6 +652,7 @@
 
                 })
             },
+
             //保存
             keepList() {
                 let dataParam = JSON.stringify({
@@ -651,10 +660,10 @@
                     "creditCode": this.creditBean.changeCreditCode
                 });
                 getJsonData('/company/creditCode/add', dataParam).then(res => {
-                        this.$message({
-                            message: '企业统一社会信用代码保存成功！',
-                            type: 'success'
-                        });
+                    this.$message({
+                        message: '企业统一社会信用代码保存成功！',
+                        type: 'success'
+                    });
 
                     this.getCreditData();
 
@@ -768,8 +777,8 @@
                     this.creditData = res.data[0];
                     let comDataArray = res.data;
                     this.changeCreditCode = res.data[0].changeCreditCode;
-                    this.beforeComName = res.data[0].comName;
-                    this.afterComName = res.data[0].comNameEx;
+                    this.beforeComName = res.data[0].comNameEx;
+                    this.afterComName = res.data[0].comName;
                     this.changeTime = res.data[0].changeTime;
                     for (let j = 0; j < comDataArray.length; j++) {
                         let comDataBean = comDataArray[j];
