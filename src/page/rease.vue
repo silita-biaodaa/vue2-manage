@@ -114,7 +114,7 @@
                 pkid:"",
                 // dialogTableVisible: false,
                 dialogFormVisible: false,
-                start: 1,
+                currentPage: 1,
                 dataList: [],
                 pageSize: 20,
                 totalSize: 1,
@@ -259,13 +259,13 @@
                 this.getDataList();
             },
             handleCurrentChange(val) {
-                this.start = val;
+                this.currentPage = val;
                 this.getDataList();
             },
 //            分页
             getDataList() {
                 let dataParam = JSON.stringify({
-                    "start": this.start,
+                    "currentPage": this.currentPage,
                     "pageSize": this.pageSize
                 });
                 getJsonData('/company/art/list', dataParam).then(res => {
