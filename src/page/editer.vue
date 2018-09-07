@@ -66,7 +66,7 @@
         <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
             <el-col :span="12">
                 <div class="grid-content bg-purple">变更时间：
-                    <el-date-picker v-model="changeTime" type="date" placeholder="选择日期">
+                    <el-date-picker v-model="changeTime" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期">
                     </el-date-picker>
                 </div>
             </el-col>
@@ -76,7 +76,7 @@
 
             <el-table-column type="index" label="序号" header-align="center" align="center">
             </el-table-column>
-            <el-table-column prop="changeComName" label="变更前名称">
+            <el-table-column prop="comNameEx" label="变更前名称">
             </el-table-column>
             <el-table-column prop="comName" label="变更后名称">
             </el-table-column>
@@ -86,12 +86,12 @@
             </el-table-column>
             <el-table-column label="操作" width="120">
                 <template slot-scope="scope">
-                    <el-button
-                        size="mini"
-                        type="danger"
-                        @click="deleteComItem(scope.$index, scope.row)">删除
-                    </el-button>
-                </template>
+                            <el-button
+                                size="mini"
+                                type="danger"
+                                @click="deleteComItem(scope.$index, scope.row)">删除
+                            </el-button>
+</template>
             </el-table-column>
         </el-table>
         <el-row class="bdd_hr"></el-row>
@@ -133,6 +133,8 @@
                 <div class="grid-content bg-purple">有效期：
                     <el-date-picker
                         v-model="expiredStr"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
                         type="date"
                         placeholder="选择日期">
                     </el-date-picker>
@@ -261,11 +263,11 @@
             </el-table-column>
             <el-table-column label="操作"
             >
-                <template slot-scope="scope">
-                    <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">
-                        删除
-                    </el-button>
-                </template>
+<template slot-scope="scope">
+    <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">
+        删除
+    </el-button>
+</template>
             </el-table-column>
         </el-table>
         <el-row class="bdd_hr"></el-row>
@@ -332,6 +334,8 @@
                     <el-date-picker
                         v-model="timeExpiredStr"
                         type="date"
+                         format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
                         placeholder="选择日期">
                     </el-date-picker>
                 </div>
@@ -384,30 +388,29 @@
             </el-table-column>
             <el-table-column label="操作"
                              width="200">
-                <template slot-scope="scope">
-                    <el-button type="text" @click="editGongLu(scope.$index)">
-                        修改
-                    </el-button>
+<template slot-scope="scope">
+    <el-button type="text" @click="editGongLu(scope.$index)">
+        修改
+    </el-button>
 
-                    <el-dialog style="text-align: center;width:50%" title="公路信用评价等级修改"
-                               :visible.sync="dialogFormVisible">
+    <el-dialog style="text-align: center;width:50%" title="公路信用评价等级修改" :visible.sync="dialogFormVisible">
 
-                        <el-form :model="form">
-                            <el-form-item label="" :label-width="formLabelWidth">
-                                <el-select style="margin-right:110px;" v-model="selectGongLuLevel" placeholder="空值">
-                                    <el-option label="A" value="A"></el-option>
-                                    <el-option label="B" value="B"></el-option>
-                                    <el-option label="C" value="C"></el-option>
-                                    <el-option label="D" value="D"></el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-form>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="dialogFormVisible = false">取 消</el-button>
-                            <el-button type="primary" @click="editGongLuSure">确 定</el-button>
-                        </div>
-                    </el-dialog>
-                </template>
+        <el-form :model="form">
+            <el-form-item label="" :label-width="formLabelWidth">
+                <el-select style="margin-right:110px;" v-model="selectGongLuLevel" placeholder="空值">
+                    <el-option label="A" value="A"></el-option>
+                    <el-option label="B" value="B"></el-option>
+                    <el-option label="C" value="C"></el-option>
+                    <el-option label="D" value="D"></el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="editGongLuSure">确 定</el-button>
+        </div>
+    </el-dialog>
+</template>
             </el-table-column>
         </el-table>
     </el-container>
@@ -445,11 +448,13 @@
                 let selectGongLuLevel = this.selectGongLuLevel;
                 let dataParam = JSON.stringify({
                     comId: this.comId,
-                    assessProvCode: roadBean.assessProv,
+                    assessProvCode: roadBean.assessProv?roadBean.assessProv:"hunan",
                     assessYear: roadBean.assessYear,
                     assessLevel: selectGongLuLevel
                 });
                 getJsonData('/company/highway/add', dataParam).then(res => {
+                    console.log(res.data)
+                    this.dialogFormVisible = false;
                     console.log(res);
                     this.getRoadLevel();
                     this.dialogFormVisible = false;
@@ -461,7 +466,7 @@
 
             },
             getCascaderObj(val, opt) {
-                return val.map(function (value, index, array) {
+                return val.map(function(value, index, array) {
                     for (var itm of opt) {
                         if (itm.value == value) {
                             opt = itm.children;
@@ -522,6 +527,13 @@
             },
             handleDelete(index) {
                 let qualityBean = this.qualityTableData[index];
+                if(qualityBean.pkid==null){
+                     this.$message({
+                        message: '非人工添加的无法删除！',
+                        type: 'fail'
+                    });
+                    return;
+                }
                 let dataParam = JSON.stringify({
                     comId: qualityBean.pkid
 
@@ -618,11 +630,11 @@
 
             deleteComZhi() {
 
-                this.quality.certNo ='';
-                this.quality.certOrg='';
-                this.quality.certDate='';
-                this.quality.validDate='';
-                this.quality.certDate='';
+                this.quality.certNo = '';
+                this.quality.certOrg = '';
+                this.quality.certDate = '';
+                this.quality.validDate = '';
+                this.quality.certDate = '';
 
 
             },
@@ -632,6 +644,7 @@
                     comId: this.comId,
                     certNo: this.quality.certNo,
                     certDate: this.quality.certDate,
+                    certOrg: this.quality.certOrg,
                     validDate: this.quality.validDate,
                     quaCode: this.oneQualityLevel,
                     gradeCode: this.twoQualityLevel
@@ -673,24 +686,30 @@
                 let dataParam = JSON.stringify({
                     pkid: this.comDataArray[index].pkid
                 });
-                getJsonData('/company/comName/del', dataParam).then(res => {
-                    this.$confirm('此操作将删除该条变更企业名称, 是否继续?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(() => {
+
+
+
+                this.$confirm('此操作将删除该条变更企业名称, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    getJsonData('/company/comName/del', dataParam).then(res => {
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
                         });
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消删除'
-                        });
+                         this.getDataList();
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
                     });
-                    this.getDataList();
-                })
+                });
+
+
+
             },
             deleteAnxu() {
                 this.certNo = "";
@@ -704,6 +723,13 @@
                     expiredStr: this.expiredStr
                 });
                 getJsonData('/company/certNo/Add', dataParam).then(res => {
+                    if(res.code == 400){
+                         this.$message({
+                        message: res.msg,
+                        type: 'fail'
+                             });
+                        retrun;
+                    }
                     let bddArray = res.data;
                     this.$message({
                         message: '企业安许证号保存成功！',
@@ -722,42 +748,43 @@
                     if (allQuality != null && allQuality.length > 0) {
                         for (let i = 0; i < allQuality.length; i++) {
                             let oneLevel = allQuality[i];
-                            oneLevel.value = oneLevel.quaName;
-                            oneLevel.label = oneLevel.quaName;
+                            let oneBean = new Object();
+                            oneBean.value = oneLevel.quaName;
+                            oneBean.label = oneLevel.quaName;
                             let qualArr = oneLevel.qualList;
+                            let oneChildren = new Array();
                             if (qualArr != null && qualArr.length > 0) {
                                 var twoLevelArr = new Array();
                                 for (let j = 0; j < qualArr.length; j++) {
-                                    let twoLevel = qualArr[i];
-                                    twoLevel.value = twoLevel.quaCode;
-                                    twoLevel.label = twoLevel.quaName;
+                                    let twoLevel = qualArr[j];
+                                    let twoBean = new Object();
+                                    twoBean.value = twoLevel.quaCode;
+                                    twoBean.label = twoLevel.quaName;
                                     let twoChildren = new Array();
-                                    let gradeArr = oneLevel.gradeList;
+                                    let gradeArr = twoLevel.gradeList;
                                     if (gradeArr != null && gradeArr.length > 0) {
 
                                         for (let k = 0; k < gradeArr.length; k++) {
-                                            let threeLevel = gradeArr[i];
-                                            threeLevel.value = twoLevel.quaCode;
-                                            threeLevel.label = twoLevel.name;
-                                            if (threeLevel != null && threeLevel.value) {
-                                                twoChildren.push(threeLevel);
+                                            let threeBean = new Object();
+                                            let threeLevel = gradeArr[k];
+                                            threeBean.value = threeLevel.gradeCode;
+                                            threeBean.label = threeLevel.name;
+                                            if (threeLevel != null) {
+                                                twoChildren.push(threeBean);
                                             }
                                         }
                                     }
                                     if (twoChildren != null && twoChildren.length > 0) {
-                                        twoLevel.children = twoChildren;
+                                        twoBean.children = twoChildren;
                                     }
-                                    if (twoLevel != null) {
-                                        twoLevelArr.push(twoLevel);
-                                    }
+                                    twoLevelArr.push(twoBean);
+                                }
+                                if (twoLevelArr != null && twoLevelArr.length > 0) {
+                                    oneBean.children = twoLevelArr;
                                 }
                             }
-                            if (twoLevelArr != null && twoLevelArr.length > 0) {
-                                oneLevel.children = twoLevelArr;
-                            }
-                            if (oneLevel != null) {
-                                oneLevelArr.push(oneLevel);
-                            }
+
+                            oneLevelArr.push(oneBean);
                         }
                     }
                     this.allQuality = oneLevelArr;
@@ -799,7 +826,8 @@
                 let dataParam = JSON.stringify({
                     comId: this.comId,
                     comName: this.afterComName,
-                    changeTime: changeTime
+                    changeTime: changeTime,
+                    comNameEx: this.beforeComName
                 });
                 getJsonData('/company/comName/add', dataParam).then(res => {
                     console.log(222);
@@ -819,6 +847,7 @@
                     let oneChildArrA = new Array();
                     let oneChildArrB = new Array();
                     let provinceArr = res.data;
+                    if(provinceArr !=null ){
                     for (let j = 0; j < provinceArr.length; j++) {
                         let proBean = provinceArr[j];
                         let newProBean = new Object();
@@ -833,6 +862,7 @@
                         newProBeanT.key = proBean.pkid;
                         let cityArr = proBean.citys;
                         let newCityArr = new Array();
+                        if(newCityArr!=null && newCityArr.length>0){
                         for (let k = 0; k < cityArr.length; k++) {
                             let cityBean = cityArr[k];
                             let newCityBean = new Object();
@@ -841,8 +871,10 @@
                             newCityBean.key = cityBean.pkid;
                             newCityArr.push(newCityBean);
                         }
+                        }
                         newProBeanT.children = newCityArr;
                         oneChildArrB.push(newProBeanT)
+                    }
                     }
 
 
@@ -896,7 +928,7 @@
 
         data() {
             return {
-                elQuality:[],
+                elQuality: [],
                 certProvAndCity: [],
                 certProvAndCityArr: [],
                 certLevelArr: [{
@@ -906,9 +938,9 @@
                     value: '2',
                     label: '良好'
                 }],
-                oneQualityLevel:"",
-                twoQualityLevel:"",
-                threeQualityLevel:"",
+                oneQualityLevel: "",
+                twoQualityLevel: "",
+                threeQualityLevel: "",
                 oneCertLevel: "",
                 twoCertLevel: "",
                 threeCertLevel: "",
@@ -937,7 +969,7 @@
                 changePkid: '',
                 beforeComName: "",
                 afterComName: "",
-                changeTime: new Date(),
+                changeTime: "",
                 creditData: {},
                 comDataArray: [],
                 timeExpiredStr: '',
@@ -1196,7 +1228,6 @@
 
 <style lang="less" scoped>
     @import '../style/mixin.less';
-
     .bdd_header,
     .bdd_dv {
         text-align: center;
@@ -1269,6 +1300,7 @@
     .el-dialog {
         width: 30%;
     }
+
     .el-dialog__wrapper {
         position: fixed;
         top: 200px;
