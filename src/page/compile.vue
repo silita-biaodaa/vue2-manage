@@ -46,22 +46,24 @@
             <el-form-item label="标段信息">
               <el-input v-model="form.segment"></el-input>
             </el-form-item>
-            <el-form-item label="公示日期">
-              <el-input v-model="form.pubDate"></el-input>
+            <el-form-item label='公示日期'>
+              <el-input v-model="form.pubDate" ></el-input>
             </el-form-item>                  
-            <el-form-item label="招标控制价(万元)">
-              <el-input v-model="form.controllSum"></el-input>
-              <i class="el-icon-check"></i>
+            <el-form-item  >
+              <div :class="['labe',forms.iscontrollSum?'new':'old']">招标控制价(万元)</div>
+              <el-input v-model="form.controllSum" @input="text('controllSum')" ></el-input>
             </el-form-item>
-            <el-form-item label="项目金额(万元)" >
-              <el-input v-model="form.proSum"></el-input>
+            <el-form-item >
+              <div :class="['labe',forms.isproSum?'new':'old']">项目金额(万元)</div>
+              <el-input v-model="form.proSum" @input="text('proSum')" ></el-input>
             </el-form-item>
-            <el-form-item label="项目工期">
-              <el-input v-model="form.proDuration"></el-input>
+            <el-form-item >
+              <div :class="['labe',forms.isproDuration?'new':'old']">项目工期</div>
+              <el-input v-model="form.proDuration" @input="text('proDuration')" ></el-input>
             </el-form-item>
             <el-form-item label="项目地区">             
               <el-select v-model="form.cityCode" filterable placeholder="请选择项目地区" style="width:80%">
-                <el-option v-for="item in areas" :key="item.areaCode" :label="item.areaName" :value="item.areaCode">
+                <el-option v-for="item in areas" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -71,74 +73,88 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="评标办法">
-              <el-select v-model="form.pbMode" filterable placeholder="请选择评标办法" style="width:80%">
+            <el-form-item >
+              <div :class="['labe',forms.ispbMode?'new':'old']">评标办法</div>
+              <el-select v-model="form.pbMode" @input="text('pbMode')" filterable placeholder="请选择评标办法" style="width:80%">
                 <el-option v-for="item in ways" :key="item.code" :label="item.name" :value="item.code">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="投标保证金(万元)">
-              <el-input v-model="form.bidBonds"></el-input>
+            <el-form-item >
+              <div :class="['labe',forms.isbidBonds?'new':'old']">投标保证金(万元)</div>
+              <el-input v-model="form.bidBonds" @input="text('bidBonds')" ></el-input>
             </el-form-item>            
-            <el-form-item label="保证金截至时间">   
+            <el-form-item > 
+              <div :class="['labe',forms.isbidBondsEndTime?'new':'old']">保证金截至时间</div>
               <div class="block">
                 <el-date-picker v-model="form.bidBondsEndTime" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
               </div>
             </el-form-item>
-            <el-form-item label="报名截止时间">
+            <el-form-item >
+              <div :class="['labe',forms.isenrollEndTime?'new':'old']">报名截止时间</div>
               <div class="block">
                 <el-date-picker v-model="form.enrollEndTime" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
               </div>
             </el-form-item>
-            <el-form-item label="报名地点">
-              <el-input v-model="form.enrollAddr"></el-input>
+            <el-form-item >
+              <div :class="['labe',forms.isenrollAddr?'new':'old']">报名地点</div>
+              <el-input v-model="form.enrollAddr" @input="text('enrollAddr')" ></el-input>
             </el-form-item>
-            <el-form-item label="资格审查截止时间">
+            <el-form-item>
+              <div :class="['labe',forms.isauditTime?'new':'old']">资格审查截止时间</div>
               <div class="block">
                 <el-date-picker v-model="form.auditTime" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
               </div>
             </el-form-item>
-            <el-form-item label="资格审查地点">
-              <el-input v-model="form.certAuditAddr"></el-input>
+            <el-form-item >
+              <div :class="['labe',forms.iscertAuditAddr?'new':'old']">资格审查地点</div>
+              <el-input v-model="form.certAuditAddr" @input="text('certAuditAddr')" ></el-input>
             </el-form-item>
-            <el-form-item label="投标截止时间">
+            <el-form-item >
+              <div :class="['labe',forms.isbidEndTime?'new':'old']">投标截止时间</div>
               <div class="block">
                 <el-date-picker v-model="form.bidEndTime" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
               </div>
             </el-form-item>
-            <el-form-item label="开标人员">
-              <el-select v-model="form.openingPerson" filterable placeholder="请选择开标人员" style="width:80%">
+            <el-form-item >
+              <div :class="['labe',forms.isopeningPerson?'new':'old']">开标人员</div>
+              <el-select v-model="form.openingPerson" @input="text('openingPerson')" filterable placeholder="请选择开标人员" style="width:80%">
                 <el-option v-for="item in exploits" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="开标地点">
-              <el-input v-model="form.openingAddr"></el-input>
+            <el-form-item >
+              <div :class="['labe',forms.isopeningAddr?'new':'old']">开标地点</div>
+              <el-input v-model="form.openingAddr" @input="text('openingAddr')" ></el-input>
             </el-form-item>
-            <el-form-item label="项目类型">
-              <el-select v-model="form.ntCategory" filterable placeholder="请选择项目类型" style="width:80%">
+            <el-form-item >
+              <div :class="['labe',forms.isntCategory?'new':'old']">项目类型</div>
+              <el-select v-model="form.ntCategory" @input="text('ntCategory')" filterable placeholder="请选择项目类型" style="width:80%">
                 <el-option v-for="item in type1s" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="招标类型">
-              <el-select v-model="form.binessType" filterable placeholder="请选择招标类型" style="width:80%">
+            <el-form-item >
+              <div :class="['labe',forms.isbinessType?'new':'old']">招标类型</div>
+              <el-select v-model="form.binessType" @input="text('binessType')" filterable placeholder="请选择招标类型" style="width:80%">
                 <el-option v-for="item in types" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="平台备案要求">
-               <el-select v-model="form.filingPfm" filterable placeholder="请选择备案要求" style="width:80%">
+            <el-form-item>
+              <div :class="['labe',forms.isfilingPfm?'new':'old']">平台备案要求</div>
+               <el-select v-model="form.filingPfm" @input="text('filingPfm')" filterable placeholder="请选择备案要求" style="width:80%">
                 <el-option v-for="item in records" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="招标状态">
-              <el-select v-model="form.ntType" filterable placeholder="请选择招标状态" style="width:80%">
+            <el-form-item >
+              <div :class="['labe',forms.isntType?'new':'old']">招标状态</div>
+              <el-select v-model="form.ntType" @input="text('ntType')" filterable placeholder="请选择招标状态" style="width:80%">
                 <el-option v-for="item in status" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
@@ -310,6 +326,26 @@
 export default {
   data () {
     return {
+      forms:{
+        iscontrollSum:false,
+        isproSum:false,
+        isproDuration:false,
+        ispbMode:false,
+        isbidBonds:false,
+        isbidBondsEndTime:false,
+        isenrollEndTime:false,
+        isenrollAddr:false,
+        isauditTime:false,
+        iscertAuditAddr:false,
+        isbidEndTime:false,
+        isopeningPerson:false,
+        isopeningAddr:false,
+        isntCategory:false,
+        isbinessType:false,
+        isfilingPfm:false,
+        isntType:false        
+      },
+      
       ckpid:'',
       careaName:'',
       pkid:this.$route.params.id,
@@ -437,6 +473,16 @@ export default {
     }
   },
   methods: {
+    text(val) {
+      if(this.typecompile === '编辑') {
+          return 
+      }
+      if(this.form[val].trim()) {
+        this.forms['is'+ val] = true
+      } else {
+        this.forms['is'+ val] = false 
+      }
+    },
     newurl() {
       localStorage.setItem("reliTitle",this.title)
       localStorage.setItem('reliSource', this.code)
@@ -462,8 +508,6 @@ export default {
     },
     listNtgpn() {
         listNtgp({ntId:this.pkid,source:this.code}).then(res => {
-          console.log(1)
-          console.log(res,461)
           if(res.code ===1) {
             this.relation =res.data.datas
           }
@@ -484,15 +528,18 @@ export default {
         
     },
     listTender() {
+        console.log(this.pkid,533)
+        console.log(this.code,534)
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
+          console.log(res,536)
          this.state = this.state + res.data[0].url
+         this.compileData = res.data
           this.form = res.data[0]
           this.again = res.data[0]
-          this.arrjson(res.data[0])
       }) 
     },
     listFile() {
-      listFiles({bizId:this.pkid}).then(res=> {
+      listFiles({bizId:this.pkid,source:this.code}).then(res=> {
         
         this.file = res.data
         
@@ -501,7 +548,7 @@ export default {
     // 解除相关公告函数
     arrjson(obj) {
       this.ajson.ntId = obj.ntId
-      this.ajson.relGp = this.releGp
+      this.ajson.relGp = obj.relGp
       this.ajson.source = this.code
       this.list.push(this.ajson)
       console.log(this.list,515)
@@ -605,7 +652,9 @@ export default {
            }
       },
       sendKid() {
-      return { bizId: this.pkid }
+      return { 
+        bizId: this.pkid,
+        source:this.code }
     },
        //   上传文件等方法
     //  文件列表移除文件时的钩子
@@ -645,7 +694,7 @@ export default {
         this.urlFormVisible = true
 
     },
-    urlSubmit() { 
+    urlSubmit() {
        
         if(this.urlupload.trim()==='') {
             this.$message({
@@ -653,8 +702,14 @@ export default {
              message:'地址栏不能为空~'
            })        
        } else {
-         listFilesPath({bizId:this.id,filePath:this.urlupload}).then(res=> {
-            console.log(res)
+         listFilesPath({bizId:this.pkid,filePath:this.urlupload,type:4,orderNo:1,source:this.code}).then(res=> {
+               if(res.code === 1) {
+                 this.$message({
+                   type:'success',
+                   message: res.msg
+                 })
+                 this.urlFormVisible = false 
+               }
           })          
        }   
     },
@@ -670,7 +725,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteFiles({idsStr:this.deleturl}).then(res => {
+        deleteFiles({idsStr:this.deleturl,source:this.code}).then(res => {
            if(res.code ===1) {
               this.$message({
               type: 'success',
@@ -727,11 +782,11 @@ export default {
     },
     addcompile() {
       this.typecompile = '编辑' 
-      this.form = this.again
+      // this.form = this.again
     },
     toocompile () {
       this.typecompile = '变更' 
-      this.form = this.again
+      // this.form = this.again
     },
     //接触相关的公告
     relieve() {
@@ -741,9 +796,6 @@ export default {
             message:'请选择要解除的公告' 
         })
       }
-      // console.log(this.list,'没有rel')
-      this.list[0].relGp = this.releGp
-      // console.log(this.list,'有rel')
       this.reli.forEach(item => {
           this.arrjson(item)
       })
@@ -756,9 +808,7 @@ export default {
             });
             this.listNtgpn()
             this.reli = []
-            this.releGp = ''
-            this.list.length = 1  
-            console.log(this.list,760)                        
+            this.list.length = 0                       
          } else {
              this.$message({
               type: 'warning',
@@ -813,6 +863,24 @@ export default {
     .btn {
       text-align: center;
     }
+    .labe {
+      // float: left;
+      position: absolute;
+      top: 0;
+      left: -200px;
+      width: 200px;
+      text-align: center;
+      font-size: 12px;
+      padding-right: 12px;
+      box-sizing: border-box;   
+    }
+    .old {
+      color:#606266;
+    }
+    .new {
+      color:red;
+    }
+
     // font-size:12px;
     .el-form-item{
        margin-bottom: 8px;

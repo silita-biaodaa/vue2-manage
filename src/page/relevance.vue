@@ -165,6 +165,7 @@ export default {
           this.arMsg.push(this.pkid)
           this.reStr = this.arMsg.join("|")
           relivan({idsStr:this.reStr,source:this.code}).then(res => {
+            console.log(res)
              if(res.code === 1) {
                 this.$message({
                      type: 'success',
