@@ -34,23 +34,23 @@ axios.interceptors.response.use(function (response) { // ①10010 token过期（
 export const getJsonData = (url, params) => {
     return new Promise((resolve, reject) => {
         let token = localStorage.getItem("Authorization")
-            if (params != null) {
-                axios.post(url, params, {
-                    headers: { 'Content-Type': 'application/json', 'Authorization': token }
-                }).then(res => {
-                    resolve(res.data)
-                }).catch(error => {
-                    reject(error)
-                })
-            } else {
-                axios.post(url, null, {
-                    headers: { 'Content-Type': 'application/json', 'Authorization': token }
-                }).then(res => {
-                    resolve(res.data)
-                }).catch(error => {
-                    reject(error)
-                })
-            }
+        if (params != null) {
+            axios.post(url, params, {
+                headers: { 'Content-Type': 'application/json', 'Authorization': token }
+            }).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        } else {
+            axios.post(url, null, {
+                headers: { 'Content-Type': 'application/json', 'Authorization': token }
+            }).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        }
     })
 
 }
@@ -159,23 +159,23 @@ export const listStatus = params => {
 
 // 获取公告列表
 export const listMain = params => {
-    return axios.post('zhaobiao/listNtMain',params).then(res => res.data)
+    return axios.post('zhaobiao/listNtMain', params).then(res => res.data)
 }
 
-export const exportE =  form => {
-        return axios({ // 用axios发送post请求
-            method: 'post',
-            url: 'zhaobiao/exportTendersExcel', // 请求地址
-            data: form, // 参数
-            responseType: 'blob', // 表明返回服务器返回的数据类型
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res=> res.data)
-    }
+export const exportE = form => {
+    return axios({ // 用axios发送post请求
+        method: 'post',
+        url: 'zhaobiao/exportTendersExcel', // 请求地址
+        data: form, // 参数
+        responseType: 'blob', // 表明返回服务器返回的数据类型
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.data)
+}
 // 设置变更招中标参数
 export const updateStatus = params => {
-    return axios.post('zhaobiao/updateNtMainStatus',params).then(res => res.data)
+    return axios.post('zhaobiao/updateNtMainStatus', params).then(res => res.data)
 }
 
 // 设置变更招中标参数
@@ -185,7 +185,7 @@ export const listFixed = params => {
 
 // 获取标段信息
 export const listTenders = params => {
-    return axios.post('zhaobiao/listNtTenders',params).then(res => res.data)
+    return axios.post('zhaobiao/listNtTenders', params).then(res => res.data)
 }
 // 获取招标文件列表
 export const listFiles = params => {
@@ -204,7 +204,7 @@ export const deleteFiles = params => {
 
 // 获取评标办法
 export const listPbMode = params => {
-    return axios.post('zhaobiao/listPbMode',params).then(res => res.data)
+    return axios.post('zhaobiao/listPbMode', params).then(res => res.data)
 }
 // 删除编辑明细
 export const deletePkid = params => {
@@ -216,7 +216,7 @@ export const listGp = params => {
 }
 // 保存招标公告标段信息
 export const insertNt = params => {
-    return axios.post('zhaobiao/insertNtTenders', params).then(res => res.data)
+    return axios.post('zhaobiao/saveNtTenders', params).then(res => res.data)
 }
 
 // 删除公告

@@ -36,7 +36,7 @@
         </el-col>
         <el-col :span="12" class="redact-c">
             
-          <el-form ref="edits" :model="form" label-width="200px" class="demo-ruleForm" >
+          <el-form ref="edits" :model="form" label-width="200px" class="demo-ruleForm"  >
             <el-form-item label="招标编辑编号">
               <el-input v-model="form.editCode"></el-input>
             </el-form-item>
@@ -61,13 +61,15 @@
               <div :class="['labe',forms.isproDuration?'new':'old']">项目工期</div>
               <el-input v-model="form.proDuration" @input="text('proDuration')" ></el-input>
             </el-form-item>
-            <el-form-item label="项目地区">             
+            <el-form-item >
+              <div class="labe"><i class="el-icon-warning"></i>项目地区</div>
               <el-select v-model="form.cityCode" filterable placeholder="请选择项目地区" style="width:80%">
                 <el-option v-for="item in areas" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="项目县区">
+            <el-form-item >
+              <div class="labe"><i class="el-icon-warning"></i>项目县区</div>
               <el-select v-model="form.countyCode" filterable placeholder="请选择项目县区" style="width:80%">
                 <el-option v-for="item in counties" :key="item.areaCode" :label="item.areaName" :value="item.areaCode">
                 </el-option>
@@ -132,7 +134,7 @@
               <el-input v-model="form.openingAddr" @input="text('openingAddr')" ></el-input>
             </el-form-item>
             <el-form-item >
-              <div :class="['labe',forms.isntCategory?'new':'old']">项目类型</div>
+              <div :class="['labe',forms.isntCategory?'new':'old']"><i class="el-icon-warning"></i>项目类型</div>
               <el-select v-model="form.ntCategory" @input="text('ntCategory')" filterable placeholder="请选择项目类型" style="width:80%">
                 <el-option v-for="item in type1s" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
@@ -345,7 +347,8 @@ export default {
         isfilingPfm:false,
         isntType:false        
       },
-      
+      arrf:[], // 收集变更字段信息的数组
+      parentId:'',
       ckpid:'',
       careaName:'',
       pkid:this.$route.params.id,
@@ -425,14 +428,16 @@ export default {
        delcomp:[],
        delcompl:'',
        typecompile: '编辑',
-       again:[],
        reli:[],
        ajson:{},
        list:[],
-       releGp:''
+       releGp:'',
+       compare:{},  // 用于变更时候的比较字段
+       arrpare:[]  // 用于变更时候请求接口几次判断
     }
   },
   created () {
+    this.parentId = localStorage.getItem('parentId')
     this.listNtgpn()
     this.listfixe()
     this.listFile()
@@ -461,10 +466,8 @@ export default {
   },
   watch: {
     "form.cityCode"(val) {
-      console.log(val,1)
-        this.cpkid= val.substring(0,1)
-        this.careaName= val.substring(1)
-        // console.log(this.careaName,426)
+        this.cpkid= val.substring(0,32)
+        this.careaName= val.substring(32)
         listArea({areaParentId:this.cpkid}).then(res => {
             if(res.code === 1) {
                 this.counties = res.data
@@ -477,10 +480,12 @@ export default {
       if(this.typecompile === '编辑') {
           return 
       }
-      if(this.form[val].trim()) {
-        this.forms['is'+ val] = true
+      if( this.form[val].trim() === this.compare[val].trim() ) {
+        console.log(this.form[val].trim())
+        console.log(this.compare[val].trim());        
+        this.forms['is'+ val] = false
       } else {
-        this.forms['is'+ val] = false 
+        this.forms['is'+ val] = true 
       }
     },
     newurl() {
@@ -490,7 +495,7 @@ export default {
       this.$router.push('/relevance')
     },
     listregion() {
-        listArea({areaParentId:this.pkid}).then(res => {
+        listArea({areaParentId:this.parentId}).then(res => {
             if(res.code === 1 ) {
                res.data.forEach(itme => {
                    itme.areaCode = itme.pkid + itme.areaCode
@@ -528,14 +533,12 @@ export default {
         
     },
     listTender() {
-        console.log(this.pkid,533)
-        console.log(this.code,534)
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-          console.log(res,536)
          this.state = this.state + res.data[0].url
          this.compileData = res.data
           this.form = res.data[0]
-          this.again = res.data[0]
+          this.compare = res.data[0]
+          // this.again = res.data[0]
       }) 
     },
     listFile() {
@@ -551,7 +554,6 @@ export default {
       this.ajson.relGp = obj.relGp
       this.ajson.source = this.code
       this.list.push(this.ajson)
-      console.log(this.list,515)
       this.ajson = {}
     },
     handlemark() {    //中标设置弹框
@@ -602,29 +604,53 @@ export default {
       });
     },
       onSubmit() {   //保存按钮
-      if(this.typecompile === '编辑') {       
+      if(this.typecompile === '编辑') {   
         if(this.form.cityCode === '') {
+            console.log(this.form.cityCode,604)
+            console.log(1)
             return this.$message({
                     message:'请选择项目地区',
                     type:'warning'
                   })
-          } else if (this.form.countyCode === '') {
-              return this.$message({
+        } else if ( !this.form.countyCode) {
+           return this.$message({
                     message:'请选择项目县区',
                     type:'warning'
                   })
-          } else if (this.form.ntCategory ==='') {
-            return this.$message({
+        } else if(!this.form.ntCategory) {
+          return this.$message({
                     message:'请选择项目类型',
                     type:'warning'
                   })
-          }
-          // console.log(this.form.ntCategory)
-          //  insertNt({source:this.code,ntId:this.pkid,segment:this.form.segment,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,ntCategory:this.form.ntCategory,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntType:this.form.ntType,certAuditAddr:this.form.certAuditAddr}).then( res=> {
-          //     console.log(res,559)
-          //  })
+        } 
+         insertNt({source:this.code,ntId:this.pkid,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,ntCategory:this.form.ntCategory,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntType:this.form.ntType,certAuditAddr:this.form.certAuditAddr}).then( res=> {
+             if(res.code === 1 ) {
+               this.$message({
+                    message:res.msg,
+                    type:'success'
+                  })
+             } else {
+               this.$message({
+                    message:res.msg,
+                    type:'warning'
+                  })
+             }
+             this.listTender()
+         })
 
+      } else {
+          Object.keys(this.forms).forEach(key => {
+                if(this.obj[key]) {
+                  this.arrpare.push(key.substring(2)) 
+                }
+                // console.log()
+          })
+          console.log(this.arrpare)
       }
+
+    },
+    // 修改或者添加信息字段
+    amendlist(){
 
     },
      emptyForm(formName) {  // 清空按钮
@@ -637,7 +663,8 @@ export default {
      },
       handleSelectionChange(val) {   // 编辑明细  选中时发生变化会触发该事件
           this.delcom = val
-          this.again = val[0]
+          // this.agtain = val[0]
+          this.compare = val[0]
           this.form = val[0]
       },
       handleFileChange(val) {   //  招标文件的
@@ -659,14 +686,12 @@ export default {
        //   上传文件等方法
     //  文件列表移除文件时的钩子
     handleRemove(file, fileList) {
-      // console.log(file, fileList);
     },
     //  点击文件列表已上传的文件时的钩子的
     handlePreview(file) {
         console.log(file,1)
     },
     handleSuccess(response, file, fileList) {   //当文件上传成功的时候的回调函数
-      console.log(response)
       if (response.code === 1) {
         this.$message({
           type: 'success',
@@ -756,7 +781,6 @@ export default {
       })
       this.delcompl = this.delcomp.join('|')
         deletePkid({idsStr:this.delcompl,source:this.code}).then(res => {
-          console.log(res,670)
            if(res.code ===1) {
               this.$message({
                 type: 'success',
@@ -799,7 +823,6 @@ export default {
       this.reli.forEach(item => {
           this.arrjson(item)
       })
-      console.log(this.list,749)
       listreli({list:this.list}).then(res => {
          if(res.code ===1) {
             this.$message({
@@ -872,7 +895,11 @@ export default {
       text-align: center;
       font-size: 12px;
       padding-right: 12px;
-      box-sizing: border-box;   
+      box-sizing: border-box;
+      .el-icon-warning {
+        color: red;
+        margin-right: 5px;
+      }   
     }
     .old {
       color:#606266;
