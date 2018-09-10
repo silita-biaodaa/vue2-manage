@@ -490,6 +490,8 @@ export default {
         this.certProvAndCity,
         this.optionsProData
       );
+      var citySer = this.certProvAndCity;
+      console.log(citySer);
       this.certProvAndCityArr = certProvAndCityArr;
       if (certProvAndCityArr != null && certProvAndCityArr.length > 0) {
         this.oneCertLevel = certProvAndCityArr[0].value;
@@ -594,6 +596,23 @@ export default {
         console.log(888);
         let anquanBean = res.data;
         this.anquanBean = anquanBean;
+        if(anquanBean!=null && anquanBean.lab!=null){
+        var seLevel = anquanBean.lab.certLevel;
+        var sePro = anquanBean.lab.certProvCode;
+        var seCity = anquanBean.lab.certCityCode;
+        let certProvAndCity = new Array();
+        if(seLevel)
+        certProvAndCity.push(seLevel);
+        if(sePro)
+        certProvAndCity.push(sePro);
+        if(seCity)
+        certProvAndCity.push(seCity);
+        this.certProvAndCity =certProvAndCity;
+        }
+       // var certProvAndCity = anquanBean.lab.certProv?anquanBean.lab.certProv:""+ anquanBean.lab.certCity?anquanBean.lab.certCity:"";
+       //var selectCityArr = new Array();
+       // selectCityArr.push(certProvAndCity);
+       //this.certProvAndCity =certProvAndCity;
         if (anquanBean != null && anquanBean.lab != null) {
           this.twoCertLevel = anquanBean.lab.certProvCode
             ? anquanBean.lab.certProvCode
