@@ -576,7 +576,7 @@ export default {
             console.log(888);
              this.certNo = "";
              this.expiredStr = "";
-            alert("删除成功");
+
             this.getAnxuData();
           });
         })
