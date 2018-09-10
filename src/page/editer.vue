@@ -50,8 +50,7 @@
         <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
             <el-col :span="12">
                 <div class="grid-content bg-purple">&nbsp;&nbsp;&nbsp;变更前：
-                    <el-input placeholder="请输入变更前的企业名称" v-model="beforeComName" clearable>
-                    </el-input>
+                    <el-input v-model="beforeComName" placeholder="请输入变更前的企业名称"></el-input>
                 </div>
             </el-col>
             <el-col :span="12">
@@ -490,6 +489,8 @@ export default {
         this.certProvAndCity,
         this.optionsProData
       );
+      var citySer = this.certProvAndCity;
+      console.log(citySer);
       this.certProvAndCityArr = certProvAndCityArr;
       if (certProvAndCityArr != null && certProvAndCityArr.length > 0) {
         this.oneCertLevel = certProvAndCityArr[0].value;
@@ -594,6 +595,23 @@ export default {
         console.log(888);
         let anquanBean = res.data;
         this.anquanBean = anquanBean;
+        if(anquanBean!=null && anquanBean.lab!=null){
+        var seLevel = anquanBean.lab.certLevel;
+        var sePro = anquanBean.lab.certProvCode;
+        var seCity = anquanBean.lab.certCityCode;
+        let certProvAndCity = new Array();
+        if(seLevel)
+        certProvAndCity.push(seLevel);
+        if(sePro)
+        certProvAndCity.push(sePro);
+        if(seCity)
+        certProvAndCity.push(seCity);
+        this.certProvAndCity =certProvAndCity;
+        }
+       // var certProvAndCity = anquanBean.lab.certProv?anquanBean.lab.certProv:""+ anquanBean.lab.certCity?anquanBean.lab.certCity:"";
+       //var selectCityArr = new Array();
+       // selectCityArr.push(certProvAndCity);
+       //this.certProvAndCity =certProvAndCity;
         if (anquanBean != null && anquanBean.lab != null) {
           this.twoCertLevel = anquanBean.lab.certProvCode
             ? anquanBean.lab.certProvCode
@@ -653,13 +671,13 @@ export default {
     //添加资质信息
     addQuality() {
       let dataParam = JSON.stringify({
-        comId: this.comId,
-        certNo: this.quality.certNo,
-        certDate: this.quality.certDate,
-        certOrg: this.quality.certOrg,
-        validDate: this.quality.validDate,
-        quaCode: this.twoQualityLevel,
-        gradeCode: this.threeQualityLevel
+          comId: this.comId,
+          certNo: this.quality.certNo,
+          certDate: this.quality.certDate,
+          certOrg: this.quality.certOrg,
+          validDate: this.quality.validDate,
+          quaCode: this.twoQualityLevel,
+          gradeCode: this.threeQualityLevel
       });
       getJsonData("/company/qual/add", dataParam).then(res => {
           console.log(res.data)
@@ -877,8 +895,16 @@ export default {
         changeTime: changeTime,
         comNameEx: this.beforeComName
       });
+        if(changeTime==null || changeTime.trim()==""){
+            this.$message({
+                type: "info",
+                message: "请输入内容"
+            });
+            retrun;
+        }
       getJsonData("/company/comName/add", dataParam).then(res => {
-        console.log(222);
+
+         console.log(res);
         this.$message({
           message: "恭喜你，企业名称变更成功！",
           type: "success"
@@ -981,6 +1007,7 @@ export default {
           label: "良好"
         }
       ],
+        data:'',
       oneQualityLevel: "",
       twoQualityLevel: "",
       threeQualityLevel: "",
