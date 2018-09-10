@@ -50,8 +50,7 @@
         <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
             <el-col :span="12">
                 <div class="grid-content bg-purple">&nbsp;&nbsp;&nbsp;变更前：
-                    <el-input placeholder="请输入变更前的企业名称" v-model="beforeComName" clearable>
-                    </el-input>
+                    <el-input v-model="beforeComName" placeholder="请输入变更前的企业名称"></el-input>
                 </div>
             </el-col>
             <el-col :span="12">
@@ -672,13 +671,13 @@ export default {
     //添加资质信息
     addQuality() {
       let dataParam = JSON.stringify({
-        comId: this.comId,
-        certNo: this.quality.certNo,
-        certDate: this.quality.certDate,
-        certOrg: this.quality.certOrg,
-        validDate: this.quality.validDate,
-        quaCode: this.twoQualityLevel,
-        gradeCode: this.threeQualityLevel
+          comId: this.comId,
+          certNo: this.quality.certNo,
+          certDate: this.quality.certDate,
+          certOrg: this.quality.certOrg,
+          validDate: this.quality.validDate,
+          quaCode: this.twoQualityLevel,
+          gradeCode: this.threeQualityLevel
       });
       getJsonData("/company/qual/add", dataParam).then(res => {
           console.log(res.data)
@@ -896,8 +895,16 @@ export default {
         changeTime: changeTime,
         comNameEx: this.beforeComName
       });
+        if(changeTime==null || changeTime.trim()==""){
+            this.$message({
+                type: "info",
+                message: "请输入内容"
+            });
+            retrun;
+        }
       getJsonData("/company/comName/add", dataParam).then(res => {
-        console.log(222);
+
+         console.log(res);
         this.$message({
           message: "恭喜你，企业名称变更成功！",
           type: "success"
@@ -1000,6 +1007,7 @@ export default {
           label: "良好"
         }
       ],
+        data:'',
       oneQualityLevel: "",
       twoQualityLevel: "",
       threeQualityLevel: "",
