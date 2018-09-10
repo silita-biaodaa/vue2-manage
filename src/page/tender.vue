@@ -117,7 +117,7 @@ export default {
     return {
     city:'',  //市级数据
     citys:[],  //   市级请求数据 
-    province:'1hunan',
+    province:'15fb9d5310ab4f7b9375884df98d45d8hunan',
      provinces: [],
         state:'',  //公共状态数据
         states:[
@@ -179,7 +179,7 @@ export default {
           id:1111 ,
           pubDate:'',
           pubEndDate:'',
-          pkid:'',
+          pkid:'15fb9d5310ab4f7b9375884df98d45d8',
           coDe:'hunan',
           pagesize:15, // 当前页面条数
           pagenum: 1  //当前页面数
@@ -193,15 +193,16 @@ export default {
      },
      province:function() {
          this.city = ''
-        this.pkid= this.province.substring(0,1)
-        this.coDe= this.province.substring(1)
+        this.pkid= this.province.substring(0,32)
+        // console.log(this.pkid,197)
+        this.coDe= this.province.substring(32)
+        console.log(this.coDe,199)
+        console.log(this.pkid,200)
         listArea({areaParentId:this.pkid}).then(res => {
-            console.log(this.pkid,1)
-            if(res.code === 1) {
-
+            console.log(res,201)
+            if(res.code === 1) {               
                 this.citys = res.data
                 this.citys.unshift({areaName:'全部',areaCode:''})
-                console.log(this.citys)
             }
         })
      }
@@ -228,13 +229,12 @@ export default {
 methods: {
       listTen() {
           listArea({areaParentId:0}).then(res => {
-              console.log(res,236)
+              console.log(res,232)
               if(res.code === 1 ) {
                  res.data.forEach(itme => {
                     itme.areaCode = itme.pkid + itme.areaCode
                  })                 
                  this.provinces = res.data
-                 console.log(this.provinces,236)
               }
           })
 
