@@ -8,19 +8,15 @@ const state = {
 	adminInfo: {
 		avatar: 'default.jpg'
 	},
-	liprovince:'',
-	lititle:''
+  compare:{}
 }
 
 const mutations = {
 	saveAdminInfo(state, adminInfo){
 		state.adminInfo = adminInfo;
 	},
-	saveProvince(state,val) {
-		state.liprovince = val
-	},
-	saveTitle(state,val) {
-		state.lititle = val
+	saveCompare(state,val) {
+		state.compare = val
 	}
 }
 

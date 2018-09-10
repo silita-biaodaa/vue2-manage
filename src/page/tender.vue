@@ -198,18 +198,13 @@ export default {
         this.coDe= this.province.substring(32)
         console.log(this.coDe,199)
         console.log(this.pkid,200)
-        listArea({areaParentId:this.pkid}).then(res => {
-            console.log(res,201)
-            if(res.code === 1) {               
-                this.citys = res.data
-                this.citys.unshift({areaName:'全部',areaCode:''})
-            }
-        })
+        this.showArea()
      }
   },
   created () {
       this.listTen()
       this.listForm()
+      this.showArea()
   }, 
   filters: {
      sum:function(value){
@@ -227,6 +222,14 @@ export default {
      }
   },
 methods: {
+     showArea() {
+           listArea({areaParentId:this.pkid}).then(res => {
+            if(res.code === 1) {               
+                this.citys = res.data
+                this.citys.unshift({areaName:'全部',areaCode:''})
+            }
+        })
+     },
       listTen() {
           listArea({areaParentId:0}).then(res => {
               console.log(res,232)

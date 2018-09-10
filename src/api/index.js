@@ -235,3 +235,11 @@ export const listreli = params => {
 export const relivan = params => {
     return axios.post('zhaobiao/insertNtAssociateGp', params).then(res => res.data)
 }
+// 添加关联公告
+export const getNt = params => {
+    return axios.post('zhaobiao/getNtTenders', params).then(res => res.data)
+}
+// 添加变更公告
+export const inserttbNt = params => {
+    return axios.post('zhaobiao/insertTbNtChange', params).then(res => res.data)
+}
