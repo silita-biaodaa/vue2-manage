@@ -593,7 +593,7 @@
             }
         this.$confirm("此操作将删除该条变更人工安许证号, 是否继续?", "提示", )
           .then(() => {
-
+            
             let dataParam = JSON.stringify({
               pkid: this.anxuBean.lab.pkid
             });
@@ -956,7 +956,7 @@
       },
 
       /*称显示企业名称记录*/
-      getDataList() {
+      getDataList(type) {
         let dataParam = JSON.stringify({
           comId: this.comId
         });
@@ -968,10 +968,14 @@
           let comDataArray = res.data;
           this.afterComName = res.data[0].comName;
           if( this.beforeComName ==null||this.beforeComName==""){
-                 this.beforeComName=res.data[0].comName
-              }
-
+          this.beforeComName = res.data[0].comName;
+          }
+          
           this.changeTime = res.data[0].changeTime;
+          if(type==0){
+            this.changeTime = "";
+            this.afterComName = "";
+          }
           for (let j = 0; j < comDataArray.length; j++) {
             let comDataBean = comDataArray[j];
             comDataBean.sourceStr = comDataBean.source == 1 ? "程序" : "人工";
@@ -1007,8 +1011,9 @@
             message: "恭喜你，企业名称变更成功！",
             type: "success"
           });
-            this.getDataList();
+            
           this.beforeComName = res.data;
+          this.getDataList(0);
 
         });
       },
