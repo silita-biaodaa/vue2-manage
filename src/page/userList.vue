@@ -2,7 +2,7 @@
     <!--导航栏-->
     <el-container>
         <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path:'/userlist' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item  :to="{ path:'/userlist' }"><span class="bdd_v">首页</span></el-breadcrumb-item>
         </el-breadcrumb>
         <!--搜索框-->
         <el-header>
@@ -275,4 +275,8 @@
     .el-input[data-v-e47dfd12][data-v-e47dfd12] {
         width: 30%;
     }
+   .bdd_v:hover{
+       color: red;
+   }
+
 </style>
