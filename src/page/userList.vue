@@ -276,7 +276,9 @@
         width: 30%;
     }
    .bdd_v:hover{
+       cursor:pointer;
        color: red;
+
    }
 
 </style>

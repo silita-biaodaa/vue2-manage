@@ -722,7 +722,6 @@
           return;
         }
 
-
         let dataParam = JSON.stringify({
           comId: this.comId,
           certNo: this.certNoB,
@@ -1007,7 +1006,6 @@
         }
         getJsonData("/company/comName/add", dataParam).then(res => {
           console.log(res);
-
           this.$message({
             message: "恭喜你，企业名称变更成功！",
             type: "success"
@@ -1557,6 +1555,7 @@
 }
   .bdd_v:hover{
       color: red;
+      cursor:pointer;
   }
 </style>
 
