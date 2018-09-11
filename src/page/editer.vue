@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path:'/userlist' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path:'/userlist' }"><span class="bdd_v">首页</span></el-breadcrumb-item>
       <!--<el-breadcrumb-item :to="{ path:'/editer' }">编辑</el-breadcrumb-item>-->
       <!--<el-breadcrumb-item :to="{ path:'/rease' }">增加企业</el-breadcrumb-item>-->
     </el-breadcrumb>
@@ -732,8 +732,6 @@
           validDate: this.validDateB,
           quaCode: this.twoQualityLevel,
           gradeCode: this.threeQualityLevel
-
-
 
         });
 
@@ -1557,6 +1555,9 @@
 .red{
     color:red;
 }
+  .bdd_v:hover{
+      color: red;
+  }
 </style>
 
 
