@@ -387,7 +387,7 @@
             <el-table-column label="操作"
                              width="200">
 <template slot-scope="scope">
-  <el-button type="text" @click="editGongLu(scope.$index)">
+  <el-button  :class="{ red:editGongLuRed == index}" type="text" @click="editGongLu(scope.$index)">
     修改
   </el-button>
 
@@ -395,8 +395,8 @@
 
     <el-form :model="form">
       <el-form-item label="" :label-width="formLabelWidth">
-        <el-select style="margin-right:110px;" v-model="selectGongLuLevel" placeholder="空值">
-          <el-option label="空值" value="空值"></el-option>
+        <el-select style="margin-right:110px;" v-model="selectGongLuLevel" placeholder=" ">
+          <el-option label=" " value=" "></el-option>
           <el-option label="A" value="A"></el-option>
           <el-option label="B" value="B"></el-option>
           <el-option label="C" value="C"></el-option>
@@ -440,6 +440,9 @@
       editGongLu(index) {
         this.roadBean = this.roadTableData[index];
         this.dialogFormVisible = true;
+        this.editGongLured=index;
+
+
       },
       editGongLuSure() {
         let roadBean = this.roadBean;
@@ -482,7 +485,9 @@
           console.log(777);
           let creditBean = res.data;
           this.creditBean = creditBean;
+          if( this.beforeComName==null||this.beforeComName==""){
           this.beforeComName = creditBean.comName;
+          }
           this.changeCreditCode = creditBean.changeCreditCode;
         });
       },
@@ -578,10 +583,19 @@
         });
       },
       deleteAnxu() {
+        let anxuBean =  this.anxuBean;
+            if(anxuBean==null||anxuBean.lab==null||anxuBean.lab.pkid==null){
+              this.$message({
+              type: "info",
+              message: "人工安许证号已删除,无需再次删除"
+            });
+              return;
+            }
         this.$confirm("此操作将删除该条变更人工安许证号, 是否继续?", "提示", )
           .then(() => {
+
             let dataParam = JSON.stringify({
-              pkid: this.anxuBean.pkid
+              pkid: this.anxuBean.lab.pkid
             });
 
             getJsonData("/company/security/del", dataParam).then(res => {
@@ -694,7 +708,6 @@
       },
       //添加资质信息
       addQuality() {
-
         let certNo = this.certNoB;
         let certDate = this.certDateB;
         let certOrg = this.certOrgB;
@@ -739,7 +752,14 @@
       },
       deleteAnquan() {
 
-
+          let anquanBean =  this.anquanBean;
+            if(anquanBean==null||anquanBean.lab==null||anquanBean.lab.pkid==null){
+              this.$message({
+              type: "info",
+              message: "人工安全认证已删除,无需再次删除"
+            });
+              return;
+            }
 
            this.$confirm("此操作将删除安全认证, 是否继续?", "提示", {
             confirmButtonText: "确定",
@@ -748,7 +768,7 @@
           })
           .then(() => {
             let dataParam = JSON.stringify({
-              pkid: this.anxuBean.lab.pkid
+              pkid: this.anquanBean.lab.pkid
             });
 
             getJsonData("/company/security/del", dataParam).then(res => {
@@ -946,9 +966,11 @@
           this.order = res.data.creditCode;
           this.creditData = res.data[0];
           let comDataArray = res.data;
-
-
           this.afterComName = res.data[0].comName;
+          if( this.beforeComName ==null||this.beforeComName==""){
+                 this.beforeComName=res.data[0].comName
+              }
+
           this.changeTime = res.data[0].changeTime;
           for (let j = 0; j < comDataArray.length; j++) {
             let comDataBean = comDataArray[j];
@@ -1522,6 +1544,9 @@
     overflow: auto;
     margin: 0;
   }
+.red{
+    color:red;
+}
 </style>
 
 
