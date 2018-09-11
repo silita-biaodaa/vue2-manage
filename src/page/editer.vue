@@ -212,7 +212,7 @@
             <el-col :span="8">
                 <div class="grid-content bg-purple">发文日期：
                     <el-date-picker
-                        v-model="certDateB"
+                        v-model="certDatep"
                         type="date"
                         format="yyyy-MM-dd"
                         value-format="yyyy-MM-dd"
@@ -248,7 +248,7 @@
                 label="有效期">
             </el-table-column>
             <el-table-column
-                prop="news"
+                prop="issueDate"
                 label="发文日期">
             </el-table-column>
             <el-table-column
@@ -593,7 +593,7 @@
             }
         this.$confirm("此操作将删除该条变更人工安许证号, 是否继续?", "提示", )
           .then(() => {
-            
+
             let dataParam = JSON.stringify({
               pkid: this.anxuBean.lab.pkid
             });
@@ -727,10 +727,14 @@
           comId: this.comId,
           certNo: this.certNoB,
           certDate: this.certDateB,
+            issueDate: this.certDatep,
           certOrg: this.certOrgB,
           validDate: this.validDateB,
           quaCode: this.twoQualityLevel,
           gradeCode: this.threeQualityLevel
+
+
+
         });
 
         getJsonData("/company/qual/add", dataParam).then(res => {
@@ -966,12 +970,11 @@
           this.order = res.data.creditCode;
           this.creditData = res.data[0];
           let comDataArray = res.data;
-          this.afterComName = res.data[0].comName;
-          if( this.beforeComName ==null||this.beforeComName==""){
+
+          if( this.beforeComName ==null||this.beforeComName==""||this.afterComName ==null||this.afterComName==""){
           this.beforeComName = res.data[0].comName;
           }
-          
-          this.changeTime = res.data[0].changeTime;
+
           if(type==0){
             this.changeTime = "";
             this.afterComName = "";
@@ -1011,7 +1014,7 @@
             message: "恭喜你，企业名称变更成功！",
             type: "success"
           });
-            
+
           this.beforeComName = res.data;
           this.getDataList(0);
 
@@ -1111,7 +1114,9 @@
             label: "良好"
           }
         ],
+
         data: '',
+          certDatep:'',
         oneQualityLevel: "",
         twoQualityLevel: "",
         threeQualityLevel: "",
