@@ -317,5 +317,7 @@
     }
     .bdd_v:hover{
         color: red;
+        cursor:pointer
     }
+
 </style>
