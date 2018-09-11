@@ -593,7 +593,7 @@
             }
         this.$confirm("此操作将删除该条变更人工安许证号, 是否继续?", "提示", )
           .then(() => {
-            
+
             let dataParam = JSON.stringify({
               pkid: this.anxuBean.lab.pkid
             });
@@ -968,8 +968,9 @@
           let comDataArray = res.data;
           this.afterComName = res.data[0].comName;
           if( this.beforeComName ==null||this.beforeComName==""){
-          this.beforeComName = res.data[0].comNameEx;
-          }
+                 this.beforeComName=res.data[0].comName
+              }
+
           this.changeTime = res.data[0].changeTime;
           for (let j = 0; j < comDataArray.length; j++) {
             let comDataBean = comDataArray[j];
