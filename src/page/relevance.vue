@@ -2,7 +2,7 @@
    <div class="relevance">
        <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path:'/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{path:'/home'}">业务</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path:'/home' }">业务</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path:'/relevance' }">相关公告</el-breadcrumb-item>
         </el-breadcrumb>
         <el-row class="rele-title" v-show='skip' >
@@ -12,7 +12,7 @@
         </el-row>
         <el-row class="rele-selction" >
           <el-col :span='24'>
-              <el-select v-model="code" placeholder="请选择" @change='changetab' >
+              <el-select v-model="civiic" placeholder="请选择" @change='changetab' >
                 <el-option
                   v-for="item in options"
                   :key="item.areaCode"
@@ -94,7 +94,7 @@ export default {
     return {
       skip:true,
       options:[],
-      code:'hunan',
+      civiic:'hunan',
       firm: '',
       total: 10,
       pagenum: '',
@@ -136,10 +136,12 @@ export default {
   methods: {
       
       showtitle() {
-        this.code = localStorage.getItem('reliSource')
-        this.title = localStorage.getItem('reliTitle') 
-        console.log(this.title,118)
-        console.log(localStorage.getItem('reliTitle'),119)
+        if(localStorage.getItem('reliSource')) {
+            this.civiic = localStorage.getItem('reliSource')
+             this.title = localStorage.getItem('reliTitle') 
+        }
+        
+
          if(localStorage.getItem('reliTitle')) {
              this.skip = true 
          } else {
@@ -159,9 +161,8 @@ export default {
       //  this.arrreli.push(this.kpid)
      },
      listRele() {
-        listGp({source:this.code,title:this.firm,currentPage:this.pagenum,pageSize:this.pagesize}).then(res=> {
-          console.log(res,116)
-          console.log(res.data.datas)
+        listGp({source:this.civiic,title:this.firm,currentPage:this.pagenum,pageSize:this.pagesize}).then(res=> {
+
           if(res.code ===1) {
             this.tableData3 = res.data.datas
             this.total = res.data.total
@@ -182,7 +183,7 @@ export default {
           // console.log('不为空')
           this.arMsg.push(this.pkid)
           this.reStr = this.arMsg.join("|")
-          relivan({idsStr:this.reStr,source:this.code}).then(res => {
+          relivan({idsStr:this.reStr,source:this.civiic}).then(res => {
             console.log(res)
              if(res.code === 1) {
                 this.$message({
@@ -194,7 +195,7 @@ export default {
         } else {
           console.log('为空')
             this.reStr = this.arMsg.join("|")
-          relivan({idsStr:this.reStr,source:this.code}).then(res => {
+          relivan({idsStr:this.reStr,source:this.civiic}).then(res => {
              if(res.code === 1) {
                 this.$message({
                      type: 'success',
@@ -225,7 +226,7 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
           }).then(() => {
-              delpost({pkid:row.pkid,source:this.code}).then(res => {
+              delpost({pkid:row.pkid,source:this.civiic}).then(res => {
                      this.$message({
                         type: 'success',
                         message: res.msg

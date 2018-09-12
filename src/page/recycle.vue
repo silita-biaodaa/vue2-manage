@@ -126,11 +126,11 @@ export default {
   },
   filters:{
     del: function (val) {
-       if(val === '1') {
+       if(val == '1') {
          return '程序去重'
-       } else if (val === '2') {
+       } else if (val == '2') {
          return '程序去重'
-       } else if (val === '3') {
+       } else if (val == '3') {
          return '人工去重'
        } else {
          return '手动删除'
@@ -161,9 +161,7 @@ export default {
       //  this.arrreli.push(this.kpid)
      },
      firmchange() {  // 搜索框变化的方法
-          console.log(this.pagenum,164)
-          console.log(this.pagesieze,165)
-          this.pagesize = 1
+          this.pagenum= 1
           this.recyclist()
       },
       focusdel() {
