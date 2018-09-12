@@ -657,7 +657,7 @@
         let certResult = this.anquanCertLevelStr;
         if (expiredStr == null || expiredStr.trim() == "" || certLevel == null || certLevel.trim() == "" || certResult == null || certResult == "") {
           this.$message({
-            message: "请输入内容！",
+            message: "请选择安全认证内容！",
             type: "info"
           });
           return;
@@ -707,15 +707,14 @@
       },
       //添加资质信息
       addQuality() {
-        let certNo = this.certNoB;
-        let certDate = this.certDateB;
-        let certOrg = this.certOrgB;
-        let validDate = this.validDateB;
+
+        let threeQualityLevel = this.threeQualityLevel;
+        let twoQualityLevel = this.twoQualityLevel;
 
 
-        if (certNo == null || certNo.trim() == "" || certDate == null || certDate.trim() == "" || certOrg == null || certOrg == "" || validDate == null || validDate == "") {
+        if (threeQualityLevel == null || threeQualityLevel.trim() == ""||twoQualityLevel == null || twoQualityLevel.trim() == ""){
           this.$message({
-            message: "请输入内容！",
+            message: "请选择资质！",
             type: "info"
           });
           return;
@@ -745,9 +744,9 @@
           this.threeQualityLevel="";
 
         this.elQuality = new Array();
-        
-          
-        
+
+
+
           if (res.code == 400) {
             this.$message({
               type: "info",
@@ -833,7 +832,7 @@
         if (changeCreditCode == null || changeCreditCode.trim() == "") {
           this.$message({
             type: "fail",
-            message: "请输入内容！"
+            message: "请输入企业统一社会信用代码！"
           });
           retrun;
         }
@@ -979,8 +978,10 @@
           this.creditData = res.data[0];
           let comDataArray = res.data;
 
-          if( this.beforeComName ==null||this.beforeComName==""||this.afterComName ==null||this.afterComName==""){
+          if( this.beforeComName ==null||this.beforeComName==""){
+            if(res.data!=null){
           this.beforeComName = res.data[0].comName;
+            }
           }
 
           if(type==0){
@@ -1011,7 +1012,7 @@
         if (changeTime == null || changeTime.trim() == "" || afterComName == null || afterComName.trim() == "") {
           this.$message({
             type: "info",
-            message: "请输入内容"
+            message: "请输入变更后企业名称"
           });
           retrun;
         }
