@@ -513,7 +513,6 @@
         console.log(3333);
 
         let allQualityArr = this.getCascaderObj(this.elQuality, this.allQuality);
-
         if (allQualityArr != null && allQualityArr.length > 0) {
           this.oneQualityLevel = allQualityArr[0].value;
           this.twoQualityLevel = allQualityArr[1].value;
@@ -691,10 +690,10 @@
           this.qualityTableData = res.data;
           let quality = res.data[0];
           this.quality = quality;
-          this.certNoB = quality.certNo;
-          this.certDateB = quality.certDate;
-          this.certOrgB = quality.certOrg;
-          this.validDateB = quality.validDate;
+          // this.certNoB = quality.certNo;
+          // this.certDateB = quality.certDate;
+          // this.certOrgB = quality.certOrg;
+          // this.validDateB = quality.validDate;
         });
       },
 
@@ -736,6 +735,19 @@
 
         getJsonData("/company/qual/add", dataParam).then(res => {
           console.log(res.data)
+
+          this.certNoB="";
+          this.certDateB="";
+            this.certDatep="";
+          this.certOrgB="";
+          this.validDateB="";
+          this.twoQualityLevel="";
+          this.threeQualityLevel="";
+
+        this.elQuality = new Array();
+        
+          
+        
           if (res.code == 400) {
             this.$message({
               type: "info",
@@ -748,7 +760,6 @@
             });
             this.getQuality();
           }
-
         });
       },
       deleteAnquan() {
