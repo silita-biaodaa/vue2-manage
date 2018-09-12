@@ -657,7 +657,7 @@
         let certResult = this.anquanCertLevelStr;
         if (expiredStr == null || expiredStr.trim() == "" || certLevel == null || certLevel.trim() == "" || certResult == null || certResult == "") {
           this.$message({
-            message: "请选择安全认证内容！",
+            message: "安全认证输入内容不能为空！",
             type: "info"
           });
           return;
@@ -882,7 +882,7 @@
         if (curCertNo == null || curCertNo.trim() == "") {
           this.$message({
             type: "info",
-            message: "安许证号-人工编辑不能为空"
+            message: "安许证号输入内容不能为空"
           });
           retrun;
         }
@@ -1012,7 +1012,7 @@
         if (changeTime == null || changeTime.trim() == "" || afterComName == null || afterComName.trim() == "") {
           this.$message({
             type: "info",
-            message: "请输入变更后企业名称"
+            message: "企业名称变更内容不能为空"
           });
           retrun;
         }
