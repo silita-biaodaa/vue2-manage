@@ -157,7 +157,7 @@
             <el-form-item >
               <div :class="['labe',forms.isntTdStatus?'new':'old']">招标状态</div>
               <el-select v-model="form.ntTdStatus" @input="text('ntTdStatus')" filterable placeholder="请选择招标状态" style="width:80%">
-                <el-option v-for="item in status" :key="item.value" :label="item.name" :value="item.value">
+                <el-option v-for="sta in statuss" :key="sta.value" :label="sta.name" :value="sta.value">
                 </el-option>
               </el-select>
             </el-form-item>                        
@@ -352,8 +352,8 @@ export default {
       parentId:'',
       ckpid:'',
       careaName:'',
-      pkid:this.$route.params.id,
-      code:this.$route.params.code,
+      pkid:'',
+      code:'',
       title: '',
       pubDate: '', 
        form: {   //编辑变更数据
@@ -389,7 +389,7 @@ export default {
        type1s:[], //项目类型
        types:[],  //招标类型
        records:[],  //备案要求
-       status:[], //开标状态
+       statuss:[], //开标状态
       activeIndex:'1',
       condition:'未处理',
       state:'http://',
@@ -440,7 +440,8 @@ export default {
        engine:{},
        arrpkid:[],
        arrtitle:[],
-       arrpub:[]
+       arrpub:[],
+       position:''
     }
   },
   created () {
@@ -517,7 +518,7 @@ export default {
             }
         })
     },
-
+    //评标办法
     listMode() {
         listPbMode({type:this.code}).then(res => {
            if(res.code === 1 ) {
@@ -525,26 +526,31 @@ export default {
            }
         })
     },
+    // 相关公告得
     listNtgpn() {
+        this.id = this.$route.params.id
+        this.code = this.$route.params.code
+        this.position = localStorage.getItem('indexer')
         listNtgp({ntId:this.pkid,source:this.code}).then(res => {
           if(res.code ===1) {
             this.relation =res.data.datas
           }
         })
     },
+    // 固定下拉框
     listfixe() {
       listFixed({}).then(res=> {
         this.exploits = res.data.bidOpeningPersonnel
         this.types = res.data.biddingType
         this.type1s = res.data.projectType
         this.records = res.data.filingRequirements
-        this.status = res.data.biddingStatus
+        this.statuss = res.data.biddingStatus
       })
         
     },
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-          console.log(res,520)
+
          this.state = this.state + res.data[0].url
          this.compileData = res.data
           this.form = res.data[0]
@@ -576,7 +582,21 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        
+        delpost({pkid:this.id,source:this.code}).then(res => {
+           if(res.code === 1 ) {
+              this.$message({
+                type:'success',
+                message:'删除成功~'
+              })
+            //  if(this.position < this.arrpkid || this.position > this.)
+            this.arrpkid.splice(this.position,1)
+            this.arrtitle.splice(this.position,1)
+            this.arrpub.splice(this.position,1)
+            this.$router.push({
+              name:'compile',params:{id:this.arrpkid[this.position],code:this.code}
+            })
+           }
+        })
         
       }).catch(() => {
         this.$message({
@@ -629,7 +649,26 @@ export default {
                     type:'warning'
                   })
         } 
-         insertNt({source:this.code,ntId:this.pkid,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
+        
+        // if(this.form.ntTdStatus === '未开标') {
+        //    return this.form.ntTdStatus = '1'
+        // } else if (this.form.ntTdStatus === '流标') {
+        //    return this.form.ntTdStatus = '2'
+        // } else if (this.form.ntTdStatus === '重新招标') {
+        //    return this.form.ntTdStatus = '3'
+        // } else if (this.form.ntTdStatus === "终止") {
+        //   return this.form.ntTdStatus = '4'
+        // } else if (this.form.ntTdStatus === '中止') {
+        //    return this.form.ntTdStatus = '5'
+        // } else if (this.form.ntTdStatus === '废标') {
+        //   return this.form.ntTdStatus = '6'
+        // } else if (this.form.ntTdStatus === '延期') {
+        //   return this.form.ntTdStatus = '7'
+        // } else {
+        //   this.form.ntTdStatus = '8'
+        // }
+        console.log(this.form.ntTdStatus,632)
+          insertNt({source:this.code,ntId:this.pkid,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
              if(res.code === 1 ) {
                this.$message({
                     message:res.msg,
