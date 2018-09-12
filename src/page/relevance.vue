@@ -115,7 +115,7 @@ export default {
   },
   filters: {
     relnt:function(val) {
-       if(val ==='0') {
+       if(val === '0') {
          return '未编辑'
        } else if (val === '1') {
          return '已编辑'

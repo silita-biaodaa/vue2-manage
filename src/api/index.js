@@ -251,3 +251,11 @@ export const cycdel = params => {
 export const cycrecover = params => {
     return axios.post('recycle/recover', params).then(res => res.data)
 }
+// 单个标段信息
+export const getNt = params => {
+    return axios.post('zhaobiao/getNtTenders', params).then(res => res.data)
+}
+// 变更标段信息
+export const insertNtC = params => {
+    return axios.post('zhaobiao/insertTbNtChange', params).then(res => res.data)
+}
