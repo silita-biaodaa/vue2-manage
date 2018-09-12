@@ -235,3 +235,19 @@ export const listreli = params => {
 export const relivan = params => {
     return axios.post('zhaobiao/insertNtAssociateGp', params).then(res => res.data)
 }
+// 回收站列表
+export const listrecyc = params => {
+    return axios.post('recycle/list', params).then(res => res.data)
+}
+// 公告原文列表
+export const cyccontent = params => {
+    return axios.post('common/detail', params).then(res => res.data)
+}
+// 回收站删除
+export const cycdel = params => {
+    return axios.post('recycle/del', params).then(res => res.data)
+}
+// 回收站恢复
+export const cycrecover = params => {
+    return axios.post('recycle/recover', params).then(res => res.data)
+}

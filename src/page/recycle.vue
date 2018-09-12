@@ -3,16 +3,12 @@
        <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path:'/home' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item :to="{path:'/home'}">业务</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path:'/relevance' }">相关公告</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path:'/recycle' }">回收站</el-breadcrumb-item>
         </el-breadcrumb>
-        <el-row class="rele-title" v-show='skip' >
-           <el-col :span='24' >
-             相关公告标题:{{title}}
-           </el-col>
-        </el-row>
+
         <el-row class="rele-selction" >
           <el-col :span='24'>
-              <el-select v-model="code" placeholder="请选择" @change='changetab' >
+              <el-select v-model="city" placeholder="请选择" @change='changetab' >
                 <el-option
                   v-for="item in options"
                   :key="item.areaCode"
@@ -23,7 +19,8 @@
               <el-input placeholder="请输入内容" v-model="firm" style="width:30%" @change="firmchange">
                   <i slot="prefix" class="el-input__icon el-icon-search" ></i>
               </el-input>
-              <el-button type="primary" @click='correlation' class="rele-btn" >关联已选择的公告</el-button>
+              <el-button type="primary" @click='correlation' class="rele-btn" >批量恢复</el-button>
+              <el-button type="primary" @click='focusdel' >批量删除</el-button>
           </el-col>
         </el-row>
         <el-row>
@@ -33,6 +30,9 @@
                   height="450"
                   border
                   @selection-change="handleRelevance"
+                  @row-click='mulcheckbox'
+                  @row-contextmenu='contentlist'
+                  ref="moviesTable"
                   style="width: 100%">
                   <el-table-column
                     type="selection"
@@ -44,9 +44,9 @@
                    width="350">
                   </el-table-column>
                   <el-table-column
-                    prop="pubDate"
                     label="发布日期"
                    width='150'>
+                  <template slot-scope="scope">{{ scope.row.pubDate | dateFormat }}</template>
                   </el-table-column>
                   <el-table-column
                     prop="srcSite"
@@ -54,14 +54,13 @@
                     width='250'>
                   </el-table-column>
                   <el-table-column
-                    prop="ntStatus"
                     label="状态"
                     width="150">
-                    <template slot-scope="scope">{{ scope.row.delType | relnt }}</template>
+                    <template slot-scope="scope">{{ scope.row.delType | del }}</template>
                   </el-table-column>
                  <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <el-button size="mini" @click="relevanEdit(scope.$index, scope.row)">编辑</el-button>
+                            <el-button size="mini" @click="relevanEdit(scope.$index, scope.row)">恢复</el-button>
                             <el-button size="mini" type="danger" @click="relevanDelete(scope.$index, scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
@@ -85,70 +84,73 @@
                 </el-col> 
                 
             </el-row>
+
+            <!-- 文章标题展示弹框 -->
+            <el-dialog
+              :title="title"
+              :visible.sync="dialogVisible"
+              width="50%">
+              <span>{{this.context}}</span>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+              </span>
+            </el-dialog>
    </div>
 </template>
 <script>
-import { listArea,listGp,delpost,relivan } from '@/api/index'
+import { listrecyc,cycrecover,cycdel,listArea,cyccontent } from '@/api/index'
 export default {
   data() {
     return {
       skip:true,
       options:[],
-      code:'hunan',
+      city:'hunan',
       firm: '',
       total: 10,
-      pagenum: '',
-      pagesize: '',
+      pagenum: '1',
+      pagesize: '15',
       tableData3: [],
       title:'',
       pkid:localStorage.getItem('relipkid'),
       arrreli:[],
       arMsg:[],
-      reStr:''
+      reStr:'',
+      title:'',
+      dialogVisible:false,
+      context:''
     }
   },
   created () {
-    // this.showtitle()
      this.listsou() 
-     this.listRele()
-      
+     this.recyclist() 
   },
-  filters: {
-    relnt:function(val) {
-       if(val ==='0') {
-         return '未编辑'
-       } else if (val === '1') {
-         return '已编辑'
+  filters:{
+    del: function (val) {
+       if(val === '1') {
+         return '程序去重'
        } else if (val === '2') {
-         return '已审核'
-       } else if (val === '3' ) {
-         return '未审核'
-       } else if (val === '4') {
-         return '审核未通过'
+         return '程序去重'
+       } else if (val === '3') {
+         return '人工去重'
        } else {
-         return '已处理'
+         return '手动删除'
        }
     }
   },
   mounted () {
-    this.showtitle()
+    
   },
   methods: {
-      
-      showtitle() {
-        this.code = localStorage.getItem('reliSource')
-        this.title = localStorage.getItem('reliTitle') 
-        console.log(this.title,118)
-        console.log(localStorage.getItem('reliTitle'),119)
-         if(localStorage.getItem('reliTitle')) {
-             this.skip = true 
-         } else {
-             this.skip = false                
-         }       
-         console.log(this.skip,127)
-     },
+      // 回收站页面的展示
+      recyclist() { 
+        listrecyc({title:this.firm,source:this.city,currentPage:this.pagenum,pageSize:this.pagesize}).then(res => {
+            if(res.code ===1) {
+              this.tableData3 = res.data.list
+              this.total = res.data.total
+            }
+        })
+      },
     handleRelevance(val) {
-        console.log(val)
         this.arrreli = val
     },
      listsou(){
@@ -158,66 +160,73 @@ export default {
        })
       //  this.arrreli.push(this.kpid)
      },
-     listRele() {
-        listGp({source:this.code,title:this.firm,currentPage:this.pagenum,pageSize:this.pagesize}).then(res=> {
-          console.log(res,116)
-          console.log(res.data.datas)
-          if(res.code ===1) {
-            this.tableData3 = res.data.datas
-            this.total = res.data.total
-          }
-
-        })
-     },
      firmchange() {  // 搜索框变化的方法
-          this.pagenum = 1
-          this.listRele()
+          console.log(this.pagenum,164)
+          console.log(this.pagesieze,165)
+          this.pagesize = 1
+          this.recyclist()
       },
-      correlation() {
-           this.arrreli.forEach(element => {
+      focusdel() {
+            this.arrreli.forEach(element => {
             this.arMsg.push(element.pkid)
         });
-        console.log(this.pkid)
-        if(this.pkid) {
-          // console.log('不为空')
-          this.arMsg.push(this.pkid)
           this.reStr = this.arMsg.join("|")
-          relivan({idsStr:this.reStr,source:this.code}).then(res => {
+           cycdel({pkids:this.reStr,source:this.city}).then(res => {
             console.log(res)
              if(res.code === 1) {
                 this.$message({
                      type: 'success',
                      message: res.msg
                  });
+                this.arrreli = {}
+                this.arMsg = []
+                this.reStr = ''
+                this.recyclist()
              }
           })
-        } else {
-          console.log('为空')
-            this.reStr = this.arMsg.join("|")
-          relivan({idsStr:this.reStr,source:this.code}).then(res => {
+      },
+      correlation() {
+           this.arrreli.forEach(element => {
+            this.arMsg.push(element.pkid)
+        });
+          this.reStr = this.arMsg.join("|")
+          cycrecover({pkids:this.reStr,source:this.city}).then(res => {
+            console.log(res)
              if(res.code === 1) {
                 this.$message({
                      type: 'success',
                      message: res.msg
                  });
+                this.arrreli = {}
+                this.arMsg = []
+                this.reStr = ''
+                this.recyclist()
              }
           })
-        }
       },
       changetab(){
           this.pagenum = 1
-           this.listRele()
+           this.recyclist()
       },
       handleCurrentChange(val) {  // 当前页改变的函数
          this.pagenum = val
-          this.listRele()
+          this.recyclist()
       },
       handleSizeChange(val) {  // 每页条数发生改变时做出的函数
+        this.pagenum = 1
          this.pagesize = val
-         this.listRele()            
+         this.recyclist()            
       },
       relevanEdit(index,row){
-
+        cycrecover({pkids:row.pkid,source:this.city}).then(res=> {
+          if(res.code === 1) {
+            this.$message({
+              type:'success',
+              message:'恢复成功'
+            })
+            this.recyclist() 
+          }
+        })
       },
       relevanDelete(index,row) {
           this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
@@ -225,12 +234,12 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
           }).then(() => {
-              delpost({pkid:row.pkid,source:this.code}).then(res => {
+              cycdel({pkids:row.pkid,source:this.city}).then(res => {
                      this.$message({
                         type: 'success',
                         message: res.msg
                     });
-                    this.listRele()
+                    this.recyclist()
               })
           }).catch(() => {
               this.$message({
@@ -238,15 +247,22 @@ export default {
                   message: '已取消删除'
               });
           }); 
-      }
+      },
+     mulcheckbox(	row, event, column) {
+        this.$refs.moviesTable.toggleRowSelection(row)
+     },
+     contentlist(row,event) {
+       this.dialogVisible = true
+       this.title = row.title
+          cyccontent({source:this.city,ntId:row.ntId}).then(res=> {
+             if(res.code === 1 ) {
+                this.context = res.data.content
+             }
+          })
+     }
   },
   components: {
   },
-  destroyed() {
-    localStorage.removeItem('reliTitle')
-    localStorage.removeItem('reliSource')
-    localStorage.removeItem('relipkid')
-  }
 }
 </script>
 <style lang="less" >

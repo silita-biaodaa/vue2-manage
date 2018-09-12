@@ -32,6 +32,13 @@ router.beforeEach((to, from, next) => {
 	}
 })
 
+// 导入格式化时间的插件
+import moment from 'moment'
+// 定义全局的过滤器
+Vue.filter('dateFormat', function (dataStr, pattern = "YYYY-MM-DD") {
+	return moment(dataStr).format(pattern)
+})
+
 new Vue({
 	el: '#app',
 	router,
