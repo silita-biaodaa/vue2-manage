@@ -156,6 +156,12 @@
                             message: '请先添写企业名称'
                           });
                 }
+                if(!this.comName) {
+                    return this.$message({
+                        type: 'warning',
+                        message: '请输入社会统一信用代码'
+                    });
+                }
 
                  let dataParam = JSON.stringify({
                      "pkid":this.selectPkid,
