@@ -5,7 +5,7 @@
            <el-row>
               <el-col :span="12" class="left-c">
                  <div class="message-c">
-                    <span :style= "{color:(this.condition === '未处理' ? 'red' : 'white')}">{{this.condition}}</span>
+                    <span :style= "{color:(this.condition === '0' ? 'red' : 'white')}">{{this.condition | condi}}</span>
                     <a :href="this.state" target="_blank">来源站点</a>
                  </div>
                  <div class="handle-c">
@@ -134,8 +134,8 @@
               <el-input v-model="form.openingAddr" @input="text('openingAddr')" ></el-input>
             </el-form-item>
             <el-form-item >
-              <div :class="['labe',forms.isntCategory?'new':'old']"><i class="el-icon-warning"></i>项目类型</div>
-              <el-select v-model="form.ntCategory" @input="text('ntCategory')" filterable placeholder="请选择项目类型" style="width:80%">
+              <div :class="['labe',forms.isproType?'new':'old']"><i class="el-icon-warning"></i>项目类型</div>
+              <el-select v-model="form.proType" @input="text('proType')" filterable placeholder="请选择项目类型" style="width:80%">
                 <el-option v-for="item in type1s" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
@@ -155,8 +155,8 @@
               </el-select>
             </el-form-item>
             <el-form-item >
-              <div :class="['labe',forms.isntType?'new':'old']">招标状态</div>
-              <el-select v-model="form.ntType" @input="text('ntType')" filterable placeholder="请选择招标状态" style="width:80%">
+              <div :class="['labe',forms.isntTdStatus?'new':'old']">招标状态</div>
+              <el-select v-model="form.ntTdStatus" @input="text('ntTdStatus')" filterable placeholder="请选择招标状态" style="width:80%">
                 <el-option v-for="item in status" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
@@ -180,7 +180,7 @@
 
               <el-tab-pane label="编辑明细" name="first" >                
   
-                    <el-table style="width: 100%" height="300" @selection-change="handleSelectionChange" ref="multipleTable" :data="compileData">
+                    <el-table style="width: 100%" height="300" @selection-change="handleSelectionChange" ref="multipleTable" :data="compileData" @row-click='pilebox'>
                       <el-table-column type="selection" width="55">
                       </el-table-column>
                       <el-table-column prop="title" label="项目名称" width="300">
@@ -218,14 +218,14 @@
                       <el-table-column prop="openingAddr" label="开标地点" width="120" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column  label="项目类型" width="120" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.ntCategory | gory }}</template>
+                         <template slot-scope="scope">{{ scope.row.proType }}</template>
                       </el-table-column> 
                       <el-table-column label="招标类型" width="120" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.binessType | biness }}</template>                        
+                         <template slot-scope="scope">{{ scope.row.binessType }}</template>                        
                       </el-table-column> 
                       <el-table-column prop="filingPfm" label="平台备案要求" width="120" show-overflow-tooltip>
                       </el-table-column> 
-                      <el-table-column prop="ntType" label="招标状态" width="120" show-overflow-tooltip>
+                      <el-table-column prop="ntTdStatus" label="招标状态" width="120" show-overflow-tooltip>
                       </el-table-column>     
                     </el-table>
 
@@ -247,7 +247,7 @@
                     <el-table-column  label="上传日期" >
                       <template slot-scope="scope">{{ scope.row.created | dateFormat }}</template>
                     </el-table-column>
-                    <el-table-column prop="address" label="状态" show-overflow-tooltip >
+                    <el-table-column prop="status" label="状态" show-overflow-tooltip >
                     </el-table-column>
                   </el-table>
 
@@ -293,8 +293,8 @@
           <el-form :model="handleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">          
             <el-form-item label="公告状态" prop="resource">
               <el-radio-group v-model="handleForm.resource">
-                <el-radio label="1">未处理</el-radio>
-                <el-radio label="2">已处理</el-radio>
+                <el-radio label="0">未处理</el-radio>
+                <el-radio label="1">已处理</el-radio>
               </el-radio-group>
             </el-form-item>
             
@@ -312,6 +312,7 @@
       </el-dialog>
         <!-- 上传路路径得弹框 -->
        <el-dialog title="文件下载路径传输" :visible.sync="urlFormVisible">
+          <el-input v-model="urltitle" placeholder="请输入上传标题" class="urlma"></el-input>          
           <el-input v-model="urlupload" placeholder="请输入需要上传得下载地址"></el-input>
          <div slot="footer" class="dialog-footer">
            <el-button @click="urlFormVisible = false">取 消</el-button>
@@ -324,7 +325,7 @@
 
 <script>
  import  Edit  from "@/page/edit";
- import { updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
+ import { listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
 export default {
   data () {
     return {
@@ -342,10 +343,10 @@ export default {
         isbidEndTime:false,
         isopeningPerson:false,
         isopeningAddr:false,
-        isntCategory:false,
+        isproType:false,
         isbinessType:false,
         isfilingPfm:false,
-        isntType:false        
+        isntTdStatus:false        
       },
       arrf:[], // 收集变更字段信息的数组
       parentId:'',
@@ -370,15 +371,15 @@ export default {
         bidBondsEndTime:'', //投标保证金截止时间
         enrollEndTime:'',  // 报名截止时间
         enrollAddr:'',   // 报名地址
+        certAuditAddr:'', //资格审查地点 
         auditTime:'',   // 资格审查时间
         bidEndTime:'',  // 投标截止时间
         openingPerson:'', //开发人员
         openingAddr:'', //开标地点
-        ntCategory:'', //项目类型
+        proType:'', //项目类型
         binessType:'', // 招标类型
         filingPfm:'', //备案要求
-        ntType:'',// 招标状态
-        certAuditAddr:'' //资格审查地点 
+        ntTdStatus:'',// 招标状态       
       },
       activeName2:'first',
        areas: [],
@@ -433,7 +434,13 @@ export default {
        list:[],
        releGp:'',
        compare:{},  // 用于变更时候的比较字段
-       arrpare:[]  // 用于变更时候请求接口几次判断
+       arrpare:[],  // 用于变更时候请求接口几次判断
+       urltitle:'',
+       fieldNames:[],
+       engine:{},
+       arrpkid:[],
+       arrtitle:[],
+       arrpub:[]
     }
   },
   created () {
@@ -444,25 +451,18 @@ export default {
     this.listregion()
     this.listMode()
     this.listTender()
+    this.listarr()
   },
   filters: {
-    // 项目类型
-     gory:function(val) {
-        if(val === '1' ) {
-          return '招标'
-        } else if (val === '2') {
-          return '中标'
-        } else {
-          return '其他'
-        }
-     },
-     biness:function(val) {
-        if(val=== '1') {
-          return '建筑工程'
-        } else {
-          return '政府采购'
-        }
-     } 
+    condi:function(val) {
+       if(val === '0' || '') {
+         return '未处理'
+       } else if (val === '1') {
+         return '未审核'
+       } else {
+         return '已处理'
+       } 
+    }
   },
   watch: {
     "form.cityCode"(val) {
@@ -480,12 +480,12 @@ export default {
       if(this.typecompile === '编辑') {
           return 
       }
-      if( this.form[val].trim() === this.compare[val].trim() ) {
-        console.log(this.form[val].trim())
-        console.log(this.compare[val].trim());        
+      if( this.form[val].trim() === this.compare[val].trim() ) {   
         this.forms['is'+ val] = false
+
       } else {
         this.forms['is'+ val] = true 
+        this.fieldNames.push(val)
       }
     },
     newurl() {
@@ -494,6 +494,19 @@ export default {
       localStorage.setItem('relipkid',this.pkid)
       this.$router.push('/relevance')
     },
+    listarr(){
+       this.engine = JSON.parse(localStorage.getItem('tensele'))
+       listMain({source:this.code,proviceCode:this.code,cityCode:this.engine.cityCode,ntStatus:this.engine.ntStatus,ntCategory:1,title:this.engine.title,pubDate:this.engine.pubDate,pubEndDate:this.engine.pubEndDate,currentPage:this.engine.currentPage,pageSize:this.engine.pageSize }).then(res => {
+          if(res.code ===1){
+              res.data.datas.forEach(item => {
+                  this.arrpkid.push(item.pkid)
+                  this.arrtitle.push(item.title)
+                  this.arrpub.push(item.pubDate)
+              })
+          } 
+       }) 
+    },
+    // 加载地区 
     listregion() {
         listArea({areaParentId:this.parentId}).then(res => {
             if(res.code === 1 ) {
@@ -504,6 +517,7 @@ export default {
             }
         })
     },
+
     listMode() {
         listPbMode({type:this.code}).then(res => {
            if(res.code === 1 ) {
@@ -519,10 +533,6 @@ export default {
         })
     },
     listfixe() {
-      this.title = localStorage.getItem('lititle')
-      this.pubDate = localStorage.getItem('lipubtime')
-      this.form.title = this.title
-      this.form.pubDate = this.pubDate
       listFixed({}).then(res=> {
         this.exploits = res.data.bidOpeningPersonnel
         this.types = res.data.biddingType
@@ -534,18 +544,16 @@ export default {
     },
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
+          console.log(res,520)
          this.state = this.state + res.data[0].url
          this.compileData = res.data
           this.form = res.data[0]
-          this.compare = res.data[0]
-          // this.again = res.data[0]
+          this.condition = res.data[0].ntStatus
       }) 
     },
     listFile() {
-      listFiles({bizId:this.pkid,source:this.code}).then(res=> {
-        
-        this.file = res.data
-        
+      listFiles({bizId:this.pkid,source:this.code}).then(res=> {        
+        this.file = res.data        
       })
     },
     // 解除相关公告函数
@@ -594,9 +602,9 @@ export default {
             }            
           })
           if(this.handleForm.resource === '1') {
-              this.condition = '未处理'
+              this.condition = '5'
             } else {
-              this.condition = '已处理'
+              this.condition = '0'
             }
         } else {
           return false;
@@ -606,8 +614,6 @@ export default {
       onSubmit() {   //保存按钮
       if(this.typecompile === '编辑') {   
         if(this.form.cityCode === '') {
-            console.log(this.form.cityCode,604)
-            console.log(1)
             return this.$message({
                     message:'请选择项目地区',
                     type:'warning'
@@ -617,13 +623,13 @@ export default {
                     message:'请选择项目县区',
                     type:'warning'
                   })
-        } else if(!this.form.ntCategory) {
+        } else if(!this.form.proType) {
           return this.$message({
                     message:'请选择项目类型',
                     type:'warning'
                   })
         } 
-         insertNt({source:this.code,ntId:this.pkid,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,ntCategory:this.form.ntCategory,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntType:this.form.ntType,certAuditAddr:this.form.certAuditAddr}).then( res=> {
+         insertNt({source:this.code,ntId:this.pkid,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
              if(res.code === 1 ) {
                this.$message({
                     message:res.msg,
@@ -636,16 +642,25 @@ export default {
                   })
              }
              this.listTender()
+             this.condition = '1'
          })
 
       } else {
-          Object.keys(this.forms).forEach(key => {
-                if(this.obj[key]) {
-                  this.arrpare.push(key.substring(2)) 
-                }
-                // console.log()
+          this.fieldNames.forEach(item => {
+              insertNtC({ntId:this.pkid,ntEditId:this.form.ntId,ntCategory:1,source:this.code,fieldFrom:this.compare[item],fieldName:item,fieldValue:this.form[item]}).then(res => {
+                  if(res.code === 0 ) {
+                     return this.$message({
+                       type:'warning',
+                       message:'变更失败' 
+                     })
+                  }
+                this.$message({
+                  type:'warning',
+                  message:'变更成功'
+                })
+              })
           })
-          console.log(this.arrpare)
+          
       }
 
     },
@@ -663,8 +678,6 @@ export default {
      },
       handleSelectionChange(val) {   // 编辑明细  选中时发生变化会触发该事件
           this.delcom = val
-          // this.agtain = val[0]
-          this.compare = val[0]
           this.form = val[0]
       },
       handleFileChange(val) {   //  招标文件的
@@ -726,8 +739,13 @@ export default {
              type:'warning',
              message:'地址栏不能为空~'
            })        
+       } else if(this.urltitle.trim() === '') {
+             this.$message({
+             type:'warning',
+             message:'上传标题不能为空~'
+           })  
        } else {
-         listFilesPath({bizId:this.pkid,filePath:this.urlupload,type:4,orderNo:1,source:this.code}).then(res=> {
+         listFilesPath({bizId:this.pkid,filePath:this.urlupload,type:4,orderNo:1,source:this.code,fileName:this.urltitle}).then(res=> {
                if(res.code === 1) {
                  this.$message({
                    type:'success',
@@ -806,11 +824,28 @@ export default {
     },
     addcompile() {
       this.typecompile = '编辑' 
-      // this.form = this.again
+       getNt({ntId:this.pkid,source:this.code,pkid:this.form.pkid}).then(res => {
+          if(res.code === 1) {
+            this.form = res.data
+            Object.keys(this.forms).forEach(key => {
+                this.forms[key] = false
+            })
+          }          
+       })
     },
     toocompile () {
       this.typecompile = '变更' 
-      // this.form = this.again
+      getNt({ntId:this.pkid,source:this.code,pkid:this.form.pkid}).then(res => {
+        if(res.code === 1 ) {
+          this.compare = res.data
+          res.data.fieldName.split(',').forEach((item,index) => {
+             this.forms['is' + item ] = true
+             this.form[item] = res.data.fieldValue.split(',')[index]
+          })
+       
+
+        }
+      })
     },
     //接触相关的公告
     relieve() {
@@ -842,6 +877,9 @@ export default {
       })
    
 
+    },
+    pilebox(row) {
+      this.$refs.multipleTable.toggleRowSelection(row)
     }
   },
   components: {
@@ -851,7 +889,10 @@ export default {
 </script>
 <style lang="less">
  .compile {
-  .menu-c {
+   .urlma {
+     margin-bottom: 15px;
+   }
+    .menu-c {
     box-sizing: border-box;
     padding: 0 10px;
     color: #fff;
