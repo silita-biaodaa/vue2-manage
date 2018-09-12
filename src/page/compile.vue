@@ -17,7 +17,7 @@
               <el-col :span="12" class="right-c">                  
                   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color='#000' text-color='#fff' active-text-color='yellow' @select="handleSelect">
                     <el-menu-item index="1" @click='addcompile' >编辑</el-menu-item>
-                    <el-menu-item index="2" @click='toocompile' >变更</el-menu-item> 
+                    <el-menu-item index="3" @click='toocompile' >变更</el-menu-item> 
                   </el-menu>
               </el-col>
            </el-row>
@@ -134,8 +134,8 @@
               <el-input v-model="form.openingAddr" @input="text('openingAddr')" ></el-input>
             </el-form-item>
             <el-form-item >
-              <div :class="['labe',forms.isproType?'new':'old']"><i class="el-icon-warning"></i>项目类型</div>
-              <el-select v-model="form.proType" @input="text('proType')" filterable placeholder="请选择项目类型" style="width:80%">
+              <div :class="['labe',forms.isntCategory?'new':'old']"><i class="el-icon-warning"></i>项目类型</div>
+              <el-select v-model="form.ntCategory" @input="text('ntCategory')" filterable placeholder="请选择项目类型" style="width:80%">
                 <el-option v-for="item in type1s" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
@@ -155,8 +155,8 @@
               </el-select>
             </el-form-item>
             <el-form-item >
-              <div :class="['labe',forms.isntTdStatus?'new':'old']">招标状态</div>
-              <el-select v-model="form.ntTdStatus" @input="text('ntTdStatus')" filterable placeholder="请选择招标状态" style="width:80%">
+              <div :class="['labe',forms.isntType?'new':'old']">招标状态</div>
+              <el-select v-model="form.ntType" @input="text('ntType')" filterable placeholder="请选择招标状态" style="width:80%">
                 <el-option v-for="item in status" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
@@ -218,14 +218,14 @@
                       <el-table-column prop="openingAddr" label="开标地点" width="120" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column  label="项目类型" width="120" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.proType }}</template>
+                         <template slot-scope="scope">{{ scope.row.ntCategory | gory }}</template>
                       </el-table-column> 
                       <el-table-column label="招标类型" width="120" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.binessType }}</template>                        
+                         <template slot-scope="scope">{{ scope.row.binessType | biness }}</template>                        
                       </el-table-column> 
                       <el-table-column prop="filingPfm" label="平台备案要求" width="120" show-overflow-tooltip>
                       </el-table-column> 
-                      <el-table-column prop="ntTdStatus" label="招标状态" width="120" show-overflow-tooltip>
+                      <el-table-column prop="ntType" label="招标状态" width="120" show-overflow-tooltip>
                       </el-table-column>     
                     </el-table>
 
@@ -247,7 +247,7 @@
                     <el-table-column  label="上传日期" >
                       <template slot-scope="scope">{{ scope.row.created | dateFormat }}</template>
                     </el-table-column>
-                    <el-table-column prop="status" label="状态" show-overflow-tooltip >
+                    <el-table-column prop="address" label="状态" show-overflow-tooltip >
                     </el-table-column>
                   </el-table>
 
@@ -312,8 +312,6 @@
       </el-dialog>
         <!-- 上传路路径得弹框 -->
        <el-dialog title="文件下载路径传输" :visible.sync="urlFormVisible">
-          
-          <el-input v-model="urltitle" placeholder="请输入上传文件名称" class="title"></el-input>
           <el-input v-model="urlupload" placeholder="请输入需要上传得下载地址"></el-input>
          <div slot="footer" class="dialog-footer">
            <el-button @click="urlFormVisible = false">取 消</el-button>
@@ -326,7 +324,7 @@
 
 <script>
  import  Edit  from "@/page/edit";
- import { inserttbNt,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
+ import { updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
 export default {
   data () {
     return {
@@ -347,8 +345,7 @@ export default {
         isntCategory:false,
         isbinessType:false,
         isfilingPfm:false,
-        isntTdStatus:false,
-        isproType:false        
+        isntType:false        
       },
       arrf:[], // 收集变更字段信息的数组
       parentId:'',
@@ -381,8 +378,7 @@ export default {
         binessType:'', // 招标类型
         filingPfm:'', //备案要求
         ntType:'',// 招标状态
-        certAuditAddr:'', //资格审查地点 
-        proType:''
+        certAuditAddr:'' //资格审查地点 
       },
       activeName2:'first',
        areas: [],
@@ -415,7 +411,7 @@ export default {
        ],
        multipleSelection: [],
        //招标文件的数据
-       file:[],  //招标文件列表
+       file:[],
        fileSelect:[],  //招标文件  
         // 相关公告的名称
        relation:[
@@ -424,7 +420,6 @@ export default {
        relaSelect:[],
        fileList:[],
        urlupload:'',
-       urltitle:'',
        urlFormVisible:false,
        deurl:[],
        deleurl:[],
@@ -437,7 +432,7 @@ export default {
        ajson:{},
        list:[],
        releGp:'',
-       comparet:{},  // 用于变更时候的比较字段
+       compare:{},  // 用于变更时候的比较字段
        arrpare:[]  // 用于变更时候请求接口几次判断
     }
   },
@@ -449,16 +444,31 @@ export default {
     this.listregion()
     this.listMode()
     this.listTender()
-    this.listcities()
   },
   filters: {
-
+    // 项目类型
+     gory:function(val) {
+        if(val === '1' ) {
+          return '招标'
+        } else if (val === '2') {
+          return '中标'
+        } else {
+          return '其他'
+        }
+     },
+     biness:function(val) {
+        if(val=== '1') {
+          return '建筑工程'
+        } else {
+          return '政府采购'
+        }
+     } 
   },
   watch: {
     "form.cityCode"(val) {
         this.cpkid= val.substring(0,32)
         this.careaName= val.substring(32)
-         listArea({areaParentId:this.cpkid}).then(res => {
+        listArea({areaParentId:this.cpkid}).then(res => {
             if(res.code === 1) {
                 this.counties = res.data
             }
@@ -466,49 +476,34 @@ export default {
     }
   },
   methods: {
-    // 判断变更页面字体是否变红
     text(val) {
-        if(this.typecompile === '编辑') {
-            return 
-        }
-        console.log(this.comparet[val],484)
-        if( this.form[val].trim() === this.comparet[val]) {
-
-          this.forms['is'+ val] = false
-        } else {
-          this.forms['is'+ val] = true 
-        }
+      if(this.typecompile === '编辑') {
+          return 
+      }
+      if( this.form[val].trim() === this.compare[val].trim() ) {
+        console.log(this.form[val].trim())
+        console.log(this.compare[val].trim());        
+        this.forms['is'+ val] = false
+      } else {
+        this.forms['is'+ val] = true 
+      }
     },
-    // 跳转页面
     newurl() {
       localStorage.setItem("reliTitle",this.title)
       localStorage.setItem('reliSource', this.code)
       localStorage.setItem('relipkid',this.pkid)
       this.$router.push('/relevance')
     },
-    // 加载项目地区
     listregion() {
         listArea({areaParentId:this.parentId}).then(res => {
-          console.log(res,488)
             if(res.code === 1 ) {
                res.data.forEach(itme => {
-                   
                    itme.areaCode = itme.pkid + itme.areaCode
-                })
-                
-                this.areas = res.data
+                }) 
+               this.areas = res.data
             }
         })
     },
-    //加载县区 
-    listcities() {
-        listArea({areaParentId:this.cpkid}).then(res => {
-            if(res.code === 1) {
-                this.counties = res.data
-            }
-        })
-    },
-     // 获取评标办法
     listMode() {
         listPbMode({type:this.code}).then(res => {
            if(res.code === 1 ) {
@@ -516,7 +511,6 @@ export default {
            }
         })
     },
-    //  获取相关公告列表
     listNtgpn() {
         listNtgp({ntId:this.pkid,source:this.code}).then(res => {
           if(res.code ===1) {
@@ -524,7 +518,6 @@ export default {
           }
         })
     },
-     // 获取固定列表的数据
     listfixe() {
       this.title = localStorage.getItem('lititle')
       this.pubDate = localStorage.getItem('lipubtime')
@@ -536,20 +529,23 @@ export default {
         this.type1s = res.data.projectType
         this.records = res.data.filingRequirements
         this.status = res.data.biddingStatus
-      })        
+      })
+        
     },
-    // 获取的编辑明细列表
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
          this.state = this.state + res.data[0].url
          this.compileData = res.data
-        this.form = res.data[0]
+          this.form = res.data[0]
+          this.compare = res.data[0]
+          // this.again = res.data[0]
       }) 
     },
-    // 招标文件列表
     listFile() {
-      listFiles({bizId:this.pkid,source:this.code}).then(res=> {    
-        this.file = res.data        
+      listFiles({bizId:this.pkid,source:this.code}).then(res=> {
+        
+        this.file = res.data
+        
       })
     },
     // 解除相关公告函数
@@ -627,45 +623,29 @@ export default {
                     type:'warning'
                   })
         } 
-         insertNt({source:this.code,ntId:this.pkid,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntType:this.form.ntType,certAuditAddr:this.form.certAuditAddr}).then( res=> {
+         insertNt({source:this.code,ntId:this.pkid,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,ntCategory:this.form.ntCategory,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntType:this.form.ntType,certAuditAddr:this.form.certAuditAddr}).then( res=> {
              if(res.code === 1 ) {
                this.$message({
                     message:res.msg,
                     type:'success'
                   })
-                  this.listTender()
              } else {
                this.$message({
                     message:res.msg,
                     type:'warning'
                   })
              }
-             
+             this.listTender()
          })
 
       } else {
           Object.keys(this.forms).forEach(key => {
-                if(this.forms[key]) {
+                if(this.obj[key]) {
                   this.arrpare.push(key.substring(2)) 
-                }           
-          })
-            
-          this.arrpare.forEach(item => {
-            console.log(this.form.pkid)
-             inserttbNt({ntId:this.id,ntEditId:this.form.pkid,ntCategory:1,source:this.code,fieldFrom:this.comparet[item],fieldName:item,fieldValue:this.form[item]}).then(res => {                 
-                if(res.code === 0 ) {
-                    return this.$message({
-                            message:res.msg,
-                            type:'warning'
-                          })
                 }
-             })
+                // console.log()
           })
-          this.$message({
-            type:'success',
-            message:'变更成功'
-          }) 
-
+          console.log(this.arrpare)
       }
 
     },
@@ -682,8 +662,9 @@ export default {
        console.log(tab, event);
      },
       handleSelectionChange(val) {   // 编辑明细  选中时发生变化会触发该事件
-           this.comparelist(this.pkid,this.code,val[0].pkid)
           this.delcom = val
+          // this.agtain = val[0]
+          this.compare = val[0]
           this.form = val[0]
       },
       handleFileChange(val) {   //  招标文件的
@@ -714,7 +695,7 @@ export default {
       if (response.code === 1) {
         this.$message({
           type: 'success',
-          message: '上传文件成功'
+          message: response.msg
         })
       }else {
          this.$message({
@@ -722,7 +703,6 @@ export default {
           message: response.msg
         })
       }
-      this.listFile()
     },
     setHeader() {
       let token = localStorage.getItem('Authorization')
@@ -746,20 +726,14 @@ export default {
              type:'warning',
              message:'地址栏不能为空~'
            })        
-       } else if(!this.urltitle.trim()) {
-          this.$message({
-             type:'warning',
-             message:'标题栏不能为空~'
-           }) 
-       } else  {
-         listFilesPath({bizId:this.pkid,filePath:this.urlupload,fileName:this.urltitle,type:4,orderNo:1,source:this.code}).then(res=> {
+       } else {
+         listFilesPath({bizId:this.pkid,filePath:this.urlupload,type:4,orderNo:1,source:this.code}).then(res=> {
                if(res.code === 1) {
                  this.$message({
                    type:'success',
                    message: res.msg
                  })
                  this.urlFormVisible = false 
-                 this.listFile()
                }
           })          
        }   
@@ -832,19 +806,11 @@ export default {
     },
     addcompile() {
       this.typecompile = '编辑' 
+      // this.form = this.again
     },
     toocompile () {
-      this.typecompile = '变更'
-      this.comparelist(this.pkid,this.code,this.form.pkid)
-
-    },
-    // 获取变更的字段的信息 
-    comparelist(a,b,c) {
-      getNt({ntId:a,source:b,pkid:c}).then(res => {
-        if(res.code ===1) {
-          this.comparet = res.data
-        }
-      })
+      this.typecompile = '变更' 
+      // this.form = this.again
     },
     //接触相关的公告
     relieve() {
@@ -885,9 +851,6 @@ export default {
 </script>
 <style lang="less">
  .compile {
-   .title {
-     margin-bottom: 30px;
-   }
   .menu-c {
     box-sizing: border-box;
     padding: 0 10px;
