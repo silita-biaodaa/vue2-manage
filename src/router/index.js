@@ -17,6 +17,7 @@ import Rease from '@/page/rease'
 import Quillediter from '@/page/QuillEditor'
 import Detail from '@/page/detail'
 import Relevance from '@/page/relevance'
+import Recycle from '@/page/recycle'
 
 
 Vue.use(Router)
@@ -106,6 +107,11 @@ const routes = [
 									path: '/relevance',
 									component: Relevance,
 									name: 'relevance'
+								},
+								{
+									path:'/recycle',
+									component:Recycle,
+									name:'recycle'
 								}
 
 

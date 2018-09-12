@@ -182,8 +182,9 @@ export default {
           pkid:'15fb9d5310ab4f7b9375884df98d45d8',
           coDe:'hunan',
           pagesize:15, // 当前页面条数
-          pagenum: 1  //当前页面数
-
+          pagenum: 1,  //当前页面数
+          json:'',
+          j:{}
      }  
   },
   watch: {
@@ -194,7 +195,6 @@ export default {
      province:function() {
          this.city = ''
         this.pkid= this.province.substring(0,32)
-        // console.log(this.pkid,197)
         this.coDe= this.province.substring(32)
         console.log(this.coDe,199)
         console.log(this.pkid,200)
@@ -252,11 +252,17 @@ methods: {
           this.listForm()
       },
       handleEdit(index,row) {  // 编辑框的跳转
-            localStorage.removeItem('lititle')
-            localStorage.removeItem('lipubtime')
-            localStorage.setItem('lititle', row.title)
-            localStorage.setItem('lipubtime', row.pubDate)
-         
+            this.j.cityCode = this.city,
+            this.j.ntStatus = this.state
+            this.j.title = this.firm
+            this.j.pubDate = this.pubDate
+            this.j.pubEndDate = this.pubEndDate
+            this.j.currentPage = this.pagenum
+            this.j.pageSize = this.pagesize 
+             this.json = JSON.stringify(this.j)
+             localStorage.removeItem('tensele')
+             localStorage.setItem('tensele',this.json)
+        
         const { href } = this.$router.resolve({
               name:'compile',params: {id:row.pkid,code:this.coDe}
           })
