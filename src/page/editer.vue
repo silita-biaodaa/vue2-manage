@@ -256,7 +256,7 @@
                 label="发证机关">
             </el-table-column>
             <el-table-column
-                prop="channel"
+                prop="source"
                 label="来源">
             </el-table-column>
             <el-table-column label="操作"
@@ -755,7 +755,7 @@
           } else {
             this.$message({
               type: "success",
-              message: "添加成功"
+              message: "red"
             });
             this.getQuality();
           }
@@ -841,10 +841,10 @@
           creditCode: this.creditBean.changeCreditCode
         });
         getJsonData("/company/creditCode/add", dataParam).then(res => {
-          this.$message({
-            message: "企业统一社会信用代码保存成功！",
-            type: "success"
-          });
+               this.$message({
+                   message: res.msg,
+                   type: "success"
+               });
 
           this.getCreditData();
         });
@@ -916,7 +916,7 @@
           }
           let bddArray = res.data;
           this.$message({
-            message: "企业安许证号保存成功！",
+            message: res.msg,
             type: "success"
           });
           console.log(555);
@@ -984,7 +984,7 @@
           this.creditData = res.data[0];
           let comDataArray = res.data;
 
-  
+
         if(res.data!=null&& res.data[0]!=null){
           this.beforeComName = res.data[0].comName;
           }
@@ -1024,7 +1024,7 @@
         getJsonData("/company/comName/add", dataParam).then(res => {
           console.log(res);
           this.$message({
-            message: "恭喜你，企业名称变更成功！",
+            message: res.msg,
             type: "success"
           });
 
@@ -1109,7 +1109,7 @@
       changeNameEmpty() {
         this.afterComName = "";
         this.changeTime = "";
-        
+
 
       }
     },
@@ -1129,7 +1129,7 @@
             label: "良好"
           }
         ],
-
+          source:'',
         data: '',
           certDatep:'',
         oneQualityLevel: "",

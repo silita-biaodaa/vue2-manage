@@ -162,7 +162,6 @@
                          message: '请输入社会统一信用代码'
                      });
                  }
-
                  let dataParam = JSON.stringify({
                      "pkid":this.selectPkid,
                     "comName": this.credCode,
