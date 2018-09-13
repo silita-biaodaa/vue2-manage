@@ -629,7 +629,7 @@ export default {
       if(parseInt(this.position) == 0) {
           return this.$message({
              type:'warning',
-             message:'已经是第一条公告，无法跳转'
+             message:'已经是第一条公告，无法跳转~'
           })
       } else {
         this.position = parseInt(this.position) - 1
@@ -640,10 +640,10 @@ export default {
       }
     },
     nextlist() {
-       if(parseInt(this.position) == this.arrpkid.length) {
+       if(parseInt(this.position) == this.arrpkid.length - 1 ) {
           return this.$message({
              type:'warning',
-             message:'已经是最后一条公告，无法跳转'
+             message:'已经是最后一条公告，无法跳转~'
           })
       } else {
         this.position = parseInt(this.position) + 1

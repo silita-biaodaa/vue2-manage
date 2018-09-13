@@ -61,7 +61,7 @@
 								<i class="el-icon-warning"></i>
 								<span>设置</span>
 								</template>
-							<el-menu-item index="explain">账号管理</el-menu-item>
+							<el-menu-item index="/explain">账号管理</el-menu-item>
 							<el-menu-item index="/aptitudes">资质维护</el-menu-item>
 							<el-menu-item index="/method">评标办法维护</el-menu-item>
 							<el-menu-item index="/maintenance">等级维护</el-menu-item>
