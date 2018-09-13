@@ -154,14 +154,14 @@
                   return this.$message({
                             type: 'warning',
                             message: '请先添写企业名称'
-                          });
+                          })
                 }
-                if(!this.comName) {
-                    return this.$message({
-                        type: 'warning',
-                        message: '请输入社会统一信用代码'
-                    });
-                }
+                 if(!this.crCode) {
+                     return this.$message({
+                         type: 'warning',
+                         message: '请输入社会统一信用代码'
+                     });
+                 }
 
                  let dataParam = JSON.stringify({
                      "pkid":this.selectPkid,
@@ -175,7 +175,7 @@
                     this.dialogFormVisible = false;
                      if (res.code == 1) {
                          this.$message({
-                            type: 'success',
+                            type: 'warning',
                             message: '修改成功!'
                         });
                         this.getDataList();

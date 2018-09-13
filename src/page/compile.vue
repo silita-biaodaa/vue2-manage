@@ -25,11 +25,11 @@
       </el-row>
       <el-row>
         <el-col :span="12" class="edit-c">
-           <div class="edit-l">
-             <i class="el-icon-arrow-left"></i>
+           <div class="edit-l" @click='lastlist'>
+             <i class="el-icon-arrow-left" ></i>
            </div>
-           <div class="edit-r">
-             <i class="el-icon-arrow-right"></i>
+           <div class="edit-r" @click='nextlist' >
+             <i class="el-icon-arrow-right" ></i>
            </div>
 
             <Edit></Edit>
@@ -51,15 +51,15 @@
             </el-form-item>                  
             <el-form-item  >
               <div :class="['labe',forms.iscontrollSum?'new':'old']">招标控制价(万元)</div>
-              <el-input v-model="form.controllSum" @input="text('controllSum')" ></el-input>
+              <el-input v-model="form.controllSum" @blur="text('controllSum')" ></el-input>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isproSum?'new':'old']">项目金额(万元)</div>
-              <el-input v-model="form.proSum" @input="text('proSum')" ></el-input>
+              <el-input v-model="form.proSum" @blur="text('proSum')" ></el-input>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isproDuration?'new':'old']">项目工期</div>
-              <el-input v-model="form.proDuration" @input="text('proDuration')" ></el-input>
+              <el-input v-model="form.proDuration" @blur="text('proDuration')" ></el-input>
             </el-form-item>
             <el-form-item >
               <div class="labe"><i class="el-icon-warning"></i>项目地区</div>
@@ -77,86 +77,86 @@
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.ispbMode?'new':'old']">评标办法</div>
-              <el-select v-model="form.pbMode" @input="text('pbMode')" filterable placeholder="请选择评标办法" style="width:80%">
+              <el-select v-model="form.pbMode" @change="text('pbMode')" filterable placeholder="请选择评标办法" style="width:80%">
                 <el-option v-for="item in ways" :key="item.code" :label="item.name" :value="item.code">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isbidBonds?'new':'old']">投标保证金(万元)</div>
-              <el-input v-model="form.bidBonds" @input="text('bidBonds')" ></el-input>
+              <el-input v-model="form.bidBonds" @blur="text('bidBonds')" ></el-input>
             </el-form-item>            
             <el-form-item > 
               <div :class="['labe',forms.isbidBondsEndTime?'new':'old']">保证金截至时间</div>
               <div class="block">
-                <el-date-picker v-model="form.bidBondsEndTime" type="datetime" placeholder="选择日期时间">
+                <el-date-picker v-model="form.bidBondsEndTime" type="datetime"  @blur="text('bidBondsEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" >
                 </el-date-picker>
               </div>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isenrollEndTime?'new':'old']">报名截止时间</div>
               <div class="block">
-                <el-date-picker v-model="form.enrollEndTime" type="datetime" placeholder="选择日期时间">
+                <el-date-picker v-model="form.enrollEndTime" type="datetime"  @blur="text('enrollEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" >
                 </el-date-picker>
               </div>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isenrollAddr?'new':'old']">报名地点</div>
-              <el-input v-model="form.enrollAddr" @input="text('enrollAddr')" ></el-input>
+              <el-input v-model="form.enrollAddr" @blur="text('enrollAddr')" ></el-input>
             </el-form-item>
             <el-form-item>
               <div :class="['labe',forms.isauditTime?'new':'old']">资格审查截止时间</div>
               <div class="block">
-                <el-date-picker v-model="form.auditTime" type="datetime" placeholder="选择日期时间">
+                <el-date-picker v-model="form.auditTime" type="datetime"  @blur="text('auditTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" >
                 </el-date-picker>
               </div>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.iscertAuditAddr?'new':'old']">资格审查地点</div>
-              <el-input v-model="form.certAuditAddr" @input="text('certAuditAddr')" ></el-input>
+              <el-input v-model="form.certAuditAddr" @blur="text('certAuditAddr')" ></el-input>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isbidEndTime?'new':'old']">投标截止时间</div>
               <div class="block">
-                <el-date-picker v-model="form.bidEndTime" type="datetime" placeholder="选择日期时间">
+                <el-date-picker v-model="form.bidEndTime" type="datetime"  @blur="text('bidEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm">
                 </el-date-picker>
               </div>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isopeningPerson?'new':'old']">开标人员</div>
-              <el-select v-model="form.openingPerson" @input="text('openingPerson')" filterable placeholder="请选择开标人员" style="width:80%">
+              <el-select v-model="form.openingPerson" @change="text('openingPerson')" filterable placeholder="请选择开标人员" style="width:80%">
                 <el-option v-for="item in exploits" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isopeningAddr?'new':'old']">开标地点</div>
-              <el-input v-model="form.openingAddr" @input="text('openingAddr')" ></el-input>
+              <el-input v-model="form.openingAddr" @blur="text('openingAddr')" ></el-input>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isproType?'new':'old']"><i class="el-icon-warning"></i>项目类型</div>
-              <el-select v-model="form.proType" @input="text('proType')" filterable placeholder="请选择项目类型" style="width:80%">
+              <el-select v-model="form.proType" @blur="text('proType')" filterable placeholder="请选择项目类型" style="width:80%">
                 <el-option v-for="item in type1s" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isbinessType?'new':'old']">招标类型</div>
-              <el-select v-model="form.binessType" @input="text('binessType')" filterable placeholder="请选择招标类型" style="width:80%">
+              <el-select v-model="form.binessType" @change="text('binessType')" filterable placeholder="请选择招标类型" style="width:80%">
                 <el-option v-for="item in types" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
               <div :class="['labe',forms.isfilingPfm?'new':'old']">平台备案要求</div>
-               <el-select v-model="form.filingPfm" @input="text('filingPfm')" filterable placeholder="请选择备案要求" style="width:80%">
+               <el-select v-model="form.filingPfm" @change="text('filingPfm')" filterable placeholder="请选择备案要求" style="width:80%">
                 <el-option v-for="item in records" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isntTdStatus?'new':'old']">招标状态</div>
-              <el-select v-model="form.ntTdStatus" @input="text('ntTdStatus')" filterable placeholder="请选择招标状态" style="width:80%">
+              <el-select v-model="form.ntTdStatus" @change="text('ntTdStatus')" filterable placeholder="请选择招标状态" style="width:80%">
                 <el-option v-for="sta in statuss" :key="sta.value" :label="sta.name" :value="sta.value">
                 </el-option>
               </el-select>
@@ -325,7 +325,7 @@
 
 <script>
  import  Edit  from "@/page/edit";
- import { listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
+ import { delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
 export default {
   data () {
     return {
@@ -379,7 +379,7 @@ export default {
         proType:'', //项目类型
         binessType:'', // 招标类型
         filingPfm:'', //备案要求
-        ntTdStatus:'',// 招标状态       
+        ntTdStatus:''// 招标状态       
       },
       activeName2:'first',
        areas: [],
@@ -433,7 +433,7 @@ export default {
        ajson:{},
        list:[],
        releGp:'',
-       compare:{},  // 用于变更时候的比较字段
+       comparepile:{},  // 用于变更时候的比较字段
        arrpare:[],  // 用于变更时候请求接口几次判断
        urltitle:'',
        fieldNames:[],
@@ -446,19 +446,19 @@ export default {
   },
   created () {
     this.parentId = localStorage.getItem('parentId')
-    this.listNtgpn()
     this.listfixe()
+    this.listNtgpn()
     this.listFile()
     this.listregion()
     this.listMode()
-    this.listTender()
+    this.listTenders()
     this.listarr()
   },
   filters: {
     condi:function(val) {
-       if(val === '0' || '') {
+       if(val == '0' || '') {
          return '未处理'
-       } else if (val === '1') {
+       } else if (val == '1') {
          return '未审核'
        } else {
          return '已处理'
@@ -466,6 +466,13 @@ export default {
     }
   },
   watch: {
+    "$route"(to,from) {
+        if(to.name === 'compile') {
+            this.listNtgpn()
+            this.listTenders()
+            this.listFile()
+        }
+    },
     "form.cityCode"(val) {
         this.cpkid= val.substring(0,32)
         this.careaName= val.substring(32)
@@ -481,12 +488,15 @@ export default {
       if(this.typecompile === '编辑') {
           return 
       }
-      if( this.form[val].trim() === this.compare[val].trim() ) {   
+      if( this.form[val] === this.comparepile[val]) {   
         this.forms['is'+ val] = false
 
       } else {
+
         this.forms['is'+ val] = true 
         this.fieldNames.push(val)
+        console.log(this.fieldNames,490)
+      
       }
     },
     newurl() {
@@ -528,9 +538,8 @@ export default {
     },
     // 相关公告得
     listNtgpn() {
-        this.id = this.$route.params.id
+        this.pkid = this.$route.params.id
         this.code = this.$route.params.code
-        this.position = localStorage.getItem('indexer')
         listNtgp({ntId:this.pkid,source:this.code}).then(res => {
           if(res.code ===1) {
             this.relation =res.data.datas
@@ -539,27 +548,32 @@ export default {
     },
     // 固定下拉框
     listfixe() {
+        this.position = localStorage.getItem('indexer')
       listFixed({}).then(res=> {
         this.exploits = res.data.bidOpeningPersonnel
         this.types = res.data.biddingType
         this.type1s = res.data.projectType
         this.records = res.data.filingRequirements
         this.statuss = res.data.biddingStatus
+        
       })
         
     },
-    listTender() {
+     // 获取编辑列表
+    listTenders() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-
          this.state = this.state + res.data[0].url
          this.compileData = res.data
           this.form = res.data[0]
           this.condition = res.data[0].ntStatus
       }) 
     },
-    listFile() {
+    listFile() {     
       listFiles({bizId:this.pkid,source:this.code}).then(res=> {        
-        this.file = res.data        
+        this.file = res.data  
+         this.form.title = this.arrtitle[this.position]
+        //  console.log(this.form.title,parseInt(this.position)+1)
+         this.form.pubDate = this.arrpub[this.position]      
       })
     },
     // 解除相关公告函数
@@ -582,28 +596,62 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delpost({pkid:this.id,source:this.code}).then(res => {
+        delpost({pkid:this.pkid,source:this.code}).then(res => {
            if(res.code === 1 ) {
-              this.$message({
-                type:'success',
-                message:'删除成功~'
-              })
+             
             //  if(this.position < this.arrpkid || this.position > this.)
             this.arrpkid.splice(this.position,1)
             this.arrtitle.splice(this.position,1)
             this.arrpub.splice(this.position,1)
+            if(this.arrpkid.length == 0) {
+               return this.$message({
+                 type:'warning',
+                 message:'数据列表为空，请回到招标首页'
+               })
+            }
             this.$router.push({
               name:'compile',params:{id:this.arrpkid[this.position],code:this.code}
             })
+            if(parseInt(this.position) > this.arrpkid.length) {
+               this.position = parseInt(this.position) -1
+             }
            }
+
         })
-        
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除'
         });
       });
+    },
+    lastlist() {
+      if(parseInt(this.position) == 0) {
+          return this.$message({
+             type:'warning',
+             message:'已经是第一条公告，无法跳转'
+          })
+      } else {
+        this.position = parseInt(this.position) - 1
+        this.form = {}
+        this.$router.push({
+              name:'compile',params:{id:this.arrpkid[this.position],code:this.code}
+            })
+      }
+    },
+    nextlist() {
+       if(parseInt(this.position) == this.arrpkid.length) {
+          return this.$message({
+             type:'warning',
+             message:'已经是最后一条公告，无法跳转'
+          })
+      } else {
+        this.position = parseInt(this.position) + 1
+        this.form = {}
+        this.$router.push({
+              name:'compile',params:{id:this.arrpkid[this.position],code:this.code}
+            })
+      }
     },
     resetForm() {    // 设置页面得操作得
       this.redactFormVisible = false
@@ -648,26 +696,7 @@ export default {
                     message:'请选择项目类型',
                     type:'warning'
                   })
-        } 
-        
-        // if(this.form.ntTdStatus === '未开标') {
-        //    return this.form.ntTdStatus = '1'
-        // } else if (this.form.ntTdStatus === '流标') {
-        //    return this.form.ntTdStatus = '2'
-        // } else if (this.form.ntTdStatus === '重新招标') {
-        //    return this.form.ntTdStatus = '3'
-        // } else if (this.form.ntTdStatus === "终止") {
-        //   return this.form.ntTdStatus = '4'
-        // } else if (this.form.ntTdStatus === '中止') {
-        //    return this.form.ntTdStatus = '5'
-        // } else if (this.form.ntTdStatus === '废标') {
-        //   return this.form.ntTdStatus = '6'
-        // } else if (this.form.ntTdStatus === '延期') {
-        //   return this.form.ntTdStatus = '7'
-        // } else {
-        //   this.form.ntTdStatus = '8'
-        // }
-        console.log(this.form.ntTdStatus,632)
+        }       
           insertNt({source:this.code,ntId:this.pkid,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
              if(res.code === 1 ) {
                this.$message({
@@ -686,7 +715,8 @@ export default {
 
       } else {
           this.fieldNames.forEach(item => {
-              insertNtC({ntId:this.pkid,ntEditId:this.form.ntId,ntCategory:1,source:this.code,fieldFrom:this.compare[item],fieldName:item,fieldValue:this.form[item]}).then(res => {
+              insertNtC({ntId:this.pkid,ntEditId:this.form.ntId,ntCategory:1,source:this.code,fieldFrom:this.comparepile[item],fieldName:item,fieldValue:this.form[item]}).then(res => {
+                  console.log(res);                  
                   if(res.code === 0 ) {
                      return this.$message({
                        type:'warning',
@@ -694,7 +724,7 @@ export default {
                      })
                   }
                 this.$message({
-                  type:'warning',
+                  type:'success',
                   message:'变更成功'
                 })
               })
@@ -876,7 +906,7 @@ export default {
       this.typecompile = '变更' 
       getNt({ntId:this.pkid,source:this.code,pkid:this.form.pkid}).then(res => {
         if(res.code === 1 ) {
-          this.compare = res.data
+          this.comparepile = res.data
           res.data.fieldName.split(',').forEach((item,index) => {
              this.forms['is' + item ] = true
              this.form[item] = res.data.fieldValue.split(',')[index]
@@ -1027,6 +1057,7 @@ export default {
     position: relative;
     .edit-l,
     .edit-r {
+      z-index: 99;
       color:#fff; 
       position: absolute;
        height: 45px;

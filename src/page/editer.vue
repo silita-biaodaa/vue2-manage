@@ -865,6 +865,12 @@
                 type: "success",
                 message: "删除成功!"
               });
+              let comDataArray = this.comDataArray;
+              if(comDataArray!=null&&comDataArray.length==1){
+                this.beforeComName="";
+                this.getCreditData();
+
+              }
               this.getDataList();
             });
           })
@@ -978,10 +984,9 @@
           this.creditData = res.data[0];
           let comDataArray = res.data;
 
-          if( this.beforeComName ==null||this.beforeComName==""){
-            if(res.data!=null){
+  
+        if(res.data!=null&& res.data[0]!=null){
           this.beforeComName = res.data[0].comName;
-            }
           }
 
           if(type==0){
@@ -1104,6 +1109,8 @@
       changeNameEmpty() {
         this.afterComName = "";
         this.changeTime = "";
+        
+
       }
     },
 

@@ -266,6 +266,10 @@ methods: {
              this.json = JSON.stringify(this.j)
              localStorage.removeItem('tensele')
              localStorage.setItem('tensele',this.json)
+             localStorage.removeItem('indexer')
+             localStorage.setItem('indexer',index)
+             localStorage.removeItem('parentId')
+             localStorage.setItem('parentId',this.pkid)
         
         const { href } = this.$router.resolve({
               name:'compile',params: {id:row.pkid,code:this.coDe}
