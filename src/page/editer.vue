@@ -692,7 +692,7 @@
           this.quality = quality;
           // this.certNoB = quality.certNo;
           // this.certDateB = quality.certDate;
-          // this.certOrgB = quality.certOrg;
+          // this.certOrgB = quality.certOrg;npmn
           // this.validDateB = quality.validDate;
         });
       },
