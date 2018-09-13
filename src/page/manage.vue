@@ -7,6 +7,7 @@
 
 				<el-menu
 				:router="true"
+				:default-active="$route.path"
 				:collapse="isCollapse"
 				class="el-menu-admin"
 				@open="handleOpen"
@@ -22,12 +23,12 @@
 								<i class="el-icon-plus"></i>
 								<span>业务</span>
 							</template>
-							<el-menu-item index="tender">招标</el-menu-item>
-							<el-menu-item index="addGoods">中标</el-menu-item>
-							<el-menu-item index="recycle">回收站</el-menu-item>
-							<el-menu-item index="userList">企信</el-menu-item>
-							<el-menu-item index="service">金融服务</el-menu-item>
-							<el-menu-item index="relevance">相关公告</el-menu-item>
+							<el-menu-item index="/tender">招标</el-menu-item>
+							<el-menu-item index="/addGoods">中标</el-menu-item>
+							<el-menu-item index="/recycle">回收站</el-menu-item>
+							<el-menu-item index="/userList">企信</el-menu-item>
+							<el-menu-item index="/service">金融服务</el-menu-item>
+							<el-menu-item index="/relevance">相关公告</el-menu-item>
 						</el-submenu>
 						<el-submenu index="4">
 							<template slot="title">
@@ -61,9 +62,9 @@
 								<span>设置</span>
 								</template>
 							<el-menu-item index="explain">账号管理</el-menu-item>
-							<el-menu-item index="aptitudes">资质维护</el-menu-item>
-							<el-menu-item index="method">评标办法维护</el-menu-item>
-							<el-menu-item index="maintenance">等级维护</el-menu-item>
+							<el-menu-item index="/aptitudes">资质维护</el-menu-item>
+							<el-menu-item index="/method">评标办法维护</el-menu-item>
+							<el-menu-item index="/maintenance">等级维护</el-menu-item>
 						</el-submenu>
 
 				</el-menu>
