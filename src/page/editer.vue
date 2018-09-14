@@ -108,10 +108,10 @@
         </el-row>
         <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
             <el-col :span="12">
-                <div class="grid-content bg-purple">程序处理：安许证号（{{this.preCertNo}}）</div>
+                <div class="grid-content bg-purple">程序处理：{{this.preCertNo}}</div>
             </el-col>
             <el-col :span="12">
-                <div class="grid-content bg-purple">&nbsp;&nbsp;&nbsp;有效期：{{this.preExpiredStr}}
+                <div class="grid-content bg-purple">有效期：{{this.preExpiredStr}}
 
                 </div>
             </el-col>
@@ -284,7 +284,7 @@
         </el-row>
         <el-row :gutter="20" style="line-height:40px;margin-left: 10%;">
             <el-col :span="8">
-                <div class="grid-content bg-purple">程序处理：安许认证
+                <div class="grid-content bg-purple">程序处理：
                     {{(anquanBean.pro&&anquanBean.pro.certLevelStr)?anquanBean.pro.certLevelStr:""}}
                 </div>
             </el-col>
@@ -328,7 +328,7 @@
                 </div>
             </el-col>
             <el-col :span="8">
-                <div class="grid-content bg-purple">变更时间：
+                <div class="grid-content bg-purple">有效期：
                     <el-date-picker
                         v-model="timeExpiredStr"
                         type="date"
