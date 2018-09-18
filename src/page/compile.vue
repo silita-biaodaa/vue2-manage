@@ -1,11 +1,12 @@
-<template>
-    <div class="compile">
+<template>    
+    <div class="compile" ref="refs">
+      
       <el-row class="menu-c">
         <el-col :span="24">
            <el-row>
               <el-col :span="12" class="left-c">
                  <div class="message-c">
-                    <span :style= "{color:(this.condition === '0' ? 'red' : 'white')}">{{this.condition | condi}}</span>
+                    <span :style= "{color:(this.condition === ('1' || '0')  ? 'red' : 'white')}">{{this.condition | condi}}</span>
                     <a :href="this.state" target="_blank">来源站点</a>
                  </div>
                  <div class="handle-c">
@@ -17,28 +18,29 @@
               <el-col :span="12" class="right-c">                  
                   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color='#000' text-color='#fff' active-text-color='yellow' @select="handleSelect">
                     <el-menu-item index="1" @click='addcompile' >编辑</el-menu-item>
-                    <el-menu-item index="3" @click='toocompile' >变更</el-menu-item> 
+                    <el-menu-item index="2" @click='toocompile' >变更</el-menu-item> 
                   </el-menu>
               </el-col>
            </el-row>
         </el-col>
       </el-row>
-      <el-row>
+      <!-- 中间内容部分展示 -->
+
+      <el-row class="main-t">
         <el-col :span="12" class="edit-c">
-           <div class="edit-l" @click='lastlist'>
+           <div class="edit-l" @click='lastlist' v-show="isShow">
              <i class="el-icon-arrow-left" ></i>
            </div>
-           <div class="edit-r" @click='nextlist' >
+           <div class="edit-r" @click='nextlist' v-show="isShow" >
              <i class="el-icon-arrow-right" ></i>
            </div>
-
             <Edit></Edit>
         </el-col>
         <el-col :span="12" class="redact-c">
             
           <el-form ref="edits" :model="form" label-width="200px" class="demo-ruleForm"  >
             <el-form-item label="招标编辑编号">
-              <el-input v-model="form.editCode"></el-input>
+              <el-input v-model="form.editCode" disabled></el-input>
             </el-form-item>
             <el-form-item label="项目名称">
               <el-input v-model="form.title"></el-input>
@@ -173,14 +175,14 @@
       </el-row>
 
         <!-- tabs标签页 -->
-      <el-row>
+      <el-row class="fixation">
         <el-col :span="24">
             <!-- 编辑明细 -->
-          <el-tabs v-model="activeName2" @tab-click="handleClick" >
+          <el-tabs v-model="activeName2" @tab-click="handleClick" type='border-card'>
 
               <el-tab-pane label="编辑明细" name="first" >                
   
-                    <el-table style="width: 100%" height="300" @selection-change="handleSelectionChange" ref="multipleTable" :data="compileData" @row-click='pilebox'>
+                    <el-table style="width: 100%" height="200" @selection-change="handleSelectionChange" ref="multipleTable" :data="compileData" @row-click='pilebox'>
                       <el-table-column type="selection" width="55">
                       </el-table-column>
                       <el-table-column prop="title" label="项目名称" width="300">
@@ -218,18 +220,20 @@
                       <el-table-column prop="openingAddr" label="开标地点" width="120" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column  label="项目类型" width="120" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.proType }}</template>
+                         <template slot-scope="scope">{{ scope.row.proType | itemtype }}</template>
                       </el-table-column> 
                       <el-table-column label="招标类型" width="120" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.binessType }}</template>                        
+                         <template slot-scope="scope">{{ scope.row.binessType | trick }}</template>                        
                       </el-table-column> 
                       <el-table-column prop="filingPfm" label="平台备案要求" width="120" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column prop="ntTdStatus" label="招标状态" width="120" show-overflow-tooltip>
+                         <template slot-scope="scope">{{ scope.row.ntTdStatus | affair }}</template>                        
+
                       </el-table-column>     
                     </el-table>
 
-                     <div style="margin-top: 20px">
+                     <div style="margin-top: 10px">
                        <el-button type="primary" @click='addtop' >添加编辑明细</el-button>
                        <el-button type="primary" @click='delcompile' >删除编辑明细</el-button>
                      </div>
@@ -238,7 +242,7 @@
             </el-tab-pane>
              <el-tab-pane label="招标文件" name="second">
                
-                  <el-table ref="multipleFile" :data="file" tooltip-effect="dark" style="width: 100%" @selection-change="handleFileChange" height="300">
+                  <el-table ref="multipleFile" :data="file" tooltip-effect="dark"  @selection-change="handleFileChange" height="200">
                     <el-table-column type="selection" style="width:5%">
                     </el-table-column>
                     <el-table-column label="招标文件" width="650" >
@@ -251,7 +255,7 @@
                     </el-table-column>
                   </el-table>
 
-                  <div style="margin-top: 20px">
+                  <div style="margin-top: 10px">
                        <el-upload class="updown-list" action="http://120.79.116.245:19004/upload/uploadZhaoBiaoFile/" :data="sendKid()" :on-preview="handlePreview"  :on-success="handleSuccess" name='files' :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
                          <el-button type="primary">
                            上传招标文件
@@ -264,24 +268,22 @@
 
              </el-tab-pane>
             <el-tab-pane label="相关公告" name="third">
-                  <el-table ref="multipleRela" :data="relation" tooltip-effect="dark" style="width: 100%" @selection-change="handleRelaChange" height="300">
-                    <el-table-column type="selection" style="width:5%">
-                    </el-table-column>
-                    <el-table-column label="公告名称" width="650" >
-                      <template slot-scope="scope">{{ scope.row.title }}</template>
-                    </el-table-column>
-                    <el-table-column prop="pubDate" label="发布日期" >
-                    </el-table-column>
-                    <el-table-column prop="ntStatus" label="状态" show-overflow-tooltip >
-                    </el-table-column>
-                  </el-table>
-
-                  <div style="margin-top: 20px">
-                       <el-button type="primary" >编辑公告</el-button>
-                       <el-button type="primary" @click='newurl' >新增关联公告</el-button>
-                       <el-button type="primary" @click='relieve' >解除关联公告</el-button>                       
-                  </div>
-
+               <el-table ref="multipleRela" :data="relation" tooltip-effect="dark"  @selection-change="handleRelaChange" height="200">
+                 <el-table-column type="selection" style="width:5%">
+                 </el-table-column>
+                 <el-table-column label="公告名称" width="650" >
+                   <template slot-scope="scope">{{ scope.row.title }}</template>
+                 </el-table-column>
+                 <el-table-column prop="pubDate" label="发布日期" >
+                 </el-table-column>
+                 <el-table-column prop="ntStatus" label="状态" show-overflow-tooltip >
+                 </el-table-column>
+               </el-table>
+               <div style="margin-top: 10px">
+                    <el-button type="primary" >编辑公告</el-button>
+                    <el-button type="primary" @click='newurl' >新增关联公告</el-button>
+                    <el-button type="primary" @click='relieve' >解除关联公告</el-button>                       
+               </div>
             </el-tab-pane>
           </el-tabs>
 
@@ -311,14 +313,14 @@
           </el-form>       
       </el-dialog>
         <!-- 上传路路径得弹框 -->
-       <el-dialog title="文件下载路径传输" :visible.sync="urlFormVisible">
-          <el-input v-model="urltitle" placeholder="请输入上传标题" class="urlma"></el-input>          
-          <el-input v-model="urlupload" placeholder="请输入需要上传得下载地址"></el-input>
-         <div slot="footer" class="dialog-footer">
-           <el-button @click="urlFormVisible = false">取 消</el-button>
-           <el-button type="primary" @click="urlSubmit">确 定</el-button>
-         </div>
-    </el-dialog>
+      <el-dialog title="文件下载路径传输" :visible.sync="urlFormVisible">
+            <el-input v-model="urltitle" placeholder="请输入上传标题" class="urlma"></el-input>          
+            <el-input v-model="urlupload" placeholder="请输入需要上传得下载地址"></el-input>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="urlFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="urlSubmit">确 定</el-button>
+              </div>
+      </el-dialog>
 
     </div>
 </template>
@@ -441,8 +443,12 @@ export default {
        arrpkid:[],
        arrtitle:[],
        arrpub:[],
-       position:''
+       position:'',
+       isShow: true
     }
+  },
+  mounted () {
+      // this.needScroll()
   },
   created () {
     this.parentId = localStorage.getItem('parentId')
@@ -451,7 +457,7 @@ export default {
     this.listFile()
     this.listregion()
     this.listMode()
-    this.listTenders()
+    this.listTender()
     this.listarr()
   },
   filters: {
@@ -463,13 +469,285 @@ export default {
        } else {
          return '已处理'
        } 
+    },
+
+    itemtype:function(val) {
+       switch (val) {
+         case '1':
+            return "建筑工程"
+           break;
+         case '2':
+          return "公路工程"
+           break;
+         case '3':
+          return "铁路工程"
+           break;   
+         case '4':
+          return  "港口与航道工程"
+           break;
+           case '5':
+          return "港口与航道工程"
+           break;
+           case '6':
+          return "电力工程"
+           break;
+           case '7':
+          return "矿山工程"
+           break;
+           case '8':
+          return "冶金工程"
+           break;
+           case '9':
+           return "石油化工工程"
+           break;
+           case '10':
+           return "市政公用工程"
+           break;
+           case '11':
+           return "通信工程"    
+           break;
+           case '12':
+           return "电信工程"
+           break;
+           case '13':
+           return "地基基础工程"
+           break;
+           case '14':
+           return "建筑装修装饰工程"
+           break;
+           case '15':
+           return "建筑幕墙工程"
+           break;
+           case '16':
+           return "预拌混凝土"
+           break;
+           case '17':
+           return "钢结构工程"
+           break;
+           case '18':
+           return "消防设施工程"
+           break;
+           case '19':
+           return "模板脚手架"
+           break;
+           case '20':
+           return "起重设备安装"
+           break;
+           case '21':
+           return "防水防腐保温工程"
+           break;
+           case '22':
+           return "建筑机电安装工程"
+           break;
+           case '23':
+           return "古建筑工程"
+           break;
+           case '24':
+           return "城市及道路照明工程"
+           break;
+           case '25':
+           return "环保工程"
+           break;
+           case '26':
+           return "桥梁工程"
+           break;
+           case '27':
+           return "电子与智能化工程"
+           break;
+           case '28':
+          return "隧道工程"
+           break;
+           case '29':
+           return "公路路基工程"
+           break;
+           case '31':
+           return "铁路电务工程"
+           break;
+           case '32':
+           return "铁路铺轨架梁工程"
+           break;
+           case '33':
+           return "铁路电气化工程"
+           break;
+           case '34':
+           return "机场场道工程"
+           break;
+           case '35':
+           return "民航空管工程及机场弱电系统工程"
+           break;
+           case '36':
+           return "机场目视助航工程"
+           break;
+           case '37':
+           return "港口与海岸工程"
+           break;
+           case '38':
+           return "港航设备安装及水上交管工程"
+           break;
+           case '39':
+           return "航道工程"
+           break;
+           case '40':
+           return "水利水电机电设备安装工程"
+           break;
+           case '41':
+           return "水工金属结构制作与安装工程"
+           break;
+           case '42':
+           return "河湖整治工程"
+           break;
+           case '43':
+           return "通航建筑工程"
+           break;
+           case '44':
+           return "核工程"
+           break;
+           case '45':
+           return "输变电工程"
+           break;
+           case '46':
+           return "公路交通工程"
+           break;
+           case '47':
+           return "海洋石油工程"
+           break;
+           case '48':
+           return "特种工程"
+           break;
+           case '49':
+           return "勘察项目"
+           break;
+           case '50':
+           return "设计项目"
+           break;
+           case '51':
+           return "监理项目"
+           break;
+           case '52':
+           return "招标代理工程"
+           break;
+           case '53':
+           return "地质灾害治理工程"
+           break;
+           case '54':
+           return "城市园林绿化工程"
+           break;
+           case '55':
+           return "土石方工程"
+           break;
+           case '56':
+           return "文物保护工程"
+           break;
+           case '57':
+           return "设计与施工一体化项目"
+           break;
+           case '58':
+           return "造价咨询项目"
+           break;
+           case '59':
+           return "公路养护工程"
+           break;
+           case '60':
+           return "检测项目"
+           break;
+           case '61':
+           return "土整项目"
+           break;
+           case '62':
+           return "室内装饰"
+           break;
+           case '63':
+           return "EPC项目"
+           break;
+           case '64':
+           return "PPP项目"
+           break;
+           case '65':
+           return "安防工程"
+           break;
+       
+       }
+    },
+    affair:function(val) {
+      switch (val) {
+        case '1':
+        return "未开标"            
+          break;
+          case '2':
+        return "流标"           
+          break;
+          case '3':
+        return "重新招标"            
+          break;
+          case '4':
+        return "终止"           
+          break;
+          case '5':
+        return "中止"            
+          break;
+          case '6':
+        return "废标"            
+          break;
+          case '7':
+        return "延期"            
+          break;
+          case '8':
+        return "已开标"           
+          break;
+          case '':
+        return             
+          break;
+      }
+    },
+    trick:function(val) {
+      switch (val) {
+        case '01':
+        return "施工"            
+          break;
+           case '02':
+        return "监理"            
+          break;
+           case '03':
+        return "设计"            
+          break;
+           case '04':
+        return "勘察"            
+          break;
+           case '05':
+        return "采购"            
+          break;
+           case '06':
+        return "其他"            
+          break;
+           case '07':
+        return "PPP"            
+          break;
+           case '08':
+        return "设计施工"            
+          break;
+           case '09':
+        return "EPC"            
+          break;
+           case '10':
+        return "检测"            
+          break;
+           case '11':
+        return "施工采购"            
+          break;
+           case '12':
+        return "造价咨询"            
+          break;
+          case '13':
+        return "造价咨询"
+          break;
+      }
     }
   },
   watch: {
     "$route"(to,from) {
         if(to.name === 'compile') {
             this.listNtgpn()
-            this.listTenders()
+            this.listTender()
             this.listFile()
         }
     },
@@ -482,6 +760,7 @@ export default {
             }
         })
     }
+
   },
   methods: {
     text(val) {
@@ -500,10 +779,11 @@ export default {
       }
     },
     newurl() {
-      localStorage.setItem("reliTitle",this.title)
+      localStorage.setItem("reliTitle",this.form.title)
+      // console.log(this.form.title)
       localStorage.setItem('reliSource', this.code)
       localStorage.setItem('relipkid',this.pkid)
-      this.$router.push('/relevance')
+      this.$router.replace('/relevance')
     },
     listarr(){
        this.engine = JSON.parse(localStorage.getItem('tensele'))
@@ -514,6 +794,9 @@ export default {
                   this.arrtitle.push(item.title)
                   this.arrpub.push(item.pubDate)
               })
+            if(this.arrpkid.length == 1 ) {
+                this.isShow = false   
+            }
           } 
        }) 
     },
@@ -551,28 +834,34 @@ export default {
         this.position = localStorage.getItem('indexer')
       listFixed({}).then(res=> {
         this.exploits = res.data.bidOpeningPersonnel
-        this.types = res.data.biddingType
+        this.types = res.data.biddingType      
         this.type1s = res.data.projectType
         this.records = res.data.filingRequirements
         this.statuss = res.data.biddingStatus
-        
       })
         
     },
      // 获取编辑列表
-    listTenders() {
+    listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-         this.state = this.state + res.data[0].url
-         this.compileData = res.data
-          this.form = res.data[0]
-          this.condition = res.data[0].ntStatus
+          console.log(1)
+          if(res.data.length >= 1) {
+            this.state = this.state + res.data[0].url
+            this.compileData = JSON.parse(JSON.stringify(res.data))
+             this.form = res.data[0]
+             this.condition  = res.data[0].ntStatus
+          } else {
+            this.condition = '0'
+            this.form = {}
+            this.compileData = {}
+          }
+         
       }) 
     },
     listFile() {     
       listFiles({bizId:this.pkid,source:this.code}).then(res=> {        
         this.file = res.data  
          this.form.title = this.arrtitle[this.position]
-        //  console.log(this.form.title,parseInt(this.position)+1)
          this.form.pubDate = this.arrpub[this.position]      
       })
     },
@@ -598,16 +887,15 @@ export default {
       }).then(() => {
         delpost({pkid:this.pkid,source:this.code}).then(res => {
            if(res.code === 1 ) {
-             
-            //  if(this.position < this.arrpkid || this.position > this.)
+
             this.arrpkid.splice(this.position,1)
             this.arrtitle.splice(this.position,1)
             this.arrpub.splice(this.position,1)
+            if(this.arrpkid.length == 1) {
+               this.isShow = false 
+            }
             if(this.arrpkid.length == 0) {
-               return this.$message({
-                 type:'warning',
-                 message:'数据列表为空，请回到招标首页'
-               })
+               return this.$router.push({path:'/tender'})
             }
             this.$router.push({
               name:'compile',params:{id:this.arrpkid[this.position],code:this.code}
@@ -697,7 +985,7 @@ export default {
                     type:'warning'
                   })
         }       
-          insertNt({source:this.code,ntId:this.pkid,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
+          insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
              if(res.code === 1 ) {
                this.$message({
                     message:res.msg,
@@ -779,6 +1067,7 @@ export default {
           type: 'success',
           message: response.msg
         })
+        this.listFile()
       }else {
          this.$message({
           type: 'warning',
@@ -821,6 +1110,7 @@ export default {
                    message: res.msg
                  })
                  this.urlFormVisible = false 
+                 this.listFile()
                }
           })          
        }   
@@ -887,9 +1177,10 @@ export default {
         });
       });
     },
-    addtop() {
+    addtop(i) {
        this.form.segment = ''
        this.form.editCode = ''
+    
     },
     addcompile() {
       this.typecompile = '编辑' 
@@ -906,7 +1197,8 @@ export default {
       this.typecompile = '变更' 
       getNt({ntId:this.pkid,source:this.code,pkid:this.form.pkid}).then(res => {
         if(res.code === 1 ) {
-          this.comparepile = res.data
+          this.form = res.data
+          this.comparepile = JSON.parse(JSON.stringify(res.data))
           res.data.fieldName.split(',').forEach((item,index) => {
              this.forms['is' + item ] = true
              this.form[item] = res.data.fieldValue.split(',')[index]
@@ -958,6 +1250,8 @@ export default {
 </script>
 <style lang="less">
  .compile {
+   position: relative;
+   overflow: hidden;
    .urlma {
      margin-bottom: 15px;
    }
@@ -1053,58 +1347,67 @@ export default {
       }
     }
   }
-  .edit-c {
-    position: relative;
-    .edit-l,
-    .edit-r {
-      z-index: 99;
-      color:#fff; 
-      position: absolute;
-       height: 45px;
-       width: 45px;
-       border-radius: 50%;
-       background-color: #000;
-       top: 50%;
-       transform: translateY(-50%);
-       text-align: center;
-       line-height: 45px;
-       font-size: 30px;
-       font-weight: 1000;  
-    }
-    .edit-r {
-      right:0;
-    }   
-    .ql-editor {
-      height: 815px;
-    }
-  }
-  .compiletable {
-    width: 100%;
-    overflow: hidden;
+  .main-t {
+    //  height: 1500px;
+     .edit-c {
+      position: relative;
+        .edit-l,
+        .edit-r {
+          z-index: 99;
+          color:#fff; 
+          position: absolute;
+          height: 45px;
+          width: 45px;
+          border-radius: 50%;
+          background-color: #000;
+          top: 50%;
+          transform: translateY(-50%);
+          text-align: center;
+          line-height: 45px;
+          font-size: 30px;
+          font-weight: 1000;  
+        }
+        .edit-r {
+          right:0;
+        }   
+        .ql-editor {
+        height: 815px;
+        }
+      }
+      .right-c {
+        overflow: hidden;
+      } 
   }
   
- ::-webkit-scrollbar {
-   height: 13px;
- }
- 
-::-webkit-scrollbar-thumb {
-  border-radius: 0;
-  background-color: #c4c4c4;
+  .fixation{
+      // position: fixed;
+      // bottom: -5px;
+      // width: 84%;
+      // overflow: hidden;
+      // z-index: 999;
+        ::-webkit-scrollbar {
+            height: 13px;
+          }
+          
+          ::-webkit-scrollbar-thumb {
+            border-radius: 0;
+            background-color: #c4c4c4;
 
-}
-.updown-list {
-  float:left;
-  margin-right:20px;
-}
- .el-icon-check {
-   color:red;
-   font-size: 18px;
-   line-height: 30px;
-   position: absolute;
-   right: 10%;
-   top:0;
-   font-weight: 700;
- }
+          }
+          .updown-list {
+            float:left;
+            margin-right:20px;
+          }
+          .el-icon-check {
+            color:red;
+            font-size: 18px;
+            line-height: 30px;
+            position: absolute;
+            right: 10%;
+            top:0;
+            font-weight: 700;
+          }
+  }
 
  }
 </style>
