@@ -107,6 +107,7 @@ export default {
       reStr:''
     }
   },
+
   created () {
     // this.showtitle()
      this.listsou() 
@@ -133,21 +134,32 @@ export default {
   mounted () {
     this.showtitle()
   },
+  beforeRouteEnter(to, from, next){
+
+      if(from.name == 'compile') {
+          next()
+      } else {
+          localStorage.removeItem('reliTitle')
+          localStorage.removeItem('reliSource')
+          localStorage.removeItem('relipkid') 
+          next()
+      }
+  },
   methods: {
-      
+  
       showtitle() {
         if(localStorage.getItem('reliSource')) {
             this.civiic = localStorage.getItem('reliSource')
              this.title = localStorage.getItem('reliTitle') 
         }
-        
+            
 
          if(localStorage.getItem('reliTitle')) {
-             this.skip = true 
+          this.skip = true 
          } else {
-             this.skip = false                
+          this.skip = false
+
          }       
-         console.log(this.skip,127)
      },
     handleRelevance(val) {
         console.log(val)
@@ -242,6 +254,11 @@ export default {
       }
   },
   components: {
+  },
+  beforeDestroy () {
+    localStorage.removeItem('reliTitle')
+    localStorage.removeItem('reliSource')
+    localStorage.removeItem('relipkid')
   },
   destroyed() {
     localStorage.removeItem('reliTitle')
