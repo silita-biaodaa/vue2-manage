@@ -800,7 +800,6 @@ export default {
                   this.arrtitle.push(item.title)
                   this.arrpub.push(item.pubDate)
               })
-              // 
               this.form.title = this.arrtitle[this.position]
               this.form.pubDate = this.arrpub[this.position]
             if(this.arrpkid.length == 1 ) {
@@ -863,6 +862,8 @@ export default {
           } else {
             this.condition = '0'
             this.form = {}
+            this.form.title = this.arrtitle[this.position]
+            this.form.pubDate = this.arrpub[this.position]
             this.compileData = []
           }
          
