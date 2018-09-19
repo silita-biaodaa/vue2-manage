@@ -12,7 +12,7 @@
                  <div class="handle-c">
                     <span @click='handlemark'>设置</span>
                     <span @click='deletemark'>删除</span>
-                    <!-- <span @click='textco'>测试</span> -->
+                    <span @click='textco'>测试</span>
                  </div>
               </el-col>
 
@@ -41,7 +41,7 @@
             
           <el-form ref="edits" :model="form" label-width="200px" class="demo-ruleForm"  >
             <el-form-item label="招标编辑编号">
-              <el-input v-model="form.editCode" disabled></el-input>
+              <el-input v-model="form.editCode" disabled ></el-input>
             </el-form-item>
             <el-form-item label="项目名称">
               <el-input v-model="form.title"></el-input>
@@ -780,6 +780,9 @@ export default {
 
   },
   methods: {
+    textco() {
+      console.log(this.form)
+    },
     text(val) {
       if(this.typecompile === '编辑') {
           return 
@@ -861,19 +864,18 @@ export default {
      // 获取编辑列表
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-           
+          console.log(res.data,867)
+          console.log(res.data.length,868)           
           if(res.data.length >= 1) {
             this.state = this.state + res.data[0].url
-            this.compileData = JSON.parse(JSON.stringify(res.data))
-             this.form = res.data[0]
+            this.compileData = res.data.concat()
+             this.form = JSON.parse(JSON.stringify(res.data[0]))
           } else {
             this.condition = '0'
             this.form = {}
             this.form.title = this.arrtitle[this.position]
             this.form.pubDate = this.arrpub[this.position]
-            this.compileData = []
-          }
-         
+          }         
       }) 
     },
     listFile() {     
@@ -892,14 +894,14 @@ export default {
       this.ajson = {}
     },
     handlemark() {    //中标设置弹框.
-      // if(this.condition != '0' && '5') {
-      //     return this.$message({
-      //             type:'warning',
-      //             message:'该公告无法设置'
-      //           })
-      // }else {
-      //     this.redactFormVisible = true
-      // }
+      if(this.condition != '0' && '5') {
+          return this.$message({
+                  type:'warning',
+                  message:'该公告无法设置'
+                })
+      }else {
+          this.redactFormVisible = true
+      }
        this.redactFormVisible = true
     },
     handleSelect(key, keyPath) {
@@ -1062,7 +1064,7 @@ export default {
      },
       handleSelectionChange(val) {   // 编辑明细  选中时发生变化会触发该事件
           this.delcom = val
-          this.form = val[0]
+          this.form = JSON.parse(JSON.stringify(val[0]))
       },
       handleFileChange(val) {   //  招标文件的
            this.deurl = val       
@@ -1176,15 +1178,16 @@ export default {
       });
     },
     delcompile() {
-       this.$confirm('此操作将永久删除该招标文件, 是否继续?', '提示', {
+       this.$confirm('此操作将永久删除该标段信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.delcom.forEach(item => {
-         this.delcomp.push(item.pkid)
-      })
+          this.delcom.forEach(item => {
+            this.delcomp.push(item.pkid)
+          })          
       this.delcompl = this.delcomp.join('|')
+      this.emptyForm('edits')
         deletePkid({idsStr:this.delcompl,source:this.code}).then(res => {
            if(res.code ===1) {
               this.$message({
@@ -1197,6 +1200,7 @@ export default {
            this.delcompl = ''
            this.listTender()
         })
+  
         
       }).catch(() => {
         this.$message({
@@ -1207,8 +1211,7 @@ export default {
     },
     addtop(i) {
        this.form.segment = ''
-       this.form.editCode = ''
-    
+       this.form.editCode = ''    
     },
     addcompile() {
       this.typecompile = '编辑' 
