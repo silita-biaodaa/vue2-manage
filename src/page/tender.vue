@@ -205,17 +205,23 @@ export default {
       this.listForm()
   }, 
   filters: {
-     sum:function(value){
-         if(value ==='0') {
-             return '未编辑'
-         } else if(value === '1') {
-             return '已编辑'
-         } else if(value === '2') {
-             return '已审核'
-         } else if(value === '3') {
-             return '未审核'
-         } else  {
-             return '已审核未通过'
+     sum:function(val){
+         switch (val) {
+             case '0':
+               return '新建'  
+                 break;
+             case '1':
+               return '未审核'  
+                 break;
+                 case '2':
+               return '已审核'  
+                 break;
+                 case '4':
+               return '审核未通过'  
+                 break;
+                 case '5':
+               return '已处理'  
+                 break;  
          }
      }
   },

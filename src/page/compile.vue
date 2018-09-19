@@ -6,12 +6,13 @@
            <el-row>
               <el-col :span="12" class="left-c">
                  <div class="message-c">
-                    <span :style= "{color:(this.condition === '0' ? 'red' : 'white')}">{{this.condition | condi}}</span>
+                    <span :style= "{color:(this.condition === '0' ? 'red' : 'white')}">{{ condition | condi}}</span>
                     <a :href="this.state" target="_blank">来源站点</a>
                  </div>
                  <div class="handle-c">
                     <span @click='handlemark'>设置</span>
                     <span @click='deletemark'>删除</span>
+                    <!-- <span @click='textco'>测试</span> -->
                  </div>
               </el-col>
 
@@ -120,7 +121,7 @@
             <el-form-item >
               <div :class="['labe',forms.isbidEndTime?'new':'old']">投标截止时间</div>
               <div class="block">
-                <el-date-picker v-model="form.bidEndTime" type="datetime"  @blur="text('bidEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm">
+                <el-date-picker v-model="form.bidEndTime" type="datetime"  @blur="text('bidEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" >
                 </el-date-picker>
               </div>
             </el-form-item>
@@ -393,7 +394,7 @@ export default {
        records:[],  //备案要求
        statuss:[], //开标状态
       activeIndex:'1',
-      condition:'未处理',
+      condition:'0',
       state:'http://',
       redactFormVisible : false,
       handleForm:{
@@ -462,17 +463,23 @@ export default {
   },
   filters: {
     condi:function(val) {
-       if(val == '0') {
-         return '未处理'
-       } else if (val == '1') {
-         return '未审核'
-       } else if (val == '2') {
-         return '已处理'
-       } else if(val == '4') {
-         return '审核未通过'
-       } else if(val == '5') {
-          return '已处理' 
-       }
+      switch (val) {
+        case '0':
+          return '未处理'
+          break;
+         case '1':
+          return '未审核'
+          break;
+          case '2':
+          return '已通过'
+          break;
+          case '4':
+          return '审核未通过'
+          break;
+          case '5':
+          return '已处理'
+          break; 
+      }
     },
 
     itemtype:function(val) {
@@ -832,9 +839,10 @@ export default {
         this.pkid = this.$route.params.id
         this.code = this.$route.params.code
         listNtgp({ntId:this.pkid,source:this.code}).then(res => {
+          console.log(res,842)
           if(res.code ===1) {
             // 相关公告列表
-            this.relation =res.data.datas
+            this.relation = res.data.datas
           }
         })
     },
@@ -853,12 +861,11 @@ export default {
      // 获取编辑列表
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-          console.log(1)
+           
           if(res.data.length >= 1) {
             this.state = this.state + res.data[0].url
             this.compileData = JSON.parse(JSON.stringify(res.data))
              this.form = res.data[0]
-             this.condition  = res.data[0].ntStatus
           } else {
             this.condition = '0'
             this.form = {}
@@ -885,13 +892,15 @@ export default {
       this.ajson = {}
     },
     handlemark() {    //中标设置弹框.
-      if(this.condition != '0' && '5') {
-          return this.$message({
-                  type:'warning',
-                  message:'该公告无法设置'
-                })
-      }
-      this.redactFormVisible = true
+      // if(this.condition != '0' && '5') {
+      //     return this.$message({
+      //             type:'warning',
+      //             message:'该公告无法设置'
+      //           })
+      // }else {
+      //     this.redactFormVisible = true
+      // }
+       this.redactFormVisible = true
     },
     handleSelect(key, keyPath) {
       console.log(key, keyPath); 
@@ -1042,6 +1051,9 @@ export default {
     },
      emptyForm(formName) {  // 清空按钮
         for (let key in this.form) {
+          if(key == 'title' || key == 'pubDate' ) {
+              continue
+          }
           this.form[key] = ''
         }
     },  
@@ -1066,7 +1078,8 @@ export default {
       sendKid() {
       return { 
         bizId: this.pkid,
-        source:this.code }
+        source:this.code
+      }
     },
        //   上传文件等方法
     //  文件列表移除文件时的钩子
@@ -1212,7 +1225,6 @@ export default {
       this.typecompile = '变更' 
       getNt({ntId:this.pkid,source:this.code,pkid:this.form.pkid}).then(res => {
         if(res.code === 1 ) {
-          console.log(res.data,'变更返回给我的字段')
           this.form = res.data
           this.comparepile = JSON.parse(JSON.stringify(res.data))
           res.data.fieldName.split(',').forEach((item,index) => {

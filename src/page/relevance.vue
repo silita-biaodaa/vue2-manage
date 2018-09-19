@@ -57,7 +57,7 @@
                     prop="ntStatus"
                     label="状态"
                     width="150">
-                    <template slot-scope="scope">{{ scope.row.delType | relnt }}</template>
+                    <template slot-scope="scope">{{ scope.row.ntStatus | relnt }}</template>
                   </el-table-column>
                  <el-table-column label="操作">
                         <template slot-scope="scope">
@@ -116,19 +116,23 @@ export default {
   },
   filters: {
     relnt:function(val) {
-       if(val === '0') {
-         return '未编辑'
-       } else if (val === '1') {
-         return '已编辑'
-       } else if (val === '2') {
-         return '已审核'
-       } else if (val === '3' ) {
-         return '未审核'
-       } else if (val === '4') {
-         return '审核未通过'
-       } else {
-         return '已处理'
-       }
+        switch (val) {
+             case '0':
+               return '新建'  
+                 break;
+             case '1':
+               return '未审核'  
+                 break;
+                 case '2':
+               return '已审核'  
+                 break;
+                 case '4':
+               return '审核未通过'  
+                 break;
+                 case '5':
+               return '已处理'  
+                 break;  
+         }
     }
   },
   mounted () {
@@ -145,15 +149,12 @@ export default {
           next()
       }
   },
-  methods: {
-  
+  methods: {  
       showtitle() {
         if(localStorage.getItem('reliSource')) {
             this.civiic = localStorage.getItem('reliSource')
              this.title = localStorage.getItem('reliTitle') 
-        }
-            
-
+        }            
          if(localStorage.getItem('reliTitle')) {
           this.skip = true 
          } else {
@@ -162,20 +163,17 @@ export default {
          }       
      },
     handleRelevance(val) {
-        console.log(val)
         this.arrreli = val
     },
      listsou(){
        listArea({areaParentId:'0'}).then(res => {
-         console.log(res)
           this.options = res.data
        })
-      //  this.arrreli.push(this.kpid)
      },
      listRele() {
         listGp({source:this.civiic,title:this.firm,currentPage:this.pagenum,pageSize:this.pagesize}).then(res=> {
-
           if(res.code ===1) {
+            console.log(res,170)
             this.tableData3 = res.data.datas
             this.total = res.data.total
           }
@@ -189,12 +187,14 @@ export default {
       correlation() {
            this.arrreli.forEach(element => {
             this.arMsg.push(element.pkid)
-        });
-        console.log(this.pkid)
+            });
+            console.log(this.civiic,166)
+            console.log(this.pkid,191)
         if(this.pkid) {
-          // console.log('不为空')
           this.arMsg.push(this.pkid)
           this.reStr = this.arMsg.join("|")
+          console.log(this.reStr,195)
+          
           relivan({idsStr:this.reStr,source:this.civiic}).then(res => {
             console.log(res)
              if(res.code === 1) {
