@@ -779,13 +779,9 @@ export default {
       }
       if( this.form[val] === this.comparepile[val]) {   
         this.forms['is'+ val] = false
-
       } else {
-
         this.forms['is'+ val] = true 
-        this.fieldNames.push(val)
-        // console.log(this.fieldNames,490)
-      
+        this.fieldNames.push(val)    
       }
     },
     newurl() {
@@ -793,7 +789,8 @@ export default {
       localStorage.setItem('reliSource', this.code)
       localStorage.setItem('relipkid',this.pkid)
       this.$router.replace('/relevance')
-    },
+    },    
+    // 获取上一条下一条数据
     listarr(){
        this.engine = JSON.parse(localStorage.getItem('tensele'))
        listMain({source:this.code,proviceCode:this.code,cityCode:this.engine.cityCode,ntStatus:this.engine.ntStatus,ntCategory:1,title:this.engine.title,pubDate:this.engine.pubDate,pubEndDate:this.engine.pubEndDate,currentPage:this.engine.currentPage,pageSize:this.engine.pageSize }).then(res => {
@@ -803,6 +800,9 @@ export default {
                   this.arrtitle.push(item.title)
                   this.arrpub.push(item.pubDate)
               })
+              // 
+              this.form.title = this.arrtitle[this.position]
+              this.form.pubDate = this.arrpub[this.position]
             if(this.arrpkid.length == 1 ) {
                 this.isShow = false   
             }
@@ -834,6 +834,7 @@ export default {
         this.code = this.$route.params.code
         listNtgp({ntId:this.pkid,source:this.code}).then(res => {
           if(res.code ===1) {
+            // 相关公告列表
             this.relation =res.data.datas
           }
         })
@@ -862,7 +863,7 @@ export default {
           } else {
             this.condition = '0'
             this.form = {}
-            this.compileData = {}
+            this.compileData = []
           }
          
       }) 
