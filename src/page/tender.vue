@@ -102,8 +102,7 @@
                          @size-change="handleSizeChange">
                         </el-pagination>
                     </div> 
-                </el-col> 
-                
+                </el-col>                 
             </el-row>
 
        
@@ -126,21 +125,18 @@ export default {
                 label: '全部'
             }, {
                 value: '0',
-                label: '未编辑'
+                label: '新建'
             }, {
                 value: '1',
-                label: '已编辑'
+                label: '未审核'
             }, {
                 value: '2',
-                label: '已审核'
+                label: '已通过'
             }, {
-                value: '3',
-                label: '未审核'
+                value: '4',
+                label: '审核未通过'
             },
             {
-                value:'4',
-                label:'审核未通过'
-            },{
                 value:'5',
                 label:'已处理'
             }
@@ -193,7 +189,7 @@ export default {
          this. pubEndDate = this.times[1]
      },
      province:function() {
-         this.city = ''
+        this.city = ''
         this.pkid= this.province.substring(0,32)
         this.coDe= this.province.substring(32)
         listArea({areaParentId:this.pkid}).then(res => {
@@ -224,8 +220,7 @@ export default {
      }
   },
 methods: {
-      listTen() {
-         
+      listTen() {         
           listArea({areaParentId:0}).then(res => {
               console.log(res,232)
               if(res.code === 1 ) {
@@ -316,7 +311,7 @@ methods: {
       exportexcel(){
           exportE({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:1,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize},{responseType: 'blob'}).then(res=> {
                const blob = new Blob([res]);
-                const fileName = '统计.xlsx';
+                const fileName = '招标公告.xlsx';
                 const elink = document.createElement('a');
                 elink.download = fileName;
                 elink.style.display = 'none';
