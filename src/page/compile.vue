@@ -6,7 +6,7 @@
            <el-row>
               <el-col :span="12" class="left-c">
                  <div class="message-c">
-                    <span :style= "{color:(this.condition === ('1' || '0')  ? 'red' : 'white')}">{{this.condition | condi}}</span>
+                    <span :style= "{color:(this.condition === '0' ? 'red' : 'white')}">{{this.condition | condi}}</span>
                     <a :href="this.state" target="_blank">来源站点</a>
                  </div>
                  <div class="handle-c">
@@ -296,7 +296,7 @@
             <el-form-item label="公告状态" prop="resource">
               <el-radio-group v-model="handleForm.resource">
                 <el-radio label="0">未处理</el-radio>
-                <el-radio label="1">已处理</el-radio>
+                <el-radio label="5">已处理</el-radio>
               </el-radio-group>
             </el-form-item>
             
@@ -352,7 +352,7 @@ export default {
       },
       arrf:[], // 收集变更字段信息的数组
       parentId:'',
-      ckpid:'',
+      cpkid:'',
       careaName:'',
       pkid:'',
       code:'',
@@ -448,7 +448,7 @@ export default {
     }
   },
   mounted () {
-      // this.needScroll()
+
   },
   created () {
     this.parentId = localStorage.getItem('parentId')
@@ -462,13 +462,17 @@ export default {
   },
   filters: {
     condi:function(val) {
-       if(val == '0' || '') {
+       if(val == '0') {
          return '未处理'
        } else if (val == '1') {
          return '未审核'
-       } else {
+       } else if (val == '2') {
          return '已处理'
-       } 
+       } else if(val == '4') {
+         return '审核未通过'
+       } else if(val == '5') {
+          return '已处理' 
+       }
     },
 
     itemtype:function(val) {
@@ -751,14 +755,20 @@ export default {
             this.listFile()
         }
     },
-    "form.cityCode"(val) {
-        this.cpkid= val.substring(0,32)
-        this.careaName= val.substring(32)
-        listArea({areaParentId:this.cpkid}).then(res => {
-            if(res.code === 1) {
-                this.counties = res.data
-            }
-        })
+    "form.cityCode":{
+        handler:function(val){
+           if(val) {
+              this.cpkid= val.substring(0,32)
+              this.careaName= val.substring(32)
+              listArea({areaParentId:this.cpkid}).then(res => {
+                  if(res.code === 1) {
+                      this.counties = res.data                
+                  }
+              })
+           }
+        
+        deep: true
+      }
     }
 
   },
@@ -774,13 +784,12 @@ export default {
 
         this.forms['is'+ val] = true 
         this.fieldNames.push(val)
-        console.log(this.fieldNames,490)
+        // console.log(this.fieldNames,490)
       
       }
     },
     newurl() {
       localStorage.setItem("reliTitle",this.form.title)
-      // console.log(this.form.title)
       localStorage.setItem('reliSource', this.code)
       localStorage.setItem('relipkid',this.pkid)
       this.$router.replace('/relevance')
@@ -873,7 +882,13 @@ export default {
       this.list.push(this.ajson)
       this.ajson = {}
     },
-    handlemark() {    //中标设置弹框
+    handlemark() {    //中标设置弹框.
+      if(this.condition != '0' && '5') {
+          return this.$message({
+                  type:'warning',
+                  message:'该公告无法设置'
+                })
+      }
       this.redactFormVisible = true
     },
     handleSelect(key, keyPath) {
@@ -895,6 +910,7 @@ export default {
                this.isShow = false 
             }
             if(this.arrpkid.length == 0) {
+               
                return this.$router.push({path:'/tender'})
             }
             this.$router.push({
@@ -949,19 +965,16 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           updateStatus({ntCategory:this.handleForm.type,ntStatus:this.handleForm.resource,pkid:this.pkid,source:this.code}).then(res=> {
-            if(res.code ===1 ) {
+            if(res.code === 1 ) {
               this.$message({
                 message:res.msg,
                 type:'success'
               });
+              this.condition = this.handleForm.resource
               this.redactFormVisible = false;
             }            
           })
-          if(this.handleForm.resource === '1') {
-              this.condition = '5'
-            } else {
-              this.condition = '0'
-            }
+        
         } else {
           return false;
         }
@@ -1003,8 +1016,8 @@ export default {
 
       } else {
           this.fieldNames.forEach(item => {
-              insertNtC({ntId:this.pkid,ntEditId:this.form.ntId,ntCategory:1,source:this.code,fieldFrom:this.comparepile[item],fieldName:item,fieldValue:this.form[item]}).then(res => {
-                  console.log(res);                  
+              insertNtC({ntId:this.pkid,ntEditId:this.form.pkid,ntCategory:1,source:this.code,fieldFrom:this.comparepile[item],fieldName:item,fieldValue:this.form[item]}).then(res => {
+                  console.log(res,'变更返回给我的状态');                  
                   if(res.code === 0 ) {
                      return this.$message({
                        type:'warning',
@@ -1103,7 +1116,7 @@ export default {
              message:'上传标题不能为空~'
            })  
        } else {
-         listFilesPath({bizId:this.pkid,filePath:this.urlupload,type:4,orderNo:1,source:this.code,fileName:this.urltitle}).then(res=> {
+         listFilesPath({bizId:this.pkid,filePath:this.urlupload,type:4,orderNo:1,source:this.code,fileName:this.urltitle,}).then(res=> {
                if(res.code === 1) {
                  this.$message({
                    type:'success',
@@ -1197,6 +1210,7 @@ export default {
       this.typecompile = '变更' 
       getNt({ntId:this.pkid,source:this.code,pkid:this.form.pkid}).then(res => {
         if(res.code === 1 ) {
+          console.log(res.data,'变更返回给我的字段')
           this.form = res.data
           this.comparepile = JSON.parse(JSON.stringify(res.data))
           res.data.fieldName.split(',').forEach((item,index) => {
