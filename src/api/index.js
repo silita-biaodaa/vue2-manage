@@ -69,9 +69,6 @@ export const curd = params => {
     return axios.post('qual/add', params).then(res => res.data)
 }
 
-export const checkUser = params => {
-    return axios.post('dataMaintain/listPbMode').then(res => res.data)
-}
 // 资质类别接口
 export const checkType = params => {
     return axios.post('qual/qualCate').then(res => res.data)
