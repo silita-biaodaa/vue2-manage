@@ -17,7 +17,7 @@
               </el-col>
 
               <el-col :span="12" class="right-c">                  
-                  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color='#000' text-color='#fff' active-text-color='yellow' @select="handleSelect">
+                  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color='#EBEEF5' menu-trigger='click' @select="handleSelect"  >
                     <el-menu-item index="1" @click='addcompile' >编辑</el-menu-item>
                     <el-menu-item index="2" @click='toocompile' >变更</el-menu-item> 
                   </el-menu>
@@ -66,14 +66,14 @@
             </el-form-item>
             <el-form-item >
               <div class="labe"><i class="el-icon-warning"></i>项目地区</div>
-              <el-select v-model="form.cityCode" filterable placeholder="请选择项目地区" style="width:80%">
+              <el-select v-model="form.cityCodeName" filterable placeholder="请选择项目地区" style="width:80%">
                 <el-option v-for="item in areas" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item >
               <div class="labe"><i class="el-icon-warning"></i>项目县区</div>
-              <el-select v-model="form.countyCode" filterable placeholder="请选择项目县区" style="width:80%">
+              <el-select v-model="form.countyCodeName" filterable placeholder="请选择项目县区" style="width:80%">
                 <el-option v-for="item in counties" :key="item.areaCode" :label="item.areaName" :value="item.areaCode">
                 </el-option>
               </el-select>
@@ -198,11 +198,11 @@
                       </el-table-column>
                       <el-table-column prop="proDuration" label="项目工期" width="120" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column prop="cityCode" label="项目地区" width="120" show-overflow-tooltip>
+                      <el-table-column prop="cityCodeName" label="项目地区" width="120" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column prop="countyCode" label="项目县市" width="120" show-overflow-tooltip>
+                      <el-table-column prop="countyCodeName" label="项目县市" width="120" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column prop="pbMode" label="评标办法" width="150" show-overflow-tooltip>
+                      <el-table-column prop="pbModeName" label="评标办法" width="150" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column prop="bidBonds" label="项目保证金(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -226,7 +226,8 @@
                       <el-table-column label="招标类型" width="120" show-overflow-tooltip>
                          <template slot-scope="scope">{{ scope.row.binessType | trick }}</template>                        
                       </el-table-column> 
-                      <el-table-column prop="filingPfm" label="平台备案要求" width="120" show-overflow-tooltip>
+                      <el-table-column  label="平台备案要求" width="120" show-overflow-tooltip>
+                         <template slot-scope="scope">{{ scope.row.filingPfm | pfm }}</template>                                                
                       </el-table-column> 
                       <el-table-column prop="ntTdStatus" label="招标状态" width="120" show-overflow-tooltip>
                          <template slot-scope="scope">{{ scope.row.ntTdStatus | affair }}</template>                        
@@ -367,7 +368,7 @@ export default {
         controllSum:'',  //超标控制价
         proSum:'',   //项目金额
         proDuration:'',  //项目工期
-        cityCode:'',    //项目地区
+        cityCodeName:'',    //项目地区
         countyCode:'',  //项目县区
         pbMode:'',  //评标办法
         bidBonds:'', // 投标保证金
@@ -752,6 +753,31 @@ export default {
         return "造价咨询"
           break;
       }
+    },
+    pfm:function(val) {
+      switch (val) {
+        case '01':
+         return "长沙公共资源交易电子服务平台"
+          break;
+        case '02':
+         return "湖南省水利建设市场信用信息平台"
+          break;
+        case '03':
+         return "全国水利建设市场信用信息平台"
+          break;
+        case '04':
+         return "湘潭市公共资源交易中心"
+          break;
+        case '05':
+         return "湘西州公共资源交易网"
+          break;
+        case '06':
+         return "湖南省交通运输厅公路建设市场信用信息管理系统"
+          break;
+        case '07':
+         return "全国公路建设市场信用信息管理系统"
+          break;          
+      }
     }
   },
   watch: {
@@ -762,14 +788,20 @@ export default {
             this.listFile()
         }
     },
-    "form.cityCode":{
+    "form.cityCodeName":{
         handler:function(val){
            if(val) {
+              this.form.countyCode = ''
               this.cpkid= val.substring(0,32)
               this.careaName= val.substring(32)
               listArea({areaParentId:this.cpkid}).then(res => {
                   if(res.code === 1) {
-                      this.counties = res.data                
+                      this.counties = res.data   
+                      if(this.counties.length ==0 ) {
+                        listTenders({ntId:this.pkid,source:this.code}).then(res=> {
+                          this.counties = res.data[0].countys
+                        })
+                      }            
                   }
               })
            }
@@ -780,8 +812,8 @@ export default {
 
   },
   methods: {
-    textco() {
-      console.log(this.form)
+    textco(val) {
+       
     },
     text(val) {
       if(this.typecompile === '编辑') {
@@ -834,6 +866,7 @@ export default {
         listPbMode({type:this.code}).then(res => {
            if(res.code === 1 ) {
              this.ways = res.data
+             console.log(res.data,869)
            }
         })
     },
@@ -842,7 +875,6 @@ export default {
         this.pkid = this.$route.params.id
         this.code = this.$route.params.code
         listNtgp({ntId:this.pkid,source:this.code}).then(res => {
-          console.log(res,842)
           if(res.code ===1) {
             // 相关公告列表
             this.relation = res.data.datas
@@ -863,16 +895,15 @@ export default {
     },
      // 获取编辑列表
     listTender() {
-        listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-          console.log(res.data,867)
-          console.log(res.data.length,868)           
+        listTenders({ntId:this.pkid,source:this.code}).then(res=> {     
           if(res.data.length >= 1) {
+            console.log(res.data[0],899)
             this.state = this.state + res.data[0].url
             this.compileData = res.data.concat()
-             this.form = JSON.parse(JSON.stringify(res.data[0]))
+             this.form = JSON.parse(JSON.stringify(res.data[0]))             
           } else {
             this.condition = '0'
-            this.form = {}
+            this.emptyForm('edits')
             this.form.title = this.arrtitle[this.position]
             this.form.pubDate = this.arrpub[this.position]
           }         
@@ -902,7 +933,6 @@ export default {
       }else {
           this.redactFormVisible = true
       }
-       this.redactFormVisible = true
     },
     handleSelect(key, keyPath) {
       console.log(key, keyPath); 
@@ -913,7 +943,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delpost({pkid:this.pkid,source:this.code}).then(res => {
+         this.nextdel()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    nextdel() {
+         delpost({pkid:this.pkid,source:this.code}).then(res => {
            if(res.code === 1 ) {
 
             this.arrpkid.splice(this.position,1)
@@ -935,12 +974,6 @@ export default {
            }
 
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
     },
     lastlist() {
       if(parseInt(this.position) == 0) {
@@ -983,6 +1016,9 @@ export default {
                 message:res.msg,
                 type:'success'
               });
+              if(this.handleForm.type == 2) {
+                this.nextdel()
+              }
               this.condition = this.handleForm.resource
               this.redactFormVisible = false;
             }            
@@ -995,12 +1031,12 @@ export default {
     },
       onSubmit() {   //保存按钮
       if(this.typecompile === '编辑') {   
-        if(this.form.cityCode === '') {
+        if(this.form.cityCodeName === '') {
             return this.$message({
                     message:'请选择项目地区',
                     type:'warning'
                   })
-        } else if ( !this.form.countyCode) {
+        } else if ( !this.form.countyCodeName) {
            return this.$message({
                     message:'请选择项目县区',
                     type:'warning'
@@ -1011,6 +1047,7 @@ export default {
                     type:'warning'
                   })
         }       
+        console.log(this.form.countyCode,1047)
           insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
              if(res.code === 1 ) {
                this.$message({
@@ -1064,6 +1101,10 @@ export default {
      },
       handleSelectionChange(val) {   // 编辑明细  选中时发生变化会触发该事件
           this.delcom = val
+          this.activeIndex = '1'
+          Object.keys(this.forms).forEach(key => {
+                this.forms[key] = false
+            })
           this.form = JSON.parse(JSON.stringify(val[0]))
       },
       handleFileChange(val) {   //  招标文件的
@@ -1210,11 +1251,13 @@ export default {
       });
     },
     addtop(i) {
+        this.addcompile()
        this.form.segment = ''
        this.form.editCode = ''    
     },
     addcompile() {
-      this.typecompile = '编辑' 
+      this.typecompile = '编辑'
+      this.activeIndex = '1' 
        getNt({ntId:this.pkid,source:this.code,pkid:this.form.pkid}).then(res => {
           if(res.code === 1) {
             this.form = res.data
@@ -1226,6 +1269,7 @@ export default {
     },
     toocompile () {
       this.typecompile = '变更' 
+      this.activeIndex = '2'
       getNt({ntId:this.pkid,source:this.code,pkid:this.form.pkid}).then(res => {
         if(res.code === 1 ) {
           this.form = res.data
@@ -1289,8 +1333,8 @@ export default {
     .menu-c {
     box-sizing: border-box;
     padding: 0 10px;
-    color: #fff;
-    background-color: #000;
+    color: #303133;
+    background-color:#EBEEF5;
     line-height: 60px;
     font-size: 16px;
     .left-c {
@@ -1301,18 +1345,13 @@ export default {
           margin-right: 10px;
         }
         a {
-          color:white;
+          color:#303133;
         }
       }
       .handle-c {
         span {
           margin-right: 10px;
         }
-      }
-    }
-    .right-c {
-      .el-menu--horizontal>.el-menu-item.is-active {
-        border-bottom: none;
       }
     }
   }
@@ -1390,13 +1429,18 @@ export default {
           height: 45px;
           width: 45px;
           border-radius: 50%;
-          background-color: #000;
+          background-color: #909399;
+          opacity: 0.2;
           top: 50%;
           transform: translateY(-50%);
           text-align: center;
           line-height: 45px;
           font-size: 30px;
           font-weight: 1000;  
+        }
+        .edit-l:hover,
+        .edit-r:hover {
+          opacity: 1;
         }
         .edit-r {
           right:0;
