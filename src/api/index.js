@@ -174,7 +174,7 @@ export const exportE = form => {
 export const exportX = form => {
     return axios({ // 用axios发送post请求
         method: 'post',
-        url: 'zhaobiao/exportBidsDetail', // 请求地址
+        url: 'zhongbiao/exportBidsDetail', // 请求地址
         data: form, // 参数
         responseType: 'blob', // 表明返回服务器返回的数据类型
         headers: {

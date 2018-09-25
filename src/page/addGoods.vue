@@ -110,7 +110,7 @@
     </div>
 </template>
 <script>
-import { exportX,listArea,listStatus,listMain,listExcel,exportE,delpost } from '@/api/index';
+import { exportX,listArea,listStatus,listMain,listExcel,delpost } from '@/api/index';
 export default {
   data () {
     return {
@@ -314,7 +314,7 @@ methods: {
           }, 100);                    
       },
       exportexcel(){
-          exportE({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:2,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize},{responseType: 'blob'}).then(res=> {
+          exportX({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:2,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize},{responseType: 'blob'}).then(res=> {
                const blob = new Blob([res]);
                 const fileName = '中标公告.xlsx';
                 const elink = document.createElement('a');
