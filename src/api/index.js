@@ -170,6 +170,18 @@ export const exportE = form => {
         }
     }).then(res => res.data)
 }
+// 导出中标EXCEL 
+export const exportX = form => {
+    return axios({ // 用axios发送post请求
+        method: 'post',
+        url: 'zhaobiao/exportBidsDetail', // 请求地址
+        data: form, // 参数
+        responseType: 'blob', // 表明返回服务器返回的数据类型
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.data)
+}
 // 设置变更招中标参数
 export const updateStatus = params => {
     return axios.post('zhaobiao/updateNtMainStatus', params).then(res => res.data)

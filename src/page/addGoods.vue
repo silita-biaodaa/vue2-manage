@@ -26,7 +26,7 @@
                     </el-col>
 
                     <el-col :span="5">
-                        公共状态：
+                        公告状态：
                         <el-select v-model="state" placeholder="请选择状态" style='width:60%' @change='changetable' >
                             <el-option v-for="item in states" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
@@ -110,7 +110,7 @@
     </div>
 </template>
 <script>
-import { listArea,listStatus,listMain,listExcel,exportE,delpost } from '@/api/index';
+import { exportX,listArea,listStatus,listMain,listExcel,exportE,delpost } from '@/api/index';
 export default {
   data () {
     return {
@@ -314,18 +314,18 @@ methods: {
           }, 100);                    
       },
       exportexcel(){
-          // exportE({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:1,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize},{responseType: 'blob'}).then(res=> {
-          //      const blob = new Blob([res]);
-          //       const fileName = '中标公告.xlsx';
-          //       const elink = document.createElement('a');
-          //       elink.download = fileName;
-          //       elink.style.display = 'none';
-          //       elink.href = URL.createObjectURL(blob);
-          //       document.body.appendChild(elink);
-          //       elink.click();
-          //       URL.revokeObjectURL(elink.href); // 释放URL 对象
-          //       document.body.removeChild(elink);
-          // })
+          exportE({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:2,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize},{responseType: 'blob'}).then(res=> {
+               const blob = new Blob([res]);
+                const fileName = '中标公告.xlsx';
+                const elink = document.createElement('a');
+                elink.download = fileName;
+                elink.style.display = 'none';
+                elink.href = URL.createObjectURL(blob);
+                document.body.appendChild(elink);
+                elink.click();
+                URL.revokeObjectURL(elink.href); // 释放URL 对象
+                document.body.removeChild(elink);
+          })
      
       }
 

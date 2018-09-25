@@ -26,7 +26,7 @@
                     </el-col>
 
                     <el-col :span="5">
-                        公共状态：
+                        公告状态：
                         <el-select v-model="state" placeholder="请选择状态" style='width:60%' @change='changetable' >
                             <el-option v-for="item in states" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>

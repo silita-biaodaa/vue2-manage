@@ -6,13 +6,13 @@
            <el-row>
               <el-col :span="12" class="left-c">
                  <div class="message-c">
-                    <span :style= "{color:(this.condition === '0' ? 'red' : 'white')}">{{ condition | condi}}</span>
+                    <span :style= "{color:(this.condition === '0' ? 'red' : '#E6A23C')}">{{ condition | condi}}</span>
                     <a :href="this.state" target="_blank">来源站点</a>
                  </div>
                  <div class="handle-c">
                     <span @click='handlemark'>设置</span>
                     <span @click='deletemark'>删除</span>
-                    <span @click='textco'>测试</span>
+                    <span @click='textt'>测试</span>
                  </div>
               </el-col>
 
@@ -92,14 +92,14 @@
             <el-form-item > 
               <div :class="['labe',forms.isbidBondsEndTime?'new':'old']">保证金截至时间</div>
               <div class="block">
-                <el-date-picker v-model="form.bidBondsEndTime" type="datetime"  @blur="text('bidBondsEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" >
+                <el-date-picker v-model="form.bidBondsEndTime" type="datetime"  @blur="text('bidBondsEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" value-format="timestamp" >
                 </el-date-picker>
               </div>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.isenrollEndTime?'new':'old']">报名截止时间</div>
               <div class="block">
-                <el-date-picker v-model="form.enrollEndTime" type="datetime"  @blur="text('enrollEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" >
+                <el-date-picker v-model="form.enrollEndTime" type="datetime"  @blur="text('enrollEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" value-format="timestamp" >
                 </el-date-picker>
               </div>
             </el-form-item>
@@ -110,7 +110,7 @@
             <el-form-item>
               <div :class="['labe',forms.isauditTime?'new':'old']">资格审查截止时间</div>
               <div class="block">
-                <el-date-picker v-model="form.auditTime" type="datetime"  @blur="text('auditTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" >
+                <el-date-picker v-model="form.auditTime" type="datetime"  @blur="text('auditTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" value-format="timestamp" >
                 </el-date-picker>
               </div>
             </el-form-item>
@@ -121,7 +121,7 @@
             <el-form-item >
               <div :class="['labe',forms.isbidEndTime?'new':'old']">投标截止时间</div>
               <div class="block">
-                <el-date-picker v-model="form.bidEndTime" type="datetime"  @blur="text('bidEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" >
+                <el-date-picker v-model="form.bidEndTime" type="datetime"  @blur="text('bidEndTime')" placeholder="选择日期时间" format="yyyy-MM-dd HH:mm" value-format="timestamp" >
                 </el-date-picker>
               </div>
             </el-form-item>
@@ -162,7 +162,7 @@
               <el-select v-model="form.ntTdStatus" @change="text('ntTdStatus')" filterable placeholder="请选择招标状态" style="width:80%">
                 <el-option v-for="sta in statuss" :key="sta.value" :label="sta.name" :value="sta.value">
                 </el-option>
-              </el-select>
+              </el-select> 
             </el-form-item>                        
 
             <el-form-item class="btn">
@@ -206,15 +206,18 @@
                       </el-table-column>
                       <el-table-column prop="bidBonds" label="项目保证金(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column prop="bidBondsEndTime" label="保证金截至时间" width="120" show-overflow-tooltip> 
+                      <el-table-column width="120" show-overflow-tooltip> 
+                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD hh:mm') }}</template>
                       </el-table-column>
                       <el-table-column prop="enrollAddr" label="报名地点" width="120" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column prop="auditTime" label="资格审查截止时间" width="150" show-overflow-tooltip>
+                      <el-table-column label="资格审查截止时间" width="150" show-overflow-tooltip>
+                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD hh:mm')}}</template>
                       </el-table-column> 
                       <el-table-column prop="certAuditAddr" label="资格审查地点" width="150" show-overflow-tooltip>
                       </el-table-column> 
-                      <el-table-column prop="bidEndTime" label="投标截止时间" width="150" show-overflow-tooltip>
+                      <el-table-column  label="投标截止时间" width="150" show-overflow-tooltip>
+                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD hh:mm')}}</template>                          
                       </el-table-column> 
                       <el-table-column prop="openingPerson" label="开标人员" width="120" show-overflow-tooltip>
                       </el-table-column> 
@@ -231,7 +234,6 @@
                       </el-table-column> 
                       <el-table-column prop="ntTdStatus" label="招标状态" width="120" show-overflow-tooltip>
                          <template slot-scope="scope">{{ scope.row.ntTdStatus | affair }}</template>                        
-
                       </el-table-column>     
                     </el-table>
 
@@ -329,6 +331,7 @@
 
 <script>
  import  Edit  from "@/page/edit";
+//  import moment from 'moment'
  import { delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
 export default {
   data () {
@@ -383,7 +386,8 @@ export default {
         proType:'', //项目类型
         binessType:'', // 招标类型
         filingPfm:'', //备案要求
-        ntTdStatus:''// 招标状态       
+        ntTdStatus:'',// 招标状态 
+        titurela:[] // 资质关系逻辑             
       },
       activeName2:'first',
        areas: [],
@@ -395,7 +399,7 @@ export default {
        records:[],  //备案要求
        statuss:[], //开标状态
       activeIndex:'1',
-      condition:'0',
+      condition:'',
       state:'http://',
       redactFormVisible : false,
       handleForm:{
@@ -812,8 +816,8 @@ export default {
 
   },
   methods: {
-    textco(val) {
-       
+    textt() {
+       console.log(this.form.bidBondsEndTime)
     },
     text(val) {
       if(this.typecompile === '编辑') {
@@ -897,13 +901,14 @@ export default {
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {     
           if(res.data.length >= 1) {
-            console.log(res.data[0],899)
             this.state = this.state + res.data[0].url
+            this.condition = res.data[0].ntStatus
             this.compileData = res.data.concat()
-             this.form = JSON.parse(JSON.stringify(res.data[0]))             
+            this.form = JSON.parse(JSON.stringify(res.data[0]))             
           } else {
             this.condition = '0'
             this.emptyForm('edits')
+             this.compileData = res.data.concat()
             this.form.title = this.arrtitle[this.position]
             this.form.pubDate = this.arrpub[this.position]
           }         
@@ -1046,9 +1051,10 @@ export default {
                     message:'请选择项目类型',
                     type:'warning'
                   })
-        }       
-        console.log(this.form.countyCode,1047)
+        }            
+          // insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:moment(this.form.bidBondsEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollEndTime:moment(this.form.enrollEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollAddr:this.form.enrollAddr,auditTime:moment(this.form.auditTime).format('YYYY-MM-DD hh:mm:ss'),bidEndTime:moment(this.form.bidEndTime).format('YYYY-MM-DD hh:mm:ss'),openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
           insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
+
              if(res.code === 1 ) {
                this.$message({
                     message:res.msg,
@@ -1066,8 +1072,7 @@ export default {
 
       } else {
           this.fieldNames.forEach(item => {
-              insertNtC({ntId:this.pkid,ntEditId:this.form.pkid,ntCategory:1,source:this.code,fieldFrom:this.comparepile[item],fieldName:item,fieldValue:this.form[item]}).then(res => {
-                  console.log(res,'变更返回给我的状态');                  
+              insertNtC({ntId:this.pkid,ntEditId:this.form.pkid,ntCategory:1,source:this.code,fieldFrom:this.comparepile[item],fieldName:item,fieldValue:this.form[item]}).then(res => {                            
                   if(res.code === 0 ) {
                      return this.$message({
                        type:'warning',
@@ -1235,11 +1240,12 @@ export default {
                 type: 'success',
                 message: '删除成功!'
               });
-           }
-           this.delcom=[],
-           this.delcomp = [],
-           this.delcompl = ''
-           this.listTender()
+              this.delcom=[],
+              this.delcomp = [],
+              this.delcompl = ''
+              this.listTender()
+          }
+           
         })
   
         
@@ -1250,10 +1256,29 @@ export default {
         });
       });
     },
-    addtop(i) {
-        this.addcompile()
-       this.form.segment = ''
-       this.form.editCode = ''    
+    addtop() {
+       this.addcompile()       
+      //  ’假如我隐藏下面得两个 上面函数就执行，假如不隐藏就不会执行‘
+      setTimeout(() => {
+        this.form.segment = ''
+        this.form.editCode = '' 
+        this.texttop()
+      }, 150);
+      this.$message({
+        type:'success',
+        message:'请注意标段信息已经清空~'
+      })
+       
+    },
+    texttop() {     
+        let back = setInterval(() => {
+          if(document.querySelector('.el-main').scrollTop){
+           document.querySelector('.el-main').scrollTop-=100;
+           document.querySelector('.el-main').scrollTop-=100;            
+          }else {
+            clearInterval(back)
+          }
+        });
     },
     addcompile() {
       this.typecompile = '编辑'
@@ -1316,6 +1341,9 @@ export default {
     },
     pilebox(row) {
       this.$refs.multipleTable.toggleRowSelection(row)
+    },
+    formatsj(val) {
+       return moment(val).format('YYYY-MM-DD hh:mm:ss')
     }
   },
   components: {
@@ -1327,7 +1355,8 @@ export default {
  .compile {
    position: relative;
    overflow: hidden;
-   .urlma {
+
+   .urlma { 
      margin-bottom: 15px;
    }
     .menu-c {
@@ -1349,6 +1378,7 @@ export default {
         }
       }
       .handle-c {
+        cursor: pointer;
         span {
           margin-right: 10px;
         }
@@ -1461,7 +1491,7 @@ export default {
       // overflow: hidden;
       // z-index: 999;
         ::-webkit-scrollbar {
-            height: 13px;
+            height: 10px;
           }
           
           ::-webkit-scrollbar-thumb {
