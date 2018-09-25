@@ -50,7 +50,7 @@
               <el-input v-model="form.segment"></el-input>
             </el-form-item>
             <el-form-item label='公示日期'>
-              <el-input v-model="form.pubDate" ></el-input>
+              <el-input v-model="form.pubDate"  ></el-input>
             </el-form-item>                  
             <el-form-item  >
               <div :class="['labe',forms.iscontrollSum?'new':'old']">招标控制价(万元)</div>
@@ -206,7 +206,7 @@
                       </el-table-column>
                       <el-table-column prop="bidBonds" label="项目保证金(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                      <el-table-column width="120" show-overflow-tooltip> 
+                      <el-table-column width="120" label="保证金截至时间" show-overflow-tooltip> 
                          <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD hh:mm') }}</template>
                       </el-table-column>
                       <el-table-column prop="enrollAddr" label="报名地点" width="120" show-overflow-tooltip>
@@ -364,29 +364,29 @@ export default {
       title: '',
       pubDate: '', 
        form: {   //编辑变更数据
-        editCode: '',  // 编辑明细编码
-        title:'',     //标段名称
-        segment:'',  // 标段
-        pubDate:'',   // 公示日期
-        controllSum:'',  //超标控制价
-        proSum:'',   //项目金额
-        proDuration:'',  //项目工期
-        cityCodeName:'',    //项目地区
-        countyCode:'',  //项目县区
-        pbMode:'',  //评标办法
-        bidBonds:'', // 投标保证金
-        bidBondsEndTime:'', //投标保证金截止时间
-        enrollEndTime:'',  // 报名截止时间
-        enrollAddr:'',   // 报名地址
-        certAuditAddr:'', //资格审查地点 
-        auditTime:'',   // 资格审查时间
-        bidEndTime:'',  // 投标截止时间
-        openingPerson:'', //开发人员
-        openingAddr:'', //开标地点
-        proType:'', //项目类型
-        binessType:'', // 招标类型
-        filingPfm:'', //备案要求
-        ntTdStatus:'',// 招标状态 
+        // editCode: '',  // 编辑明细编码
+        // title:'',     //标段名称
+        // segment:'',  // 标段
+        // pubDate:'',   // 公示日期
+        // controllSum:'',  //超标控制价
+        // proSum:'',   //项目金额
+        // proDuration:'',  //项目工期
+        // cityCodeName:'',    //项目地区
+        // countyCode:'',  //项目县区
+        // pbMode:'',  //评标办法
+        // bidBonds:'', // 投标保证金
+        // bidBondsEndTime:'', //投标保证金截止时间
+        // enrollEndTime:'',  // 报名截止时间
+        // enrollAddr:'',   // 报名地址
+        // certAuditAddr:'', //资格审查地点 
+        // auditTime:'',   // 资格审查时间
+        // bidEndTime:'',  // 投标截止时间
+        // openingPerson:'', //开发人员
+        // openingAddr:'', //开标地点
+        // proType:'', //项目类型
+        // binessType:'', // 招标类型
+        // filingPfm:'', //备案要求
+        // ntTdStatus:'',// 招标状态 
         titurela:[] // 资质关系逻辑             
       },
       activeName2:'first',
