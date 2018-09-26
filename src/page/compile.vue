@@ -163,11 +163,66 @@
                 <el-option v-for="sta in statuss" :key="sta.value" :label="sta.name" :value="sta.value">
                 </el-option>
               </el-select> 
-            </el-form-item>                        
+            </el-form-item>
+
+            <!-- 资质关系组件 -->
+            <el-form-item  v-for="(rela,index) in titurela" :key="index" label="资质关系" class="rela" >
+              <!-- 资质和等级 -->
+              <el-select  v-model="rela.labe" placeholder="请选择资质和等级" style="width:65%" clearable filterable >
+                    <el-option
+                    v-for="item in company"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+              </el-select>
+              <el-button size="mini" type="danger" class="delete" @click="deleteItem(index)">删除</el-button> 
+              <el-button size="mini" type="primary" class="delete" @click="addItem(index)">添加</el-button> 
+                
+                <!-- 第二个动态组件  -->
+               <div v-for='(item,indexx) in titurela[index].name' :key='indexx' class="rela-sel" >
+                  <el-select  v-model="item.rela" placeholder="请选择资质关系" clearable class="sel-conc"
+                    filterable>
+                    <el-option
+                    v-for="item in concern"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                  </el-select>
+                    <el-select  v-model="item.label" placeholder="请选择资质和等级" clearable  style="width:65%"
+                    filterable>
+                    <el-option
+                    v-for="item in company"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                  </el-select>
+                <el-button size="mini" type="danger" @click="deleteeItem(index,indexx)">删除</el-button> 
+               
+                </div>
+
+              <!-- 资质关系 -->
+                <el-form-item  v-show="func(index)" class="el-rela" >
+                  <div class="labe-rela">条件类别:</div>
+                  <el-select  v-model="rela.conc" placeholder="请选择资质关系"  clearable filterable class="conc-re" >
+                        <el-option
+                        v-for="item in concern"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                  </el-select>
+                </el-form-item>
+        
+            </el-form-item>
 
             <el-form-item class="btn">
               <el-button @click="emptyForm('edits')">清空</el-button>
               <el-button type="primary" @click="onSubmit">保存</el-button>
+              <el-button type="primary" @click="addrela">新增资质关系</el-button>
+
             </el-form-item>  
           </el-form>
 
@@ -333,6 +388,7 @@
 <script>
  import  Edit  from "@/page/edit";
 //  import moment from 'moment'
+import Vue from 'vue'
  import { delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
 export default {
   data () {
@@ -387,9 +443,31 @@ export default {
         // proType:'', //项目类型
         // binessType:'', // 招标类型
         // filingPfm:'', //备案要求
-        // ntTdStatus:'',// 招标状态 
-        titurela:[] // 资质关系逻辑             
+        // ntTdStatus:'',// 招标状态           
       },
+      titurela:[{name:[]},{name:[]}], // 资质关系逻辑
+      company:[
+          {
+            value: '老板',
+            label: '老板'
+          }, {
+            value: '经理',
+            label: '经理'
+          }, {
+            value: '主管',
+            label: '主管'
+          }
+      ],
+      concern:[
+        {
+          value:'和',
+          label:'和'
+        },
+        {
+          value:'或',
+          label:'或'
+        }
+      ],
       activeName2:'first',
        areas: [],
        counties: [],
@@ -818,7 +896,34 @@ export default {
   },
   methods: {
     textt() {
-       console.log(this.form)
+       console.log(this.titurela)
+    },
+    // 判断是否隐藏多余的下拉框
+    func(index) {
+      if(this.titurela.length - 1 == index) {
+           return false
+      } else {
+        return true
+      }
+    },
+    // 添加
+     addItem(index){
+      this.titurela[index].name.push({})      
+    },
+    //  删除
+    deleteItem(index) {
+        if(index == (this.titurela.length - 1) ) {
+          if(!(this.titurela[ index - 1 ].rela == undefined) ) {
+              Vue.delete(this.titurela[index - 1 ],'rela')
+          }
+        }
+        this.titurela.splice(index,1)        
+    },
+    deleteeItem(index,indexx){
+       this.titurela[index].name.splice(indexx,1)
+    },
+    addrela() {
+      this.titurela.push({name:[]})
     },
     text(val) {
       if(this.typecompile === '编辑') {
@@ -1407,6 +1512,35 @@ export default {
         margin-right: 5px;
       }   
     }
+    .rela{
+    .el-form-item{
+     margin-top: 8px;
+     margin-bottom: 0px;
+    }
+    .rela-sel{
+      .sel-conc  {
+        width: 40%;
+        margin-left: 50px;
+      }
+    }
+    .el-rela {
+        .labe-rela {
+         position: absolute;
+          top: 0;
+          left: 0px;
+          width: 100px;
+          text-align: center;
+          font-size: 12px;
+          // padding-right: 12px;
+          box-sizing: border-box;
+      }
+      .el-select {
+        margin-left: 100px;
+        width: 40%;
+      }
+    }
+  } 
+    
     .old {
       color:#606266;
     }
