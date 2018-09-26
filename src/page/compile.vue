@@ -73,7 +73,7 @@
             </el-form-item>
             <el-form-item >
               <div class="labe"><i class="el-icon-warning"></i>项目县区</div>
-              <el-select v-model="form.countyCodeName" filterable placeholder="请选择项目县区" style="width:80%">
+              <el-select v-model="form.countyCode" filterable placeholder="请选择项目县区" style="width:80%">
                 <el-option v-for="item in counties" :key="item.areaCode" :label="item.areaName" :value="item.areaCode">
                 </el-option>
               </el-select>
@@ -200,6 +200,7 @@
                       </el-table-column>
                       <el-table-column prop="cityCodeName" label="项目地区" width="120" show-overflow-tooltip>
                       </el-table-column>
+                      <!-- countyCode  countyCodeName  -->
                       <el-table-column prop="countyCodeName" label="项目县市" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column prop="pbModeName" label="评标办法" width="150" show-overflow-tooltip>
@@ -817,7 +818,7 @@ export default {
   },
   methods: {
     textt() {
-       console.log(this.form.bidBondsEndTime)
+       console.log(this.form)
     },
     text(val) {
       if(this.typecompile === '编辑') {
@@ -870,7 +871,7 @@ export default {
         listPbMode({type:this.code}).then(res => {
            if(res.code === 1 ) {
              this.ways = res.data
-             console.log(res.data,869)
+            //  console.log(res.data,869)
            }
         })
     },
@@ -901,6 +902,7 @@ export default {
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {     
           if(res.data.length >= 1) {
+            console.log(res.data[0],905)
             this.state = this.state + res.data[0].url
             this.condition = res.data[0].ntStatus
             this.compileData = res.data.concat()
@@ -940,7 +942,7 @@ export default {
       }
     },
     handleSelect(key, keyPath) {
-      console.log(key, keyPath); 
+      // console.log(key, keyPath); 
     },
     deletemark() {     // 删除操作得弹框 
        this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
@@ -1102,7 +1104,7 @@ export default {
         }
     },  
      handleClick(tab, event) {  // 被选中tab标签实例
-       console.log(tab, event);
+      //  console.log(tab, event);
      },
       handleSelectionChange(val) {   // 编辑明细  选中时发生变化会触发该事件
           this.delcom = val
@@ -1135,7 +1137,7 @@ export default {
     },
     //  点击文件列表已上传的文件时的钩子的
     handlePreview(file) {
-        console.log(file,1)
+        // console.log(file,1)
     },
     handleSuccess(response, file, fileList) {   //当文件上传成功的时候的回调函数
       if (response.code === 1) {
