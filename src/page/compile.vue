@@ -874,19 +874,24 @@ export default {
     "form.cityCodeName":{
         handler:function(val){
            if(val) {
-              this.form.countyCode = ''
-              this.cpkid= val.substring(0,32)
-              this.careaName= val.substring(32)
-              listArea({areaParentId:this.cpkid}).then(res => {
-                  if(res.code === 1) {
-                      this.counties = res.data   
-                      if(this.counties.length ==0 ) {
-                        listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-                          this.counties = res.data[0].countys
-                        })
-                      }            
-                  }
-              })
+              if(val.length >= 32 ) {
+                    this.form.countyCode = ''
+                  this.cpkid= val.substring(0,32)
+                  this.careaName= val.substring(32)
+                  listArea({areaParentId:this.cpkid}).then(res => {
+                      if(res.code === 1) {
+                          this.counties = res.data   
+                          if(this.counties.length ==0 ) {
+                            
+                          }            
+                      }
+                  })
+              } else {
+                  return listTenders({ntId:this.pkid,source:this.code}).then(res=> {
+                                  this.counties = res.data[0].countys
+                            })
+              }
+              
            }
         
         deep: true
@@ -1006,14 +1011,15 @@ export default {
      // 获取编辑列表
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {     
+           console.log(res,1014)
           if(res.data.length >= 1) {
-            console.log(res.data[0],905)
+            this.careaName = res.data[0].cityCode
             this.state = this.state + res.data[0].url
             this.condition = res.data[0].ntStatus
             this.compileData = res.data.concat()
-            this.form = JSON.parse(JSON.stringify(res.data[0]))             
+            this.form = JSON.parse(JSON.stringify(res.data[0]))   
           } else {
-            this.condition = '0'
+            this.condition = res.data.status
             this.emptyForm('edits')
              this.compileData = res.data.concat()
             this.form.title = this.arrtitle[this.position]
@@ -1022,7 +1028,8 @@ export default {
       }) 
     },
     listFile() {     
-      listFiles({bizId:this.pkid,source:this.code}).then(res=> {        
+      listFiles({bizId:this.pkid,source:this.code}).then(res=> {
+        console.log(res,1026)        
         this.file = res.data  
          this.form.title = this.arrtitle[this.position]
          this.form.pubDate = this.arrpub[this.position]      
@@ -1148,7 +1155,7 @@ export default {
                     message:'请选择项目地区',
                     type:'warning'
                   })
-        } else if ( !this.form.countyCodeName) {
+        } else if ( !this.form.countyCode) {
            return this.$message({
                     message:'请选择项目县区',
                     type:'warning'
@@ -1158,7 +1165,12 @@ export default {
                     message:'请选择项目类型',
                     type:'warning'
                   })
-        }            
+        }
+
+        console.log(this.form.countyCode,1165);
+        console.log(this.careaName);
+        
+        
           // insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:moment(this.form.bidBondsEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollEndTime:moment(this.form.enrollEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollAddr:this.form.enrollAddr,auditTime:moment(this.form.auditTime).format('YYYY-MM-DD hh:mm:ss'),bidEndTime:moment(this.form.bidEndTime).format('YYYY-MM-DD hh:mm:ss'),openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
           insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
 
@@ -1648,6 +1660,7 @@ export default {
             top:0;
             font-weight: 700;
           }
+
   }
 
  }

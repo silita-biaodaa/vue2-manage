@@ -236,7 +236,7 @@ export const delpost = params => {
 export const listNtgp = params => {
     return axios.post('zhaobiao/listNtAssociateGp', params).then(res => res.data)
 }
-// 接触关联公告
+// 
 export const listreli = params => {
     return axios.post('zhaobiao/deleteNtAssociateGp', params).then(res => res.data)
 }
@@ -268,3 +268,30 @@ export const getNt = params => {
 export const insertNtC = params => {
     return axios.post('zhaobiao/insertTbNtChange', params).then(res => res.data)
 }
+// 中标公告编辑明细列表
+export const bidList = params => {
+    return axios.post('zhongbiao/listTbNtBids', params).then(res => res.data)
+}
+// 多选删除中标编辑明细
+export const delDidList = params => {
+    return axios.post('zhongbiao/deleteTbNtBids', params).then(res => res.data)
+}
+// 获取中标文件列表 
+export const bidFiles = params => {
+    return axios.post('zhongbiao/listZhaoBiaoFiles', params).then(res => res.data)
+}
+// 获取中标关联公告列表 
+export const bidRela = params => {
+    return axios.post('zhongbiao/listNtAssociateGp', params).then(res => res.data)
+}
+// 获取招标编辑明细列表 
+export const bidzhaoList = params => {
+    return axios.post('zhongbiao/listNtTenders', params).then(res => res.data)
+}
+// 删除招标编辑明细列表 
+export const biddelList = params => {
+    return axios.post('zhongbiao/deleteNtTenders', params).then(res => res.data)
+}
+
+
+
