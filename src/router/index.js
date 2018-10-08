@@ -18,6 +18,7 @@ import Quillediter from '@/page/QuillEditor'
 import Detail from '@/page/detail'
 import Relevance from '@/page/relevance'
 import Recycle from '@/page/recycle'
+import Bidding from '@/page/bidding'
 
 
 Vue.use(Router)
@@ -47,6 +48,11 @@ const routes = [
 								path:'/addgoods',
 								component: Addgoods,
 								name:'addGoods'
+							},
+							{
+								path: '/bidding/:id/:code',
+								component: Bidding,
+								name: 'bidding'
 							},
 							{
 								path:'/bin',

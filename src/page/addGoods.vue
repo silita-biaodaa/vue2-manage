@@ -272,11 +272,11 @@ methods: {
         //      localStorage.removeItem('parentId')
         //      localStorage.setItem('parentId',this.pkid)
         
-        // const { href } = this.$router.resolve({
-        //       name:'compile',params: {id:row.pkid,code:this.coDe}
-        //   })
+        const { href } = this.$router.resolve({
+              name:'bidding',params: {id:row.pkid,code:this.coDe}
+          })
    
-        //   window.open(href, '_blank')
+          window.open(href, '_blank')
       },
       handleDelete(index,row) {
            this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
