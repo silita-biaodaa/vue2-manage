@@ -222,7 +222,6 @@
               <el-button @click="emptyForm('edits')">清空</el-button>
               <el-button type="primary" @click="onSubmit">保存</el-button>
               <el-button type="primary" @click="addrela">新增资质关系</el-button>
-
             </el-form-item>  
           </el-form>
 
@@ -429,7 +428,7 @@ export default {
         // proSum:'',   //项目金额
         // proDuration:'',  //项目工期
         // cityCodeName:'',    //项目地区
-        // countyCode:'',  //项目县区
+        countyCode:'',  //项目县区
         // pbMode:'',  //评标办法
         // bidBonds:'', // 投标保证金
         // bidBondsEndTime:'', //投标保证金截止时间
