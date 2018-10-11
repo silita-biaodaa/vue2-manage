@@ -262,17 +262,17 @@
                       <el-table-column prop="bidBonds" label="项目保证金(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column width="120" label="保证金截至时间" show-overflow-tooltip> 
-                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD hh:mm') }}</template>
+                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD HH:mm') }}</template>
                       </el-table-column>
                       <el-table-column prop="enrollAddr" label="报名地点" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column label="资格审查截止时间" width="150" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD hh:mm')}}</template>
+                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD HH:mm')}}</template>
                       </el-table-column> 
                       <el-table-column prop="certAuditAddr" label="资格审查地点" width="150" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column  label="投标截止时间" width="150" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD hh:mm')}}</template>                          
+                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD HH:mm')}}</template>                          
                       </el-table-column> 
                       <el-table-column prop="openingPerson" label="开标人员" width="120" show-overflow-tooltip>
                       </el-table-column> 
@@ -900,7 +900,11 @@ export default {
   },
   methods: {
     textt() {
-       console.log(this.titurela)
+      //  console.log(this.titurela)
+      console.log(this.form.bidBondsEndTime);
+      console.log(this.form.enrollEndTime);
+      console.log(this.form.auditTime);
+      console.log(this.form.bidEndTime);      
     },
     // 判断是否隐藏多余的下拉框
     func(index) {
@@ -1017,6 +1021,8 @@ export default {
             this.condition = res.data[0].ntStatus
             this.compileData = res.data.concat()
             this.form = JSON.parse(JSON.stringify(res.data[0]))   
+            console.log(res.data[0],1024);
+            
           } else {
             this.condition = res.data.status
             this.emptyForm('edits')
@@ -1148,6 +1154,12 @@ export default {
       });
     },
       onSubmit() {   //保存按钮
+      // this.bidBondsEndTime = this.form.bidBondsEndTime / 1000
+      // // console.log(this.form.bidBondsEndTime.getTime());
+      // this.enrollEndTime = this.form.enrollEndTime / 1000
+      // this.auditTime = this.form.auditTime / 1000
+      // this.bidEndTime = this.form.bidEndTime / 1000
+
       if(this.typecompile === '编辑') {   
         if(this.form.cityCodeName === '') {
             return this.$message({
@@ -1164,12 +1176,7 @@ export default {
                     message:'请选择项目类型',
                     type:'warning'
                   })
-        }
-
-        console.log(this.form.countyCode,1165);
-        console.log(this.careaName);
-        
-        
+        }        
           // insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:moment(this.form.bidBondsEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollEndTime:moment(this.form.enrollEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollAddr:this.form.enrollAddr,auditTime:moment(this.form.auditTime).format('YYYY-MM-DD hh:mm:ss'),bidEndTime:moment(this.form.bidEndTime).format('YYYY-MM-DD hh:mm:ss'),openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
           insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
 

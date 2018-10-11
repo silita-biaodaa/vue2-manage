@@ -292,6 +292,11 @@ export const bidzhaoList = params => {
 export const biddelList = params => {
     return axios.post('zhongbiao/deleteNtTenders', params).then(res => res.data)
 }
-
-
-
+// 根据关键词、拼音搜索企业
+export const bidcompany = params => {
+    return axios.post('zhongbiao/listCompany', params).then(res => res.data)
+}
+// 保存的中变编辑明细
+export const bidSave = params => {
+    return axios.post('zhongbiao/saveTbNtBids', params).then(res => res.data)
+}

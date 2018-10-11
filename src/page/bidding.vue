@@ -64,45 +64,47 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="项目类型" >
-                    <el-select v-model="bidForm.proType" filterable placeholder="请选择项目类型" style="width:80%">
-                      <el-option v-for="item in bidType" :key="item.code"  :label="item.name" :value="item.code">
+                    <el-select v-model="bidForm.proType"  placeholder="请选择项目类型" style="width:80%">
+                      <el-option v-for="item in bidType" :key="item.value"  :label="item.name" :value="item.value">
                       </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="招标类型" >
-                    <el-select v-model="bidForm.binessType" filterable placeholder="请选择招标类型" style="width:80%">
-                      <el-option v-for="item in bidbiness" :key="item.code"  :label="item.name" :value="item.code">
+                    <el-select v-model="bidForm.binessType"  placeholder="请选择招标类型" style="width:80%">
+                      <el-option v-for="item in bidbiness" :key="item.value"  :label="item.name" :value="item.value">
                       </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="评标办法" >
                     <el-select v-model="bidForm.pbMode" filterable placeholder="请选择评标办法" style="width:80%">
-                      <el-option v-for="item in bidbiness" :key="item.code"  :label="item.name" :value="item.code">
+                      <el-option v-for="item in bidMode" :key="item.code"  :label="item.name" :value="item.code">
                       </el-option>
                     </el-select>
                 </el-form-item>
                 <!-- 第一中标候选人 -->
-                <div
-                 v-for="(item,index) in bidForm.domains"
+
+                 <div
+                 v-for="(item,index) in bidForm.first"
                  :key="index"
                  class="bidtask"
                 >
                 <el-button @click="addDomain" size='mini' class="bidadd" type="danger" v-show="taskadd(index)" >增加</el-button>                   
                 <el-form-item label="第一中标候选人">
-                    <el-select v-model="item.fCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
+                    <el-select v-model="item.oneCandidate" value-key='creditCode' filterable placeholder="请选择企业名称" style="width:80%">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
+
                 <el-form-item label="第一联合人之一">
-                    <el-select v-model="item.fCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
+                    <el-select v-model="item.twoCandidate"   filterable placeholder="请选择企业名称" style="width:80%">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="第一中标候选人">
-                    <el-select v-model="item.fCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
+                <el-form-item label="第一联合人之二">
+                    <el-select v-model="item.threeCandidate"   filterable placeholder="请选择企业名称" style="width:80%">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
@@ -129,28 +131,29 @@
                 </el-form-item>
                 <el-button @click.prevent="removeDomain(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
                 </div>
+
                  <!-- 第二中标候选人 -->
-                <div
+                <!-- <div
                  v-for="(item,index) in bidForm.second"
                  :key="index"
                  class="bidtask"
                 >
                 <el-button @click="addtDomain" size='mini' class="bidadd" type="danger" v-show="taskadd(index)" >增加</el-button>                   
                 <el-form-item label="第二中标候选人">
-                    <el-select v-model="item.fCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
+                    <el-select v-model="item.oneCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
                       </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="第二联合人之一">
-                    <el-select v-model="item.fCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
+                    <el-select v-model="item.twoCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="第二中标候选人">
-                    <el-select v-model="item.fCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
+                <el-form-item label="第二联合人之二">
+                    <el-select v-model="item.threeCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
                       </el-option>
                     </el-select>
                 </el-form-item>
@@ -176,29 +179,29 @@
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
                 <el-button @click.prevent="removeSecond(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
-                </div>
+                </div> -->
                 <!-- 第三中标候选人 -->
-                <div
+                <!-- <div
                  v-for="(item,index) in bidForm.third"
                  :key="index"
                  class="bidtask"
                 >
                 <el-button @click="addthird" size='mini' class="bidadd" type="danger" v-show="taskadd(index)" >增加</el-button>                   
                 <el-form-item label="第三中标候选人">
-                    <el-select v-model="item.fCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
+                    <el-select v-model="item.oneCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
                       </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="第三联合人之一">
-                    <el-select v-model="item.fCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
+                    <el-select v-model="item.twoCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="第三中标候选人">
-                    <el-select v-model="item.fCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
+                <el-form-item label="第三联合人之二">
+                    <el-select v-model="item.threeCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
                       </el-option>
                     </el-select>
                 </el-form-item>
@@ -224,7 +227,7 @@
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
                 <el-button @click.prevent="removeThird(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
-                </div>
+                </div>  -->
 
                 <el-form-item class="btn">
                   <el-button @click="emptyForm">清空</el-button>
@@ -269,11 +272,11 @@
                          <template slot-scope="scope">{{ scope.row.binessType  }}</template>                        
                       </el-table-column> 
                       
-                       <el-table-column prop="first[0].fCandidate" label="第一中标候选人" width="150" show-overflow-tooltip>
+                       <el-table-column prop="first[0].oneCandidate" label="第一中标候选人" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="first[0].fCandidate" label="第一联合人之一" width="150" show-overflow-tooltip>
+                       <el-table-column prop="first[0].twoCandidate" label="第一联合人之一" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="first[0].fCandidate" label="第一联合人之二" width="150" show-overflow-tooltip>
+                       <el-table-column prop="first[0].threeCandidate" label="第一联合人之二" width="150" show-overflow-tooltip>
                       </el-table-column>
                        <el-table-column prop="first[0].fQuote" label="中标金额(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -288,11 +291,11 @@
                        <el-table-column prop="first[0].fQuality " label="质量员" width="150" show-overflow-tooltip >
                       </el-table-column>
 
-                      <el-table-column prop="first[1].fCandidate" label="第一中标候选人(1)" width="150" show-overflow-tooltip >
+                      <el-table-column prop="first[1].oneCandidate" label="第一中标候选人(1)" width="150" show-overflow-tooltip >
                       </el-table-column>
-                       <el-table-column prop="first[1].fCandidate" label="第一联合人之一(1)" width="150" show-overflow-tooltip >
+                       <el-table-column prop="first[1].twoCandidate" label="第一联合人之一(1)" width="150" show-overflow-tooltip >
                       </el-table-column>
-                       <el-table-column prop="first[1].fCandidate" label="第一联合人之二(1)" width="150" show-overflow-tooltip >
+                       <el-table-column prop="first[1].threeCandidate" label="第一联合人之二(1)" width="150" show-overflow-tooltip >
                       </el-table-column>
                        <el-table-column prop="first[1].fQuote" label="中标金额(万元)(1)" width="150" show-overflow-tooltip >
                       </el-table-column>
@@ -307,11 +310,11 @@
                        <el-table-column prop="first[1].fQuality " label="质量员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
 
-                       <el-table-column prop="second[0].fCandidate" label="第二中标候选人" width="150" show-overflow-tooltip>
+                       <el-table-column prop="second[0].oneCandidate" label="第二中标候选人" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="second[0].fCandidate" label="第二联合人之一" width="150" show-overflow-tooltip>
+                       <el-table-column prop="second[0].twoCandidate" label="第二联合人之一" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="second[0].fCandidate" label="第二联合人之二" width="150" show-overflow-tooltip>
+                       <el-table-column prop="second[0].threeCandidate" label="第二联合人之二" width="150" show-overflow-tooltip>
                       </el-table-column>
                        <el-table-column prop="second[0].fQuote" label="中标金额(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -326,11 +329,11 @@
                        <el-table-column prop="second[0].fQuality " label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
 
-                       <el-table-column prop="second[1].fCandidate" label="第二中标候选人(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="second[1].oneCandidate" label="第二中标候选人(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="second[1].fCandidate" label="第二联合人之一(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="second[1].twoCandidate" label="第二联合人之一(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="second[1].fCandidate" label="第二联合人之二(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="second[1].threeCandidate" label="第二联合人之二(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
                        <el-table-column prop="second[1].fQuote" label="中标金额(万元)(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -345,11 +348,11 @@
                        <el-table-column prop="second[1].fQuality " label="质量员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
 
-                      <el-table-column prop="third[0].fCandidate" label="第三中标候选人" width="150" show-overflow-tooltip>
+                      <el-table-column prop="third[0].oneCandidate" label="第三中标候选人" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="third[0].fCandidate" label="第三联合人之一" width="150" show-overflow-tooltip>
+                       <el-table-column prop="third[0].twoCandidate" label="第三联合人之一" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="third[0].fCandidate" label="第三联合人之二" width="150" show-overflow-tooltip>
+                       <el-table-column prop="third[0].threeCandidate" label="第三联合人之二" width="150" show-overflow-tooltip>
                       </el-table-column>
                        <el-table-column prop="third[0].fQuote" label="中标金额(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -364,11 +367,11 @@
                        <el-table-column prop="third[0].fQuality " label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
 
-                      <el-table-column prop="third[1].fCandidate" label="第三中标候选人(1)" width="150" show-overflow-tooltip>
+                      <el-table-column prop="third[1].oneCandidate" label="第三中标候选人(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="third[1].fCandidate" label="第三联合人之一(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="third[1].twoCandidate" label="第三联合人之一(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="third[1].fCandidate" label="第三联合人之二(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="third[1].threeCandidate" label="第三联合人之二(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
                        <el-table-column prop="third[1].fQuote" label="中标金额(万元)(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -446,17 +449,17 @@
                       <el-table-column prop="bidBonds" label="项目保证金(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column width="120" label="保证金截至时间" show-overflow-tooltip> 
-                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD hh:mm') }}</template>
+                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD HH:mm') }}</template>
                       </el-table-column>
                       <el-table-column prop="enrollAddr" label="报名地点" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column label="资格审查截止时间" width="150" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD hh:mm')}}</template>
+                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD HH:mm')}}</template>
                       </el-table-column> 
                       <el-table-column prop="certAuditAddr" label="资格审查地点" width="150" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column  label="投标截止时间" width="150" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD hh:mm')}}</template>                          
+                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD HH:mm')}}</template>                          
                       </el-table-column> 
                       <el-table-column prop="openingPerson" label="开标人员" width="120" show-overflow-tooltip>
                       </el-table-column> 
@@ -513,7 +516,7 @@
 </template>
 <script>
 import bidEdit from '@/page/edit';
-import { listFixed,listPbMode,listArea,updateStatus,bidList,delDidList,bidFiles,listreli,listTenders,bidRela,bidzhaoList,biddelList } from '@/api/index'
+import { bidSave,bidcompany,listFixed,listPbMode,listArea,updateStatus,bidList,delDidList,bidFiles,listreli,listTenders,bidRela,bidzhaoList,biddelList } from '@/api/index'
 export default {
   data () {
      return {
@@ -545,18 +548,24 @@ export default {
         list:[],
         ajson:{},
         bidForm:{
-          editCode:'',
           title:'',
           segment:'',
           controllSum:'',
           proSum:'',
           proDuration:'',
-          proType:'',
-          binessType:'',
-          pbMode:'',
-          domains:[{}], 
-          second:[{}],
-          third:[{}],          
+          proType:'', // 项目类型
+          binessType:'', // 招标类型
+          pbMode:'', // 评标办法
+          countyCode:'',
+          first:[{
+            number:1,
+          }], 
+          second:[{
+            number:2,
+          }],
+          third:[{
+            number:3
+          }],          
         }, // 编辑明细列表数据
         areas:[], //项目地区
         bidplaces:[], //项目县区
@@ -580,9 +589,9 @@ export default {
                       }
                   })
               } else {
-                  return listTenders({ntId:this.pkid,source:this.source}).then(res=> {
-                                  this.bidplaces = res.data[0].countys
-                            })
+                  // return listTenders({ntId:this.pkid,source:this.source}).then(res=> {
+                  //                 this.bidplaces = res.data[0].countys
+                  //           })
               }
               
            }
@@ -600,10 +609,19 @@ export default {
     this.gainRelation() // 获取相关的公告文件列表
     this.gainzhaoList()     // 获取相关的招标编辑明细
     this.gaindown()
+    this.gaincompany()
   },
   methods: {
     textt(){
-       console.log(this.bidForm.domains);
+       console.log(this.bidForm.first)
+    },
+    // 获取企业关系列表的
+    gaincompany() {
+       bidcompany({queryKey:''}).then(res => {
+          this.taskcompany = res.data        
+          console.log(res.data,622);
+            
+       }) 
     },
     // 获取的相关下拉数据列表的
     gaindown(){
@@ -619,13 +637,12 @@ export default {
         // 评标办法
       listPbMode({type:this.source}).then(res => {
            if(res.code === 1 ) {
-             this.bidbiness = res.data
-            //  console.log(res.data,869)
+             this.bidMode = res.data   //评标办法
            }
         })
         listFixed({}).then(res=> {
            this.bidType = res.data.projectType
-           this.bidbiness = res.data.biddingType   
+           this.bidbiness = res.data.biddingType  //招标类型 
         })    
     },
     // 获取相关公告列表
@@ -664,6 +681,9 @@ export default {
             }); 
             // console.log(res.data)   
             this.biddData = res.data
+            this.bidForm = JSON.parse(JSON.stringify(res.data[1]))
+            console.log(res.data[1],669)
+
 
           //    if(res.data.length >= 1) {
           //   this.state = this.state + res.data[0].url
@@ -857,12 +877,15 @@ export default {
             this.biddpkid.push(item.pkid)
           })          
           this.biddpkids = this.biddpkid.join('|')
-          biddelList({idsStr:this.biddpkid,source:this.source}).then( res => {
+          // console.log(this.biddpkids,880);
+          
+          biddelList({idsStr:this.biddpkids,source:this.source}).then( res => {
               if(res.code == 1) {
                  this.$message({
                     type:'success',
                     message:'删除招标编辑明细成功'
                  })
+                // this.biddetail()
                 this.gainzhaoList()
                 this.biddpkids = ''
                 this.biddpkid = []
@@ -880,7 +903,7 @@ export default {
     // 删除所选中得候选人列表 
     removeDomain(i) {
        if(i != 0) {
-          this.bidForm.domains.splice(i, 1);
+          this.bidForm.first.splice(i, 1);
           // console.log(this.bidForm.domains);
        } else {
           this.$message({
@@ -899,11 +922,11 @@ export default {
     },
     addDomain() {
       //  console.log(1) 
-       this.bidForm.domains.push({});
+       this.bidForm.first.push({number:1});
     },
     // 第二个列表增加按钮
     addtDomain(){
-        this.bidForm.second.push({});
+        this.bidForm.second.push({number:2});
     },
 
     removeSecond(i) {
@@ -918,7 +941,7 @@ export default {
        }
     },
     addthird() {
-      this.bidForm.third.push({});
+      this.bidForm.third.push({number:3});
     },
     removeThird(i) {
       if(i != 0) {
@@ -936,7 +959,43 @@ export default {
     },
     // 保存按钮 
     onSubmit() {
+      if( !bidForm.cityCodeName.trim()) {
+         return this.$message({
+           type:'warning',
+           message:'项目地区不能为空~'
+         })
+      }
+      if( !bidForm.countyCode.trim()) {
+         return this.$message({
+           type:'warning',
+           message:'项目县区不能为空~'
+         })
+      }
+      if( !bidForm.proType.trim()) {
+         return this.$message({
+           type:'warning',
+           message:'项目类型不能为空~'
+         })
+      }
+      if( !bidForm.pbMode.trim()) {
+         return this.$message({
+           type:'warning',
+           message:'评标办法不能为空~'
+         })
+      }
+      bidForm.first.forEach(item => {
+          if( !item.oneCandidate.trim()) {
+             return this.$message({
+                  type:'warning',
+                  message:'中标第一候选人不能为空~'
+                })
+          }
+      })
+    bidSave({source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.bidForm.cityCodeName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.bidForm.first }).then(res => {
+       console.log(res)
+    })
 
+      
     },
     //  点击编辑
     bidedit() {
