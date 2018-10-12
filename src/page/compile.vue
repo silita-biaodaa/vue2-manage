@@ -1014,7 +1014,13 @@ export default {
      // 获取编辑列表
     listTender() {
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {     
-           console.log(res,1014)
+          //  console.log(res,1014)
+          res.data.forEach((item,index) => {
+              if(item.pkid == null) {
+                  res.data.splice(index,1)
+              }
+          })
+
           if(res.data.length >= 1) {
             this.careaName = res.data[0].cityCode
             this.state = this.state + res.data[0].url

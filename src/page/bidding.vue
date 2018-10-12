@@ -611,7 +611,10 @@ export default {
   },
   methods: {
     textt(){
-       console.log(this.bidForm.first)
+      //  console.log(this.bidForm.first)
+      console.log(this.pkid,615);
+      console.log(this.setpkid)
+      
     },
     // 获取企业关系列表的
     gaincompany() {
@@ -663,6 +666,11 @@ export default {
     // 获取中标编辑明细
     biddetail(){
       bidList({ntId:this.pkid,source:this.source}).then(res => {
+             res.data.forEach((item,index) => {
+              if(item.pkid == null) {
+                  res.data.splice(index,1)
+              }
+          })
             res.data.forEach(item => {
                 item.first = new Array()
                 item.second = new Array()
@@ -677,13 +685,15 @@ export default {
                        }
                   })  
             }); 
-            // console.log(res.data)
-            this.setpkid = res.data[1].pkid || ''   
-            this.biddData = res.data
-            console.log(res.data[1],684);
-            this.bidForm = JSON.parse(JSON.stringify(res.data[1]))
-            this.judgenull()
-            // console.log(res.data[1],669)
+            // this.judgenull()
+             if(res.data.length >= 1) {
+                this.biddData = res.data
+                this.bidForm = JSON.parse(JSON.stringify(res.data[0]))
+                this.setpkid = res.data[0].pkid
+             } else {
+                this.setpkid = ''
+             }
+
 
 
           //    if(res.data.length >= 1) {
@@ -815,11 +825,12 @@ export default {
                     type:'success',
                     message:'删除成功'
                   })
-                  this.biddlist = []
+                 this.biddlist = []
                   this.biddpkids = ''
                   this.biddpkid = []
                   this.biddetail()
                 }
+                 
             })
           
       }).catch(() => {
