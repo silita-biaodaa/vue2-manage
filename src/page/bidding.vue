@@ -124,13 +124,10 @@
                   <el-input v-model="item.fSafety"  ></el-input>
                 </el-form-item>
                 <el-form-item label='质量员'>
-                  <el-input v-model="item.fSafety"  ></el-input>
-                </el-form-item>
-                <el-form-item label='质量员'>
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
                 <el-button @click.prevent="removeDomain(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
-                </div>
+                </div> 
 
                  <!-- 第二中标候选人 -->
                 <!-- <div
@@ -269,7 +266,7 @@
                          <template slot-scope="scope">{{ scope.row.proType }}</template>
                       </el-table-column> 
                       <el-table-column label="招标类型" width="120" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.binessType  }}</template>                        
+                         <template slot-scope="scope">{{ scope.row.binessTypeName  }}</template>                        
                       </el-table-column> 
                       
                        <el-table-column prop="first[0].oneCandidate" label="第一中标候选人" width="150" show-overflow-tooltip>
@@ -521,6 +518,7 @@ export default {
   data () {
      return {
         pkid:'',
+        setpkid:'',
         source:'',
         activeIndex:'1',
         condition:'0',
@@ -679,10 +677,13 @@ export default {
                        }
                   })  
             }); 
-            // console.log(res.data)   
+            // console.log(res.data)
+            this.setpkid = res.data[1].pkid || ''   
             this.biddData = res.data
+            console.log(res.data[1],684);
             this.bidForm = JSON.parse(JSON.stringify(res.data[1]))
-            console.log(res.data[1],669)
+            this.judgenull()
+            // console.log(res.data[1],669)
 
 
           //    if(res.data.length >= 1) {
@@ -727,6 +728,17 @@ export default {
     },
     relaedbox(row) {
       this.$refs.multipleRelaed.toggleRowSelection(row)
+    },
+    // 判断数值是否为空的
+    judgenull() {
+      if(this.bidForm.first.length == 0) {
+         this.bidForm.first.push({number:1})
+      } else if (this.bidForm.second.length == 0) {
+        this.bidForm.second.push({number:2})
+      } else if (this.bidForm.three.length == 0) {
+        this.bidForm.three.push({number:3})
+
+      }
     },
     //  修改公告状态
     biddmark() {
@@ -959,40 +971,63 @@ export default {
     },
     // 保存按钮 
     onSubmit() {
-      if( !bidForm.cityCodeName.trim()) {
+      if( !this.bidForm.cityCodeName.trim()) {
          return this.$message({
            type:'warning',
            message:'项目地区不能为空~'
          })
       }
-      if( !bidForm.countyCode.trim()) {
+      if( !this.bidForm.countyCode.trim()) {
          return this.$message({
            type:'warning',
            message:'项目县区不能为空~'
          })
       }
-      if( !bidForm.proType.trim()) {
+      if( !this.bidForm.proType.trim()) {
          return this.$message({
            type:'warning',
            message:'项目类型不能为空~'
          })
       }
-      if( !bidForm.pbMode.trim()) {
+      if( !this.bidForm.pbMode.trim()) {
          return this.$message({
            type:'warning',
            message:'评标办法不能为空~'
          })
       }
-      bidForm.first.forEach(item => {
-          if( !item.oneCandidate.trim()) {
-             return this.$message({
-                  type:'warning',
-                  message:'中标第一候选人不能为空~'
-                })
-          }
-      })
-    bidSave({source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.bidForm.cityCodeName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.bidForm.first }).then(res => {
+      // this.bidForm.first.forEach(item => {
+      //     if( !item.oneCandidate.trim()) {
+      //        return this.$message({
+      //             type:'warning',
+      //             message:'中标第一候选人不能为空~'
+      //           })
+      //     }
+      // })
+      console.log( this.setpkid ,'标段信息');
+    bidSave({pkid:this.setpkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.bidForm.first}).then(res => {
        console.log(res)
+       console.log(this.bidForm.first,1006)
+       this.$message({
+         type:'success',
+         message: res
+       })
+        bidList({ntId:this.pkid,source:this.source}).then(res => {
+            res.data.forEach(item => {
+                item.first = new Array()
+                item.second = new Array()
+                item.third = new Array()
+                  item.bidsCands.forEach(el => {
+                       if(el.number == 1 ) {
+                          item.first.push(el)
+                       } else if (el.number == 2) {
+                         item.second.push(el)
+                       } else {
+                         item.third.push(el)
+                       }
+                  })
+            });
+            this.biddData = res.data
+        })    
     })
 
       
