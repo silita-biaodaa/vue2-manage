@@ -269,8 +269,8 @@ methods: {
         //      localStorage.setItem('tensele',this.json)
         //      localStorage.removeItem('indexer')
         //      localStorage.setItem('indexer',index)
-            //  localStorage.removeItem('bidId')
-            //  localStorage.setItem('bidId',this.pkid)
+             localStorage.removeItem('bidId')
+             localStorage.setItem('bidId',this.pkid)
         
         const { href } = this.$router.resolve({
               name:'bidding',params: {id:row.pkid,code:this.coDe}
