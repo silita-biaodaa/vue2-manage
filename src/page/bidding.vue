@@ -611,10 +611,7 @@ export default {
   },
   methods: {
     textt(){
-      //  console.log(this.bidForm.first)
-      console.log(this.pkid,615);
-      console.log(this.setpkid)
-      
+        console.log(this.bidid)
     },
     // 获取企业关系列表的
     gaincompany() {
