@@ -39,6 +39,9 @@
                 <el-form-item label="项目名称">
                   <el-input v-model="bidForm.title"></el-input>
                 </el-form-item>
+                <el-form-item label="公示日期">
+                  <el-input v-model="bidForm.pubDate"></el-input>
+                </el-form-item>
                 <el-form-item label="标段信息">
                   <el-input v-model="bidForm.segment"></el-input>
                 </el-form-item>
@@ -82,6 +85,7 @@
                     </el-select>
                 </el-form-item>
                 <!-- 第一中标候选人 -->
+                <!-- 等企业上线，还需要进行一次的修改的完善的 -->
 
                  <div
                  v-for="(item,index) in bidForm.first"
@@ -130,27 +134,27 @@
                 </div> 
 
                  <!-- 第二中标候选人 -->
-                <!-- <div
+                <div
                  v-for="(item,index) in bidForm.second"
-                 :key="index"
+                 :key="index + '-label'"
                  class="bidtask"
                 >
                 <el-button @click="addtDomain" size='mini' class="bidadd" type="danger" v-show="taskadd(index)" >增加</el-button>                   
                 <el-form-item label="第二中标候选人">
                     <el-select v-model="item.oneCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="第二联合人之一">
                     <el-select v-model="item.twoCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="第二联合人之二">
                     <el-select v-model="item.threeCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
+                      <el-option v-for="item in taskcompany" :key="item.companyName "  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
@@ -167,38 +171,35 @@
                   <el-input v-model="item.fBuilder"  ></el-input>
                 </el-form-item> 
                 <el-form-item label='安全员'>
-                  <el-input v-model="item.fSafety"  ></el-input>
-                </el-form-item>
-                <el-form-item label='质量员'>
                   <el-input v-model="item.fSafety"  ></el-input>
                 </el-form-item>
                 <el-form-item label='质量员'>
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
                 <el-button @click.prevent="removeSecond(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
-                </div> -->
+                </div>
                 <!-- 第三中标候选人 -->
-                <!-- <div
+                <div
                  v-for="(item,index) in bidForm.third"
-                 :key="index"
+                 :key="index + '-third'"
                  class="bidtask"
                 >
                 <el-button @click="addthird" size='mini' class="bidadd" type="danger" v-show="taskadd(index)" >增加</el-button>                   
                 <el-form-item label="第三中标候选人">
                     <el-select v-model="item.oneCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="第三联合人之一">
                     <el-select v-model="item.twoCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="第三联合人之二">
                     <el-select v-model="item.threeCandidate" filterable placeholder="请选择企业名称" style="width:80%">
-                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.creditCode">
+                      <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
@@ -218,13 +219,10 @@
                   <el-input v-model="item.fSafety"  ></el-input>
                 </el-form-item>
                 <el-form-item label='质量员'>
-                  <el-input v-model="item.fSafety"  ></el-input>
-                </el-form-item>
-                <el-form-item label='质量员'>
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
                 <el-button @click.prevent="removeThird(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
-                </div>  -->
+                </div> 
 
                 <el-form-item class="btn">
                   <el-button @click="emptyForm">清空</el-button>
@@ -283,10 +281,11 @@
                       </el-table-column>
                        <el-table-column prop="first[0].fBuilder" label="施工员" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="first[0].fSafety" label="完全员" width="150" show-overflow-tooltip>
+                       <el-table-column prop="first[0].fSafety" label="安全员" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="first[0].fQuality " label="质量员" width="150" show-overflow-tooltip >
+                       <el-table-column prop="first[0].fQuality" label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
+                       
 
                       <el-table-column prop="first[1].oneCandidate" label="第一中标候选人(1)" width="150" show-overflow-tooltip >
                       </el-table-column>
@@ -304,7 +303,7 @@
                       </el-table-column>
                        <el-table-column prop="first[1].fSafety" label="完全员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="first[1].fQuality " label="质量员(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="first[1].fQuality" label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
 
                        <el-table-column prop="second[0].oneCandidate" label="第二中标候选人" width="150" show-overflow-tooltip>
@@ -323,7 +322,7 @@
                       </el-table-column>
                        <el-table-column prop="second[0].fSafety" label="完全员" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="second[0].fQuality " label="质量员" width="150" show-overflow-tooltip>
+                       <el-table-column prop="second[0].fQuality" label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
 
                        <el-table-column prop="second[1].oneCandidate" label="第二中标候选人(1)" width="150" show-overflow-tooltip>
@@ -342,7 +341,7 @@
                       </el-table-column>
                        <el-table-column prop="second[1].fSafety" label="完全员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="second[1].fQuality " label="质量员(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="second[1].fQuality" label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
 
                       <el-table-column prop="third[0].oneCandidate" label="第三中标候选人" width="150" show-overflow-tooltip>
@@ -361,7 +360,7 @@
                       </el-table-column>
                        <el-table-column prop="third[0].fSafety" label="完全员" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="third[0].fQuality " label="质量员" width="150" show-overflow-tooltip>
+                       <el-table-column prop="third[0].fQuality" label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
 
                       <el-table-column prop="third[1].oneCandidate" label="第三中标候选人(1)" width="150" show-overflow-tooltip>
@@ -380,7 +379,7 @@
                       </el-table-column>
                        <el-table-column prop="third[1].fSafety" label="完全员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="third[1].fQuality " label="质量员(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="third[1].fQuality" label="质量员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
                     </el-table>
                      <div style="margin-top: 10px">
@@ -550,6 +549,8 @@ export default {
           segment:'',
           controllSum:'',
           proSum:'',
+          countyCode:'',
+          cityCodeName:'',
           proDuration:'',
           proType:'', // 项目类型
           binessType:'', // 招标类型
@@ -571,6 +572,8 @@ export default {
         bidbiness:[], //招标类型
         bidMode:[], //评标办法
         taskcompany:[],  // 企业候选人 
+        delArr:[],
+        first:[],
       }
   },
   watch: {
@@ -611,14 +614,13 @@ export default {
   },
   methods: {
     textt(){
-        console.log(this.bidid)
+        console.log(this.delArr)
+        console.log(this.bidForm.third)
     },
     // 获取企业关系列表的
     gaincompany() {
        bidcompany({queryKey:''}).then(res => {
           this.taskcompany = res.data        
-          console.log(res.data,622);
-            
        }) 
     },
     // 获取的相关下拉数据列表的
@@ -646,7 +648,6 @@ export default {
     // 获取相关公告列表
     gainRelation() {
       bidRela({pkid:this.pkid,source:this.source}).then(res => {
-          // console.log(res,356)
           if(res.code == 1) {
              this.bidrelation = res.data.datas
           }
@@ -682,11 +683,12 @@ export default {
                        }
                   })  
             }); 
-            // this.judgenull()
              if(res.data.length >= 1) {
+                console.log(res.data,687)
                 this.biddData = res.data
                 this.bidForm = JSON.parse(JSON.stringify(res.data[0]))
                 this.setpkid = res.data[0].pkid
+                this.judgenull()
              } else {
                 this.setpkid = ''
              }
@@ -742,9 +744,9 @@ export default {
          this.bidForm.first.push({number:1})
       } else if (this.bidForm.second.length == 0) {
         this.bidForm.second.push({number:2})
-      } else if (this.bidForm.three.length == 0) {
-        this.bidForm.three.push({number:3})
-
+      } else if (this.bidForm.third.length == 0) {
+        console.log(1111);
+        this.bidForm.third.push({number:3})
       }
     },
     //  修改公告状态
@@ -803,7 +805,8 @@ export default {
     },
     // 添加编辑明细的时候额
     addbid() {
-
+      this.bidForm.segment = '' 
+      this.texttop()
     },
     // 多选删除编辑的
     delcompilebid() {
@@ -822,10 +825,10 @@ export default {
                     type:'success',
                     message:'删除成功'
                   })
+                  this.biddetail()
                  this.biddlist = []
                   this.biddpkids = ''
                   this.biddpkid = []
-                  this.biddetail()
                 }
                  
             })
@@ -897,7 +900,6 @@ export default {
             this.biddpkid.push(item.pkid)
           })          
           this.biddpkids = this.biddpkid.join('|')
-          // console.log(this.biddpkids,880);
           
           biddelList({idsStr:this.biddpkids,source:this.source}).then( res => {
               if(res.code == 1) {
@@ -905,7 +907,6 @@ export default {
                     type:'success',
                     message:'删除招标编辑明细成功'
                  })
-                // this.biddetail()
                 this.gainzhaoList()
                 this.biddpkids = ''
                 this.biddpkid = []
@@ -923,8 +924,13 @@ export default {
     // 删除所选中得候选人列表 
     removeDomain(i) {
        if(i != 0) {
+         this.bidForm.first[i].number = ''
+         this.delArr.push(this.bidForm.first[i])
           this.bidForm.first.splice(i, 1);
-          // console.log(this.bidForm.domains);
+          this.$message({
+             type:'success',
+             message:'删除成功~'
+          })
        } else {
           this.$message({
             type:'warning',
@@ -951,8 +957,13 @@ export default {
 
     removeSecond(i) {
       if(i != 0) {
+          this.bidForm.second[i].number = ''
+         this.delArr.push(this.bidForm.second[i])
           this.bidForm.second.splice(i, 1);
-          // console.log(this.bidForm.domains);
+          this.$message({
+             type:'success',
+             message:'删除成功~'
+          })
        } else {
           this.$message({
             type:'warning',
@@ -965,7 +976,13 @@ export default {
     },
     removeThird(i) {
       if(i != 0) {
+         this.bidForm.third[i].number = ''
+         this.delArr.push(this.bidForm.third[i])
           this.bidForm.third.splice(i, 1);
+          this.$message({
+             type:'success',
+             message:'删除成功~'
+          })
        } else {
           this.$message({
             type:'warning',
@@ -975,68 +992,125 @@ export default {
     },
     // 清空按钮
     emptyForm() {
-
+      this.bidForm.editCode = ''
+      this.bidForm.segment = '' 
+      this.bidForm.controllSum = ''
+      this.bidForm.proSum = ''
+      this.bidForm.proDuration = ''
+      this.bidForm.cityCodeName = ''
+      this.bidForm.countyCode = ''
+      this.bidForm.proType = ''
+      this.bidForm.binessType = ''
+      this.bidForm.pbMode = ''
+      this.bidForm.first = [{number:1}]
+      this.bidForm.second = [{number:2}]
+      this.bidForm.third = [{number:3}]
+      this.texttop()
+    },
+      texttop() {     
+        let back = setInterval(() => {
+          if(document.querySelector('.el-main').scrollTop){
+           document.querySelector('.el-main').scrollTop-=100;
+           document.querySelector('.el-main').scrollTop-=100;            
+          }else {
+            clearInterval(back)
+          }
+        });
     },
     // 保存按钮 
     onSubmit() {
-      if( !this.bidForm.cityCodeName.trim()) {
-         return this.$message({
-           type:'warning',
-           message:'项目地区不能为空~'
-         })
+            
+          if(this.bidstr == '编辑') {
+           
+              if( this.bidForm.cityCodeName == '') {
+            return this.$message({
+              type:'warning',
+              message:'项目地区不能为空~'
+            })
+          } else if( this.bidForm.countyCode == '') {
+            return this.$message({
+              type:'warning',
+              message:'项目县区不能为空~'
+            })
+          } else if( this.bidForm.proType == '') {
+            return this.$message({
+              type:'warning',
+              message:'项目类型不能为空~'
+            })
+          } else if( this.bidForm.pbMode === '') {
+            return this.$message({
+              type:'warning',
+              message:'评标办法不能为空~'
+            })
+          } else {
+              let breakt = true
+            this.bidForm.first.forEach(item => {
+              if( item.oneCandidate == '' || item.oneCandidate == null ) {
+                breakt = false
+                return this.$message({
+                          type:'warning',
+                          message:'中标第一候选人不能为空~'
+                        });
+              }
+           })
+           return false;
+         }
+      
+        let _this = this
+        this.first = this.first.concat(this.delArr,this.bidForm.first,this.bidForm.second,this.bidForm.third)
+        setTimeout(function() {
+            bidSave({pkid:_this.setpkid,source:_this.source,ntId:_this.pkid,segment:_this.bidForm.segment,controllSum:_this.bidForm.controllSum,pubDate:_this.bidForm.pubDate,proSum:_this.bidForm.proSum,proType:_this.bidForm.proType,proDuration:_this.bidForm.proDuration,pbMode:_this.bidForm.pbMode,title:_this.bidForm.title,pubDate:_this.bidForm.pubDate,cityCode:_this.careaName,countyCode:_this.bidForm.countyCode,binessType:_this.bidForm.binessType,bidsCands:_this.first}).then(res => {
+            _this.$message({
+              type:'success',
+              message: res
+            })            
+              bidList({ntId:_this.pkid,source:_this.source}).then(res => {
+                  res.data.forEach(item => {
+                      item.first = new Array()
+                      item.second = new Array()
+                      item.third = new Array()
+                        item.bidsCands.forEach(el => {
+                            if(el.number == 1 ) {
+                                item.first.push(el)
+                            } else if (el.number == 2) {
+                              item.second.push(el)
+                            } else {
+                              item.third.push(el)
+                            }
+                        })
+                  });
+                  _this.biddData = res.data
+              })    
+          })
+        },150)
       }
-      if( !this.bidForm.countyCode.trim()) {
-         return this.$message({
-           type:'warning',
-           message:'项目县区不能为空~'
-         })
-      }
-      if( !this.bidForm.proType.trim()) {
-         return this.$message({
-           type:'warning',
-           message:'项目类型不能为空~'
-         })
-      }
-      if( !this.bidForm.pbMode.trim()) {
-         return this.$message({
-           type:'warning',
-           message:'评标办法不能为空~'
-         })
-      }
-      // this.bidForm.first.forEach(item => {
-      //     if( !item.oneCandidate.trim()) {
-      //        return this.$message({
-      //             type:'warning',
-      //             message:'中标第一候选人不能为空~'
-      //           })
-      //     }
-      // })
-      console.log( this.setpkid ,'标段信息');
-    bidSave({pkid:this.setpkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.bidForm.first}).then(res => {
-       console.log(res)
-       console.log(this.bidForm.first,1006)
-       this.$message({
-         type:'success',
-         message: res
-       })
-        bidList({ntId:this.pkid,source:this.source}).then(res => {
-            res.data.forEach(item => {
-                item.first = new Array()
-                item.second = new Array()
-                item.third = new Array()
-                  item.bidsCands.forEach(el => {
-                       if(el.number == 1 ) {
-                          item.first.push(el)
-                       } else if (el.number == 2) {
-                         item.second.push(el)
-                       } else {
-                         item.third.push(el)
-                       }
-                  })
-            });
-            this.biddData = res.data
-        })    
-    })
+
+      
+        //   bidSave({pkid:this.setpkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,pubDate:this.bidForm.pubDate,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.first}).then(res => {
+        //   this.$message({
+        //     type:'success',
+        //     message: res
+        //   })            
+        //     bidList({ntId:this.pkid,source:this.source}).then(res => {
+        //         res.data.forEach(item => {
+        //             item.first = new Array()
+        //             item.second = new Array()
+        //             item.third = new Array()
+        //               item.bidsCands.forEach(el => {
+        //                   if(el.number == 1 ) {
+        //                       item.first.push(el)
+        //                   } else if (el.number == 2) {
+        //                     item.second.push(el)
+        //                   } else {
+        //                     item.third.push(el)
+        //                   }
+        //               })
+        //         });
+        //         this.biddData = res.data
+        //     })    
+        // })
+
+      
 
       
     },
