@@ -1079,7 +1079,9 @@ export default {
                     })    
                 })
                 this.first = []
-           } 
+           } else {
+             
+           }
           
          }
        
