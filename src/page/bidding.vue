@@ -574,6 +574,7 @@ export default {
         taskcompany:[],  // 企业候选人 
         delArr:[],
         first:[],
+        breakt:true
       }
   },
   watch: {
@@ -614,8 +615,7 @@ export default {
   },
   methods: {
     textt(){
-        console.log(this.delArr)
-        console.log(this.bidForm.third)
+      console.log(this.breakt)
     },
     // 获取企业关系列表的
     gaincompany() {
@@ -1019,9 +1019,8 @@ export default {
     },
     // 保存按钮 
     onSubmit() {
-            
+            this.breakt = true
           if(this.bidstr == '编辑') {
-           
               if( this.bidForm.cityCodeName == '') {
             return this.$message({
               type:'warning',
@@ -1043,46 +1042,50 @@ export default {
               message:'评标办法不能为空~'
             })
           } else {
-              let breakt = true
             this.bidForm.first.forEach(item => {
               if( item.oneCandidate == '' || item.oneCandidate == null ) {
-                breakt = false
+                this.breakt = false 
                 return this.$message({
                           type:'warning',
                           message:'中标第一候选人不能为空~'
-                        });
+                        })
               }
            })
-           return false;
+
+           if(this.breakt) {
+                 this.first = this.first.concat(this.delArr,this.bidForm.first,this.bidForm.second,this.bidForm.third)
+        // setTimeout(function() {
+                  bidSave({pkid:this.setpkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,pubDate:this.bidForm.pubDate,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.first}).then(res => {
+                  this.$message({
+                    type:'success',
+                    message: res
+                  })            
+                    bidList({ntId:this.pkid,source:this.source}).then(res => {
+                        res.data.forEach(item => {
+                            item.first = new Array()
+                            item.second = new Array()
+                            item.third = new Array()
+                              item.bidsCands.forEach(el => {
+                                  if(el.number == 1 ) {
+                                      item.first.push(el)
+                                  } else if (el.number == 2) {
+                                    item.second.push(el)
+                                  } else {
+                                    item.third.push(el)
+                                  }
+                              })
+                        });
+                      this.biddData = res.data
+                    })    
+                })
+                this.first = []
+           } 
+          
          }
-      
-        let _this = this
-        this.first = this.first.concat(this.delArr,this.bidForm.first,this.bidForm.second,this.bidForm.third)
-        setTimeout(function() {
-            bidSave({pkid:_this.setpkid,source:_this.source,ntId:_this.pkid,segment:_this.bidForm.segment,controllSum:_this.bidForm.controllSum,pubDate:_this.bidForm.pubDate,proSum:_this.bidForm.proSum,proType:_this.bidForm.proType,proDuration:_this.bidForm.proDuration,pbMode:_this.bidForm.pbMode,title:_this.bidForm.title,pubDate:_this.bidForm.pubDate,cityCode:_this.careaName,countyCode:_this.bidForm.countyCode,binessType:_this.bidForm.binessType,bidsCands:_this.first}).then(res => {
-            _this.$message({
-              type:'success',
-              message: res
-            })            
-              bidList({ntId:_this.pkid,source:_this.source}).then(res => {
-                  res.data.forEach(item => {
-                      item.first = new Array()
-                      item.second = new Array()
-                      item.third = new Array()
-                        item.bidsCands.forEach(el => {
-                            if(el.number == 1 ) {
-                                item.first.push(el)
-                            } else if (el.number == 2) {
-                              item.second.push(el)
-                            } else {
-                              item.third.push(el)
-                            }
-                        })
-                  });
-                  _this.biddData = res.data
-              })    
-          })
-        },150)
+       
+        // let _this = this
+     
+        // },150)
       }
 
       
