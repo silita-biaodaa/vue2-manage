@@ -886,7 +886,7 @@ export default {
                       }
                   })
               } else {
-                  return listTenders({ntId:this.pkid,source:this.code}).then(res=> {
+                  return listTenders({ntId:this.pkid,source:this.source}).then(res=> {
                                   this.counties = res.data[0].countys
                             })
               }

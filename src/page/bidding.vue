@@ -602,9 +602,10 @@ export default {
                       }
                   })
               } else {
-                  // return listTenders({ntId:this.pkid,source:this.source}).then(res=> {
-                  //                 this.bidplaces = res.data[0].countys
-                  //           })
+                  return bidList({ntId:this.pkid,source:this.source}).then(res=> {
+                                  this.careaName = res.data[0].cityCode
+                                  this.bidplaces = res.data[0].countys
+                            })
               }
               
            }
@@ -700,6 +701,7 @@ export default {
 
              if(res.data.length >= 1) {
                 this.biddData = res.data
+                this.bidplaces = res.data[0].countys
                 this.bidForm = JSON.parse(JSON.stringify(res.data[0]))
                 this.setpkid = res.data[0].pkid
                 this.condition = res.data[0].ntStatus
@@ -779,7 +781,6 @@ export default {
     },
     // 判断数值是否为空的
     judgenull() {
-      console.log(22222)
       if(this.bidForm.first.length == 0) {
          this.bidForm.first.push({number:1})
       } 
