@@ -257,18 +257,18 @@ methods: {
           this.listForm()
       },
       handleEdit(index,row) {  // 编辑框的跳转
-        //     this.j.cityCode = this.city,
-        //     this.j.ntStatus = this.state
-        //     this.j.title = this.firm
-        //     this.j.pubDate = this.pubDate
-        //     this.j.pubEndDate = this.pubEndDate
-        //     this.j.currentPage = this.pagenum
-        //     this.j.pageSize = this.pagesize 
-        //      this.json = JSON.stringify(this.j)
-        //      localStorage.removeItem('tensele')
-        //      localStorage.setItem('tensele',this.json)
-        //      localStorage.removeItem('indexer')
-        //      localStorage.setItem('indexer',index)
+            this.j.cityCode = this.city,
+            this.j.ntStatus = this.state
+            this.j.title = this.firm
+            this.j.pubDate = this.pubDate
+            this.j.pubEndDate = this.pubEndDate
+            this.j.currentPage = this.pagenum
+            this.j.pageSize = this.pagesize 
+             this.json = JSON.stringify(this.j)
+             localStorage.removeItem('tensele')
+             localStorage.setItem('tensele',this.json)
+             localStorage.removeItem('indexer')
+             localStorage.setItem('indexer',index)
              localStorage.removeItem('bidId')
              localStorage.setItem('bidId',this.pkid)
         

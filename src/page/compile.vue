@@ -900,11 +900,11 @@ export default {
   },
   methods: {
     textt() {
-      //  console.log(this.titurela)
-      console.log(this.form.bidBondsEndTime);
-      console.log(this.form.enrollEndTime);
-      console.log(this.form.auditTime);
-      console.log(this.form.bidEndTime);      
+      // //  console.log(this.titurela)
+      // console.log(this.form.bidBondsEndTime);
+      // console.log(this.form.enrollEndTime);
+      // console.log(this.form.auditTime);
+      // console.log(this.form.bidEndTime);      
     },
     // 判断是否隐藏多余的下拉框
     func(index) {

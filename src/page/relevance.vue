@@ -140,7 +140,7 @@ export default {
   },
   beforeRouteEnter(to, from, next){
 
-      if(from.name == 'compile') {
+      if(from.name == 'compile' || 'bidding' ) {
           next()
       } else {
           localStorage.removeItem('reliTitle')

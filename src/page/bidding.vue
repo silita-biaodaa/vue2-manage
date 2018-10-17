@@ -7,7 +7,7 @@
                   <el-col :span="12" class="left-c">
                     <div class="message-c">
                         <span :style= "{color:(this.condition === '0' ? 'red' : '#E6A23C')}">{{ condition | condi}}</span>
-                        <a >来源站点</a>
+                        <a :href="this.state" target="_blank">来源站点</a>
                     </div>
                     <div class="handle-c">
                         <span @click="biddmark" >设置</span>
@@ -28,7 +28,13 @@
        
       <!-- 中间内容部分展示 -->
       <el-row>
-         <el-col :span='12' >
+         <el-col :span='12' class="bid-edit" >
+          <div class="edit-l" @click='lastlist' v-show="isShow">
+             <i class="el-icon-arrow-left" ></i>
+           </div>
+           <div class="edit-r" @click='nextlist' v-show="isShow" >
+             <i class="el-icon-arrow-right" ></i>
+           </div>
             <bidEdit></bidEdit>
          </el-col>
          <el-col :span='12'  class="redact-c" >
@@ -415,7 +421,7 @@
                </el-table>
                <div style="margin-top: 10px">
                     <el-button type="primary" >编辑公告</el-button>
-                    <el-button type="primary" >新增关联公告</el-button>
+                    <el-button type="primary" @click='bidnew' >新增关联公告</el-button>
                     <el-button type="primary" @click='bidrelief' >解除关联公告</el-button>                       
                </div>
             </el-tab-pane>
@@ -512,7 +518,7 @@
 </template>
 <script>
 import bidEdit from '@/page/edit';
-import { bidSave,bidcompany,listFixed,listPbMode,listArea,updateStatus,bidList,delDidList,bidFiles,listreli,listTenders,bidRela,bidzhaoList,biddelList } from '@/api/index'
+import { listMain,bidSave,bidcompany,listFixed,listPbMode,listArea,updateStatus,bidList,delDidList,bidFiles,listreli,listTenders,bidRela,bidzhaoList,biddelList } from '@/api/index'
 export default {
   data () {
      return {
@@ -574,7 +580,12 @@ export default {
         taskcompany:[],  // 企业候选人 
         delArr:[],
         first:[],
-        breakt:true
+        breakt:true,
+        bidpkid:[],
+        bidtitle:[],
+        bidpub:[],
+        isShow:true,
+        state:''
       }
   },
   watch: {
@@ -612,10 +623,12 @@ export default {
     this.gainzhaoList()     // 获取相关的招标编辑明细
     this.gaindown()
     this.gaincompany()
+    this.gainnext()
   },
   methods: {
     textt(){
-      console.log(this.breakt)
+      console.log(this.bidForm);
+                    
     },
     // 获取企业关系列表的
     gaincompany() {
@@ -683,11 +696,14 @@ export default {
                        }
                   })  
             }); 
+                console.log(res.data[0],687)
+
              if(res.data.length >= 1) {
-                console.log(res.data,687)
                 this.biddData = res.data
                 this.bidForm = JSON.parse(JSON.stringify(res.data[0]))
                 this.setpkid = res.data[0].pkid
+                this.condition = res.data[0].ntStatus
+                this.state = res.data[0].url
                 this.judgenull()
              } else {
                 this.setpkid = ''
@@ -707,6 +723,29 @@ export default {
           //   this.form.title = this.arrtitle[this.position]
           //   this.form.pubDate = this.arrpub[this.position]
           // } 
+      })
+    },
+    //获取上下一条数据
+    gainnext() {
+      this.position = localStorage.getItem('indexer')
+      this.engine = JSON.parse(localStorage.getItem('tensele'))
+      this.engine.source = this.source
+      this.engine.proviceCode = this.source
+      this.engine.ntCategory = 2
+      listMain(this.engine).then(res => {
+        console.log(res,721);
+         if(res.code == 1) {
+           res.data.datas.forEach(item => {
+                  this.bidpkid.push(item.pkid)
+                  this.bidtitle.push(item.title)
+                  this.bidpub.push(item.pubDate)
+           })
+            this.bidForm.title = this.bidtitle[this.position]
+            this.bidForm.pubDate = this.bidpub[this.position]
+            if(this.bidpkid.length == 1 ) {
+                this.isShow = false   
+            }
+         }
       })
     },
     // 获取中标文件列表
@@ -740,12 +779,14 @@ export default {
     },
     // 判断数值是否为空的
     judgenull() {
+      console.log(22222)
       if(this.bidForm.first.length == 0) {
          this.bidForm.first.push({number:1})
-      } else if (this.bidForm.second.length == 0) {
+      } 
+       if (this.bidForm.second.length == 0) {
         this.bidForm.second.push({number:2})
-      } else if (this.bidForm.third.length == 0) {
-        console.log(1111);
+      } 
+      if (this.bidForm.third.length == 0) {
         this.bidForm.third.push({number:3})
       }
     },
@@ -1132,6 +1173,18 @@ export default {
     handleSelect(key, keyPath) {
       // console.log(key, keyPath); 
     },
+    bidnew() {
+      localStorage.setItem("reliTitle",this.bidForm.title)
+      localStorage.setItem('reliSource', this.source)
+      localStorage.setItem('relipkid',this.pkid)
+      this.$router.replace('/relevance')
+    },
+    lastlist() {
+
+    },
+    nextlist() {
+
+    }
   },
   filters: {
      condi:function(val) {
@@ -1186,6 +1239,36 @@ export default {
           }
         }
       }
+    }
+    .bid-edit {
+       position: relative;
+        .edit-l,
+        .edit-r {
+          z-index: 99;
+          color:#fff; 
+          position: absolute;
+          height: 45px;
+          width: 45px;
+          border-radius: 50%;
+          background-color: #909399;
+          opacity: 0.2;
+          top: 50%;
+          transform: translateY(-50%);
+          text-align: center;
+          line-height: 45px;
+          font-size: 30px;
+          font-weight: 1000;  
+        }
+        .edit-l:hover,
+        .edit-r:hover {
+          opacity: 1;
+        }
+        .edit-r {
+          right:0;
+        }   
+       .ql-editor {
+        height: 1400px;
+        }
     }
      .redact-c {
     padding: 10px 20px;
