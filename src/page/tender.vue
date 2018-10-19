@@ -246,7 +246,7 @@ methods: {
       },
       listForm() {
           listMain({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:1,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize}).then(res => {
-
+            
             if(res.code ===1) {
                 this.tableData = res.data.datas
                 this.total = res.data.total

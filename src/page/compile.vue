@@ -327,7 +327,7 @@
 
              </el-tab-pane>
             <el-tab-pane label="相关公告" name="third">
-               <el-table ref="multipleRela" :data="relation" tooltip-effect="dark"  @selection-change="handleRelaChange" height="200">
+               <el-table ref="multipleRela" :data="relation" tooltip-effect="dark"  @selection-change="handleRelaChange" height="200" @row-click='relabox' >
                  <el-table-column type="selection" style="width:5%">
                  </el-table-column>
                  <el-table-column label="公告名称" width="650" >
@@ -339,7 +339,7 @@
                  </el-table-column>
                </el-table>
                <div style="margin-top: 10px">
-                    <el-button type="primary" >编辑公告</el-button>
+                    <el-button type="primary" @click='editice' >编辑公告</el-button>
                     <el-button type="primary" @click='newurl' >新增关联公告</el-button>
                     <el-button type="primary" @click='relieve' >解除关联公告</el-button>                       
                </div>
@@ -528,7 +528,8 @@ export default {
        arrtitle:[],
        arrpub:[],
        position:'',
-       isShow: true
+       isShow: true,
+       mainCo :[],
     }
   },
   mounted () {
@@ -886,7 +887,7 @@ export default {
                       }
                   })
               } else {
-                  return listTenders({ntId:this.pkid,source:this.source}).then(res=> {
+                  return listTenders({ntId:this.pkid,source:this.code}).then(res=> {
                                   this.counties = res.data[0].countys
                             })
               }
@@ -900,11 +901,6 @@ export default {
   },
   methods: {
     textt() {
-      // //  console.log(this.titurela)
-      // console.log(this.form.bidBondsEndTime);
-      // console.log(this.form.enrollEndTime);
-      // console.log(this.form.auditTime);
-      // console.log(this.form.bidEndTime);      
     },
     // 判断是否隐藏多余的下拉框
     func(index) {
@@ -952,21 +948,28 @@ export default {
     },    
     // 获取上一条下一条数据
     listarr(){
-       this.engine = JSON.parse(localStorage.getItem('tensele'))
-       listMain({source:this.code,proviceCode:this.code,cityCode:this.engine.cityCode,ntStatus:this.engine.ntStatus,ntCategory:1,title:this.engine.title,pubDate:this.engine.pubDate,pubEndDate:this.engine.pubEndDate,currentPage:this.engine.currentPage,pageSize:this.engine.pageSize }).then(res => {
-          if(res.code ===1){
-              res.data.datas.forEach(item => {
-                  this.arrpkid.push(item.pkid)
-                  this.arrtitle.push(item.title)
-                  this.arrpub.push(item.pubDate)
-              })
-              this.form.title = this.arrtitle[this.position]
-              this.form.pubDate = this.arrpub[this.position]
-            if(this.arrpkid.length == 1 ) {
-                this.isShow = false   
-            }
-          } 
-       }) 
+      if(localStorage.getItem('tensele')) {
+          this.engine = JSON.parse(localStorage.getItem('tensele'))
+          listMain({source:this.code,proviceCode:this.code,cityCode:this.engine.cityCode,ntStatus:this.engine.ntStatus,ntCategory:1,title:this.engine.title,pubDate:this.engine.pubDate,pubEndDate:this.engine.pubEndDate,currentPage:this.engine.currentPage,pageSize:this.engine.pageSize }).then(res => {
+              console.log(res,953);
+              if(res.code ===1){
+                  res.data.datas.forEach(item => {
+                      this.arrpkid.push(item.pkid)
+                      this.arrtitle.push(item.title)
+                      this.arrpub.push(item.pubDate)
+                  })
+                  this.form.title = this.arrtitle[this.position]
+                  this.form.pubDate = this.arrpub[this.position]
+                if(this.arrpkid.length == 1 ) {
+                    this.isShow = false   
+                }
+              } 
+          }) 
+      } else {
+          this.isShow = false
+      }
+       
+
     },
     // 加载地区 
     listregion() {
@@ -1013,34 +1016,39 @@ export default {
     },
      // 获取编辑列表
     listTender() {
-        listTenders({ntId:this.pkid,source:this.code}).then(res=> {     
-          //  console.log(res,1014)
-          res.data.forEach((item,index) => {
+        listTenders({ntId:this.pkid,source:this.code}).then(res=> {
+          this.mainCo = res.data[0]   
+          this.condition = res.data[0].ntStatus,1013
+          console.log(res,1013);
+     
+        res.data.forEach((item,index) => {
               if(item.pkid == null) {
                   res.data.splice(index,1)
               }
           })
-
           if(res.data.length >= 1) {
             this.careaName = res.data[0].cityCode
             this.state = this.state + res.data[0].url
             this.condition = res.data[0].ntStatus
             this.compileData = res.data.concat()
             this.form = JSON.parse(JSON.stringify(res.data[0]))   
-            console.log(res.data[0],1024);
-            
           } else {
-            this.condition = res.data.status
             this.emptyForm('edits')
              this.compileData = res.data.concat()
-            this.form.title = this.arrtitle[this.position]
-            this.form.pubDate = this.arrpub[this.position]
+           if(localStorage.getItem('setTitle')) {
+              this.form.title = localStorage.getItem('setTitle')
+            this.form.pubDate = localStorage.getItem('setPud')
+           } else {
+             this.form.title = this.arrtitle[this.position]
+              this.form.pubDate = this.arrpub[this.position]
+            
+           }
+           
           }         
       }) 
     },
     listFile() {     
       listFiles({bizId:this.pkid,source:this.code}).then(res=> {
-        console.log(res,1026)        
         this.file = res.data  
          this.form.title = this.arrtitle[this.position]
          this.form.pubDate = this.arrpub[this.position]      
@@ -1084,7 +1092,6 @@ export default {
     nextdel() {
          delpost({pkid:this.pkid,source:this.code}).then(res => {
            if(res.code === 1 ) {
-
             this.arrpkid.splice(this.position,1)
             this.arrtitle.splice(this.position,1)
             this.arrpub.splice(this.position,1)
@@ -1147,7 +1154,7 @@ export default {
                 type:'success'
               });
               if(this.handleForm.type == 2) {
-                this.nextdel()
+                  this.$router.push({name:'bidding',params: {id:this.pkid,code:this.code}}) 
               }
               this.condition = this.handleForm.resource
               this.redactFormVisible = false;
@@ -1185,8 +1192,8 @@ export default {
         }        
           // insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:moment(this.form.bidBondsEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollEndTime:moment(this.form.enrollEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollAddr:this.form.enrollAddr,auditTime:moment(this.form.auditTime).format('YYYY-MM-DD hh:mm:ss'),bidEndTime:moment(this.form.bidEndTime).format('YYYY-MM-DD hh:mm:ss'),openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
           insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
-
-             if(res.code === 1 ) {
+               console.log(res,1181)
+             if(res.code == 1 ) {
                this.$message({
                     message:res.msg,
                     type:'success'
@@ -1248,11 +1255,22 @@ export default {
       },
       handleRelaChange(val) {   //相关公告得                   
           this.reli = val
+          console.log(val,1257)
            if(this.reli.length ===0) {
              this.releGp = 0 
            } else {
              this.releGp = val[0].relGp
            }
+      },
+      editice() {
+         if(this.reli[0].relType == 1) {
+               this.isShow = false
+               this.$router.push({name:'compile',params: {id:this.reli[0].ntId,code:this.code}})
+               this.texttop()
+         } else {
+           this.$router.push({name:'bidding',params: {id:this.reli[0].ntId,code:this.code}})
+         }
+         this.reli.length = 0
       },
       sendKid() {
       return { 
@@ -1473,9 +1491,25 @@ export default {
     pilebox(row) {
       this.$refs.multipleTable.toggleRowSelection(row)
     },
-    formatsj(val) {
-       return moment(val).format('YYYY-MM-DD hh:mm:ss')
+    relabox(row) {
+      this.$refs.multipleRela.toggleRowSelection(row)
     }
+  },
+  beforeRouteEnter(to, from, next){
+      if(from.name == 'bidding' ) {
+          localStorage.removeItem('parentId')
+          localStorage.removeItem('tensele')
+          next()
+      } else if(from.name == 'compile') {
+          // console.log('1111111111111111111111');
+          if(localStorage.getItem('tensele')) {
+             console.log('等等等等')  
+          }
+      } else {
+          localStorage.removeItem('setTitle')
+          localStorage.removeItem('setPud')
+          next()
+      }
   },
   components: {
      Edit

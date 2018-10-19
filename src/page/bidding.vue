@@ -307,7 +307,7 @@
                       </el-table-column>
                        <el-table-column prop="first[1].fBuilder" label="施工员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="first[1].fSafety" label="完全员(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="first[1].fSafety" label="安全员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
                        <el-table-column prop="first[1].fQuality" label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -326,7 +326,7 @@
                       </el-table-column>
                        <el-table-column prop="second[0].fBuilder" label="施工员" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="second[0].fSafety" label="完全员" width="150" show-overflow-tooltip>
+                       <el-table-column prop="second[0].fSafety" label="安全员" width="150" show-overflow-tooltip>
                       </el-table-column>
                        <el-table-column prop="second[0].fQuality" label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -345,7 +345,7 @@
                       </el-table-column>
                        <el-table-column prop="second[1].fBuilder" label="施工员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="second[1].fSafety" label="完全员(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="second[1].fSafety" label="安全员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
                        <el-table-column prop="second[1].fQuality" label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -364,7 +364,7 @@
                       </el-table-column>
                        <el-table-column prop="third[0].fBuilder" label="施工员" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="third[0].fSafety" label="完全员" width="150" show-overflow-tooltip>
+                       <el-table-column prop="third[0].fSafety" label="安全员" width="150" show-overflow-tooltip>
                       </el-table-column>
                        <el-table-column prop="third[0].fQuality" label="质量员" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -383,7 +383,7 @@
                       </el-table-column>
                        <el-table-column prop="third[1].fBuilder" label="施工员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
-                       <el-table-column prop="third[1].fSafety" label="完全员(1)" width="150" show-overflow-tooltip>
+                       <el-table-column prop="third[1].fSafety" label="安全员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
                        <el-table-column prop="third[1].fQuality" label="质量员(1)" width="150" show-overflow-tooltip>
                       </el-table-column>
@@ -806,17 +806,20 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          updateStatus({ntCategory:this.handleForm.type,ntStatus:this.handleForm.resource,pkid:this.pkid,source:this.code}).then(res=> {
+          updateStatus({ntCategory:this.biddForm.type,ntStatus:this.biddForm.resource,pkid:this.pkid,source:this.source}).then(res=> {
             if(res.code === 1 ) {
               this.$message({
                 message:res.msg,
                 type:'success'
               });
               //  中标公告变为招标公告处理
-              if(this.handleForm.type == 2) {
-                // this.nextdel()
+              if(this.biddForm.type == 1) {
+                // console.log(1111)
+                  localStorage.setItem('setTitle',this.bidForm.title)
+                  localStorage.setItem('setPud',this.bidForm.pubDate)
+                 this.$router.push({name:'compile',params: {id:this.pkid,code:this.source}})
               }
-              this.condition = this.handleForm.resource
+              this.condition = this.biddForm.resource
               this.biddFormVisible = false;
             }            
           })
@@ -965,7 +968,7 @@ export default {
     },
     // 删除所选中得候选人列表 
     removeDomain(i) {
-       if(i != 0) {
+       if( this.bidForm.first.length >= 1 ) {
          this.bidForm.first[i].number = ''
          this.delArr.push(this.bidForm.first[i])
           this.bidForm.first.splice(i, 1);
@@ -998,7 +1001,7 @@ export default {
     },
 
     removeSecond(i) {
-      if(i != 0) {
+      if(  this.bidForm.second.length >= 1) {
           this.bidForm.second[i].number = ''
          this.delArr.push(this.bidForm.second[i])
           this.bidForm.second.splice(i, 1);
@@ -1017,7 +1020,7 @@ export default {
       this.bidForm.third.push({number:3});
     },
     removeThird(i) {
-      if(i != 0) {
+      if(this.bidForm.third.length >= 0) {
          this.bidForm.third[i].number = ''
          this.delArr.push(this.bidForm.third[i])
           this.bidForm.third.splice(i, 1);
@@ -1186,6 +1189,18 @@ export default {
     nextlist() {
 
     }
+  },
+   beforeRouteEnter(to, from, next){
+      if(from.name == 'Compile' ) {
+          localStorage.removeItem('parentId')
+          localStorage.removeItem('tensele')
+          localStorage.removeItem('setTitle')
+          localStorage.removeItem('setPud')
+          this.isShow = true 
+          next()
+      } else {
+          next()
+      }
   },
   filters: {
      condi:function(val) {
