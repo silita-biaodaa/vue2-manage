@@ -300,3 +300,11 @@ export const bidcompany = params => {
 export const bidSave = params => {
     return axios.post('zhongbiao/saveTbNtBids', params).then(res => res.data)
 }
+// 纠错首页查询
+export const errSelect = params => {
+    return axios.post('correction/listNotice', params).then(res => res.data)
+}
+// 纠错删除
+export const errDele = params => {
+    return axios.post('correction/deleteNotice', params).then(res => res.data)
+}

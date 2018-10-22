@@ -4,20 +4,11 @@
         <el-row class="condition">
             <el-col :span="24" >
                 <el-row>
-                    <el-col :span="9">
+                    <el-col :span="5">
                          省份：
-                        <el-select v-model="province" placeholder="请选择" style='width:35%' @change='changetable'>
+                        <el-select v-model="province" placeholder="请选择" style='width:80%' @change='changetable'>
                            <el-option
                              v-for="item in provinces"
-                             :key="item.areaCode"
-                             :label="item.areaName"
-                             :value="item.areaCode">
-                           </el-option>
-                         </el-select>
-                        市级：
-                        <el-select v-model="city" placeholder="请选择" style='width:35%' @change='changetable'>
-                           <el-option
-                             v-for="item in citys"
                              :key="item.areaCode"
                              :label="item.areaName"
                              :value="item.areaCode">
@@ -26,7 +17,7 @@
                     </el-col>
 
                     <el-col :span="5">
-                        公告状态：
+                        公告类型：
                         <el-select v-model="state" placeholder="请选择状态" style='width:60%' @change='changetable' >
                             <el-option v-for="item in states" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
@@ -48,7 +39,7 @@
                 <el-input placeholder="请输入内容" v-model="firm" style="width:30%" @change="firmchange">
                     <i slot="prefix" class="el-input__icon el-icon-search" ></i>
                 </el-input>
-                <el-button type="primary" class="fl-left" @click='exportexcel'>导出Excel</el-button >  
+                <!-- <el-button type="primary" class="fl-left" @click='exportexcel'>导出Excel</el-button >   -->
             </el-col>
         </el-row>
 
@@ -56,30 +47,25 @@
             <el-col :span="24">
 
                 <el-table class='baa_ai' :data="tableData" style="width:90%;">
-                    <el-table-column label="公告标题">
-                        <template slot-scope="scope">
+                    <el-table-column label="公告标题" width="400" >
+                        <template slot-scope="scope"  >
                             <span>{{ scope.row.title }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="发布日期">
+                    <el-table-column label="发布日期"  width="150" >
                         <template slot-scope="scope">
-                            <span>{{ scope.row.pubDate }}</span>
-                        </template> 
-                    </el-table-column>
-                    <el-table-column label="公告发布网站">
-                        <template slot-scope="scope">
-                            <span>{{ scope.row.srcSite }}</span>
+                            <span>{{ scope.row.openDate }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="公告状态" width="100">
+                    <el-table-column label="公告发布网站" show-overflow-tooltip>
                         <template slot-scope="scope">
-                            <span>{{ scope.row.ntStatus | sum }}</span>
+                            <a :href="scope.row.url" target="_black" >{{ scope.row.url }}</a>
                         </template>
                     </el-table-column>
+                    
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">审核</el-button>
+                            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">纠错</el-button>
                             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
@@ -110,35 +96,22 @@
     </div>
 </template>
 <script>
-import { exportX,listArea,listStatus,listMain,listExcel,delpost } from '@/api/index';
+import { listArea,delpost,errSelect,errDele } from '@/api/index';
 export default {
   data () {
     return {
-    city:'',  //市级数据
+    // city:'',  //市级数据
     citys:[],  //   市级请求数据 
-    province:'15fb9d5310ab4f7b9375884df98d45d8hunan',
+    province:'jiangs',
      provinces: [],
-        state:'',  //公共状态数据
+        state:'0',  //公共状态数据
         states:[
             {
-                value: '',
-                label: '全部'
+                value: '2',
+                label: '中标'
             }, {
                 value: '0',
-                label: '新建'
-            }, {
-                value: '1',
-                label: '未审核'
-            }, {
-                value: '2',
-                label: '已通过'
-            }, {
-                value: '4',
-                label: '审核未通过'
-            },
-            {
-                value:'5',
-                label:'已处理'
+                label: '招标'
             }
         ],
          pickerOptions2: {
@@ -188,109 +161,74 @@ export default {
          this.pubDate = this.times[0]
          this. pubEndDate = this.times[1]
      },
-     province:function() {
-        this.city = ''
-        this.pkid= this.province.substring(0,32)
-        this.coDe= this.province.substring(32)
-        listArea({areaParentId:this.pkid}).then(res => {
-            if(res.code === 1) {               
-                this.citys = res.data
-                this.citys.unshift({areaName:'全部',areaCode:''})
-            }
-        })
-     }
   },
   created () {
       this.listTen()
       this.listForm()
   }, 
   filters: {
-     sum:function(val){
-         switch (val) {
-             case '0':
-               return '新建'  
-                 break;
-             case '1':
-               return '未审核'  
-                 break;
-                 case '2':
-               return '已审核'  
-                 break;
-                 case '4':
-               return '审核未通过'  
-                 break;
-                 case '5':
-               return '已处理'  
-                 break;  
-         }
-     }
+     
   },
 methods: {
       listTen() {         
           listArea({areaParentId:0}).then(res => {
-              console.log(res,232)
-              if(res.code === 1 ) {
-                 res.data.forEach(itme => {
-                    itme.areaCode = itme.pkid + itme.areaCode
-                 })                 
+              if(res.code === 1 ) {               
                  this.provinces = res.data
               }
           })
-            listArea({areaParentId:this.pkid}).then(res => {
-            if(res.code === 1) {               
-                this.citys = res.data
-                this.citys.unshift({areaName:'全部',areaCode:''})
-            }
-        })
-
       },
       listForm() {
-          listMain({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:2,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize}).then(res => {
-
-            if(res.code ===1) {
-                this.tableData = res.data.datas
-                this.total = res.data.total
-            }
+          errSelect({source:this.province,openDate:this.pubDate,openDateEnd:this.pubEndDate,title:this.firm,type:this.state,currentPage:this.pagenum,pageSize:this.pagesize}).then( res => {
+              if(res.code == 1 ) {
+                  this.total = res.data.total
+                  this.tableData = res.data.datas
+              }
           })
       },
       firmchange() {  // 搜索框变化的方法
           this.listForm()
       },
       handleEdit(index,row) {  // 编辑框的跳转
-            this.j.cityCode = this.city,
-            this.j.ntStatus = this.state
-            this.j.title = this.firm
-            this.j.pubDate = this.pubDate
-            this.j.pubEndDate = this.pubEndDate
-            this.j.currentPage = this.pagenum
-            this.j.pageSize = this.pagesize 
-             this.json = JSON.stringify(this.j)
-             localStorage.removeItem('tensele')
-             localStorage.setItem('tensele',this.json)
-             localStorage.removeItem('indexer')
-             localStorage.setItem('indexer',index)
-             localStorage.removeItem('bidId')
-             localStorage.setItem('bidId',this.pkid)
+        //     this.j.cityCode = this.city,
+        //     this.j.ntStatus = this.state
+        //     this.j.title = this.firm
+        //     this.j.pubDate = this.pubDate
+        //     this.j.pubEndDate = this.pubEndDate
+        //     this.j.currentPage = this.pagenum
+        //     this.j.pageSize = this.pagesize 
+        //      this.json = JSON.stringify(this.j)
+        //      localStorage.removeItem('tensele')
+        //      localStorage.setItem('tensele',this.json)
+        //      localStorage.removeItem('indexer')
+        //      localStorage.setItem('indexer',index)
+        //      localStorage.removeItem('bidId')
+        //      localStorage.setItem('bidId',this.pkid)
         
-        const { href } = this.$router.resolve({
-              name:'bidding',params: {id:row.pkid,code:this.coDe}
-          })
+        // const { href } = this.$router.resolve({
+        //       name:'bidding',params: {id:row.pkid,code:this.coDe}
+        //   })
    
-          window.open(href, '_blank')
+        //   window.open(href, '_blank')
       },
       handleDelete(index,row) {
+          console.log(row.source);
+          console.log(row.id);
+          
            this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
           }).then(() => {
-              delpost({pkid:row.pkid,source:this.coDe}).then(res => {
-                     this.$message({
-                        type: 'success',
-                        message: res.msg
-                    });
-                    this.listForm()
-              })
+            errDele({source:row.source,id:row.id}).then( res => {
+                // console.log(res,220);
+               if( res.code == 1  ) {
+                 this.$message({
+                    type:'success',
+                    message:'删除公告成功~'
+                 })
+                 this.listForm()
+               }
+            })
           }).catch(() => {
               this.$message({
                   type: 'info',
@@ -303,7 +241,8 @@ methods: {
           this.listForm()
       },
       handleSizeChange(val) {  // 每页条数发生改变时做出的函数
-        console.log(val)
+        // console.log(val)
+            this.pagenum = 1
          this.pagesize = val  
           this.listForm()
       },
@@ -313,21 +252,6 @@ methods: {
               return this.listForm()
           }, 100);                    
       },
-      exportexcel(){
-          exportX({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:2,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize},{responseType: 'blob'}).then(res=> {
-               const blob = new Blob([res]);
-                const fileName = '中标公告.xlsx';
-                const elink = document.createElement('a');
-                elink.download = fileName;
-                elink.style.display = 'none';
-                elink.href = URL.createObjectURL(blob);
-                document.body.appendChild(elink);
-                elink.click();
-                URL.revokeObjectURL(elink.href); // 释放URL 对象
-                document.body.removeChild(elink);
-          })
-     
-      }
 
   },
   components: {
@@ -336,6 +260,9 @@ methods: {
 </script>
 <style lang="less">
 .tender {
+   .el-button {
+     margin-left:10px;
+    }
     .condition {
         background-color: #f8f8f8;
         height: 60px;
@@ -345,7 +272,8 @@ methods: {
         font-size: 14px;
     }
     .fl-right {
-      text-align: right;
+      display: flex;
+      justify-content: space-between;
       margin-bottom: 5px;
         .fl-left {
             margin-left: 20px;

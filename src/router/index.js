@@ -118,6 +118,11 @@ const routes = [
 									path:'/recycle',
 									component:Recycle,
 									name:'recycle'
+								},
+								{
+									path:'/errhome',
+									name:'errhome',
+									component: resolve => require(['@/page/error/erhome.vue'], resolve) 
 								}
 
 

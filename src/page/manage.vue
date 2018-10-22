@@ -66,6 +66,13 @@
 							<el-menu-item index="/method">评标办法维护</el-menu-item>
 							<el-menu-item index="/maintenance">等级维护</el-menu-item>
 						</el-submenu>
+							<el-submenu index="8">
+							<template slot="title">
+								<i class="el-icon-warning"></i>
+								<span>纠错</span>
+								</template>
+							<el-menu-item index="/errhome">招，中标</el-menu-item>
+						</el-submenu>
 
 				</el-menu>
 			</el-aside>
