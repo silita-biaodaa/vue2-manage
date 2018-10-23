@@ -308,3 +308,15 @@ export const errSelect = params => {
 export const errDele = params => {
     return axios.post('correction/deleteNotice', params).then(res => res.data)
 }
+// 纠错保存
+export const errSave = params => {
+    return axios.post('correction/updateZhaobiaoDetail', params).then(res => res.data)
+}
+// 纠错明细
+export const gainRes = params => {
+    return axios.post('correction/listZhaobiaoDetail', params).then(res => res.data)
+}
+// 资质别名
+export const gainAlia = params => {
+    return axios.post('correction/ListAllZh', params).then(res => res.data)
+}

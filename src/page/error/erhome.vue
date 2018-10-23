@@ -148,7 +148,7 @@ export default {
           id:1111 ,
           pubDate:'',
           pubEndDate:'',
-          pkid:'15fb9d5310ab4f7b9375884df98d45d8',
+          pkid:'033edfc75fb045c9b9e75ea6e3c67f10',
           coDe:'hunan',
           pagesize:15, // 当前页面条数
           pagenum: 1,  //当前页面数
@@ -161,6 +161,10 @@ export default {
          this.pubDate = this.times[0]
          this. pubEndDate = this.times[1]
      },
+     province:function() {
+        this.pkid= this.province.substring(0,32)
+        this.coDe= this.province.substring(32)
+     }
   },
   created () {
       this.listTen()
@@ -172,7 +176,11 @@ export default {
 methods: {
       listTen() {         
           listArea({areaParentId:0}).then(res => {
-              if(res.code === 1 ) {               
+              console.log(res)
+              if(res.code === 1 ) { 
+                   res.data.forEach(itme => {
+                    itme.areaCode = itme.pkid + itme.areaCode
+                 })               
                  this.provinces = res.data
               }
           })
@@ -201,14 +209,15 @@ methods: {
         //      localStorage.setItem('tensele',this.json)
         //      localStorage.removeItem('indexer')
         //      localStorage.setItem('indexer',index)
-        //      localStorage.removeItem('bidId')
-        //      localStorage.setItem('bidId',this.pkid)
-        
-        // const { href } = this.$router.resolve({
-        //       name:'bidding',params: {id:row.pkid,code:this.coDe}
-        //   })
+             localStorage.removeItem('reId')
+             localStorage.setItem('reId',this.pkid)
+        // console.log(row);
+        const { href } = this.$router.resolve({
+              name:'recovery',params: {id:row.id,code:row.province}
+          })
+
    
-        //   window.open(href, '_blank')
+          window.open(href, '_blank')
       },
       handleDelete(index,row) {
           console.log(row.source);
