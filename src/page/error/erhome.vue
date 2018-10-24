@@ -102,7 +102,7 @@ export default {
     return {
     // city:'',  //市级数据
     citys:[],  //   市级请求数据 
-    province:'jiangs',
+    province:'033edfc75fb045c9b9e75ea6e3c67f10jiangs',
      provinces: [],
         state:'0',  //公共状态数据
         states:[
@@ -149,7 +149,7 @@ export default {
           pubDate:'',
           pubEndDate:'',
           pkid:'033edfc75fb045c9b9e75ea6e3c67f10',
-          coDe:'hunan',
+          coDe:'jiangs',
           pagesize:15, // 当前页面条数
           pagenum: 1,  //当前页面数
           json:'',
@@ -176,17 +176,17 @@ export default {
 methods: {
       listTen() {         
           listArea({areaParentId:0}).then(res => {
-              console.log(res)
               if(res.code === 1 ) { 
                    res.data.forEach(itme => {
                     itme.areaCode = itme.pkid + itme.areaCode
-                 })               
+                 })      
+              console.log(res)
                  this.provinces = res.data
               }
           })
       },
       listForm() {
-          errSelect({source:this.province,openDate:this.pubDate,openDateEnd:this.pubEndDate,title:this.firm,type:this.state,currentPage:this.pagenum,pageSize:this.pagesize}).then( res => {
+          errSelect({source:this.coDe,openDate:this.pubDate,openDateEnd:this.pubEndDate,title:this.firm,type:this.state,currentPage:this.pagenum,pageSize:this.pagesize}).then( res => {
               if(res.code == 1 ) {
                   this.total = res.data.total
                   this.tableData = res.data.datas
@@ -197,27 +197,30 @@ methods: {
           this.listForm()
       },
       handleEdit(index,row) {  // 编辑框的跳转
-        //     this.j.cityCode = this.city,
-        //     this.j.ntStatus = this.state
-        //     this.j.title = this.firm
-        //     this.j.pubDate = this.pubDate
-        //     this.j.pubEndDate = this.pubEndDate
-        //     this.j.currentPage = this.pagenum
-        //     this.j.pageSize = this.pagesize 
-        //      this.json = JSON.stringify(this.j)
-        //      localStorage.removeItem('tensele')
-        //      localStorage.setItem('tensele',this.json)
-        //      localStorage.removeItem('indexer')
-        //      localStorage.setItem('indexer',index)
+            this.j.openDate = this.pubDate,
+            this.j.openDateEnd = this.pubEndDate
+            this.j.title = this.firm
+            this.j.type = this.state
+             this.json = JSON.stringify(this.j)
+             localStorage.removeItem('errTen')
+             localStorage.setItem('errTen',this.json)
+             localStorage.removeItem('erinder')
+             localStorage.setItem('erinder',index)
              localStorage.removeItem('reId')
              localStorage.setItem('reId',this.pkid)
         // console.log(row);
-        const { href } = this.$router.resolve({
-              name:'recovery',params: {id:row.id,code:row.province}
-          })
-
-   
-          window.open(href, '_blank')
+         if(this.state == '0') {
+             const { href } = this.$router.resolve({
+                name:'recovery',params: {id:row.id,code:row.source}
+            })
+            window.open(href, '_blank')
+         } else {
+            //   const { href } = this.$router.resolve({
+            //     name:'recovery',params: {id:row.id,code:row.source}
+            // })
+            // window.open(href, '_blank')
+         }
+       
       },
       handleDelete(index,row) {
           console.log(row.source);

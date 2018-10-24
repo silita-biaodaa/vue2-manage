@@ -44,19 +44,21 @@
               <el-input v-model="form.block"></el-input>
             </el-form-item>
             <el-form-item label='公示日期'>
-              <el-input v-model="form.pubDate"  ></el-input>
+              <el-input v-model="form.gsDate"  ></el-input>
             </el-form-item>                  
             <el-form-item label="项目地区">
-              <el-select v-model="form.projDq" filterable placeholder="请选择项目地区" style="width:80%">
+              <el-input v-model="form.projDq"  ></el-input>
+              <!-- <el-select v-model="form.projDq" filterable placeholder="请选择项目地区" style="width:80%">
                 <el-option v-for="item in areas" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
                 </el-option>
-              </el-select>
+              </el-select> -->
             </el-form-item>
             <el-form-item label="项目县区" >
-              <el-select v-model="form.projXs" filterable placeholder="请选择项目县区" style="width:80%">
+              <el-input v-model="form.projXs"  ></el-input>
+              <!-- <el-select v-model="form.projXs" filterable placeholder="请选择项目县区" style="width:80%">
                 <el-option v-for="item in counties" :key="item.areaCode" :label="item.areaName" :value="item.areaCode">
                 </el-option>
-              </el-select>
+              </el-select> -->
             </el-form-item>
             <el-form-item label="评标办法" >
               <el-select v-model="form.pbMode"  filterable placeholder="请选择评标办法" style="width:80%">
@@ -68,17 +70,18 @@
                  
         <!-- 第一个动态组件  -->
                     <div v-for='(item,index) in aptituform' :key='index'  class="box" >
-                      <el-select class="el-select" v-model="item.label" placeholder="请选择资质和等级" clearable
-                          filterable style="width:65%" >
+                      <el-select class="el-select" v-model="item.finalUuid" placeholder="请选择资质和等级" clearable
+                          filterable style="width:65%" @focus="vanish(index)" >
                           <el-option
                           v-for="item in addList"
                           :key="item.uuid"
                           :label="item.name"
-                          :value="item.uuid">
+                          :value="item.mainUuid"
+                          >
                           </el-option>
                         </el-select>
                       <el-button class="delete"  type="primary" size="mini" @click='deleteItem(index)'>删除</el-button> 
-                      <el-select class="el-select" v-model="item.rela" placeholder="请选择资质关系" clearable
+                      <el-select class="el-select" v-model="item.type" placeholder="请选择资质关系" clearable
                           filterable v-show="func(index)">
                           <el-option
                           v-for="item in relation"
@@ -93,7 +96,6 @@
             <!-- 资质关系组件 -->
 
             <el-form-item class="btn">
-              <el-button @click="emptyForm('edits')">清空</el-button>
               <el-button type="primary" @click="onSubmit">保存</el-button>
               <el-button type="primary" @click='addaptitu'>添加</el-button> 
             </el-form-item>  
@@ -109,7 +111,7 @@
  import  Edit  from "@/page/edit";
 //  import moment from 'moment'
 import Vue from 'vue'
- import { gainAlia,gainRes,errSave,delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
+ import { errDele,errSelect,gainAlia,gainRes,errSave,delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
 export default {
   data () {
     return {
@@ -149,13 +151,11 @@ export default {
        ajson:{},
        list:[],
        releGp:'',
-       arrpare:[],  // 用于变更时候请求接口几次判断
+       arrpare:[],  // 用于变更时n候请求接口几次判断
        urltitle:'',
        fieldNames:[],
        engine:{},
-       arrpkid:[],
-       arrtitle:[],
-       arrpub:[],
+       errpkid:[],
        position:'',
        isShow: true,
        mainCo :[],
@@ -176,59 +176,67 @@ export default {
         }
       ],
       rela:'',
-      uu:[]
+      uu:[],
+      record:[],
+
     }
   },
   mounted () {
 
   },
   created () {
-    this.parentId = localStorage.getItem('reId')
-    this.code = this.$route.params.code
-    this.pkid = this.$route.params.id
-    this.listfixe()
-    this.listFile()
-    this.listregion()
-    this.listMode()
-    this.listarr()
-    this.listAlia()
+    this.gainDate()  // 获取pkid
+    this.listfixe()  
+    this.listMode()  // 获取评标办法
+    this.listarr()   // 获取上下一条数据
+    this.listAlia()  // 公司
   },
 
   watch: {
-    // "$route"(to,from) {
-    //     if(to.name === 'compile') {
-    //         this.listFile()
-    //     }
-    // },
-    "form.projDq":{
-        handler:function(val){
-           if(val) {
-              if(val.length >= 32 ) {
-                  this.form.countyCode = ''
-                  this.cpkid= val.substring(0,32)
-                  this.careaName= val.substring(32)
-                  listArea({areaParentId:this.cpkid}).then(res => {
-                      if(res.code === 1) {
-                          this.counties = res.data   
-                          if(this.counties.length ==0 ) {
+    "$route"(to,from) {
+        if(to.name === 'recovery') {
+           this.gainDate()  // 获取pkid
+           this.listfixe()
+        }
+    },
+    // "form.projDq":{
+    //     handler:function(val){
+    //        if(val) {
+    //           if(val.length >= 32 ) {
+    //               this.form.countyCode = ''
+    //               this.cpkid= val.substring(0,32)
+    //               this.careaName= val.substring(32)
+    //               listArea({areaParentId:this.cpkid}).then(res => {
+    //                   if(res.code === 1) {
+    //                       this.counties = res.data   
+    //                       if(this.counties.length ==0 ) {
                             
-                          }            
-                      }
-                  })
-              } else {
-                  return listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-                                  this.counties = res.data[0].countys
-                            })
-              }
+    //                       }            
+    //                   }
+    //               })
+    //           } 
+    //           // else {
+    //           //     return listTenders({ntId:this.pkid,source:this.code}).then(res=> {
+    //           //                     this.counties = res.data[0].countys
+    //           //               })
+    //           // }
               
-           }
+    //        }
         
-        deep: true
-      }
-    }
+    //     deep: true
+    //   }
+    // }
 
   },
   methods: {
+    vanish(i) {
+        this.aptituform[i].finalUuid = ''
+    },
+    gainDate() {
+        this.code = this.$route.params.code
+        this.pkid = this.$route.params.id
+        console.log(this.code,234);
+    },
     textt() {
     },
     addaptitu() {
@@ -240,7 +248,6 @@ export default {
               Vue.delete(this.form[index - 1 ],'rela')
           }
         }
-
         this.aptituform.splice(index,1)
     },
     func(index) {
@@ -252,51 +259,63 @@ export default {
     },
     // 获取上一条下一条数据
     listarr(){
-        
+       this.engine = JSON.parse(localStorage.getItem('errTen'))
+       this.position = localStorage.getItem('erinder')
+       errSelect({source:this.code,openDate:this.engine.openDate,openDateEnd:this.engine.openDateEnd,title:this.engine.title,type:this.engine.type,currentPage:'1',pageSize:'15'}).then( res => {   
+          res.data.datas.forEach( el => {
+              this.errpkid.push(el.id)
+          })
+          if(res.data.datas.length == 1 ) {
+             this.isShow = false 
+          }       
+       }) 
     },
     listAlia() {
       gainAlia({name:''}).then( res => {
-        // console.log(res,266)
+        console.log(res,271)
           res.data.forEach(item => {
-             this.uu.push(item.uuid,item.rank)
-            item.uuid = this.uu.join('|')
+             this.uu.push(item.mainUuid,item.rank)
+            item.mainUuid = this.uu.join('/')
+            this.uu = []
           })
-          console.log(res,266);
-          
-          this.addList = res.data
+          this.addList = res.data  
       })
     },
     // 加载地区 
     listregion() {
-        
-        listArea({areaParentId:this.parentId}).then(res => {
-            if(res.code === 1 ) {
+        // listArea({areaParentId:this.parentId}).then(res => {
+        //     if(res.code === 1 ) {
               
-               res.data.forEach(itme => {
-                   itme.areaCode = itme.pkid + itme.areaCode
-                }) 
-               this.areas = res.data
-            }
-        })
+        //        res.data.forEach(itme => {
+        //            itme.areaCode = itme.pkid + itme.areaCode
+        //         }) 
+        //        this.areas = res.data
+        //     }
+        // })
     },
     //评标办法
     listMode() {
         listPbMode({type:this.code}).then(res => {
-          // console.log(res,277)
            if(res.code === 1 ) {
              this.ways = res.data
-            //  console.log(res.data,869)
            }
         })
     },
-    // 固定下拉框
     listfixe() {
       gainRes({source:this.code,snatchUrlId:this.pkid}).then( res => {
-         console.log(res,292);
+          console.log(res,303)
          if(res.code == 1) {
-            // this.careaName = res.data[0].source
-            // this.form = res.data[0]
-            // this.aptituform = res.data[0].snatchUrlCerts
+            this.careaName = res.data[0].source
+            this.form = res.data[0]
+             if( ! res.data[0].snatchUrlCerts.length == 0) {
+                this.aptituform = res.data[0].snatchUrlCerts
+                this.aptituform.forEach(el => {
+                   el.finalUuid = el.certificateUuid
+                })
+                console.log(this.aptituform,309);
+             } else {
+               this.aptituform = [{}]
+             }
          }
       })
     },
@@ -313,8 +332,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
-
+         this.delpkid()
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -322,16 +340,85 @@ export default {
         });
       });
     },
+    delpkid() {
+        errDele({source:this.code,id:this.pkid}).then( res => {
+                if(res.code == 1) {
+                    this.errpkid.splice(this.position,1)
+                    if(this.errpkid.length == 1 ) {
+                      this.isShow = false
+                    }
+                    if(this.errpkid.length == 0) {
+                      return this.$router.push({path:'/errhome'})
+                    }
+                    this.$router.push({
+                      name:'recovery',params:{id:this.errpkid[this.position],code:this.code}
+                    })
+                    if(parseInt(this.position) > this.errpkid.length) {
+                      this.position = parseInt(this.position) -1
+                    }
+              }
+          })
+    },
     lastlist() {
+      if(parseInt(this.position) == 0) {
+          return this.$message({
+             type:'warning',
+             message:'已经是第一条公告，无法跳转~'
+          })
+      } else {
+        this.position = parseInt(this.position) - 1
+        this.form = {}
 
+        this.$router.push({
+              name:'recovery',params:{id:this.errpkid[this.position],code:this.code}
+            })
+      }  
     },
     nextlist() {
-     
+        if(parseInt(this.position) == this.errpkid.length - 1 ) {
+          return this.$message({
+             type:'warning',
+             message:'已经是最后一条公告，无法跳转~'
+          })
+      } else {
+        this.position = parseInt(this.position) + 1
+        this.form = {}
+        this.$router.push({
+              name:'recovery',params:{id:this.errpkid[this.position],code:this.code}
+            })
+      }
     },
     onSubmit() {   //保存按钮
-      errSave({projName:this.form.projName,block:this.form.block,projDq:this.careaName,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.aptituform}).then( res => {
-         console.log(res)
-      })
+        this.aptituform.forEach(el => {
+            el.contId = this.pkid
+        })
+        
+      if(!this.aptituform[0].finalUuid) {
+         errSave({source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.careaName,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.record}).then( res => {
+           if(res.code == 1) {
+              this.$message({
+                type:'success',
+                message:'保存成功'
+              })
+           } else  {
+             console.log(res);
+           }
+        })  
+      } else {
+          console.log(this.aptituform);
+        errSave({source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.careaName,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.aptituform}).then( res => {
+          if(res.code == 1) {
+              this.$message({
+                type:'success',
+                message:'保存成功'
+              })
+           } else  {
+             console.log(res);
+           }
+        })  
+      }
+      
+      
     },
     // 修改或者添加信息字段
     amendlist(){
