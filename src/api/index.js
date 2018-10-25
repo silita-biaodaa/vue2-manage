@@ -320,3 +320,15 @@ export const gainRes = params => {
 export const gainAlia = params => {
     return axios.post('correction/ListAllZh', params).then(res => res.data)
 }
+// 中标编辑明细
+export const ongList = params => {
+    return axios.post('correction/listZhongbiaoDetail', params).then(res => res.data)
+}
+// 中标企业候选人
+export const ongCom = params => {
+    return axios.post('correction/listCompany', params).then(res => res.data)
+}
+// 保存中标
+export const ongSave = params => {
+    return axios.post('correction/updateZhongbiaoDetail', params).then(res => res.data)
+}

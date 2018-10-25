@@ -70,11 +70,11 @@
                  
         <!-- 第一个动态组件  -->
                     <div v-for='(item,index) in aptituform' :key='index'  class="box" >
-                      <el-select class="el-select" v-model="item.finalUuid" placeholder="请选择资质和等级" clearable
-                          filterable style="width:65%" @focus="vanish(index)" >
+                      <el-select class="el-select" v-model="item.finalUuid" placeholder="请选择资质和等级" 
+                          filterable style="width:65%" @focus="vanish(index)"  remote :remote-method="userSearch" :loading="userSearchLoading" >
                           <el-option
-                          v-for="item in addList"
-                          :key="item.uuid"
+                          v-for="(item,index) in addListt"
+                          :key="index"
                           :label="item.name"
                           :value="item.mainUuid"
                           >
@@ -111,7 +111,7 @@
  import  Edit  from "@/page/edit";
 //  import moment from 'moment'
 import Vue from 'vue'
- import { errDele,errSelect,gainAlia,gainRes,errSave,delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
+ import { errDele,errSelect,gainAlia,gainRes,errSave,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
 export default {
   data () {
     return {
@@ -178,7 +178,8 @@ export default {
       rela:'',
       uu:[],
       record:[],
-
+      userSearchLoading: false,
+      addListt:[]
     }
   },
   mounted () {
@@ -191,12 +192,17 @@ export default {
     this.listarr()   // 获取上下一条数据
     this.listAlia()  // 公司
   },
-
+  mounted () {
+    this.getADD()
+    // this.getAList()
+  },
   watch: {
     "$route"(to,from) {
         if(to.name === 'recovery') {
            this.gainDate()  // 获取pkid
            this.listfixe()
+           this.getADD()
+           this.getAList()
         }
     },
     // "form.projDq":{
@@ -232,6 +238,23 @@ export default {
     vanish(i) {
         this.aptituform[i].finalUuid = ''
     },
+    userSearch(query) {
+        if (query !== '') {
+          this.userSearchLoading = true
+          gainAlia({name:query}).then(r => {
+            r.data.forEach(item => {
+             this.uu.push(item.mainUuid,item.rank)
+            item.mainUuid = this.uu.join('/')
+            this.uu = []
+          })
+            this.addListt = r.data
+            this.userSearchLoading = false
+          })
+          .catch(r => {
+            this.userSearchLoading = false
+          })
+        }
+      },
     gainDate() {
         this.code = this.$route.params.code
         this.pkid = this.$route.params.id
@@ -272,14 +295,53 @@ export default {
     },
     listAlia() {
       gainAlia({name:''}).then( res => {
-        console.log(res,271)
           res.data.forEach(item => {
              this.uu.push(item.mainUuid,item.rank)
             item.mainUuid = this.uu.join('/')
             this.uu = []
           })
           this.addList = res.data  
+          console.log(this.addListt,'304');
+          
       })
+    },
+    getTT(name) {
+      console.log('二次函数');
+      console.log(name);
+      
+      gainAlia({name:name}).then( res => {
+        console.log(res,'二');
+          res.data.forEach(item => {
+             this.uu.push(item.mainUuid,item.rank)
+            item.mainUuid = this.uu.join('/')
+            this.uu = []
+            this.addList.push(item)
+          })
+          console.log(this.addList,'318');
+          
+      })
+    },
+    getADD() {
+      setTimeout(() => {
+        console.log(this.aptituform[0].certificate,'测试');
+        console.log(this.aptituform,'');
+        if(this.aptituform[0].certificate) {
+         console.log('跑到这里来');
+          this.aptituform.forEach(el => {
+             this.getTT(el.certificate)
+          })
+          this.addListt = this.addList
+       }
+      }, 300);
+       
+    },
+    getAList() {
+        setTimeout(() => {
+          this.addListt = this.addList
+          console.log(this.addListt);
+          
+        }, 350);
+      
     },
     // 加载地区 
     listregion() {

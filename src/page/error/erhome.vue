@@ -215,10 +215,10 @@ methods: {
             })
             window.open(href, '_blank')
          } else {
-            //   const { href } = this.$router.resolve({
-            //     name:'recovery',params: {id:row.id,code:row.source}
-            // })
-            // window.open(href, '_blank')
+              const { href } = this.$router.resolve({
+                name:'wrong',params: {id:row.id,code:row.source}
+            })
+            window.open(href, '_blank')
          }
        
       },
