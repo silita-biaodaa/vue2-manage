@@ -61,22 +61,23 @@
               </el-select> -->
             </el-form-item>
             <el-form-item label="评标办法" >
-              <el-select v-model="form.pbMode"  filterable placeholder="请选择评标办法" style="width:80%">
+              <!-- <el-select v-model="form.pbMode"  filterable placeholder="请选择评标办法" style="width:80%">
                 <el-option v-for="item in ways" :key="item.code" :label="item.name" :value="item.code">
                 </el-option>
-              </el-select>          
+              </el-select>           -->
+              <el-input v-model="form.pbMode"  ></el-input>
             </el-form-item>
             <el-form-item label="资质要求" >
                  
         <!-- 第一个动态组件  -->
                     <div v-for='(item,index) in aptituform' :key='index'  class="box" >
-                      <el-select class="el-select" v-model="item.finalUuid" placeholder="请选择资质和等级" 
+                      <el-select class="el-select" v-model="item.aliasName" placeholder="请选择资质和等级" 
                           filterable style="width:65%" @focus="vanish(index)"  remote :remote-method="userSearch" :loading="userSearchLoading" >
                           <el-option
                           v-for="(item,index) in addListt"
                           :key="index"
                           :label="item.name"
-                          :value="item.mainUuid"
+                          :value="item.name"
                           >
                           </el-option>
                         </el-select>
@@ -111,7 +112,7 @@
  import  Edit  from "@/page/edit";
 //  import moment from 'moment'
 import Vue from 'vue'
- import { errDele,errSelect,gainAlia,gainRes,errSave,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
+ import { errDele,errSelect,gainAlia,gainRes,errSave,listPbMode } from '@/api/index';
 export default {
   data () {
     return {
@@ -182,18 +183,15 @@ export default {
       addListt:[]
     }
   },
-  mounted () {
-
-  },
   created () {
     this.gainDate()  // 获取pkid
     this.listfixe()  
-    this.listMode()  // 获取评标办法
+    // this.listMode()  // 获取评标办法
     this.listarr()   // 获取上下一条数据
     this.listAlia()  // 公司
   },
   mounted () {
-    this.getADD()
+    // this.getADD()
     // this.getAList()
   },
   watch: {
@@ -201,52 +199,24 @@ export default {
         if(to.name === 'recovery') {
            this.gainDate()  // 获取pkid
            this.listfixe()
-           this.getADD()
-           this.getAList()
+          //  this.getADD()
+          //  this.getAList()
         }
     },
-    // "form.projDq":{
-    //     handler:function(val){
-    //        if(val) {
-    //           if(val.length >= 32 ) {
-    //               this.form.countyCode = ''
-    //               this.cpkid= val.substring(0,32)
-    //               this.careaName= val.substring(32)
-    //               listArea({areaParentId:this.cpkid}).then(res => {
-    //                   if(res.code === 1) {
-    //                       this.counties = res.data   
-    //                       if(this.counties.length ==0 ) {
-                            
-    //                       }            
-    //                   }
-    //               })
-    //           } 
-    //           // else {
-    //           //     return listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-    //           //                     this.counties = res.data[0].countys
-    //           //               })
-    //           // }
-              
-    //        }
-        
-    //     deep: true
-    //   }
-    // }
-
   },
   methods: {
     vanish(i) {
-        this.aptituform[i].finalUuid = ''
+        // this.aptituform[i].aliasName = ''
     },
     userSearch(query) {
         if (query !== '') {
           this.userSearchLoading = true
           gainAlia({name:query}).then(r => {
-            r.data.forEach(item => {
-             this.uu.push(item.mainUuid,item.rank)
-            item.mainUuid = this.uu.join('/')
-            this.uu = []
-          })
+          //   r.data.forEach(item => {
+          //    this.uu.push(item.mainUuid,item.rank)
+          //   item.mainUuid = this.uu.join('/')
+          //   this.uu = []
+          // })
             this.addListt = r.data
             this.userSearchLoading = false
           })
@@ -258,9 +228,10 @@ export default {
     gainDate() {
         this.code = this.$route.params.code
         this.pkid = this.$route.params.id
-        console.log(this.code,234);
     },
     textt() {
+      console.log(this.aptituform);
+      
     },
     addaptitu() {
       this.aptituform.push({})
@@ -295,43 +266,41 @@ export default {
     },
     listAlia() {
       gainAlia({name:''}).then( res => {
-          res.data.forEach(item => {
-             this.uu.push(item.mainUuid,item.rank)
-            item.mainUuid = this.uu.join('/')
-            this.uu = []
-          })
-          this.addList = res.data  
-          console.log(this.addListt,'304');
-          
+          // res.data.forEach(item => {
+          //    this.uu.push(item.mainUuid,item.rank)
+          //   item.mainUuid = this.uu.join('/')
+          //   this.uu = []
+          // })
+          this.addListt = res.data         
       })
     },
-    getTT(name) {
-      console.log('二次函数');
-      console.log(name);
-      
+    getTT(name) { 
       gainAlia({name:name}).then( res => {
-        console.log(res,'二');
+        console.log(res,'远程搜索到的企业');
           res.data.forEach(item => {
              this.uu.push(item.mainUuid,item.rank)
             item.mainUuid = this.uu.join('/')
             this.uu = []
             this.addList.push(item)
           })
-          console.log(this.addList,'318');
+          console.log(this.addList,'放进数组里面的企业');
           
       })
     },
     getADD() {
       setTimeout(() => {
-        console.log(this.aptituform[0].certificate,'测试');
-        console.log(this.aptituform,'');
+        console.log(this.aptituform[0].certificate,'测试数据存在');
+        console.log(this.aptituform,'检测数据');
         if(this.aptituform[0].certificate) {
-         console.log('跑到这里来');
           this.aptituform.forEach(el => {
              this.getTT(el.certificate)
           })
+          console.log(this.addListt,'第二次检测数组');
+          this.addListt = this.addList
+       } else {
           this.addListt = this.addList
        }
+         
       }, 300);
        
     },
@@ -339,30 +308,16 @@ export default {
         setTimeout(() => {
           this.addListt = this.addList
           console.log(this.addListt);
-          
         }, 350);
       
     },
-    // 加载地区 
-    listregion() {
-        // listArea({areaParentId:this.parentId}).then(res => {
-        //     if(res.code === 1 ) {
-              
-        //        res.data.forEach(itme => {
-        //            itme.areaCode = itme.pkid + itme.areaCode
-        //         }) 
-        //        this.areas = res.data
-        //     }
-        // })
-    },
-    //评标办法
-    listMode() {
-        listPbMode({type:this.code}).then(res => {
-           if(res.code === 1 ) {
-             this.ways = res.data
-           }
-        })
-    },
+    // listMode() {
+    //     listPbMode({type:this.code}).then(res => {
+    //        if(res.code === 1 ) {
+    //          this.ways = res.data
+    //        }
+    //     })
+    // },
     listfixe() {
       gainRes({source:this.code,snatchUrlId:this.pkid}).then( res => {
           console.log(res,303)
@@ -371,22 +326,14 @@ export default {
             this.form = res.data[0]
              if( ! res.data[0].snatchUrlCerts.length == 0) {
                 this.aptituform = res.data[0].snatchUrlCerts
-                this.aptituform.forEach(el => {
-                   el.finalUuid = el.certificateUuid
+                this.aptituform.forEach( el => {
+                   el.aliasName = el.certificate
                 })
-                console.log(this.aptituform,309);
              } else {
                this.aptituform = [{}]
              }
          }
       })
-    },
-    listFile() {     
-      // listFiles({bizId:this.pkid,source:this.code}).then(res=> {
-      //   this.file = res.data  
-      //    this.form.title = this.arrtitle[this.position]
-      //    this.form.pubDate = this.arrpub[this.position]      
-      // })
     },
     deletemark() {     // 删除操作得弹框 
        this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
@@ -451,12 +398,9 @@ export default {
       }
     },
     onSubmit() {   //保存按钮
-        this.aptituform.forEach(el => {
-            el.contId = this.pkid
-        })
-        
-      if(!this.aptituform[0].finalUuid) {
-         errSave({source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.careaName,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.record}).then( res => {
+      console.log(this.aptituform,398);
+      if(!this.aptituform[0].aliasName) {
+         errSave({snatchUrlId:this.pkid,source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.careaName,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.record}).then( res => {
            if(res.code == 1) {
               this.$message({
                 type:'success',
@@ -467,8 +411,8 @@ export default {
            }
         })  
       } else {
-          console.log(this.aptituform);
-        errSave({source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.careaName,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.aptituform}).then( res => {
+        console.log('进入这里来了');
+        errSave({snatchUrlId:this.pkid,source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.careaName,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.aptituform}).then( res => {
           if(res.code == 1) {
               this.$message({
                 type:'success',
@@ -481,23 +425,6 @@ export default {
       }
       
       
-    },
-    // 修改或者添加信息字段
-    amendlist(){
-
-    },
-     emptyForm(formName) {  // 清空按钮
-
-    },  
-    texttop() {     
-        let back = setInterval(() => {
-          if(document.querySelector('.el-main').scrollTop){
-           document.querySelector('.el-main').scrollTop-=100;
-           document.querySelector('.el-main').scrollTop-=100;            
-          }else {
-            clearInterval(back)
-          }
-        });
     },
   },
   components: {
