@@ -32,7 +32,7 @@
            <div class="edit-r" @click='nextlist' v-show="isShow" >
              <i class="el-icon-arrow-right" ></i>
            </div>
-            <Edit></Edit>
+           <div class="ql-editor" v-html="content" ></div>
         </el-col>
         <el-col :span="12" class="redact-c">
             
@@ -112,7 +112,7 @@
  import  Edit  from "@/page/edit";
 //  import moment from 'moment'
 import Vue from 'vue'
- import { errDele,errSelect,gainAlia,gainRes,errSave,listPbMode } from '@/api/index';
+ import { ongText,errDele,errSelect,gainAlia,gainRes,errSave,listPbMode } from '@/api/index';
 export default {
   data () {
     return {
@@ -180,7 +180,8 @@ export default {
       uu:[],
       record:[],
       userSearchLoading: false,
-      addListt:[]
+      addListt:[],
+      content:''
     }
   },
   created () {
@@ -189,6 +190,7 @@ export default {
     // this.listMode()  // 获取评标办法
     this.listarr()   // 获取上下一条数据
     this.listAlia()  // 公司
+    this.gainText()
   },
   mounted () {
     // this.getADD()
@@ -199,6 +201,7 @@ export default {
         if(to.name === 'recovery') {
            this.gainDate()  // 获取pkid
            this.listfixe()
+           this.gainText()
           //  this.getADD()
           //  this.getAList()
         }
@@ -207,6 +210,15 @@ export default {
   methods: {
     vanish(i) {
         // this.aptituform[i].aliasName = ''
+    },
+    gainText() {
+        ongText({source:this.code,snatchUrlId:this.pkid}).then(res =>{
+          console.log(res,);
+          
+          if(res.code == 1) {
+             this.content = res.data.content
+          }
+        })
     },
     userSearch(query) {
         if (query !== '') {
@@ -397,10 +409,10 @@ export default {
             })
       }
     },
-    onSubmit() {   //保存按钮
-      console.log(this.aptituform,398);
+    onSubmit() {   //保存按钮  
+     console.log(this.form,401);
       if(!this.aptituform[0].aliasName) {
-         errSave({snatchUrlId:this.pkid,source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.careaName,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.record}).then( res => {
+         errSave({snatchUrlId:this.pkid,source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.form.projDq,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.record}).then( res => {
            if(res.code == 1) {
               this.$message({
                 type:'success',
@@ -411,8 +423,7 @@ export default {
            }
         })  
       } else {
-        console.log('进入这里来了');
-        errSave({snatchUrlId:this.pkid,source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.careaName,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.aptituform}).then( res => {
+        errSave({snatchUrlId:this.pkid,source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.form.projDq,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.aptituform}).then( res => {
           if(res.code == 1) {
               this.$message({
                 type:'success',
@@ -580,7 +591,7 @@ export default {
           right:0;
         }   
         .ql-editor {
-        height: 815px;
+        height: 600px;
         }
       }
       .right-c {

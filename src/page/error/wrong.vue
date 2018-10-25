@@ -31,7 +31,7 @@
            <div class="edit-r" @click='nextlist' v-show="isShow" >
              <i class="el-icon-arrow-right" ></i>
            </div>
-            <Edit></Edit>
+             <div class="ql-editor" v-html="content" ></div>
         </el-col>
         <el-col :span="12" class="redact-c">
             
@@ -102,7 +102,7 @@
 <script>
  import  Edit  from "@/page/edit";
 import Vue from 'vue'
- import { ongSave,ongCom,ongList,errDele,errSelect } from '@/api/index';
+ import { ongText,ongSave,ongCom,ongList,errDele,errSelect } from '@/api/index';
 export default {
   data () {
     return {
@@ -142,6 +142,7 @@ export default {
       uu:[],
       record:[],
       userSearchLoading: false,
+      content:''
     }
   },
   created () {
@@ -149,6 +150,7 @@ export default {
     this.listfixe()  // 获取编辑明细
     this.listarr()  // 上下数据
     this.listFile() // 企业companyName
+    this.gainText()
   },
 
   watch: {
@@ -156,6 +158,7 @@ export default {
         if(to.name === 'wrong') {
            this.gainDate()  // 获取pkid
            this.listfixe()
+           this.gainText()
         }
     },
 
@@ -164,6 +167,15 @@ export default {
     gainDate() {
         this.code = this.$route.params.code
         this.pkid = this.$route.params.id        
+    },
+    gainText() {
+        ongText({source:this.code,snatchUrlId:this.pkid}).then(res =>{
+          console.log(res,171);
+          
+          if(res.code == 1) {
+             this.content = res.data.content
+          }
+        })
     },
     // 获取上一条下一条数据
     listarr(){
@@ -433,7 +445,7 @@ export default {
           right:0;
         }   
         .ql-editor {
-        height: 815px;
+        height: 600px;
         }
       }
       .right-c {

@@ -332,3 +332,7 @@ export const ongCom = params => {
 export const ongSave = params => {
     return axios.post('correction/updateZhongbiaoDetail', params).then(res => res.data)
 }
+// 获取内容
+export const ongText = params => {
+    return axios.post('correction/getSnatchurlcontent', params).then(res => res.data)
+}
