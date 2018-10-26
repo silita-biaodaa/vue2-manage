@@ -4,7 +4,13 @@ import Login from '@/page/login'
 import Manage from '@/page/manage'
 import Tender from '@/page/tender'
 import Bin from '@/page/bin'
-import userList from '@/page/userlist'
+import UserList from '@/page/userlist'
+import Quality from '@/page/quality'
+import Record from '@/page/record'
+import Safety from '@/page/safety'
+import Security from '@/page/security'
+import Prize from '@/page/prize'
+import Viwedata from '@/page/viwedata'
 import Edit from '@/page/edit'
 import Aptitudes from '@/page/aptitudes'
 import Method from '@/page/method'
@@ -66,9 +72,44 @@ const routes = [
 							},
 							{
 								path:'/userlist',
-								component:userList,
+								component:UserList,
 								name:'userList'
 							},
+                            {
+                                path:'/prize',
+                                component:Prize,
+                                name:'prize'
+                            },
+                            {
+                                path:'/quality',
+                                component:Quality,
+                                name:'quality'
+                            },
+                            {
+                                path:'/record',
+                                component:Record,
+                                name:'record'
+                            },
+                            {
+                                path:'/safety',
+                                component:Safety,
+                                name:'safety'
+                            },
+                            {
+                                path:'/security',
+                                component:Security,
+                                name:'security'
+                            },
+                            {
+                                path:'/security',
+                                component:Security,
+                                name:'security'
+                            },
+                            {
+                                path:'/viwedata',
+                                component:Viwedata,
+                                name:'viwedata'
+                            },
 							{
 								path:'/aptitudes',
 								component:Aptitudes,
@@ -120,19 +161,14 @@ const routes = [
 									name:'recycle'
 								},
 								{
-									path:'/errhome',	
+									path:'/errhome',
 									name:'errhome',
-									component: resolve => require(['@/page/error/erhome.vue'], resolve) 
+									component: resolve => require(['@/page/error/erhome.vue'], resolve)
 								},
 								{
 									path:'/recovery/:id/:code',
 									name:'recovery',
 									component: resolve => require(['@/page/error/recovery.vue'], resolve)
-								},
-								{
-									path: '/wrong/:id/:code',
-									name: 'wrong',
-									component: resolve => require(['@/page/error/wrong.vue'], resolve)
 								}
 
 
