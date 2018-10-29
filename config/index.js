@@ -27,7 +27,15 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/proxy':{
+        target:'http://admin.biaodaa.com',
+        changeOrigin:true,
+        pathRewrite:{
+          '^/proxy':''
+        }
+      }
+    },
     context: [ //代理路径
         '/shopping',
         '/ugc',

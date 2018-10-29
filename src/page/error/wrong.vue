@@ -170,7 +170,7 @@ export default {
     },
     gainText() {
         ongText({source:this.code,snatchUrlId:this.pkid}).then(res =>{
-          console.log(res,171);
+          // console.log(res,171);
           
           if(res.code == 1) {
              this.content = res.data.content
@@ -185,7 +185,7 @@ export default {
           res.data.datas.forEach( el => {
               this.errpkid.push(el.id)
           })
-          console.log(this.errpkid,182)
+          // console.log(this.errpkid,182)
           if(res.data.datas.length == 1 ) {
              this.isShow = false 
           }       
@@ -205,7 +205,7 @@ export default {
       },
     listfixe() {
       ongList({source:this.code,snatchUrlId:this.pkid}).then( res => {
-          console.log(res,302);
+          // console.log(res,302);
          if(res.code == 1) {
             this.form = res.data[0]
          }
@@ -213,7 +213,7 @@ export default {
     },
     listFile() {     
       ongCom({queryKey:''}).then( res => {
-        console.log(res,210)
+        // console.log(res,210)
          if(res.code ==1) {
             this.types = res.data
          }
@@ -293,7 +293,6 @@ export default {
     }, 
   },
   components: {
-     Edit
   },
 }
 </script>

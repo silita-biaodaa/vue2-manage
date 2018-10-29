@@ -17,7 +17,7 @@
               </el-col>
 
               <el-col :span="12" class="right-c">                  
-                  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color='#EBEEF5' menu-trigger='click' @select="handleSelect"  >
+                  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color='#EBEEF5' menu-trigger='click' @select="handleSelect" >
                     <el-menu-item index="1" @click='addcompile' >编辑</el-menu-item>
                     <el-menu-item index="2" @click='toocompile' >变更</el-menu-item> 
                   </el-menu>

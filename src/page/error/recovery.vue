@@ -213,8 +213,7 @@ export default {
     },
     gainText() {
         ongText({source:this.code,snatchUrlId:this.pkid}).then(res =>{
-          console.log(res,);
-          
+          // console.log(res,);
           if(res.code == 1) {
              this.content = res.data.content
           }
@@ -242,7 +241,7 @@ export default {
         this.pkid = this.$route.params.id
     },
     textt() {
-      console.log(this.aptituform);
+      // console.log(this.aptituform);
       
     },
     addaptitu() {
@@ -286,43 +285,43 @@ export default {
           this.addListt = res.data         
       })
     },
-    getTT(name) { 
-      gainAlia({name:name}).then( res => {
-        console.log(res,'远程搜索到的企业');
-          res.data.forEach(item => {
-             this.uu.push(item.mainUuid,item.rank)
-            item.mainUuid = this.uu.join('/')
-            this.uu = []
-            this.addList.push(item)
-          })
-          console.log(this.addList,'放进数组里面的企业');
+    // getTT(name) { 
+    //   gainAlia({name:name}).then( res => {
+    //     console.log(res,'远程搜索到的企业');
+    //       res.data.forEach(item => {
+    //          this.uu.push(item.mainUuid,item.rank)
+    //         item.mainUuid = this.uu.join('/')
+    //         this.uu = []
+    //         this.addList.push(item)
+    //       })
+    //       console.log(this.addList,'放进数组里面的企业');
           
-      })
-    },
-    getADD() {
-      setTimeout(() => {
-        console.log(this.aptituform[0].certificate,'测试数据存在');
-        console.log(this.aptituform,'检测数据');
-        if(this.aptituform[0].certificate) {
-          this.aptituform.forEach(el => {
-             this.getTT(el.certificate)
-          })
-          console.log(this.addListt,'第二次检测数组');
-          this.addListt = this.addList
-       } else {
-          this.addListt = this.addList
-       }
+    //   })
+    // },
+    // getADD() {
+    //   setTimeout(() => {
+    //     console.log(this.aptituform[0].certificate,'测试数据存在');
+    //     console.log(this.aptituform,'检测数据');
+    //     if(this.aptituform[0].certificate) {
+    //       this.aptituform.forEach(el => {
+    //          this.getTT(el.certificate)
+    //       })
+    //       console.log(this.addListt,'第二次检测数组');
+    //       this.addListt = this.addList
+    //    } else {
+    //       this.addListt = this.addList
+    //    }
          
-      }, 300);
+    //   }, 300);
        
-    },
-    getAList() {
-        setTimeout(() => {
-          this.addListt = this.addList
-          console.log(this.addListt);
-        }, 350);
+    // },
+    // getAList() {
+    //     setTimeout(() => {
+    //       this.addListt = this.addList
+    //       console.log(this.addListt);
+    //     }, 350);
       
-    },
+    // },
     // listMode() {
     //     listPbMode({type:this.code}).then(res => {
     //        if(res.code === 1 ) {
@@ -332,7 +331,7 @@ export default {
     // },
     listfixe() {
       gainRes({source:this.code,snatchUrlId:this.pkid}).then( res => {
-          console.log(res,303)
+          // console.log(res,303)
          if(res.code == 1) {
             this.careaName = res.data[0].source
             this.form = res.data[0]
@@ -410,7 +409,7 @@ export default {
       }
     },
     onSubmit() {   //保存按钮  
-     console.log(this.form,401);
+    //  console.log(this.form,401);
       if(!this.aptituform[0].aliasName) {
          errSave({snatchUrlId:this.pkid,source:this.code,projName:this.form.projName,block:this.form.block,projDq:this.form.projDq,projXs:this.form.projXs,pbMode:this.form.pbMode,id:this.form.id,snatchUrlCerts:this.record}).then( res => {
            if(res.code == 1) {
@@ -439,7 +438,6 @@ export default {
     },
   },
   components: {
-     Edit
   },
 }
 </script>
