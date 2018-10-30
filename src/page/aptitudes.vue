@@ -96,7 +96,7 @@
             <transition name="my">
               <el-button type="primary" icon="el-icon-search" v-show='changebut' @click='selectWord'>搜索</el-button>
             </transition>
-            <el-upload class="updown-list" action="http://120.79.116.245:19004/upload/quaAlias/" :on-preview="handlePreview" :data="sendCode()" :on-success="handleSuccess" :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple  v-show='changebut' :on-exceed="handleExceed" :file-list="fileList">
+            <el-upload class="updown-list" action="http://pre-admin.biaodaa.com/upload/quaAlias/" :on-preview="handlePreview" :data="sendCode()" :on-success="handleSuccess" :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple  v-show='changebut' :on-exceed="handleExceed" :file-list="fileList">
               <el-button type="primary">
                 <i class="el-icon-upload el-icon--right"></i>
                 上传

@@ -168,7 +168,7 @@
             <!-- 资质关系组件 -->
             <el-form-item  v-for="(rela,index) in titurela" :key="index" label="资质关系" class="rela" >
               <!-- 资质和等级 -->
-              <el-select  v-model="rela.labe" placeholder="请选择资质和等级" style="width:65%" clearable filterable >
+              <el-select  v-model="rela.quaId" placeholder="请选择资质和等级" style="width:65%" clearable filterable >
                     <el-option
                     v-for="item in company"
                     :key="item.value"
@@ -180,8 +180,8 @@
               <el-button size="mini" type="primary" class="delete" @click="addItem(index)">添加</el-button> 
                 
                 <!-- 第二个动态组件  -->
-               <div v-for='(item,indexx) in titurela[index].name' :key='indexx' class="rela-sel" >
-                  <el-select  v-model="item.rela" placeholder="请选择资质关系" clearable class="sel-conc"
+               <div v-for='(item,indexx) in titurela[index].tbNtQuaGroups' :key='indexx' class="rela-sel" >
+                  <el-select  v-model="item.relType" placeholder="请选择资质关系" clearable class="sel-conc"
                     filterable>
                     <el-option
                     v-for="item in concern"
@@ -190,7 +190,7 @@
                     :value="item.value">
                     </el-option>
                   </el-select>
-                    <el-select  v-model="item.label" placeholder="请选择资质和等级" clearable  style="width:65%"
+                    <el-select  v-model="item.quaId" placeholder="请选择资质和等级" clearable  style="width:65%"
                     filterable>
                     <el-option
                     v-for="item in company"
@@ -204,9 +204,11 @@
                 </div>
 
               <!-- 资质关系 -->
-                <el-form-item  v-show="func(index)" class="el-rela" >
+                <!-- <el-form-item  v-show="func(index)" class="el-rela" > -->
+                <el-form-item   class="el-rela" >
+
                   <div class="labe-rela">条件类别:</div>
-                  <el-select  v-model="rela.conc" placeholder="请选择资质关系"  clearable filterable class="conc-re" >
+                  <el-select  v-model="rela.relType" placeholder="请选择资质关系"  clearable filterable class="conc-re" >
                         <el-option
                         v-for="item in concern"
                         :key="item.value"
@@ -254,7 +256,6 @@
                       </el-table-column>
                       <el-table-column prop="cityCodeName" label="项目地区" width="120" show-overflow-tooltip>
                       </el-table-column>
-                      <!-- countyCode  countyCodeName  -->
                       <el-table-column prop="countyCodeName" label="项目县市" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column prop="pbModeName" label="评标办法" width="150" show-overflow-tooltip>
@@ -315,17 +316,16 @@
                   </el-table>
 
                   <div style="margin-top: 10px">
-                       <el-upload class="updown-list" action="http://120.79.116.245:19004/upload/uploadZhaoBiaoFile/" :data="sendKid()" :on-preview="handlePreview"  :on-success="handleSuccess" name='files' :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
+                       <el-upload class="updown-list" action="http://pre-admin.biaodaa.com/upload/uploadZhaoBiaoFile/" :data="sendKid()" :on-preview="handlePreview"  :on-success="handleSuccess" name='files' :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
                          <el-button type="primary">
                            上传招标文件
                          </el-button>
                        </el-upload>
                        <el-button type="primary" @click="uploadurl" >上传文件下载路径</el-button>
                        <el-button type="primary" @click="deleteurl">删除招标文件</el-button>
-
                   </div>
-
              </el-tab-pane>
+
             <el-tab-pane label="相关公告" name="third">
                <el-table ref="multipleRela" :data="relation" tooltip-effect="dark"  @selection-change="handleRelaChange" height="200" @row-click='relabox' >
                  <el-table-column type="selection" style="width:5%">
@@ -428,7 +428,7 @@ export default {
         // proSum:'',   //项目金额
         // proDuration:'',  //项目工期
         // cityCodeName:'',    //项目地区
-        countyCode:'',  //项目县区
+        // countyCode:'',  //项目县区
         // pbMode:'',  //评标办法
         // bidBonds:'', // 投标保证金
         // bidBondsEndTime:'', //投标保证金截止时间
@@ -444,7 +444,7 @@ export default {
         // filingPfm:'', //备案要求
         // ntTdStatus:'',// 招标状态           
       },
-      titurela:[{name:[]},{name:[]}], // 资质关系逻辑
+      titurela:[{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}], // 资质关系逻辑
       company:[
           {
             value: '老板',
@@ -459,11 +459,11 @@ export default {
       ],
       concern:[
         {
-          value:'和',
+          value:'&',
           label:'和'
         },
         {
-          value:'或',
+          value:'|',
           label:'或'
         }
       ],
@@ -478,7 +478,7 @@ export default {
        statuss:[], //开标状态
       activeIndex:'1',
       condition:'',
-      state:'http://',
+      state:'',
       redactFormVisible : false,
       handleForm:{
         resource:'',
@@ -537,13 +537,13 @@ export default {
   },
   created () {
     this.parentId = localStorage.getItem('parentId')
-    this.listfixe()
-    this.listNtgpn()
-    this.listFile()
-    this.listregion()
-    this.listMode()
-    this.listTender()
-    this.listarr()
+    this.listfixe()   // 固定下拉框
+    this.listNtgpn()   // 相关公告 获取id和source 
+    this.listFile()    // 相关文件
+    this.listregion()  // 加载地区
+    this.listMode()  // 评标办法
+    this.listTender()   // 获取编辑列表
+    this.listarr()  // 上下一条得数据，获取刷选条件
   },
   filters: {
     condi:function(val) {
@@ -873,6 +873,8 @@ export default {
     },
     "form.cityCodeName":{
         handler:function(val){
+          console.log(val,875);
+          
            if(val) {
               if(val.length >= 32 ) {
                     this.form.countyCode = ''
@@ -888,10 +890,10 @@ export default {
                   })
               } else {
                   return listTenders({ntId:this.pkid,source:this.code}).then(res=> {
+                                  console.log(res.data[0].countys,890);
                                   this.counties = res.data[0].countys
                             })
               }
-              
            }
         
         deep: true
@@ -901,6 +903,7 @@ export default {
   },
   methods: {
     textt() {
+       console.log(this.titurela,902);
     },
     // 判断是否隐藏多余的下拉框
     func(index) {
@@ -912,22 +915,24 @@ export default {
     },
     // 添加
      addItem(index){
-      this.titurela[index].name.push({})      
+      this.titurela[index].tbNtQuaGroups.push({})      
     },
     //  删除
     deleteItem(index) {
+         // 此处的有待的商定的功能性！
+
         if(index == (this.titurela.length - 1) ) {
-          if(!(this.titurela[ index - 1 ].rela == undefined) ) {
-              Vue.delete(this.titurela[index - 1 ],'rela')
+          if(!(this.titurela[ index - 1 ].relType == undefined) ) {
+              Vue.delete(this.titurela[index - 1 ],'relType')
           }
         }
         this.titurela.splice(index,1)        
     },
     deleteeItem(index,indexx){
-       this.titurela[index].name.splice(indexx,1)
+       this.titurela[index].tbNtQuaGroups.splice(indexx,1)
     },
     addrela() {
-      this.titurela.push({name:[]})
+      this.titurela.push({tbNtQuaGroups:[]})
     },
     text(val) {
       if(this.typecompile === '编辑') {
@@ -985,6 +990,7 @@ export default {
     //评标办法
     listMode() {
         listPbMode({type:this.code}).then(res => {
+          console.log(res,991)
            if(res.code === 1 ) {
              this.ways = res.data
             //  console.log(res.data,869)
@@ -1016,37 +1022,51 @@ export default {
     },
      // 获取编辑列表
     listTender() {
+        
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-          this.mainCo = res.data[0]   
-          this.condition = res.data[0].ntStatus,1013
-          console.log(res,1013);
-     
-        res.data.forEach((item,index) => {
-              if(item.pkid == null) {
-                  res.data.splice(index,1)
-              }
-          })
-          if(res.data.length >= 1) {
-            this.careaName = res.data[0].cityCode
-            this.state = this.state + res.data[0].url
+            console.log(res,1025)
+          // this.mainCo = res.data[0]     // 暂时得思先行保存，渲染标题，公式日期
+          this.condition = res.data[0].ntStatus
+          this.careaName = res.data[0].cityCode   // 接口数据请求得地区
+          
+        // res.data.forEach((item,index) => {
+        //       if(item.pkid == null) {
+        //           res.data.splice(index,1)
+        //       }
+        //   })
+          // 资质关系组若为空的 
+          // titurela:[{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}]
+
+          if(res.data[0].pkid) {
+            this.state = res.data[0].url
             this.condition = res.data[0].ntStatus
             this.compileData = res.data.concat()
-            this.form = JSON.parse(JSON.stringify(res.data[0]))   
+            this.form = JSON.parse(JSON.stringify(res.data[0]))
+            if(res.data[0].tbNtRegexGroups.length == 0) {
+               this.titurela = [{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}]
+            } else {
+                this.titurela = res.data[0].tbNtRegexGroups
+                if(res.data[0].tbNtRegexGroups.length == 1) {
+                    this.titurela.push({tbNtQuaGroups:[]})
+                } 
+            }  
           } else {
-            this.emptyForm('edits')
-             this.compileData = res.data.concat()
-           if(localStorage.getItem('setTitle')) {
-              this.form.title = localStorage.getItem('setTitle')
-            this.form.pubDate = localStorage.getItem('setPud')
-           } else {
-             this.form.title = this.arrtitle[this.position]
-              this.form.pubDate = this.arrpub[this.position]
-            
-           }
+              this.emptyForm('edits')
+
+              //  this.compileData = res.data.concat()
+             if(localStorage.getItem('setTitle')) {   //单个跳转过来，后期重点优化得程序
+                this.form.title = localStorage.getItem('setTitle')
+                this.form.pubDate = localStorage.getItem('setPud')
+             } else {
+              //  this.form.title = this.arrtitle[this.position]
+                // this.form.pubDate = this.arrpub[this.position]
+               this.form = JSON.parse(JSON.stringify(res.data[0]))   
+             }
            
           }         
       }) 
     },
+    // 获取招标文件
     listFile() {     
       listFiles({bizId:this.pkid,source:this.code}).then(res=> {
         this.file = res.data  
@@ -1089,6 +1109,7 @@ export default {
         });
       });
     },
+    // 删除这条公告得操作
     nextdel() {
          delpost({pkid:this.pkid,source:this.code}).then(res => {
            if(res.code === 1 ) {
@@ -1191,7 +1212,7 @@ export default {
                   })
         }        
           // insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:moment(this.form.bidBondsEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollEndTime:moment(this.form.enrollEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollAddr:this.form.enrollAddr,auditTime:moment(this.form.auditTime).format('YYYY-MM-DD hh:mm:ss'),bidEndTime:moment(this.form.bidEndTime).format('YYYY-MM-DD hh:mm:ss'),openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
-          insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
+          insertNt({pkid:this.form.pkid,source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr,tbNtRegexGroups:this.titurela}).then( res=> {
                console.log(res,1181)
              if(res.code == 1 ) {
                this.$message({
@@ -1238,6 +1259,7 @@ export default {
           }
           this.form[key] = ''
         }
+        this.titurela = [{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}]
     },  
      handleClick(tab, event) {  // 被选中tab标签实例
       //  console.log(tab, event);
@@ -1255,7 +1277,7 @@ export default {
       },
       handleRelaChange(val) {   //相关公告得                   
           this.reli = val
-          console.log(val,1257)
+
            if(this.reli.length ===0) {
              this.releGp = 0 
            } else {
@@ -1263,6 +1285,12 @@ export default {
            }
       },
       editice() {
+        if(this.reli.length == 0) {
+           return this.$message({
+              type:'warning',
+              message:'请先选择中要操作数据'
+           })
+        }
          if(this.reli[0].relType == 1) {
                this.isShow = false
                this.$router.push({name:'compile',params: {id:this.reli[0].ntId,code:this.code}})
@@ -1405,6 +1433,7 @@ export default {
         });
       });
     },
+    // 添加编辑明细得
     addtop() {
        this.addcompile()       
       //  ’假如我隐藏下面得两个 上面函数就执行，假如不隐藏就不会执行‘
@@ -1419,11 +1448,12 @@ export default {
       })
        
     },
+    // 回到顶部
     texttop() {     
         let back = setInterval(() => {
           if(document.querySelector('.el-main').scrollTop){
            document.querySelector('.el-main').scrollTop-=100;
-           document.querySelector('.el-main').scrollTop-=100;            
+          //  document.querySelector('.el-main').scrollTop-=100;            
           }else {
             clearInterval(back)
           }
@@ -1501,7 +1531,6 @@ export default {
           localStorage.removeItem('tensele')
           next()
       } else if(from.name == 'compile') {
-          // console.log('1111111111111111111111');
           if(localStorage.getItem('tensele')) {
              console.log('等等等等')  
           }
