@@ -32,19 +32,14 @@
                     clearable>
         </el-input></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">省份：<el-select class="bdd_pur"
-                                                                                                  v-model="options"
-                                                                                                  placeholder="请选择">
-            <el-option-group
-                v-for="group in options3"
-                :key="group.label"
-                :label="group.label">
-              <el-option
-                  v-for="item in group.options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-              </el-option>
-            </el-option-group>
+                                                                                                  v-model="province"
+                                                                                                  placeholder="省级地区">
+            <el-option
+                v-for="item in options"
+                :key="item.pkid"
+                :label="item.areaName"
+                :value="item.areaCode">
+            </el-option>
           </el-select>
           </span>
             </el-col>
@@ -141,6 +136,7 @@
                 totalSize:'',
                 total:'',
                 pageCount:"",
+                province:'',
 
             }
         },

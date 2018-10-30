@@ -50,32 +50,26 @@
             </el-option-group>
           </el-select></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">所属地区：<el-select class="bdd_pur"
-                                                                                                    v-model="value7"
-                                                                                                    placeholder="请选择">
-            <el-option-group
-                v-for="group in options3"
-                :key="group.label"
-                :label="group.label">
-              <el-option
-                  v-for="item in group.options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-              </el-option>
-            </el-option-group>
+                                                                                                    v-model="province"
+                                                                                                    @change="choseProvince"
+                                                                                                    placeholder="省级地区">
+            <el-option
+                v-for="item in options"
+                :key="item.pkid"
+                :label="item.areaName"
+                :value="item.areaCode">
+            </el-option>
           </el-select>
-                        <el-select class="bdd_pur" v-model="value7" placeholder="请选择">
-            <el-option-group
-                v-for="group in options3"
-                :key="group.label"
-                :label="group.label">
-              <el-option
-                  v-for="item in group.options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-              </el-option>
-            </el-option-group>
+                        <el-select class="bdd_pur" v-model="shi"
+                                   @change="queryData"
+                                   placeholder="市级地区">
+            <el-option
+                v-for="item in shi1"
+                :key="item.pkid"
+                :label="item.areaName"
+                :value="item.areaName">
+
+            </el-option>
           </el-select></span>
 
             </el-col>
@@ -178,12 +172,19 @@
                 tableData: [],
                 currentPage4: '',
                 currentPage: '',
+                province: '',
+                shi: '',
+                options:'',
+                pageSize:'',
+                pageCount:'',
+                shi1:'',
+                totalSize:'',
             }
         },
         mounted() {
             this.getData();
-//         this.getProvinceData();
-//            this.getYearArray();
+         this.getProvinceData();
+            this.getYearArray();
             this.getdelete();
         },
         methods: {
@@ -212,6 +213,68 @@
                 });
 
             },
+            //获取省市
+            getProvinceData() {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                getJsonData(postBaseUrl + '/common/area').then(res => {
+                    let dataArray = res.data;
+                    this.options = dataArray;
+                    console.log(7777)
+                })
+                this.queryData();
+            },
+            queryData: function () {
+                let dataModel = new Object();
+                dataModel.currentPage = this.currentPage;
+                dataModel.pageSize = this.pageSize;
+                dataModel.regisAddress = this.province;
+                dataModel.city = (this.shi == "全部") ? "" : this.shi;
+                dataModel.comName = this.compName;
+                let dataParam = JSON.stringify(dataModel);
+                getJsonData("/company/list", dataParam).then(res => {
+                    let dataObject = res.data;
+                    this.companyInfo = dataObject;
+                    this.total = res.data.total;
+                    this.pageCount = res.data.pageCount;
+                    this.pageSize = res.data.pageSize;
+                    console.log(8888888888888);
+
+                });
+
+            },
+            // 选省
+            choseProvince: function (e) {
+                for (var index2 in this.options) {
+                    if (e === this.options[index2].areaCode) {
+                        this.province = this.options[index2].areaName;
+
+                        let cityArray = this.options[index2].citys;
+                        if (cityArray != null && cityArray.length > 0) {
+                            let dataBean = new Object();
+                            dataBean.areaName = "全部";
+                            dataBean.areaCode = "";
+                            dataBean.pkid = "";
+                            var firstDataBean = cityArray[0];
+                            if (firstDataBean.areaName != "全部") {
+                                cityArray.unshift(dataBean);
+                            }
+                            this.shi1 = cityArray;
+                            this.shi = this.options[index2].citys[0].areaName;
+                        } else {
+                            this.shi = "全部";
+                            let array = new Array();
+                            let dataBean = new Object();
+                            dataBean.areaName = "全部";
+                            dataBean.areaCode = "";
+                            dataBean.pkid = "";
+                            array.push(dataBean)
+                            this.shi1 = array;
+                        }
+                        this.queryData();
+                    }
+                }
+            },
+
 //            删除安全认证
             getdelete() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
@@ -226,10 +289,12 @@
                 });
             },
             handleSizeChange() {
-
+                this.pageSize = val;
+                this.queryData();
             },
             handleCurrentChange() {
-
+                this.currentPage = val;
+                this.queryData();
             },
         }
     }

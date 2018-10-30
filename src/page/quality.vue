@@ -23,7 +23,7 @@
             <el-col :span="24" style="line-height:50px;">
                 <span class="grid-content bg-purple-dark">企业名称：<el-input style="margin-left: 5px;"
                                                                          placeholder="请输入内容"
-                                                                         v-model="input10"
+                                                                         v-model.trim="compName" @keyup.enter.native="queryData"
                                                                          clearable>
         </el-input></span>
                 <span style="margin-left:19px;" class="grid-content bg-purple-dark ">省份：
@@ -147,7 +147,7 @@
                 pageCount: 10,
                 totalSize: 100,
                 currentPage4: '',
-                input10: '',
+                compName: '',
                 options: [],
                 yearArr: [],
                 assessLevel:'',

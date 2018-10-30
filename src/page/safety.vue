@@ -159,9 +159,9 @@
         },
         mounted() {
             this.getData();
-//         this.getProvinceData();
-//            this.getYearArray();
-         this.getdelete();
+            this.getProvinceData();
+            this.getYearArray();
+            this.getdelete();
         },
         methods: {
             getData() {
@@ -187,7 +187,70 @@
                     this.currentPage = res.data.currentPage;
                 })
 
+
             },
+//            获取省市
+            getProvinceData() {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                getJsonData(postBaseUrl + '/common/area').then(res => {
+                    let dataArray = res.data;
+                    this.options = dataArray;
+                    console.log(7777)
+                })
+                this.queryData();
+            },
+            queryData: function () {
+                let dataModel = new Object();
+                dataModel.currentPage = this.currentPage;
+                dataModel.pageSize = this.pageSize;
+                dataModel.regisAddress = this.province;
+                dataModel.city = (this.shi == "全部") ? "" : this.shi;
+                dataModel.comName = this.compName;
+                let dataParam = JSON.stringify(dataModel);
+                getJsonData("/company/list", dataParam).then(res => {
+                    let dataObject = res.data;
+                    this.companyInfo = dataObject;
+                    this.total = res.data.total;
+                    this.pageCount = res.data.pageCount;
+                    this.pageSize = res.data.pageSize;
+                    console.log(8888888888888);
+
+                });
+
+            },
+            // 选省
+            choseProvince: function (e) {
+                for (var index2 in this.options) {
+                    if (e === this.options[index2].areaCode) {
+                        this.province = this.options[index2].areaName;
+
+                        let cityArray = this.options[index2].citys;
+                        if (cityArray != null && cityArray.length > 0) {
+                            let dataBean = new Object();
+                            dataBean.areaName = "全部";
+                            dataBean.areaCode = "";
+                            dataBean.pkid = "";
+                            var firstDataBean = cityArray[0];
+                            if (firstDataBean.areaName != "全部") {
+                                cityArray.unshift(dataBean);
+                            }
+                            this.shi1 = cityArray;
+                            this.shi = this.options[index2].citys[0].areaName;
+                        } else {
+                            this.shi = "全部";
+                            let array = new Array();
+                            let dataBean = new Object();
+                            dataBean.areaName = "全部";
+                            dataBean.areaCode = "";
+                            dataBean.pkid = "";
+                            array.push(dataBean)
+                            this.shi1 = array;
+                        }
+                        this.queryData();
+                    }
+                }
+            },
+
 //         删除不良记录
             getdelete() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
@@ -197,7 +260,7 @@
                         pkids: "",
                     }
                 );
-                getJsonData(postBaseUrl +'/corp/requ/del', dataParam).then(res => {
+                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
                     console.log(595959);
                 });
             },

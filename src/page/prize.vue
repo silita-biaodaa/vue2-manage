@@ -40,27 +40,25 @@
             </el-option-group>
           </el-select></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">所属地区：<el-select class="bdd_pur"
-                                                                                                    v-model="options"
-                                                                                                    placeholder="请选择">
-            <el-option-group
+                                                                                                    v-model="province"
+                                                                                                    @change="choseProvince"
+                                                                                                    placeholder="省级地区">
+            <el-option
                 v-for="item in options"
                 :key="item.pkid"
                 :label="item.areaName"
                 :value="item.areaCode">
-            </el-option-group>
+            </el-option>
           </el-select>
-                        <el-select class="bdd_pur" v-model="options" placeholder="请选择">
-            <el-option-group
-                v-for="group in options"
-                :key="group.label"
-                :label="group.label">
-              <el-option
-                  v-for="item in group.options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-              </el-option>
-            </el-option-group>
+                    <el-select class="bdd_pur" v-model="shi"
+                               @change="queryData"
+                               placeholder="市级地区">
+            <el-option
+                v-for="item in shi1"
+                :key="item.pkid"
+                :label="item.areaName"
+                :value="item.areaName">
+            </el-option>
           </el-select></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">奖项名称：<el-input
                     placeholder="请输入内容"
@@ -90,7 +88,8 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <span class="grid-content bg-purple-dark">项目类型：<el-input style="margin-left: 5px;margin-top: 10px;" placeholder="请输入内容"
+                <span class="grid-content bg-purple-dark">项目类型：<el-input style="margin-left: 5px;margin-top: 10px;"
+                                                                         placeholder="请输入内容"
                                                                          v-model="input10" clearable>
         </el-input></span>
 
@@ -185,23 +184,25 @@
     export default {
         data() {
             return {
-                options:'',
-                level:'',
-                options3:'',
-                input10:'',
-                tableData:[],
-                currentPage:1,
-                pageSize:20,
-                pageCount:'',
-                totalSize:'',
-                total:'',
+                options: '',
+                level:[],
+                options3: '',
+                input10: '',
+                tableData: [],
+                currentPage: 1,
+                pageSize: 20,
+                pageCount: '',
+                totalSize: '',
+                total: '',
+                province: '',
+                shi: '',
             }
         },
 
         mounted() {
             this.getData();
             this.getProvinceData();
-//            this.getYearArray();
+            this.getYearArray();
             this.getdelete();
         },
 
@@ -213,63 +214,118 @@
                 let dataParam = JSON.stringify({
                         currentPage: 1,
                         pageSize: 20,
-                        tabType:"win_record",
-                        comName:"",
-                        level:"",
-                        provCode:"",
-                        cityCode:"",
-                        awdName:"",
-                        proTypeName:"",
-                        proName:"",
-                        year:"",
-                        options:[],
-                        pageCount:'',
-                        total:'',
+                        tabType: "win_record",
+                        comName: "",
+                        level: "",
+                        provCode: "",
+                        cityCode: "",
+                        awdName: "",
+                        proTypeName: "",
+                        proName: "",
+                        year: "",
+                        options: [],
+                        pageCount: '',
+                        total: '',
                     }
                 );
-                getJsonData(postBaseUrl+"/corp/requ/list",dataParam).then(res => {
+                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
                     this.tableData = dataArray.list;
                     this.totalSize = res.data.total;
                     this.pageCount = res.data.pageCount;
                     this.currentPage = res.data.currentPage;
+
                     console.log(88888888);
                 });
             },
 //            获取省市
-            getProvinceData(){
+            getProvinceData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
-                getJsonData(postBaseUrl+'/common/area').then(res=>{
+                getJsonData(postBaseUrl + '/common/area').then(res => {
                     let dataArray = res.data;
                     this.options = dataArray;
                     console.log(7777)
                 })
+                this.queryData();
             },
+            queryData: function () {
+                let dataModel = new Object();
+                dataModel.currentPage = this.currentPage;
+                dataModel.pageSize = this.pageSize;
+                dataModel.regisAddress = this.province;
+                dataModel.city = (this.shi == "全部") ? "" : this.shi;
+                dataModel.comName = this.compName;
+                let dataParam = JSON.stringify(dataModel);
+                getJsonData("/company/list", dataParam).then(res => {
+                    let dataObject = res.data;
+                    this.companyInfo = dataObject;
+                    this.total = res.data.total;
+                    this.pageCount = res.data.pageCount;
+                    this.pageSize = res.data.pageSize;
+                    console.log(8888888888888);
+
+                });
+
+            },
+            // 选省
+            choseProvince: function (e) {
+                for (var index2 in this.options) {
+                    if (e === this.options[index2].areaCode) {
+                        this.province = this.options[index2].areaName;
+
+                        let cityArray = this.options[index2].citys;
+                        if (cityArray != null && cityArray.length > 0) {
+                            let dataBean = new Object();
+                            dataBean.areaName = "全部";
+                            dataBean.areaCode = "";
+                            dataBean.pkid = "";
+                            var firstDataBean = cityArray[0];
+                            if (firstDataBean.areaName != "全部") {
+                                cityArray.unshift(dataBean);
+                            }
+                            this.shi1 = cityArray;
+                            this.shi = this.options[index2].citys[0].areaName;
+                        } else {
+                            this.shi = "全部";
+                            let array = new Array();
+                            let dataBean = new Object();
+                            dataBean.areaName = "全部";
+                            dataBean.areaCode = "";
+                            dataBean.pkid = "";
+                            array.push(dataBean)
+                            this.shi1 = array;
+                        }
+                        this.queryData();
+                    }
+                }
+            },
+
 //            删除获奖信息
-            getdelete(){
+            getdelete() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(666);
                 let dataParam = JSON.stringify({
-                        tabType:"",
-                        pkids:"",
+                        tabType: "",
+                        pkids: "",
                     }
                 );
-                getJsonData(postBaseUrl +'/corp/requ/del', dataParam).then(res => {
+                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
                     console.log(5555);
                 });
             },
-            handleSizeChange(){
-
+            handleSizeChange() {
+                this.pageSize = val;
+                this.queryData();
 
             },
             handleCurrentChange() {
-
+                this.currentPage = val;
+                this.queryData();
             },
         },
 
 
     }
-
 
 
 </script>
