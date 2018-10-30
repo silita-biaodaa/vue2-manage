@@ -21,7 +21,7 @@
         </el-row>
         <el-row style="margin-top:30px">
             <el-col :span="24" style="line-height:50px;">
-                <span class="grid-content bg-purple-dark">获奖年度：<el-input style="margin-left: 5px;"
+                <span class="grid-content bg-purple-dark">企业名称：<el-input style="margin-left: 5px;"
                                                                          placeholder="请输入内容"
                                                                          v-model="input10"
                                                                          clearable>
@@ -224,8 +224,8 @@
                         pkids:" ",
                     }
                 );
-                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
-                    console.log(5555);
+                getJsonData(postBaseUrl + "/corp/requ/del", dataParam).then(res => {
+                    console.log(656565);
                 });
             },
             handleSizeChange() {

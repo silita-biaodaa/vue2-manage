@@ -62,7 +62,7 @@
               </el-option>
             </el-option-group>
           </el-select></span>
-                <span style="margin-left:20px;" class="grid-content bg-purple-dark">项目名称：<el-input
+                <span style="margin-left:20px;" class="grid-content bg-purple-dark">奖项名称：<el-input
                     placeholder="请输入内容"
                     v-model="input10"
                     clearable>
@@ -75,12 +75,12 @@
                                                                          v-model="input10" clearable>
 
         </el-input></span>
-                <span style="margin-left:19px;" class="grid-content bg-purple-dark">项目名称：<el-input
+                <span style="margin-left:19px;" class="grid-content bg-purple-dark">企业名称：<el-input
                     placeholder="请输入内容"
                     v-model="input10"
                     clearable>
         </el-input></span>
-                <span style="margin-left:20px;" class="grid-content bg-purple-dark">项目类型：<el-input
+                <span style="margin-left:20px;" class="grid-content bg-purple-dark">项目名称：<el-input
                     placeholder="请输入内容"
                     v-model="input10"
                     clearable>
@@ -88,7 +88,14 @@
 
             </el-col>
         </el-row>
+        <el-row>
+            <el-col :span="24">
+                <span class="grid-content bg-purple-dark">项目类型：<el-input style="margin-left: 5px;margin-top: 10px;" placeholder="请输入内容"
+                                                                         v-model="input10" clearable>
+        </el-input></span>
 
+            </el-col>
+        </el-row>
         <!--按钮查询-->
         <el-row>
             <el-col :span="24" style="margin-top: 30px;">
@@ -187,6 +194,7 @@
                 pageSize:20,
                 pageCount:'',
                 totalSize:'',
+                total:'',
             }
         },
 
@@ -246,7 +254,7 @@
                         pkids:"",
                     }
                 );
-                getJsonData(postBaseUrl +'/corp/requ/list', dataParam).then(res => {
+                getJsonData(postBaseUrl +'/corp/requ/del', dataParam).then(res => {
                     console.log(5555);
                 });
             },

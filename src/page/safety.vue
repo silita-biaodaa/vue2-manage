@@ -1,21 +1,27 @@
 <template>
     <div class="bdd_header">
         <el-row :gutter="20">
-            <el-col :span="20"><div class="grid-content bg-purple">
-                <el-breadcrumb  separator-class="el-icon-arrow-right">
-                    <el-breadcrumb-item :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path: '/quality'}">公路信用评价等级</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path: '/record' }">安全生产许可证</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path: '/safety' }">不良记录</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path: '/security' }">安全认证</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path: '/' }"></el-breadcrumb-item>
-                </el-breadcrumb>
-            </div></el-col>
-            <el-col :span="4"><div class="grid-content bg-purple"><el-button type="primary">查看数据维护日志</el-button></div></el-col>
+            <el-col :span="20">
+                <div class="grid-content bg-purple">
+                    <el-breadcrumb separator-class="el-icon-arrow-right">
+                        <el-breadcrumb-item :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/quality'}">公路信用评价等级</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/record' }">安全生产许可证</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/safety' }">不良记录</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/security' }">安全认证</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/' }"></el-breadcrumb-item>
+                    </el-breadcrumb>
+                </div>
+            </el-col>
+            <el-col :span="4">
+                <div class="grid-content bg-purple">
+                    <el-button type="primary">查看数据维护日志</el-button>
+                </div>
+            </el-col>
         </el-row>
         <el-row style="margin-top: 30px;">
             <el-col :span="24" style="line-height:50px;">
-            <span  class="grid-content bg-purple-dark">企业名称：<el-input
+            <span class="grid-content bg-purple-dark">企业名称：<el-input
                 placeholder="请输入内容"
                 v-model="input10"
                 clearable>
@@ -25,7 +31,7 @@
                     v-model="input10"
                     clearable>
         </el-input></span>
-                <span style='margin-left: 20px;'  class="grid-content bg-purple-dark">不良行为内容：<el-input
+                <span style='margin-left: 20px;' class="grid-content bg-purple-dark">不良行为内容：<el-input
                     placeholder="请输入内容"
                     v-model="input10"
                     clearable>
@@ -34,7 +40,7 @@
         </el-row>
 
         <el-col :span="24" style="line-height:50px;">
-            <span  class="grid-content bg-purple-dark">发布单位：<el-input
+            <span class="grid-content bg-purple-dark">发布单位：<el-input
                 placeholder="请输入内容"
                 v-model="input10"
                 clearable>
@@ -44,14 +50,15 @@
                 v-model="input10"
                 clearable>
         </el-input></span>
-            <span style='margin-left: 20px;'  class="grid-content bg-purple-dark">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有效期至：<el-input
+            <span style='margin-left: 20px;' class="grid-content bg-purple-dark">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有效期至：<el-input
                 placeholder="请输入内容"
                 v-model="input10"
                 clearable>
         </el-input></span>
         </el-col>
         <el-col :span="24" style="line-height:50px;">
-           <span  class="grid-content bg-purple-dark">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;质：<el-select  class="bdd_pur" v-model="value7" placeholder="请选择">
+           <span class="grid-content bg-purple-dark">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;质：<el-select
+               class="bdd_pur" v-model="value7" placeholder="请选择">
             <el-option-group
                 v-for="group in options3"
                 :key="group.label"
@@ -85,33 +92,33 @@
                     width="55">
                 </el-table-column>
                 <el-table-column
-                    prop="date"
+                    prop="comName"
                     label="企业名称"
                     width="240">
                 </el-table-column>
                 <el-table-column
-                    prop="name"
-                    label="级别"
+                    prop="proName"
+                    label="项目"
                     width="180">
                 </el-table-column>
                 <el-table-column
-                    prop="address"
-                    label="等级">
+                    prop="badInfo"
+                    label="不良行为内容">
                 </el-table-column>
                 <el-table-column
-                    prop="address"
-                    label="省级">
+                    prop="property"
+                    label="性质">
                 </el-table-column>
                 <el-table-column
-                    prop="address"
-                    label="市级">
+                    prop="issueOrg"
+                    label="发布单位">
                 </el-table-column>
                 <el-table-column
-                    prop="address"
-                    label="评定日期">
+                    prop="issueDate"
+                    label="发布日期">
                 </el-table-column>
                 <el-table-column
-                    prop="address"
+                    prop="expired"
                     label="有效期至">
                 </el-table-column>
             </el-table>
@@ -119,11 +126,11 @@
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="currentPage4"
-                    :page-sizes="[100, 200, 300, 400]"
-                    :page-size="100"
+                    :page-sizes="[10, 20, 50, 100]"
+                    :page-size="pageSize"
+                    :page-count="pageCount"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="400">
+                    :total="totalSize">
                 </el-pagination>
             </div>
         </el-col>
@@ -139,27 +146,68 @@
     export default {
         data() {
             return {
-                tableData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }]
-
+                input10: '',
+                value7: '',
+                options3: [],
+                tableData: [],
+                currentPage: 1,
+                pageSize: 20,
+                pageCount: '',
+                totalSize: '',
+                total: '',
             }
         },
+        mounted() {
+            this.getData();
+//         this.getProvinceData();
+//            this.getYearArray();
+         this.getdelete();
+        },
+        methods: {
+            getData() {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(999);
+                let dataParam = JSON.stringify({
+                    currentPage: 1,
+                    pageSize: 20,
+                    tabType: "undesirable",
+                    comName: "",
+                    proName: "",
+                    badInfo: "",
+                    issueOrg: "",
+                    property: "",
+                    issueDate: "",
+                    expired: "",
+                })
+                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
+                    let dataArray = res.data;
+                    this.tableData = dataArray.list;
+                    this.totalSize = res.data.total;
+                    this.pageCount = res.data.pageCount;
+                    this.currentPage = res.data.currentPage;
+                })
 
+            },
+//         删除不良记录
+            getdelete() {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(666);
+                let dataParam = JSON.stringify({
+                        tabType: "",
+                        pkids: "",
+                    }
+                );
+                getJsonData(postBaseUrl +'/corp/requ/del', dataParam).then(res => {
+                    console.log(595959);
+                });
+            },
+            handleSizeChange() {
+
+            },
+            handleCurrentChange() {
+
+            },
+        }
     }
 
 </script>
