@@ -26,38 +26,34 @@
                                                                          v-model="input10"
                                                                          clearable>
         </el-input></span>
-                <span style="margin-left:19px;" class="grid-content bg-purple-dark ">省份：<el-select class="bdd_pur"
-                                                                                                   v-model="value7"
-                                                                                                   placeholder="请选择">
-    <el-option-group
-        v-for="group in options3"
-        :key="group.label"
-        :label="group.label">
-      <el-option
-          v-for="item in group.options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-      </el-option>
-    </el-option-group>
-  </el-select></span>
-                <span style="margin-left:20px;" class="grid-content bg-purple-dark">年度：<el-select class="bdd_pur"
-                                                                                                  v-model="value7"
-                                                                                                  placeholder="请选择">
-    <el-option-group
-        v-for="group in options3"
-        :key="group.label"
-        :label="group.label">
-      <el-option
-          v-for="item in group.options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-      </el-option>
-    </el-option-group>
-  </el-select></span>
+                <span style="margin-left:19px;" class="grid-content bg-purple-dark ">省份：
+
+                    <el-select
+                        v-model="province"
+                        placeholder="省级地区">
+              <el-option
+                  v-for="item in options"
+                  :key="item.pkid"
+                  :label="item.areaName"
+                  :value="item.areaCode">
+              </el-option>
+            </el-select>
+
+                </span>
+                <span style="margin-left:20px;" class="grid-content bg-purple-dark">年度：   <el-select
+                    v-model="curYear"
+                    @change="queryYear"
+                    placeholder="省级地区">
+              <el-option
+                  v-for="item in yearArr"
+                  :key="item.year"
+                  :label="item.year"
+                  :value="item.year">
+              </el-option>
+            </el-select>
+</span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">等级：<el-select class="bdd_pur"
-                                                                                                  v-model="value7"
+                                                                                                  v-model="assessLevel"
                                                                                                   placeholder="请选择">
     <el-option-group
         v-for="group in options3"
@@ -85,29 +81,28 @@
         </el-row>
         <el-table
             :data="tableData"
-            border
             style="width: 100%;margin-top: 30px;">
             <el-table-column
                 type="selection"
                 width="55">
             </el-table-column>
             <el-table-column
-                prop="date"
+                prop="comName"
                 label="企业名称"
                 width="300">
             </el-table-column>
             <el-table-column
-                prop="name"
+                prop="prov"
                 label="省份"
                 width="200">
             </el-table-column>
             <el-table-column
-                prop="address"
+                prop="assessYear"
                 label="年度"
                 width="300">
             </el-table-column>
             <el-table-column
-                prop="addres"
+                prop="assessLevel"
                 label="等级"
                 width="300">
             </el-table-column>
@@ -116,11 +111,11 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage4"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="pageSize"
+                :page-count="pageCount"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalSize">
             </el-pagination>
         </div>
     </div>
@@ -134,56 +129,121 @@
     export default {
         data() {
             return {
-                tableData: [{
-                    date: '衡阳公路桥梁建设有限公司',
-                    name: '湖南省',
-                    address: '2017',
-                    addres: 'AA'
-                }, {
-                    date: '衡阳公路桥梁建设有限公司',
-                    name: '湖南省',
-                    address: '2017',
-                    addres: 'AA'
-                }, {
-                    date: '衡阳公路桥梁建设有限公司',
-                    name: '湖南省',
-                    address: '2017',
-                    addres: 'AA'
-                }, {
-                    date: '衡阳公路桥梁建设有限公司',
-                    name: '湖南省',
-                    address: '2017',
-                    addres: 'AA'
-                }],
-                options3: [{
-                    label: '热门城市',
-                    options: [{
-                        value: 'Shanghai',
-                        label: '上海'
-                    }, {
-                        value: 'Beijing',
-                        label: '北京'
-                    }]
-                }, {
-                    label: '城市名',
-                    options: [{
-                        value: 'Chengdu',
-                        label: '成都'
-                    }, {
-                        value: 'Shenzhen',
-                        label: '深圳'
-                    }, {
-                        value: 'Guangzhou',
-                        label: '广州'
-                    }, {
-                        value: 'Dalian',
-                        label: '大连'
-                    }]
-                }],
-                value7: ''
+                tableData: [],
+                comName: '',
+                province: '',
+                assessYear: '',
+                assessLevel: '',
+                currentPage: 1,
+                pageSize: 20,
+                province: '',
+                assessProvCode: '',
+                assessLevel: '',
+                assessYear: '',
+                province: '',
+                curYear:'',
+                assessLevel: '',
+                options3: '',
+                pageCount: 10,
+                totalSize: 100,
+                currentPage4: '',
+                input10: '',
+                options: [],
+                yearArr: [],
+                assessLevel:'',
+
+
+            }
+        },
+
+        mounted() {
+            this.getData();
+            this.getProvinceData();
+            this.getYearArray();
+            this.getdelete();
+
+
+        },
+        methods: {
+            //  获取省份接口
+            getProvinceData() {
+                //获取省份列表
+                getJsonData("/common/area").then(res => {
+                    let dataArray = res.data;
+                    this.options = dataArray;
+                });
+            },
+            getData() {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(1111)
+                //获取公路信用评价等级列表
+                let dataParam = JSON.stringify({
+                        currentPage: 1,
+                        pageSize: 20,
+                        tabType: "highway_grade",
+                        comName: "",
+                        province: "",
+                        assessProvCode: "",
+                        assessLevel: "",
+                        assessYear: this.assessYear,
+                        pageCount:'',
+                        total:'',
+
+                    }
+                );
+
+                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
+                    let dataArray = res.data;
+                    this.tableData = dataArray.list;
+                    this.pageCount = res.data.pageCount;
+                    this.totalSize = res.data.total;
+                    this.pageSize = res.data.pageSize;
+                    this.currentPage = res.data.currentPage;
+                    console.log(1111);
+                });
+            },
+            getYearArray() {
+                let curDate = new Date();//获取当天日期
+                let curYear = curDate.getFullYear();//获取当年年份
+                let yearArr = new Array();
+                for (let i = 0; i < 10; i++) {//取最近10年的数据
+                    let curYearNum = Number(curYear);//转化为数字类型进行计算
+                    let obj = new Object();//定义对象接收年份
+                    obj.year = curYearNum-i;  //定义变量接收年份,当前年份减i
+                    yearArr.push(obj);//将对象push到数组中
+                }
+                this.yearArr = yearArr;//接收数组
+            },
+
+//            公路信用等级删除接口
+            getdelete(){
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(555);
+                let dataParam = JSON.stringify({
+                        tabType:" ",
+                        pkids:" ",
+                    }
+                );
+                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
+                    console.log(5555);
+                });
+            },
+            handleSizeChange() {
+
+            },
+            queryYear(){//年份查询方法，下拉值改变时触发此方法
+
+                this.assessYear=this.curYear;//将下拉获取的数据赋值给assessYear，
+                this.getData();//查询数据
+
+            },
+
+            handleCurrentChange() {
+
             }
         }
     }
+
 
 </script>
 

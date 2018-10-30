@@ -25,7 +25,7 @@
         <!--多选框-->
         <el-row style="margin-top: 30px;">
             <el-col :span="24" style="line-height:50px;">
-                        <span class="grid-content bg-purple-dark">奖项级别： <el-select class="el-input" v-model="value7"
+                        <span class="grid-content bg-purple-dark">奖项级别： <el-select class="el-input" v-model="level"
                                                                                    placeholder="请选择">
             <el-option-group
                 v-for="group in options3"
@@ -40,23 +40,18 @@
             </el-option-group>
           </el-select></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">所属地区：<el-select class="bdd_pur"
-                                                                                                    v-model="value7"
+                                                                                                    v-model="options"
                                                                                                     placeholder="请选择">
             <el-option-group
-                v-for="group in options3"
-                :key="group.label"
-                :label="group.label">
-              <el-option
-                  v-for="item in group.options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-              </el-option>
+                v-for="item in options"
+                :key="item.pkid"
+                :label="item.areaName"
+                :value="item.areaCode">
             </el-option-group>
           </el-select>
-                        <el-select class="bdd_pur" v-model="value7" placeholder="请选择">
+                        <el-select class="bdd_pur" v-model="options" placeholder="请选择">
             <el-option-group
-                v-for="group in options3"
+                v-for="group in options"
                 :key="group.label"
                 :label="group.label">
               <el-option
@@ -116,17 +111,17 @@
                 width="55">
             </el-table-column>
             <el-table-column
-                prop="date"
+                prop="comName"
                 label="企业"
                 width="150">
             </el-table-column>
             <el-table-column
-                prop="name"
+                prop="level"
                 label="奖项级别"
                 width="120">
             </el-table-column>
             <el-table-column
-                prop="province"
+                prop="prov"
                 label="省级"
                 width="120">
             </el-table-column>
@@ -136,27 +131,27 @@
                 width="120">
             </el-table-column>
             <el-table-column
-                prop="address"
+                prop="awdName"
                 label="奖项名称"
                 width="300">
             </el-table-column>
             <el-table-column
-                prop="zip"
+                prop="year"
                 label="获奖年度 "
                 width="120">
             </el-table-column>
             <el-table-column
-                prop="zip"
+                prop="proName"
                 label="项目名称"
                 width="120">
             </el-table-column>
             <el-table-column
-                prop="zip"
+                prop="proTypeName"
                 label="项目类型"
                 width="120">
             </el-table-column>
             <el-table-column
-                prop="zip"
+                prop="issueDate"
                 label="发文日期"
                 width="120">
             </el-table-column>
@@ -165,11 +160,11 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage4"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="pageSize"
+                :page-count="pageCount"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalSize">
             </el-pagination>
         </div>
     </div>
@@ -181,88 +176,94 @@
     } from '../api/index.js'
 
     export default {
-        methods: {
-            handleClick(row) {
-                console.log(row);
-            },
-            handleEdit(index, row) {
-                // 编辑框的跳转
-                console.log(row, 1)
-                const {
-                    href
-                } = this.$router.resolve({
-                    name: "viwedata",
-                    params: {
-                        id: row.comId
-
-                    }
-
-                });
-                window.open(href, "_blank");
-            },
-        },
         data() {
             return {
-                tableData: [{
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
-                }, {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
-                }],
-                options3: [{
-                    label: '热门城市',
-                    options: [{
-                        value: 'Shanghai',
-                        label: '上海'
-                    }, {
-                        value: 'Beijing',
-                        label: '北京'
-                    }]
-                }, {
-                    label: '城市名',
-                    options: [{
-                        value: 'Chengdu',
-                        label: '成都'
-                    }, {
-                        value: 'Shenzhen',
-                        label: '深圳'
-                    }, {
-                        value: 'Guangzhou',
-                        label: '广州'
-                    }, {
-                        value: 'Dalian',
-                        label: '大连'
-                    }]
-                }],
-                value7: ''
-
+                options:'',
+                level:'',
+                options3:'',
+                input10:'',
+                tableData:[],
+                currentPage:1,
+                pageSize:20,
+                pageCount:'',
+                totalSize:'',
             }
+        },
 
-        }
+        mounted() {
+            this.getData();
+            this.getProvinceData();
+//            this.getYearArray();
+            this.getdelete();
+        },
+
+        methods: {
+            //  获奖信息接口
+            getData() {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(1111)
+                let dataParam = JSON.stringify({
+                        currentPage: 1,
+                        pageSize: 20,
+                        tabType:"win_record",
+                        comName:"",
+                        level:"",
+                        provCode:"",
+                        cityCode:"",
+                        awdName:"",
+                        proTypeName:"",
+                        proName:"",
+                        year:"",
+                        options:[],
+                        pageCount:'',
+                        total:'',
+                    }
+                );
+                getJsonData(postBaseUrl+"/corp/requ/list",dataParam).then(res => {
+                    let dataArray = res.data;
+                    this.tableData = dataArray.list;
+                    this.totalSize = res.data.total;
+                    this.pageCount = res.data.pageCount;
+                    this.currentPage = res.data.currentPage;
+                    console.log(88888888);
+                });
+            },
+//            获取省市
+            getProvinceData(){
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                getJsonData(postBaseUrl+'/common/area').then(res=>{
+                    let dataArray = res.data;
+                    this.options = dataArray;
+                    console.log(7777)
+                })
+            },
+//            删除获奖信息
+            getdelete(){
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(666);
+                let dataParam = JSON.stringify({
+                        tabType:"",
+                        pkids:"",
+                    }
+                );
+                getJsonData(postBaseUrl +'/corp/requ/list', dataParam).then(res => {
+                    console.log(5555);
+                });
+            },
+            handleSizeChange(){
+
+
+            },
+            handleCurrentChange() {
+
+            },
+        },
+
+
     }
+
+
+
 </script>
 
 <style lang="less" scoped>
