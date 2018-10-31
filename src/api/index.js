@@ -339,3 +339,7 @@ export const ongSave = params => {
 export const ongText = params => {
     return axios.post('correction/getSnatchurlcontent', params).then(res => res.data)
 }
+// 获取资质等级
+export const bidApt = params => {
+    return axios.post('qual/qualGrade/notic/list', params).then(res => res.data)
+}
