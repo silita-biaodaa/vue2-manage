@@ -440,7 +440,7 @@ export default {
         // ntTdStatus:'',// 招标状态           
       },
       quaI:[],
-      titurela:[{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}], // 资质关系逻辑
+      titurela:[{tbNtQuaGroups:[]}], // 资质关系逻辑
       company:[
           {
             value: '老板',
@@ -907,7 +907,7 @@ export default {
   methods: {
     textt() {
         console.log(this.quaId)
-        console.log(this.titurela,965);
+        console.dir(this.titurela,965);
         console.log(this)
         
     },
@@ -1052,7 +1052,7 @@ export default {
             this.compileData = res.data.concat()
             this.form = JSON.parse(JSON.stringify(res.data[0]))
             if(res.data[0].tbNtRegexGroups == null) {
-               this.titurela = [{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}]
+               this.titurela = [{tbNtQuaGroups:[]}]
             } else {
                 this.titurela = res.data[0].tbNtRegexGroups
                 if(res.data[0].tbNtRegexGroups.length == 1) {
@@ -1211,7 +1211,9 @@ export default {
                     message:'请选择项目类型',
                     type:'warning'
                   })
-        }        
+        }
+        //  else if( !this.titurela)       
+         
           // insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:moment(this.form.bidBondsEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollEndTime:moment(this.form.enrollEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollAddr:this.form.enrollAddr,auditTime:moment(this.form.auditTime).format('YYYY-MM-DD hh:mm:ss'),bidEndTime:moment(this.form.bidEndTime).format('YYYY-MM-DD hh:mm:ss'),openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
           insertNt({pkid:this.form.pkid,source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr,tbNtRegexGroups:this.titurela}).then( res=> {
                console.log(res,1181)
@@ -1265,7 +1267,7 @@ export default {
           }
           this.form[key] = ''
         }
-        this.titurela = [{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}]
+        this.titurela = [{tbNtQuaGroups:[]}]
     },  
      handleClick(tab, event) {  // 被选中tab标签实例
       //  console.log(tab, event);
