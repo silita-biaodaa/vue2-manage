@@ -32,6 +32,7 @@
                     clearable>
         </el-input></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">省份：<el-select class="bdd_pur"
+                                                                                                  @change="getData"
                                                                                                   v-model="province"
                                                                                                   placeholder="省级地区">
             <el-option
@@ -156,7 +157,15 @@
             getProvinceData() {
                 //获取省份列表
                 getJsonData("/common/area").then(res => {
-                    let dataArray = res.data;
+
+                    let dataArray = new Array();
+                    let obj = new Object();
+                    obj.areaCode="";
+                    obj.areaName="全部";
+                    dataArray.push(obj);
+                    if( res.data!=null&& res.data.length>0){
+                        dataArray = dataArray.concat(res.data);
+                    }
                     this.options = dataArray;
                 });
             },
@@ -169,7 +178,7 @@
                     tabType: "safety_permission_cert",
                     comName: this.comNames,
                     certNo: this.licenses,
-                    certProvCode: "",
+                    certProvCode: this.province,
                     expired: this.items,
                     issueDate: this.Time,
 

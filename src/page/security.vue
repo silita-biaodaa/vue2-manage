@@ -22,7 +22,7 @@
         <el-row style="margin-top: 30px;">
             <el-col :span="24" style="line-height:50px;">
                         <span class="grid-content bg-purple-dark">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级别：<el-select
-                            class="el-input" v-model="distinction" @change="getDate" placeholder="请选择">
+                            class="el-input" v-model="certLevel" @change="getData" placeholder="请选择">
             <el-option
                 v-for="item in distinctionList"
                 :key="item.value"
@@ -31,7 +31,7 @@
             </el-option>
           </el-select></span>
                 <span style="margin-left:15px;" class="grid-content bg-purple-dark">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等级：<el-select
-                    class="el-input" v-model="ssessLevel" @change="getDate" placeholder="请选择">
+                    class="el-input" v-model="certResult" @change="getData" placeholder="请选择">
 
               <el-option
                   v-for="item in ssessLevelList"
@@ -51,15 +51,14 @@
                 :value="item.areaCode">
             </el-option>
           </el-select>
-                        <el-select class="bdd_pur" v-model="shi"
-                                   @change="queryData"
-                                   placeholder="市级地区">
+                    <el-select class="bdd_pur" v-model="shi"
+                               @change="getData"
+                               placeholder="市级地区">
             <el-option
                 v-for="item in shi1"
                 :key="item.pkid"
                 :label="item.areaName"
-                :value="item.areaName">
-
+                :value="item.areaCode">
             </el-option>
           </el-select></span>
 
@@ -164,42 +163,41 @@
                 input10: '',
                 tableData: [],
                 currentPage4: '',
-                currentPage:1,
+                currentPage: 1,
                 province: '',
                 shi: '',
-                options:'',
-                pageSize:20,
-                pageCount:20,
-                shi1:'',
-                totalSize:10,
-                distinction:'',
-                distinctionList:[],
-                ssessLevelList:[],
-                ssessLevel:'',
-                comepname:'',
-                evaluation:'',
-                times:'',
+                options: [],
+                pageSize: 20,
+                pageCount: 20,
+                shi1: [],
+                totalSize: 10,
+                certLevel: '',
+                distinctionList: [],
+                ssessLevelList: [],
+                certResult: '',
+                comepname: '',
+                evaluation: '',
+                times: '',
             }
         },
         mounted() {
             this.getData();
-         this.getProvinceData();
-            this.getdelete();
+            this.getProvinceData();
             this.getPrizeList();
-    },
+        },
         methods: {
             getData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com"
                 console.log(333);
                 let dataParam = JSON.stringify({
-                    currentPage:this.currentPage,
-                    pageSize: this.pageSize,
+                    currentPage: this.currentPage?this.currentPage:1,
+                    pageSize: this.pageSize?this.pageSize:20,
                     tabType: "safety_cert",
                     comName: this.comepname,
-                    certProvCode: "",
-                    certCityCode: "",
-                    certLevel: "",
-                    certResult: "",
+                    certProvCode: this.province,
+                    certCityCode: this.shi,
+                    certLevel: this.certLevel,
+                    certResult: this.certResult,
                     expired: this.times,
                     issueDate: this.evaluation,
                 });
@@ -213,41 +211,37 @@
                 });
 
             },
+
+
             //获取省市
             getProvinceData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 getJsonData(postBaseUrl + '/common/area').then(res => {
-                    let dataArray = res.data;
+                    let dataArray = new Array();
+                    let obj = new Object();
+                    obj.areaCode = "";
+                    obj.areaName = "全部";
+                    let arr = new Array();
+                    let sunObj = new Object();
+                    sunObj.areaCode = "";
+                    sunObj.areaName = "全部";
+                    arr.push(sunObj);
+                    obj.citys = arr;
+                    dataArray.push(obj);
+                    if (res.data != null && res.data.length > 0) {
+                        dataArray = dataArray.concat(res.data);
+                    }
                     this.options = dataArray;
+                    this.shi1 = arr;
                     console.log(7777)
                 })
-                this.queryData();
-            },
-            queryData: function () {
-                let dataModel = new Object();
-                dataModel.currentPage = this.currentPage;
-                dataModel.pageSize = this.pageSize;
-                dataModel.regisAddress = this.province;
-                dataModel.city = (this.shi == "全部") ? "" : this.shi;
-                dataModel.comName = this.compName;
-                let dataParam = JSON.stringify(dataModel);
-                getJsonData("/company/list", dataParam).then(res => {
-                    let dataObject = res.data;
-                    this.companyInfo = dataObject;
-                    this.total = res.data.total;
-                    this.pageCount = res.data.pageCount;
-                    this.pageSize = res.data.pageSize;
-                    console.log(8888888888888);
-
-                });
-
             },
             // 选省
             choseProvince: function (e) {
+                this.shi="";
                 for (var index2 in this.options) {
                     if (e === this.options[index2].areaCode) {
-                        this.province = this.options[index2].areaName;
-
+                        // this.province = this.options[index2].areaName;
                         let cityArray = this.options[index2].citys;
                         if (cityArray != null && cityArray.length > 0) {
                             let dataBean = new Object();
@@ -259,9 +253,9 @@
                                 cityArray.unshift(dataBean);
                             }
                             this.shi1 = cityArray;
-                            this.shi = this.options[index2].citys[0].areaName;
+                            //this.shi = this.options[index2].citys[0].areaName;
                         } else {
-                            this.shi = "全部";
+                            // this.shi = "全部";
                             let array = new Array();
                             let dataBean = new Object();
                             dataBean.areaName = "全部";
@@ -270,32 +264,22 @@
                             array.push(dataBean)
                             this.shi1 = array;
                         }
-                        this.queryData();
+                        this.getData();
                     }
                 }
             },
 
-//            删除安全认证
-            getdelete() {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                console.log(666);
-                let dataParam = JSON.stringify({
-                        tabType: "",
-                        pkids: "",
-                    }
-                );
-                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
-                    console.log(858585);
-                });
-            },
+
             handleSizeChange(val) {
                 this.pageSize = val;
                 this.getData();
-            },
+            }
+            ,
             handleCurrentChange(val) {
                 this.currentPage = val;
                 this.getData();
-            },
+            }
+            ,
             deleteConfirm() {
                 let selectDataList = this.selectDataList;
                 if (selectDataList == null || selectDataList.length == 0) {
@@ -318,9 +302,10 @@
                     });
                 });
 
-            },
+            }
+            ,
 
-//            删除获奖信息
+            //            删除获奖信息
             deleteData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(666);
@@ -342,47 +327,51 @@
                     });
                     this.getData();
                 });
-            },
-            getPrizeList(){
-                let  distinctionList=new Array();
-                for( let i=0;i<3;i++){
-                    let obj=new Object();
-                    if(i==0){
-                        obj.name='';
-                        obj.value="全部"
-                    }else if(i==1){
-                        obj.value='1'
-                        obj.name='省级'
-                    }else if(i==2){
-                        obj.value='2'
-                        obj.name='市级'
+            }
+            ,
+            getPrizeList() {
+                let distinctionList = new Array();
+                for (let i = 0; i < 3; i++) {
+                    let obj = new Object();
+                    if (i == 0) {
+                        obj.name = '全部';
+                        obj.value = ""
+                    } else if (i == 1) {
+                        obj.value = '1'
+                        obj.name = '省级'
+                    } else if (i == 2) {
+                        obj.value = '2'
+                        obj.name = '市级'
                     }
                     distinctionList.push(obj);
                 }
-                this.distinctionList=distinctionList;
-                let  ssessLevelList=new Array();
-                for( let i=0;i<3;i++){
-                    let obj=new Object();
-                    if(i==0){
-                        obj.name='';
-                        obj.value="全部"
-                    }else if(i==1){
-                        obj.value='1'
-                        obj.name='优秀'
-                    }else if(i==2){
-                        obj.value='2'
-                        obj.name='合格'
+                this.distinctionList = distinctionList;
+                let ssessLevelList = new Array();
+                for (let i = 0; i < 3; i++) {
+                    let obj2 = new Object();
+                    if (i == 0) {
+                        obj2.name = '全部';
+                        obj2.value = ""
+                    } else if (i == 1) {
+                        obj2.value = '1'
+                        obj2.name = '优秀'
+                    } else if (i == 2) {
+                        obj2.value = '2'
+                        obj2.name = '合格'
                     }
-                    ssessLevelList.push(obj);
+                    ssessLevelList.push(obj2);
                 }
-                this.ssessLevelList=ssessLevelList;
-            },
+                this.ssessLevelList = ssessLevelList;
+            }
+            ,
             select(objArr) {
                 this.selectDataList = objArr;
-            },
+            }
+            ,
             selectAll(objArr) {
                 this.selectDataList = objArr;
-            },
+            }
+            ,
         }
     }
 

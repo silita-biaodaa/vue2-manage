@@ -230,8 +230,8 @@
                         proTypeName: this.proTypeName,
                         proName: this.proName,
                         year: this.year,
-                        currentPage: this.currentPage,
-                        pageSize: this.pageSize
+                        currentPage: this.currentPage?this.currentPage:"1",
+                        pageSize: this.pageSize+""
 
 
                     }
@@ -249,7 +249,7 @@
             getProvinceData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 getJsonData(postBaseUrl + '/common/area').then(res => {
-                    let dataArray =new Array(); 
+                    let dataArray =new Array();
                     let obj = new Object();
                     obj.areaCode="";
                     obj.areaName ="全部";
@@ -270,6 +270,7 @@
             },
             // 选省
             choseProvince: function (e) {
+                this.shi="";
                 for (var index2 in this.options) {
                     if (e === this.options[index2].areaCode) {
                         // this.province = this.options[index2].areaName;
