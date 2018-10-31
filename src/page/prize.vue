@@ -6,7 +6,7 @@
             <el-col :span="20">
                 <div class="grid-content bg-purple">
                     <el-breadcrumb separator="/">
-                        <el-breadcrumb-item  :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/quality'}">公路信用评价等级</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/record' }">安全生产许可证</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/safety' }">不良记录</el-breadcrumb-item>
@@ -249,8 +249,22 @@
             getProvinceData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 getJsonData(postBaseUrl + '/common/area').then(res => {
-                    let dataArray = res.data;
+                    let dataArray =new Array(); 
+                    let obj = new Object();
+                    obj.areaCode="";
+                    obj.areaName ="全部";
+                    let arr = new Array();
+                    let sunObj = new Object();
+                    sunObj.areaCode="";
+                    sunObj.areaName ="全部";
+                    arr.push(sunObj);
+                    obj.citys= arr;
+                    dataArray.push(obj);
+                    if( res.data!=null&& res.data.length>0){
+                        dataArray = dataArray.concat(res.data);
+                    }
                     this.options = dataArray;
+                    this.shi1=arr;
                     console.log(7777)
                 })
             },
@@ -259,7 +273,6 @@
                 for (var index2 in this.options) {
                     if (e === this.options[index2].areaCode) {
                         // this.province = this.options[index2].areaName;
-
                         let cityArray = this.options[index2].citys;
                         if (cityArray != null && cityArray.length > 0) {
                             let dataBean = new Object();
@@ -295,7 +308,7 @@
                     });
                     return;
                 }
-                this.$confirm('此操作将删除该条数据, 是否继续?', '提示', {
+                this.$confirm('此操作将删除数据, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
