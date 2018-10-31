@@ -23,12 +23,12 @@
             <el-col :span="24" style="line-height:50px;">
                        <span class="grid-content bg-purple-dark">企业名称：<el-input
                            placeholder="请输入内容"
-                           v-model="input10"
+                           v-model.trim="comNames"
                            clearable>
         </el-input></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">安全生产许可证号：<el-input
                     placeholder="请输入内容"
-                    v-model="input10"
+                    v-model.trim="licenses"
                     clearable>
         </el-input></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">省份：<el-select class="bdd_pur"
@@ -49,20 +49,20 @@
             <el-col :span="24" style="line-height:50px;">
                        <span class="grid-content bg-purple-dark">发布日期：<el-input
                            placeholder="请输入内容"
-                           v-model="input10"
+                           v-model.trim="Time"
                            clearable>
         </el-input></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有效期至：<el-input
                     placeholder="请输入内容"
-                    v-model="input10"
+                    v-model.trim="items"
                     clearable>
         </el-input></span>
 
             </el-col>
             <el-col :span="24" style="margin-top: 30px;">
                 <el-row>
-                    <el-button type="primary">查询</el-button>
-                    <el-button type="primary">删除</el-button>
+                    <el-button type="primary" @click="getData">查询</el-button>
+                    <el-button type="primary" @click="deleteConfirm">删除</el-button>
                     <el-button type="primary">上传Excel</el-button>
                     <el-button type="primary">导出Excel</el-button>
                 </el-row>
@@ -70,6 +70,8 @@
         </el-row>
         <el-table
             :data="tableData"
+            @select="select"
+            @select-all="selectAll"
             border
             style="width: 100%;margin-top: 30px;">
             <el-table-column
@@ -132,11 +134,15 @@
                 currentPage: 1,
                 options: [],
                 pageSize:10,
-                pageCount:'',
-                totalSize:'',
-                total:'',
-                pageCount:"",
+                pageCount:1,
+                totalSize:1,
+                total:1,
+                pageCount:1,
                 province:'',
+                licenses:'',
+                comNames:'',
+                Time:'',
+                items:'',
 
             }
         },
@@ -163,11 +169,11 @@
                     currentPage: 1,
                     pageSize: 10,
                     tabType: "safety_permission_cert",
-                    comName: "",
-                    certNo: "",
+                    comName: this.comNames,
+                    certNo: this.licenses,
                     certProvCode: "",
-                    expired: "",
-                    issueDate: "",
+                    expired: this.items,
+                    issueDate: this.Time,
                     pageCount:"",
                 });
                 getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
@@ -180,17 +186,51 @@
                 });
 
             },
-//            删除安全生产许可证信息
-            getdelete() {
+            deleteConfirm(){
+                let selectDataList = this.selectDataList;
+                if(selectDataList==null||selectDataList.length==0){
+                    this.$message({
+                        type: 'info',
+                        message: "没有选择项"
+                    });
+                    return;
+                }
+                this.$confirm('此操作将删除该条企业, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.deleteData();
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
+            },
+
+//            删除公路信用等级
+            deleteData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(666);
+                let selectDataList = this.selectDataList;
+                let pkidStr = "";
+                for(let i=0;i<selectDataList.length;i++){
+                    pkidStr += selectDataList[i].pkid+"|";
+                }
+
                 let dataParam = JSON.stringify({
-                        tabType: "",
-                        pkids: "",
+                        tabType: "safety_permission_cert",
+                        pkids: pkidStr,
                     }
                 );
-                getJsonData(postBaseUrl +'/corp/requ/del', dataParam).then(res => {
-                    console.log(95959);
+                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
+                    this.$message({
+                        type: 'info',
+                        message: res.msg
+                    });
+                    this.getData();
                 });
             },
 
@@ -200,6 +240,14 @@
             handleCurrentChange(){
 
             },
+            select(objArr){
+                this.selectDataList=objArr;
+            },
+            selectAll(objArr){
+                this.selectDataList=objArr;
+            },
+
+
         }
     }
 

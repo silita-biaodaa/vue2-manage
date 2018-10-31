@@ -59,7 +59,7 @@
           </el-select></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">奖项名称：<el-input
                     placeholder="请输入内容"
-                    v-model="prizeName"
+                    v-model.trim="prizeName"
                     clearable>
         </el-input></span>
             </el-col>
@@ -67,17 +67,17 @@
         <el-row>
             <el-col :span="24">
                 <span class="grid-content bg-purple-dark">获奖年度：<el-input style="margin-left: 5px;" placeholder="请输入内容"
-                                                                         v-model="year" clearable>
+                                                                         v-model.trim="year" clearable>
 
         </el-input></span>
                 <span style="margin-left:19px;" class="grid-content bg-purple-dark">企业名称：<el-input
                     placeholder="请输入内容"
-                    v-model="comName"
+                    v-model.trim="comName"
                     clearable>
         </el-input></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">项目名称：<el-input
                     placeholder="请输入内容"
-                    v-model="proName"
+                    v-model.trim="proName"
                     clearable>
         </el-input></span>
 
@@ -87,7 +87,7 @@
             <el-col :span="24">
                 <span class="grid-content bg-purple-dark">项目类型：<el-input style="margin-left: 5px;margin-top: 10px;"
                                                                          placeholder="请输入内容"
-                                                                         v-model="proTypeName" clearable>
+                                                                         v-model.trim="proTypeName" clearable>
         </el-input></span>
 
             </el-col>
@@ -184,33 +184,34 @@
         data() {
             return {
                 options: [],
-                level:[],
+                level: [],
                 options3: '',
                 input10: '',
                 tableData: [],
                 currentPage: 1,
                 pageSize: 20,
-                pageCount: 1,
+                pageCount: 20,
                 totalSize: 10,
                 total: '',
                 province: '',
                 shi: '',
-                prizeLevel:'',
-                prizeLevelList:[],
-                shi1:[],
-                prizeName:"",
-                proTypeName:"",
-                proName:"",
-                year:"",
-                comName:"",
-                selectDataList:[]
+                prizeLevel: '',
+                prizeLevelList: [],
+                shi1: [],
+                prizeName: "",
+                proTypeName: "",
+                proName: "",
+                year: "",
+                comName: "",
+                selectDataList: []
+
             }
         },
 
         mounted() {
             this.getData();
             this.getProvinceData();
-           // this.getYearArray();
+            // this.getYearArray();
             this.getPrizeList();
         },
 
@@ -220,19 +221,18 @@
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(1111)
                 let dataParam = JSON.stringify({
-                        currentPage: 1,
-                        pageSize: 20,
                         tabType: "win_record",
                         comName: this.comName,
                         level: this.prizeLevel,
                         provCode: this.province,
                         cityCode: this.shi,
                         awdName: this.prizeName,
-                        proTypeName: "",
+                        proTypeName: this.proTypeName,
                         proName: this.proName,
                         year: this.year,
-                        pageCount: 1,
-                        total: 10
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize,
+
 
                     }
                 );
@@ -259,7 +259,7 @@
             choseProvince: function (e) {
                 for (var index2 in this.options) {
                     if (e === this.options[index2].areaCode) {
-                       // this.province = this.options[index2].areaName;
+                        // this.province = this.options[index2].areaName;
 
                         let cityArray = this.options[index2].citys;
                         if (cityArray != null && cityArray.length > 0) {
@@ -274,7 +274,7 @@
                             this.shi1 = cityArray;
                             //this.shi = this.options[index2].citys[0].areaName;
                         } else {
-                           // this.shi = "全部";
+                            // this.shi = "全部";
                             let array = new Array();
                             let dataBean = new Object();
                             dataBean.areaName = "全部";
@@ -287,9 +287,9 @@
                     }
                 }
             },
-            deleteConfirm(){
+            deleteConfirm() {
                 let selectDataList = this.selectDataList;
-                if(selectDataList==null||selectDataList.length==0){
+                if (selectDataList == null || selectDataList.length == 0) {
                     this.$message({
                         type: 'info',
                         message: "没有选择项"
@@ -317,8 +317,8 @@
                 console.log(666);
                 let selectDataList = this.selectDataList;
                 let pkidStr = "";
-                for(let i=0;i<selectDataList.length;i++){
-                    pkidStr += selectDataList[i].pkid+"|";
+                for (let i = 0; i < selectDataList.length; i++) {
+                    pkidStr += selectDataList[i].pkid + "|";
                 }
 
                 let dataParam = JSON.stringify({
@@ -342,37 +342,37 @@
                 this.currentPage = val;
             },
             //组装获奖等级数组
-            getPrizeList(){
+            getPrizeList() {
                 //声明一个数组
-               let prizeLevelList = new Array();
-               //for循环
-                for(let i=0;i<4;i++){
+                let prizeLevelList = new Array();
+                //for循环
+                for (let i = 0; i < 4; i++) {
                     //声明一个对象
                     let obj = new Object();
                     //根据不同的数值封装对象
-                    if(i==0){
-                        obj.value="";
-                        obj.name="请选择奖项级别";
-                    }else if(i==1){
-                        obj.value="1";
-                        obj.name="国家级";
-                    }else if(i==2){
-                        obj.value="2";
-                        obj.name="省级";
-                    }else if(i==3){
-                        obj.value="3";
-                        obj.name="市级";
+                    if (i == 0) {
+                        obj.value = "";
+                        obj.name = "全部";
+                    } else if (i == 1) {
+                        obj.value = "1";
+                        obj.name = "国家级";
+                    } else if (i == 2) {
+                        obj.value = "2";
+                        obj.name = "省级";
+                    } else if (i == 3) {
+                        obj.value = "3";
+                        obj.name = "市级";
                     }
                     //把对象填充到数组中
                     prizeLevelList.push(obj);
                 }
                 this.prizeLevelList = prizeLevelList;
             },
-            select(objArr){
-                this.selectDataList=objArr;
+            select(objArr) {
+                this.selectDataList = objArr;
             },
-            selectAll(objArr){
-                this.selectDataList=objArr;
+            selectAll(objArr) {
+                this.selectDataList = objArr;
             },
 
 

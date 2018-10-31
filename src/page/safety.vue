@@ -23,17 +23,17 @@
             <el-col :span="24" style="line-height:50px;">
             <span class="grid-content bg-purple-dark">企业名称：<el-input
                 placeholder="请输入内容"
-                v-model="input10"
+                v-model.trim="compname"
                 clearable>
         </el-input></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">项目名称：<el-input
                     placeholder="请输入内容"
-                    v-model="input10"
+                    v-model.trim="project"
                     clearable>
         </el-input></span>
                 <span style='margin-left: 20px;' class="grid-content bg-purple-dark">不良行为内容：<el-input
                     placeholder="请输入内容"
-                    v-model="input10"
+                    v-model.trim="action"
                     clearable>
         </el-input></span>
             </el-col>
@@ -42,42 +42,38 @@
         <el-col :span="24" style="line-height:50px;">
             <span class="grid-content bg-purple-dark">发布单位：<el-input
                 placeholder="请输入内容"
-                v-model="input10"
+                v-model.trim="Release"
                 clearable>
         </el-input></span>
             <span style="margin-left:20px;" class="grid-content bg-purple-dark">发布日期：<el-input
                 placeholder="请输入内容"
-                v-model="input10"
+                v-model.trim="issue"
                 clearable>
         </el-input></span>
             <span style='margin-left: 20px;' class="grid-content bg-purple-dark">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有效期至：<el-input
                 placeholder="请输入内容"
-                v-model="input10"
+                v-model.trim="valid"
                 clearable>
         </el-input></span>
         </el-col>
         <el-col :span="24" style="line-height:50px;">
            <span class="grid-content bg-purple-dark">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;质：<el-select
-               class="bdd_pur" v-model="value7" placeholder="请选择">
-            <el-option-group
-                v-for="group in options3"
-                :key="group.label"
-                :label="group.label">
-              <el-option
-                  v-for="item in group.options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-              </el-option>
-            </el-option-group>
+               class="bdd_pur" v-model="nature" @change="getData" placeholder="请选择">
+            <el-option
+                v-for="item in natureList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value">
+
+            </el-option>
           </el-select>
                        </span>
 
             <el-row>
                 <el-col :span="24" style="margin-top: 30px;">
                     <el-row>
-                        <el-button type="primary">查询</el-button>
-                        <el-button type="primary">删除</el-button>
+                        <el-button type="primary" @click="getData">查询</el-button>
+                        <el-button type="primary" @click="deleteConfirm">删除</el-button>
                         <el-button type="primary">上传Excel</el-button>
                         <el-button type="primary">导出Excel</el-button>
                     </el-row>
@@ -85,6 +81,8 @@
             </el-row>
             <el-table
                 :data="tableData"
+                @select="select"
+                @select-all="selectAll"
                 border
                 style="width: 100%;margin-top: 30px;">
                 <el-table-column
@@ -146,22 +144,29 @@
     export default {
         data() {
             return {
-                input10: '',
-                value7: '',
                 options3: [],
                 tableData: [],
                 currentPage: 1,
                 pageSize: 20,
-                pageCount: '',
-                totalSize: '',
-                total: '',
+                pageCount:1,
+                totalSize:1,
+                total:1,
+                compname:'',
+                project:'',
+                action:'',
+                Release:'',
+                issue:'',
+                valid:'',
+                natureList:[],
+                nature:'',
             }
         },
         mounted() {
             this.getData();
             this.getProvinceData();
-            this.getYearArray();
-            this.getdelete();
+//            this.getYearArray();
+//            this.getdelete();
+            this.getPrizeList();
         },
         methods: {
             getData() {
@@ -171,13 +176,13 @@
                     currentPage: 1,
                     pageSize: 20,
                     tabType: "undesirable",
-                    comName: "",
-                    proName: "",
-                    badInfo: "",
-                    issueOrg: "",
+                    comName: this.compname,
+                    proName: this.project,
+                    badInfo: this.action,
+                    issueOrg: this.Release,
                     property: "",
-                    issueDate: "",
-                    expired: "",
+                    issueDate: this.issueDate,
+                    expired: this.valid,
                 })
                 getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
@@ -250,19 +255,82 @@
                     }
                 }
             },
+            //组装获奖等级数组
+            getPrizeList() {
+                //声明一个数组
+                let natureList = new Array();
+                //for循环
+                for (let i = 0; i < 3; i++) {
+                    //声明一个对象
+                    let obj = new Object();
+                    //根据不同的数值封装对象
+                    if (i == 0) {
+                        obj.value = "";
+                        obj.name = "全部";
+                    } else if (i == 1) {
+                        obj.value = "1";
+                        obj.name = "严重";
+                    } else if (i == 2) {
+                        obj.value = "2";
+                        obj.name = "一般";
+                    }
+                    //把对象填充到数组中
+                    natureList.push(obj);
+                }
+                this.natureList = natureList;
+            },
+            deleteConfirm() {
+                let selectDataList = this.selectDataList;
+                if (selectDataList == null || selectDataList.length == 0) {
+                    this.$message({
+                        type: 'info',
+                        message: "没有选择项"
+                    });
+                    return;
+                }
+                this.$confirm('此操作将删除该条企业, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.deleteData();
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
 
-//         删除不良记录
-            getdelete() {
+            },
+
+//            删除不良信息
+            deleteData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(666);
+                let selectDataList = this.selectDataList;
+                let pkidStr = "";
+                for (let i = 0; i < selectDataList.length; i++) {
+                    pkidStr += selectDataList[i].pkid + "|";
+                }
+
                 let dataParam = JSON.stringify({
-                        tabType: "",
-                        pkids: "",
+                        tabType: "undesirable",
+                        pkids: pkidStr,
                     }
                 );
                 getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
-                    console.log(595959);
+                    this.$message({
+                        type: 'info',
+                        message: res.msg
+                    });
+                    this.getData();
                 });
+            },
+            select(objArr) {
+                this.selectDataList = objArr;
+            },
+            selectAll(objArr) {
+                this.selectDataList = objArr;
             },
             handleSizeChange() {
 

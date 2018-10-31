@@ -21,9 +21,9 @@
         </el-row>
         <el-row style="margin-top:30px">
             <el-col :span="24" style="line-height:50px;">
-                <span class="grid-content bg-purple-dark">企业名称：<el-input style="margin-left: 5px;"
+                <span class="grid-content bg-purple-dark">项目名称：<el-input style="margin-left: 5px;"
                                                                          placeholder="请输入内容"
-                                                                         v-model="compName" @keyup.enter.native="queryData"
+                                                                         v-model.trim="input10"
                                                                          clearable>
         </el-input></span>
                 <span style="margin-left:19px;" class="grid-content bg-purple-dark ">省份：
@@ -53,26 +53,20 @@
             </el-select>
 </span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">等级：<el-select class="bdd_pur"
-                                                                                                  v-model="assessLevel"
-                                                                                                  placeholder="请选择">
-    <el-option-group
-        v-for="group in options3"
-        :key="group.label"
-        :label="group.label">
-      <el-option
-          v-for="item in group.options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-      </el-option>
-    </el-option-group>
+                                                                                                  v-model="ssessLevel" @change="getData" placeholder="请选择">
+    <el-option
+        v-for="item in ssessLevelList"
+        :key="item.value"
+        :label="item.name"
+        :value="item.value">
+    </el-option>
   </el-select></span>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="24" style="margin-top: 30px;">
                 <el-row>
-                    <el-button type="primary" @click="getData">查询</el-button>
+                    <el-button type="primary">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
                     <el-button type="primary">上传Excel</el-button>
                     <el-button type="primary">导出Excel</el-button>
@@ -81,6 +75,9 @@
         </el-row>
         <el-table
             :data="tableData"
+            @select="select"
+            @select-all="selectAll"
+            border
             style="width: 100%;margin-top: 30px;">
             <el-table-column
                 type="selection"
@@ -147,13 +144,12 @@
                 pageCount: 10,
                 totalSize: 100,
                 currentPage4: '',
-                compName: '',
+                input10: '',
                 options: [],
                 yearArr: [],
                 assessLevel:'',
-                compName:"",
-
-
+                ssessLevel:'',
+                ssessLevelList:[],
             }
         },
 
@@ -162,6 +158,8 @@
             this.getProvinceData();
             this.getYearArray();
             this.getdelete();
+            this.getPrizeList();
+
 
 
         },
@@ -172,8 +170,7 @@
                 getJsonData("/common/area").then(res => {
                     let dataArray = res.data;
                     this.options = dataArray;
-                }
-                );
+                });
             },
             getData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
@@ -183,10 +180,10 @@
                         currentPage: 1,
                         pageSize: 20,
                         tabType: "highway_grade",
-                        comName: this.compName,
+                        comName: "",
                         province: "",
                         assessProvCode: "",
-                        assessLevel: "",
+                        assessLevel:this.ssessLevel,
                         assessYear: this.assessYear,
                         pageCount:'',
                         total:'',
@@ -217,6 +214,19 @@
                 this.yearArr = yearArr;//接收数组
             },
 
+//            公路信用等级删除接口
+            getdelete(){
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(555);
+                let dataParam = JSON.stringify({
+                        tabType:" ",
+                        pkids:" ",
+                    }
+                );
+                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
+                    console.log(5555);
+                });
+            },
             deleteConfirm(){
                 let selectDataList = this.selectDataList;
                 if(selectDataList==null||selectDataList.length==0){
@@ -241,7 +251,7 @@
 
             },
 
-//            删除公路信用等级信息
+//            删除公路信用等级
             deleteData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(666);
@@ -252,14 +262,14 @@
                 }
 
                 let dataParam = JSON.stringify({
-                        tabType:"highway_grade",
+                        tabType: "highway_grade",
                         pkids: pkidStr,
                     }
                 );
-                getJsonData(postBaseUrl +'/corp/requ/del', dataParam).then(res => {
+                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
                     this.$message({
                         type: 'info',
-                        message: res.msg,
+                        message: res.msg
                     });
                     this.getData();
                 });
@@ -276,8 +286,50 @@
 
             handleCurrentChange() {
 
-            }
+            },
+            //组装获奖等级数组
+            getPrizeList(){
+                //声明一个数组
+                let ssessLevelList = new Array();
+                //for循环
+                for(let i=0;i<6;i++){
+                    //声明一个对象
+                    let obj = new Object();
+                    //根据不同的数值封装对象
+                    if(i==0){
+                        obj.value="";
+                        obj.name="全部";
+                    }else if(i==1){
+                        obj.value="1";
+                        obj.name="AA";
+                    }else if(i==2){
+                        obj.value="2";
+                        obj.name="A";
+                    }else if(i==3){
+                        obj.value="3";
+                        obj.name="B";
+                    }else if(i==4){
+                        obj.value="4";
+                        obj.name="C";
+                    }else if(i==5){
+                        obj.value="4";
+                        obj.name="D";
+                    }
+                    //把对象填充到数组中
+                    ssessLevelList.push(obj);
+                }
+                this.ssessLevelList = ssessLevelList;
+            },
+            select(objArr){
+                this.selectDataList=objArr;
+            },
+            selectAll(objArr){
+                this.selectDataList=objArr;
+            },
+
+
         }
+
     }
 
 

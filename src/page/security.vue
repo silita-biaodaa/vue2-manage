@@ -22,32 +22,23 @@
         <el-row style="margin-top: 30px;">
             <el-col :span="24" style="line-height:50px;">
                         <span class="grid-content bg-purple-dark">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级别：<el-select
-                            class="el-input" v-model="value7" placeholder="请选择">
-            <el-option-group
-                v-for="group in options3"
-                :key="group.label"
-                :label="group.label">
-              <el-option
-                  v-for="item in group.options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-              </el-option>
-            </el-option-group>
+                            class="el-input" v-model="distinction" @change="getDate" placeholder="请选择">
+            <el-option
+                v-for="item in distinctionList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value">
+            </el-option>
           </el-select></span>
                 <span style="margin-left:15px;" class="grid-content bg-purple-dark">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等级：<el-select
-                    class="el-input" v-model="value7" placeholder="请选择">
-            <el-option-group
-                v-for="group in options3"
-                :key="group.label"
-                :label="group.label">
+                    class="el-input" v-model="ssessLevel" @change="getDate" placeholder="请选择">
+
               <el-option
-                  v-for="item in group.options"
+                  v-for="item in ssessLevelList"
                   :key="item.value"
-                  :label="item.label"
+                  :label="item.name"
                   :value="item.value">
               </el-option>
-            </el-option-group>
           </el-select></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">所属地区：<el-select class="bdd_pur"
                                                                                                     v-model="province"
@@ -78,17 +69,17 @@
             <el-col :span="24">
                 <span class="grid-content bg-purple-dark">企业名称：<el-input
                     placeholder="请输入内容"
-                    v-model="input10"
+                    v-model.trim="comepname"
                     clearable>
         </el-input></span>
                 <span style="margin-left:23px;" class="grid-content bg-purple-dark">评定日期：<el-input
                     placeholder="请输入内容"
-                    v-model="input10"
+                    v-model.trim="evaluation"
                     clearable>
         </el-input></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">有效期至：<el-input
                     placeholder="请输入内容"
-                    v-model="input10"
+                    v-model.trim="times"
                     clearable>
         </el-input></span>
 
@@ -97,8 +88,8 @@
         <el-row>
             <el-col :span="24" style="margin-top: 30px;">
                 <el-row>
-                    <el-button type="primary">查询</el-button>
-                    <el-button type="primary">删除</el-button>
+                    <el-button type="primary" @click="getData">查询</el-button>
+                    <el-button type="primary" @click="deleteConfirm">删除</el-button>
                     <el-button type="primary">上传Excel</el-button>
                     <el-button type="primary">导出Excel</el-button>
                 </el-row>
@@ -106,6 +97,8 @@
         </el-row>
         <el-table
             :data="tableData"
+            @select="select"
+            @select-all="selectAll"
             border
             style="width: 100%;margin-top: 30px;">
             <el-table-column
@@ -175,18 +168,25 @@
                 province: '',
                 shi: '',
                 options:'',
-                pageSize:'',
-                pageCount:'',
+                pageSize:20,
+                pageCount:1,
                 shi1:'',
-                totalSize:'',
+                totalSize:1,
+                distinction:'',
+                distinctionList:[],
+                ssessLevelList:[],
+                ssessLevel:'',
+                comepname:'',
+                evaluation:'',
+                times:'',
             }
         },
         mounted() {
             this.getData();
          this.getProvinceData();
-            this.getYearArray();
             this.getdelete();
-        },
+            this.getPrizeList();
+    },
         methods: {
             getData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com"
@@ -195,13 +195,13 @@
                     currentPage: 1,
                     pageSize: 20,
                     tabType: "safety_cert",
-                    comName: "",
+                    comName: this.comepname,
                     certProvCode: "",
                     certCityCode: "",
                     certLevel: "",
                     certResult: "",
-                    expired: "",
-                    issueDate: '',
+                    expired: this.times,
+                    issueDate: this.evaluation,
                 });
                 getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
@@ -295,6 +295,93 @@
             handleCurrentChange() {
                 this.currentPage = val;
                 this.queryData();
+            },
+            deleteConfirm() {
+                let selectDataList = this.selectDataList;
+                if (selectDataList == null || selectDataList.length == 0) {
+                    this.$message({
+                        type: 'info',
+                        message: "没有选择项"
+                    });
+                    return;
+                }
+                this.$confirm('此操作将删除该条企业, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.deleteData();
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
+            },
+
+//            删除获奖信息
+            deleteData() {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(666);
+                let selectDataList = this.selectDataList;
+                let pkidStr = "";
+                for (let i = 0; i < selectDataList.length; i++) {
+                    pkidStr += selectDataList[i].pkid + "|";
+                }
+
+                let dataParam = JSON.stringify({
+                        tabType: "safety_cert",
+                        pkids: pkidStr,
+                    }
+                );
+                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
+                    this.$message({
+                        type: 'info',
+                        message: res.msg
+                    });
+                    this.getData();
+                });
+            },
+            getPrizeList(){
+                let  distinctionList=new Array();
+                for( let i=0;i<3;i++){
+                    let obj=new Object();
+                    if(i==0){
+                        obj.name='';
+                        obj.value="全部"
+                    }else if(i==1){
+                        obj.value='1'
+                        obj.name='省级'
+                    }else if(i==2){
+                        obj.value='2'
+                        obj.name='市级'
+                    }
+                    distinctionList.push(obj);
+                }
+                this.distinctionList=distinctionList;
+                let  ssessLevelList=new Array();
+                for( let i=0;i<3;i++){
+                    let obj=new Object();
+                    if(i==0){
+                        obj.name='';
+                        obj.value="全部"
+                    }else if(i==1){
+                        obj.value='1'
+                        obj.name='优秀'
+                    }else if(i==2){
+                        obj.value='2'
+                        obj.name='合格'
+                    }
+                    ssessLevelList.push(obj);
+                }
+                this.ssessLevelList=ssessLevelList;
+            },
+            select(objArr) {
+                this.selectDataList = objArr;
+            },
+            selectAll(objArr) {
+                this.selectDataList = objArr;
             },
         }
     }
