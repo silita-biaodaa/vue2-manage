@@ -25,7 +25,7 @@
         <!--多选框-->
         <el-row style="margin-top: 30px;">
             <el-col :span="24" style="line-height:50px;">
-                        <span class="grid-content bg-purple-dark">奖项级别：<el-select
+                        <span class="grid-content bg-purple-dark ">奖项级别：<el-select style="margin-left: 5px;" class="el-input"
                             v-model="prizeLevel"
                             @change="getData"
                             placeholder="请选择">
@@ -36,7 +36,7 @@
                   :value="item.value">
               </el-option>
             </el-select></span>
-                <span style="margin-left:20px;" class="grid-content bg-purple-dark">所属地区：<el-select class="bdd_pur"
+                <span style="margin-left:40px;" class="grid-content bg-purple-dark">所属地区：<el-select class="bdd_pur"
                                                                                                     v-model="province"
                                                                                                     @change="choseProvince"
                                                                                                     placeholder="省级地区">
@@ -70,7 +70,7 @@
                                                                          v-model.trim="year" clearable>
 
         </el-input></span>
-                <span style="margin-left:19px;" class="grid-content bg-purple-dark">企业名称：<el-input
+                <span style="margin-left:40px;" class="grid-content bg-purple-dark">企业名称：<el-input
                     placeholder="请输入内容"
                     v-model.trim="comName"
                     clearable>
@@ -189,9 +189,9 @@
                 input10: '',
                 tableData: [],
                 currentPage: 1,
-                pageSize: 20,
-                pageCount: 20,
-                totalSize: 1,
+                pageSize:20,
+                pageCount:20,
+                totalSize: 10,
                 total: '',
                 province: '',
                 shi: '',
@@ -242,7 +242,6 @@
                     this.totalSize = res.data.total;
                     this.pageCount = res.data.pageCount;
                     this.currentPage = res.data.currentPage;
-
                     console.log(88888888);
                 });
             },
@@ -337,7 +336,6 @@
             handleSizeChange(val) {
                 this.pageSize = val;
                 this.getData();
-
             },
             handleCurrentChange(val) {
                 this.currentPage = val;

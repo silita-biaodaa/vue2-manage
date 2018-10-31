@@ -148,7 +148,7 @@
                 tableData: [],
                 currentPage: 1,
                 pageSize: 20,
-                pageCount:1,
+                pageCount:20,
                 totalSize:1,
                 total:1,
                 compname:'',
@@ -173,8 +173,8 @@
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(999);
                 let dataParam = JSON.stringify({
-                    currentPage: 1,
-                    pageSize: 20,
+                    currentPage: this.currentPage,
+                    pageSize: this.pageSize,
                     tabType: "undesirable",
                     comName: this.compname,
                     proName: this.project,
@@ -332,11 +332,14 @@
             selectAll(objArr) {
                 this.selectDataList = objArr;
             },
-            handleSizeChange() {
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.getData();
 
             },
-            handleCurrentChange() {
-
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getData();
             },
         }
     }

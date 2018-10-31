@@ -177,7 +177,7 @@
                 console.log(1111)
                 //获取公路信用评价等级列表
                 let dataParam = JSON.stringify({
-                        currentPage: 1,
+                        currentPage:this.currentPage,
                         pageSize:this.pageSize,
                         tabType: "highway_grade",
                         comName: "",
@@ -185,7 +185,7 @@
                         assessProvCode: "",
                         assessLevel:this.ssessLevel,
                         assessYear: this.assessYear,
-                        pageCount:this.pageCount,
+
                     }
                 );
 

@@ -164,14 +164,14 @@
                 input10: '',
                 tableData: [],
                 currentPage4: '',
-                currentPage: '',
+                currentPage:1,
                 province: '',
                 shi: '',
                 options:'',
                 pageSize:20,
-                pageCount:1,
+                pageCount:20,
                 shi1:'',
-                totalSize:1,
+                totalSize:10,
                 distinction:'',
                 distinctionList:[],
                 ssessLevelList:[],
@@ -192,8 +192,8 @@
                 let postBaseUrl = "http://pre-admin.biaodaa.com"
                 console.log(333);
                 let dataParam = JSON.stringify({
-                    currentPage: 1,
-                    pageSize: 20,
+                    currentPage:this.currentPage,
+                    pageSize: this.pageSize,
                     tabType: "safety_cert",
                     comName: this.comepname,
                     certProvCode: "",
@@ -209,7 +209,7 @@
                     console.log(9999);
                     this.totalSize = res.data.total;
                     this.pageCount = res.data.pageCount;
-                    this.pageSize = res.data.currentPage;
+                    this.currentPage = res.data.currentPage;
                 });
 
             },
@@ -288,13 +288,13 @@
                     console.log(858585);
                 });
             },
-            handleSizeChange() {
+            handleSizeChange(val) {
                 this.pageSize = val;
-                this.queryData();
+                this.getData();
             },
-            handleCurrentChange() {
+            handleCurrentChange(val) {
                 this.currentPage = val;
-                this.queryData();
+                this.getData();
             },
             deleteConfirm() {
                 let selectDataList = this.selectDataList;

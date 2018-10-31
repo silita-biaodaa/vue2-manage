@@ -44,7 +44,6 @@
           </span>
             </el-col>
         </el-row>
-
         <el-row>
             <el-col :span="24" style="line-height:50px;">
                        <span class="grid-content bg-purple-dark">发布日期：<el-input
@@ -133,11 +132,10 @@
                 currentPage4: '',
                 currentPage: 1,
                 options: [],
-                pageSize:10,
-                pageCount:1,
+                pageSize:20,
+                pageCount:20,
                 totalSize:1,
                 total:1,
-                pageCount:1,
                 province:'',
                 licenses:'',
                 comNames:'',
@@ -166,15 +164,15 @@
                 let postBaseUrl = "http://pre-admin.biaodaa.com"
                 console.log(333);
                 let dataParam = JSON.stringify({
-                    currentPage: 1,
-                    pageSize: 10,
+                    currentPage: this.currentPage,
+                    pageSize: this.pageSize,
                     tabType: "safety_permission_cert",
                     comName: this.comNames,
                     certNo: this.licenses,
                     certProvCode: "",
                     expired: this.items,
                     issueDate: this.Time,
-                    pageCount:"",
+
                 });
                 getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
@@ -182,7 +180,6 @@
                     console.log(9999);
                     this.totalSize = res.data.total;
                     this.pageCount = res.data.pageCount;
-                    this.pageSize = res.data.currentPage;
                 });
 
             },
@@ -234,11 +231,13 @@
                 });
             },
 
-            handleSizeChange() {
-
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.getData();
             },
-            handleCurrentChange(){
-
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getData();
             },
             select(objArr){
                 this.selectDataList=objArr;
