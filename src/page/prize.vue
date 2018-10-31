@@ -25,20 +25,17 @@
         <!--多选框-->
         <el-row style="margin-top: 30px;">
             <el-col :span="24" style="line-height:50px;">
-                        <span class="grid-content bg-purple-dark">奖项级别： <el-select class="el-input" v-model="level"
-                                                                                   placeholder="请选择">
-            <el-option-group
-                v-for="group in options3"
-                :key="group.label"
-                :label="group.label">
+                        <span class="grid-content bg-purple-dark">奖项级别：<el-select
+                            v-model="prizeLevel"
+                            @change="getData"
+                            placeholder="请选择">
               <el-option
-                  v-for="item in group.options"
+                  v-for="item in prizeLevelList"
                   :key="item.value"
-                  :label="item.label"
+                  :label="item.name"
                   :value="item.value">
               </el-option>
-            </el-option-group>
-          </el-select></span>
+            </el-select></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">所属地区：<el-select class="bdd_pur"
                                                                                                     v-model="province"
                                                                                                     @change="choseProvince"
@@ -51,18 +48,18 @@
             </el-option>
           </el-select>
                     <el-select class="bdd_pur" v-model="shi"
-                               @change="queryData"
+                               @change="getData"
                                placeholder="市级地区">
             <el-option
                 v-for="item in shi1"
                 :key="item.pkid"
                 :label="item.areaName"
-                :value="item.areaName">
+                :value="item.areaCode">
             </el-option>
           </el-select></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">奖项名称：<el-input
                     placeholder="请输入内容"
-                    v-model="input10"
+                    v-model="prizeName"
                     clearable>
         </el-input></span>
             </el-col>
@@ -70,17 +67,17 @@
         <el-row>
             <el-col :span="24">
                 <span class="grid-content bg-purple-dark">获奖年度：<el-input style="margin-left: 5px;" placeholder="请输入内容"
-                                                                         v-model="input10" clearable>
+                                                                         v-model="year" clearable>
 
         </el-input></span>
                 <span style="margin-left:19px;" class="grid-content bg-purple-dark">企业名称：<el-input
                     placeholder="请输入内容"
-                    v-model="input10"
+                    v-model="comName"
                     clearable>
         </el-input></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">项目名称：<el-input
                     placeholder="请输入内容"
-                    v-model="input10"
+                    v-model="proName"
                     clearable>
         </el-input></span>
 
@@ -90,7 +87,7 @@
             <el-col :span="24">
                 <span class="grid-content bg-purple-dark">项目类型：<el-input style="margin-left: 5px;margin-top: 10px;"
                                                                          placeholder="请输入内容"
-                                                                         v-model="input10" clearable>
+                                                                         v-model="proTypeName" clearable>
         </el-input></span>
 
             </el-col>
@@ -99,8 +96,8 @@
         <el-row>
             <el-col :span="24" style="margin-top: 30px;">
                 <el-row>
-                    <el-button type="primary">查询</el-button>
-                    <el-button type="primary">删除</el-button>
+                    <el-button type="primary" @click="getData">查询</el-button>
+                    <el-button type="primary" @click="deleteConfirm">删除</el-button>
                     <el-button type="primary">上传Excel</el-button>
                     <el-button type="primary">导出Excel</el-button>
                 </el-row>
@@ -110,6 +107,8 @@
         <!--table表格-->
         <el-table
             :data="tableData"
+            @select="select"
+            @select-all="selectAll"
             border
             style="width: 100%;margin-top: 30px;">
             <el-table-column
@@ -184,26 +183,35 @@
     export default {
         data() {
             return {
-                options: '',
+                options: [],
                 level:[],
                 options3: '',
                 input10: '',
                 tableData: [],
                 currentPage: 1,
                 pageSize: 20,
-                pageCount: '',
-                totalSize: '',
+                pageCount: 1,
+                totalSize: 10,
                 total: '',
                 province: '',
                 shi: '',
+                prizeLevel:'',
+                prizeLevelList:[],
+                shi1:[],
+                prizeName:"",
+                proTypeName:"",
+                proName:"",
+                year:"",
+                comName:"",
+                selectDataList:[]
             }
         },
 
         mounted() {
             this.getData();
             this.getProvinceData();
-            this.getYearArray();
-            this.getdelete();
+           // this.getYearArray();
+            this.getPrizeList();
         },
 
         methods: {
@@ -215,17 +223,17 @@
                         currentPage: 1,
                         pageSize: 20,
                         tabType: "win_record",
-                        comName: "",
-                        level: "",
-                        provCode: "",
-                        cityCode: "",
-                        awdName: "",
+                        comName: this.comName,
+                        level: this.prizeLevel,
+                        provCode: this.province,
+                        cityCode: this.shi,
+                        awdName: this.prizeName,
                         proTypeName: "",
-                        proName: "",
-                        year: "",
-                        options: [],
-                        pageCount: '',
-                        total: '',
+                        proName: this.proName,
+                        year: this.year,
+                        pageCount: 1,
+                        total: 10
+
                     }
                 );
                 getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
@@ -246,32 +254,12 @@
                     this.options = dataArray;
                     console.log(7777)
                 })
-                this.queryData();
-            },
-            queryData: function () {
-                let dataModel = new Object();
-                dataModel.currentPage = this.currentPage;
-                dataModel.pageSize = this.pageSize;
-                dataModel.regisAddress = this.province;
-                dataModel.city = (this.shi == "全部") ? "" : this.shi;
-                dataModel.comName = this.compName;
-                let dataParam = JSON.stringify(dataModel);
-                getJsonData("/company/list", dataParam).then(res => {
-                    let dataObject = res.data;
-                    this.companyInfo = dataObject;
-                    this.total = res.data.total;
-                    this.pageCount = res.data.pageCount;
-                    this.pageSize = res.data.pageSize;
-                    console.log(8888888888888);
-
-                });
-
             },
             // 选省
             choseProvince: function (e) {
                 for (var index2 in this.options) {
                     if (e === this.options[index2].areaCode) {
-                        this.province = this.options[index2].areaName;
+                       // this.province = this.options[index2].areaName;
 
                         let cityArray = this.options[index2].citys;
                         if (cityArray != null && cityArray.length > 0) {
@@ -284,9 +272,9 @@
                                 cityArray.unshift(dataBean);
                             }
                             this.shi1 = cityArray;
-                            this.shi = this.options[index2].citys[0].areaName;
+                            //this.shi = this.options[index2].citys[0].areaName;
                         } else {
-                            this.shi = "全部";
+                           // this.shi = "全部";
                             let array = new Array();
                             let dataBean = new Object();
                             dataBean.areaName = "全部";
@@ -295,33 +283,99 @@
                             array.push(dataBean)
                             this.shi1 = array;
                         }
-                        this.queryData();
+                        this.getData();
                     }
                 }
             },
+            deleteConfirm(){
+                let selectDataList = this.selectDataList;
+                if(selectDataList==null||selectDataList.length==0){
+                    this.$message({
+                        type: 'info',
+                        message: "没有选择项"
+                    });
+                    return;
+                }
+                this.$confirm('此操作将删除该条企业, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.deleteData();
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
+            },
 
 //            删除获奖信息
-            getdelete() {
+            deleteData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(666);
+                let selectDataList = this.selectDataList;
+                let pkidStr = "";
+                for(let i=0;i<selectDataList.length;i++){
+                    pkidStr += selectDataList[i].pkid+"|";
+                }
+
                 let dataParam = JSON.stringify({
-                        tabType: "",
-                        pkids: "",
+                        tabType: "win_record",
+                        pkids: pkidStr,
                     }
                 );
                 getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
-                    console.log(5555);
+                    this.$message({
+                        type: 'info',
+                        message: res.msg
+                    });
+                    this.getData();
                 });
             },
             handleSizeChange() {
                 this.pageSize = val;
-                this.queryData();
 
             },
             handleCurrentChange() {
                 this.currentPage = val;
-                this.queryData();
             },
+            //组装获奖等级数组
+            getPrizeList(){
+                //声明一个数组
+               let prizeLevelList = new Array();
+               //for循环
+                for(let i=0;i<4;i++){
+                    //声明一个对象
+                    let obj = new Object();
+                    //根据不同的数值封装对象
+                    if(i==0){
+                        obj.value="";
+                        obj.name="请选择奖项级别";
+                    }else if(i==1){
+                        obj.value="1";
+                        obj.name="国家级";
+                    }else if(i==2){
+                        obj.value="2";
+                        obj.name="省级";
+                    }else if(i==3){
+                        obj.value="3";
+                        obj.name="市级";
+                    }
+                    //把对象填充到数组中
+                    prizeLevelList.push(obj);
+                }
+                this.prizeLevelList = prizeLevelList;
+            },
+            select(objArr){
+                this.selectDataList=objArr;
+            },
+            selectAll(objArr){
+                this.selectDataList=objArr;
+            },
+
+
         },
 
 

@@ -23,7 +23,7 @@
             <el-col :span="24" style="line-height:50px;">
                 <span class="grid-content bg-purple-dark">企业名称：<el-input style="margin-left: 5px;"
                                                                          placeholder="请输入内容"
-                                                                         v-model.trim="compName" @keyup.enter.native="queryData"
+                                                                         v-model="compName" @keyup.enter.native="queryData"
                                                                          clearable>
         </el-input></span>
                 <span style="margin-left:19px;" class="grid-content bg-purple-dark ">省份：
@@ -72,8 +72,8 @@
         <el-row>
             <el-col :span="24" style="margin-top: 30px;">
                 <el-row>
-                    <el-button type="primary">查询</el-button>
-                    <el-button type="primary">删除</el-button>
+                    <el-button type="primary" @click="getData">查询</el-button>
+                    <el-button type="primary" @click="deleteConfirm">删除</el-button>
                     <el-button type="primary">上传Excel</el-button>
                     <el-button type="primary">导出Excel</el-button>
                 </el-row>
@@ -151,6 +151,7 @@
                 options: [],
                 yearArr: [],
                 assessLevel:'',
+                compName:"",
 
 
             }
@@ -171,7 +172,8 @@
                 getJsonData("/common/area").then(res => {
                     let dataArray = res.data;
                     this.options = dataArray;
-                });
+                }
+                );
             },
             getData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
@@ -181,7 +183,7 @@
                         currentPage: 1,
                         pageSize: 20,
                         tabType: "highway_grade",
-                        comName: "",
+                        comName: this.compName,
                         province: "",
                         assessProvCode: "",
                         assessLevel: "",
@@ -215,17 +217,51 @@
                 this.yearArr = yearArr;//接收数组
             },
 
-//            公路信用等级删除接口
-            getdelete(){
+            deleteConfirm(){
+                let selectDataList = this.selectDataList;
+                if(selectDataList==null||selectDataList.length==0){
+                    this.$message({
+                        type: 'info',
+                        message: "没有选择项"
+                    });
+                    return;
+                }
+                this.$confirm('此操作将删除该条企业, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.deleteData();
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
+            },
+
+//            删除公路信用等级信息
+            deleteData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
-                console.log(555);
+                console.log(666);
+                let selectDataList = this.selectDataList;
+                let pkidStr = "";
+                for(let i=0;i<selectDataList.length;i++){
+                    pkidStr += selectDataList[i].pkid+"|";
+                }
+
                 let dataParam = JSON.stringify({
-                        tabType:" ",
-                        pkids:" ",
+                        tabType:"highway_grade",
+                        pkids: pkidStr,
                     }
                 );
-                getJsonData(postBaseUrl + "/corp/requ/del", dataParam).then(res => {
-                    console.log(656565);
+                getJsonData(postBaseUrl +'/corp/requ/del', dataParam).then(res => {
+                    this.$message({
+                        type: 'info',
+                        message: res.msg,
+                    });
+                    this.getData();
                 });
             },
             handleSizeChange() {
