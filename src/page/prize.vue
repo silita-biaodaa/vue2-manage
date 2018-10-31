@@ -5,8 +5,8 @@
         <el-row :gutter="20">
             <el-col :span="20">
                 <div class="grid-content bg-purple">
-                    <el-breadcrumb separator-class="el-icon-arrow-right">
-                        <el-breadcrumb-item :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
+                    <el-breadcrumb separator="/">
+                        <el-breadcrumb-item  :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/quality'}">公路信用评价等级</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/record' }">安全生产许可证</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/safety' }">不良记录</el-breadcrumb-item>
@@ -191,7 +191,7 @@
                 currentPage: 1,
                 pageSize: 20,
                 pageCount: 20,
-                totalSize: 10,
+                totalSize: 1,
                 total: '',
                 province: '',
                 shi: '',
@@ -231,7 +231,7 @@
                         proName: this.proName,
                         year: this.year,
                         currentPage: this.currentPage,
-                        pageSize: this.pageSize,
+                        pageSize: this.pageSize
 
 
                     }
@@ -296,7 +296,7 @@
                     });
                     return;
                 }
-                this.$confirm('此操作将删除该条企业, 是否继续?', '提示', {
+                this.$confirm('此操作将删除该条数据, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -334,12 +334,14 @@
                     this.getData();
                 });
             },
-            handleSizeChange() {
+            handleSizeChange(val) {
                 this.pageSize = val;
+                this.getData();
 
             },
-            handleCurrentChange() {
+            handleCurrentChange(val) {
                 this.currentPage = val;
+                this.getData();
             },
             //组装获奖等级数组
             getPrizeList() {
@@ -375,12 +377,9 @@
                 this.selectDataList = objArr;
             },
 
-
         },
 
-
     }
-
 
 </script>
 
@@ -402,6 +401,9 @@
 
     .el-input {
         width: 180px;
+    }
+    .bdd_color{
+        color: yellow;
     }
 </style>
 

@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <el-col :span="20">
                 <div class="grid-content bg-purple">
-                    <el-breadcrumb separator-class="el-icon-arrow-right">
+                    <el-breadcrumb separator="/">
                         <el-breadcrumb-item :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/quality'}">公路信用评价等级</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/record' }">安全生产许可证</el-breadcrumb-item>
@@ -40,7 +40,7 @@
             </el-select>
 
                 </span>
-                <span style="margin-left:20px;" class="grid-content bg-purple-dark">年度：   <el-select
+                <span style="margin-left:20px;" class="grid-content bg-purple-dark">年度：<el-select
                     v-model="curYear"
                     @change="queryYear"
                     placeholder="省级地区">
@@ -141,7 +141,7 @@
                 curYear:'',
                 assessLevel: '',
                 options3: '',
-                pageCount: 10,
+                pageCount: 20,
                 totalSize: 100,
                 currentPage4: '',
                 input10: '',
@@ -178,16 +178,14 @@
                 //获取公路信用评价等级列表
                 let dataParam = JSON.stringify({
                         currentPage: 1,
-                        pageSize: 20,
+                        pageSize:this.pageSize,
                         tabType: "highway_grade",
                         comName: "",
                         province: "",
                         assessProvCode: "",
                         assessLevel:this.ssessLevel,
                         assessYear: this.assessYear,
-                        pageCount:'',
-                        total:'',
-
+                        pageCount:this.pageCount,
                     }
                 );
 
@@ -274,8 +272,9 @@
                     this.getData();
                 });
             },
-            handleSizeChange() {
-
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.getData();
             },
             queryYear(){//年份查询方法，下拉值改变时触发此方法
 
@@ -284,8 +283,9 @@
 
             },
 
-            handleCurrentChange() {
-
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getData();
             },
             //组装获奖等级数组
             getPrizeList(){

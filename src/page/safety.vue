@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <el-col :span="20">
                 <div class="grid-content bg-purple">
-                    <el-breadcrumb separator-class="el-icon-arrow-right">
+                    <el-breadcrumb separator="/">
                         <el-breadcrumb-item :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/quality'}">公路信用评价等级</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/record' }">安全生产许可证</el-breadcrumb-item>
