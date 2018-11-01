@@ -1045,12 +1045,6 @@ export default {
           this.condition = res.data[0].ntStatus
           this.careaName = res.data[0].cityCode   // 接口数据请求得地区
           
-        // res.data.forEach((item,index) => {
-        //       if(item.pkid == null) {
-        //           res.data.splice(index,1)
-        //       }
-        //   })
-
           if(res.data[0].pkid) {
             this.state = res.data[0].url
             this.condition = res.data[0].ntStatus
@@ -1105,7 +1099,6 @@ export default {
         }
     },
     handleSelect(key, keyPath) {
-      // console.log(key, keyPath); 
     },
     deletemark() {     // 删除操作得弹框 
        this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
@@ -1240,10 +1233,8 @@ export default {
               }
           }
          
-        }
-        //  else if( !this.titurela)       
+        }     
          
-          // insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:moment(this.form.bidBondsEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollEndTime:moment(this.form.enrollEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollAddr:this.form.enrollAddr,auditTime:moment(this.form.auditTime).format('YYYY-MM-DD hh:mm:ss'),bidEndTime:moment(this.form.bidEndTime).format('YYYY-MM-DD hh:mm:ss'),openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
           insertNt({pkid:this.form.pkid,source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr,tbNtRegexGroups:this.titurela}).then( res=> {
                console.log(res,1181)
              if(res.code == 1 ) {
@@ -1286,7 +1277,6 @@ export default {
     },
     // 修改或者添加信息字段
     amendlist(){
-
     },
      emptyForm(formName) {  // 清空按钮
         for (let key in this.form) {
@@ -1298,9 +1288,8 @@ export default {
         this.titurela = [{tbNtQuaGroups:[]}]
     },  
      handleClick(tab, event) {  // 被选中tab标签实例
-      //  console.log(tab, event);
      },
-      handleSelectionChange(val) {   // 编辑明细  选中时发生变化会触发该事件
+      handleSelectionChange(val) { 
           this.delcom = val
           this.activeIndex = '1'
           Object.keys(this.forms).forEach(key => {
@@ -1343,12 +1332,9 @@ export default {
       }
     },
        //   上传文件等方法
-    //  文件列表移除文件时的钩子
     handleRemove(file, fileList) {
     },
-    //  点击文件列表已上传的文件时的钩子的
     handlePreview(file) {
-        // console.log(file,1)
     },
     handleSuccess(response, file, fileList) {   //当文件上传成功的时候的回调函数
       if (response.code === 1) {
@@ -1368,14 +1354,13 @@ export default {
       let token = localStorage.getItem('Authorization')
       return { Authorization: token }
     },
-    //  文件超出个数限制时的钩子
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
-    uploadurl() {  //上传下载路径
+    uploadurl() { 
         this.urlFormVisible = true
 
     },
@@ -1472,7 +1457,6 @@ export default {
     // 添加编辑明细得
     addtop() {
        this.addcompile()       
-      //  ’假如我隐藏下面得两个 上面函数就执行，假如不隐藏就不会执行‘
       setTimeout(() => {
         this.form.segment = ''
         this.form.editCode = '' 
