@@ -258,17 +258,17 @@
                       <el-table-column prop="bidBonds" label="项目保证金(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column width="120" label="保证金截至时间" show-overflow-tooltip> 
-                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD HH:mm') }}</template>
+                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD HH:mm') | nuvalue }}</template>
                       </el-table-column>
                       <el-table-column prop="enrollAddr" label="报名地点" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column label="资格审查截止时间" width="150" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD HH:mm')}}</template>
+                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD HH:mm') | nuvalue }}</template>
                       </el-table-column> 
                       <el-table-column prop="certAuditAddr" label="资格审查地点" width="150" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column  label="投标截止时间" width="150" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD HH:mm')}}</template>                          
+                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD HH:mm') | nuvalue }}</template>                          
                       </el-table-column> 
                       <el-table-column prop="openingPerson" label="开标人员" width="120" show-overflow-tooltip>
                       </el-table-column> 
@@ -551,6 +551,11 @@ export default {
     this.listAtt()  // 获取资质关系组
   },
   filters: {
+    nuvalue:function (val) {
+      if(val == null)  {
+         return ''
+      }
+    },
     condi:function(val) {
       switch (val) {
         case '0':
@@ -1180,12 +1185,13 @@ export default {
                 message:res.msg,
                 type:'success'
               });
-              if(this.handleForm.type == 2) {
-                  this.$router.push({name:'bidding',params: {id:this.pkid,code:this.code}}) 
-              }
+              
               this.condition = this.handleForm.resource
               this.redactFormVisible = false;
-            }            
+            }
+            if(this.handleForm.type == 2) {
+                  this.$router.push({name:'bidding',params: {id:this.pkid,code:this.code}}) 
+              }            
           })
         
         } else {
@@ -1215,20 +1221,25 @@ export default {
                     type:'warning'
                   })
         } else {
-          this.titurela.forEach( el => {
-             if( el.qualIds == null ) {
-                this.intact = true
-                 
-             }
-          })
-          if(this.intact) {
-             this.intact = false 
-             this.Invalid = false
-             return this.$message({
-                          message:'请保证资质的关系组全部填写',
-                          type:'warning'
-                        })    
+          if(this.titurela[0].qualIds == null && this.titurela[0].tbNtQuaGroups.length == 0 ) {
+              this.titurela = []
+          } else {
+                  this.titurela.forEach( el => {
+                if( el.qualIds == null ) {
+                    this.intact = true
+                    
+                }
+              })
+              if(this.intact) {
+                this.intact = false 
+                this.Invalid = false
+                return this.$message({
+                              message:'请保证资质的关系组全部填写',
+                              type:'warning'
+                            })    
+              }
           }
+         
         }
         //  else if( !this.titurela)       
          
