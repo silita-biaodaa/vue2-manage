@@ -178,8 +178,8 @@
                 });
             },
             getData() {
-//                let postBaseUrl = "http://pre-admin.biaodaa.com"
-//                console.log(333);
+                let postBaseUrl = "http://pre-admin.biaodaa.com"
+                console.log(333);
                 let dataParam = JSON.stringify({
                     currentPage: this.currentPage,
                     pageSize: this.pageSize,
@@ -191,7 +191,7 @@
                     issueDate: this.Time,
 
                 });
-                getJsonData("/corp/requ/list", dataParam).then(res => {
+                getJsonData(postBaseUrl+"/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
                     if(dataArray==null||dataArray.length==0){
                         this.tableData = dataArray.list;
@@ -235,8 +235,8 @@
 
 //            删除公路信用等级
             deleteData() {
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-//                console.log(666);
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(666);
                 let selectDataList = this.selectDataList;
                 let pkidStr = "";
                 for(let i=0;i<selectDataList.length;i++){
@@ -247,7 +247,7 @@
                         pkids: pkidStr,
                     }
                 );
-                getJsonData('/corp/requ/del', dataParam).then(res => {
+                getJsonData(postBaseUrl+'/corp/requ/del', dataParam).then(res => {
                     this.$message({
                         type: 'info',
                         message: res.msg
@@ -285,8 +285,8 @@
                 let formData = new FormData();
                 formData.append('file',file);
                 formData.append('tabType','safety_permission_cert');
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                axios.post('/upload/uploadCompanyFile', formData, {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                axios.post(postBaseUrl+'/upload/uploadCompanyFile', formData, {
                     headers: {'Content-Type': 'multipart/form-data','Authorization':  localStorage.getItem("Authorization")}
                 }).then(res => {
                     if(res.data.code==405){

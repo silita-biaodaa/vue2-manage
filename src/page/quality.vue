@@ -179,8 +179,8 @@
                 });
             },
             getData() {
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-//                console.log(1111)
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(1111)
                 //获取公路信用评价等级列表
                 let dataParam = JSON.stringify({
                         currentPage: this.currentPage ? this.currentPage : 1,
@@ -195,7 +195,7 @@
                     }
                 );
 
-                getJsonData("/corp/requ/list", dataParam).then(res => {
+                getJsonData(postBaseUrl+"/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
                     if(dataArray==null||dataArray.length==0){
                         this.tableData = dataArray.list;
@@ -248,14 +248,14 @@
 
 //            公路信用等级删除接口
             deleteRoadData() {
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-//                console.log(555);
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(555);
                 let dataParam = JSON.stringify({
                         tabType: " ",
                         pkids: " ",
                     }
                 );
-                getJsonData("/corp/requ/list", dataParam).then(res => {
+                getJsonData(postBaseUrl+"/corp/requ/list", dataParam).then(res => {
                     console.log(5555);
                 });
             },
@@ -285,8 +285,8 @@
 
 //            删除公路信用等级
             deleteData() {
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-//                console.log(666);
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(666);
                 let selectDataList = this.selectDataList;
                 let pkidStr = "";
                 for (let i = 0; i < selectDataList.length; i++) {
@@ -298,7 +298,7 @@
                         pkids: pkidStr,
                     }
                 );
-                getJsonData('/corp/requ/del', dataParam).then(res => {
+                getJsonData(postBaseUrl+'/corp/requ/del', dataParam).then(res => {
                     this.$message({
                         type: 'info',
                         message: res.msg
@@ -376,8 +376,8 @@
                 let formData = new FormData();
                 formData.append('file', file);
                 formData.append('tabType', 'highway_grade');
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                axios.post('/upload/uploadCompanyFile', formData, {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                axios.post(postBaseUrl+'/upload/uploadCompanyFile', formData, {
                     headers: {'Content-Type': 'multipart/form-data','Authorization':  localStorage.getItem("Authorization")}
                 }).then(res => {
                     if(res.data.code==405){
