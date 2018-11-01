@@ -84,13 +84,19 @@
 
             </el-col>
         </el-row>
+        <!--按钮查询-->
         <el-row>
             <el-col :span="24" style="margin-top: 30px;">
                 <el-row>
-                    <el-button type="primary" @click="getData">查询</el-button>
+                    <el-button type="primary" @click="getData(1)">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
-                    <el-button type="primary">上传Excel</el-button>
-                    <el-button type="primary">导出Excel</el-button>
+                    <el-upload
+                        class="upload-demo"
+                        action="" :http-request='uploadFileMethod' :show-file-list="false">
+                        <el-button style="margin-left:10px;" type="primary"  size="small">上传Excel</el-button>
+                    </el-upload>
+                    <el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>
+                    <el-button style="margin-left: 10px;"  @click="downLoadExcel" v-show="excelPath">{{excelPath}}</el-button>
                 </el-row>
             </el-col>
         </el-row>
@@ -178,6 +184,7 @@
                 comepname: '',
                 evaluation: '',
                 times: '',
+                excelPath:'',
             }
         },
         mounted() {
@@ -186,8 +193,12 @@
             this.getPrizeList();
         },
         methods: {
-            getData() {
-                let postBaseUrl = "http://pre-admin.biaodaa.com"
+            getData(param) {
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+//                console.log(1111)
+                if(param!=null){
+                    this.currentPage=1;
+                }
                 console.log(333);
                 let dataParam = JSON.stringify({
                     currentPage: this.currentPage?this.currentPage:1,
@@ -201,13 +212,21 @@
                     expired: this.times,
                     issueDate: this.evaluation,
                 });
-                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
+                getJsonData("/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
-                    this.tableData = dataArray.list;
-                    console.log(9999);
-                    this.totalSize = res.data.total;
-                    this.pageCount = res.data.pageCount;
-                    this.currentPage = res.data.currentPage;
+                    if(dataArray==null||dataArray.length==0){
+                        this.tableData = dataArray.list;
+                        this.totalSize = 0;
+                        this.pageCount = 0;
+                        this.currentPage =  1;
+                    }else{
+                        this.tableData = dataArray.list;
+                        this.totalSize = res.data.total?res.data.total:0;
+                        this.pageCount = res.data.pageCount?res.data.pageCount:0;
+                        this.currentPage = res.data.currentPage?res.data.currentPage:1;
+                    }
+
+                    console.log(88888888);
                 });
 
             },
@@ -215,8 +234,8 @@
 
             //获取省市
             getProvinceData() {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                getJsonData(postBaseUrl + '/common/area').then(res => {
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                getJsonData('/common/area').then(res => {
                     let dataArray = new Array();
                     let obj = new Object();
                     obj.areaCode = "";
@@ -307,7 +326,7 @@
 
             //            删除获奖信息
             deleteData() {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(666);
                 let selectDataList = this.selectDataList;
                 let pkidStr = "";
@@ -320,11 +339,16 @@
                         pkids: pkidStr,
                     }
                 );
-                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
+                getJsonData('/corp/requ/del', dataParam).then(res => {
                     this.$message({
                         type: 'info',
                         message: res.msg
                     });
+                    let currentPage = this.currentPage;
+                    if(currentPage>1){
+                        currentPage=currentPage-1;
+                        this.currentPage = currentPage;
+                    }
                     this.getData();
                 });
             }
@@ -370,8 +394,42 @@
             ,
             selectAll(objArr) {
                 this.selectDataList = objArr;
-            }
-            ,
+            },
+            downLoadExcel(){
+                window.location.url = this.excelPath;
+            },
+            //上传文件
+            uploadFileMethod(param){
+                console.log(55555)
+                let file = param.file;
+                let formData = new FormData();
+                formData.append('file',file);
+                formData.append('tabType', 'safety_cert');
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                axios.post('/upload/uploadCompanyFile', formData, {
+                    headers: {'Content-Type': 'multipart/form-data','Authorization':  localStorage.getItem("Authorization")}
+                }).then(res => {
+                    if(res.data.code==405){
+                        this.$message({
+                            type: 'info',
+                            message: res.data.msg+" 地址为："+res.data.data
+                        });
+                        this.excelPath=res.data.data;
+                    }else {
+                        this.$message({
+                            type: 'info',
+                            message: res.data.msg
+                        });
+                        this.getData();
+                    }
+
+                }).catch(error => {
+                    console.log(error)
+                })
+
+            },
+
+
         }
     }
 
@@ -394,6 +452,13 @@
 
     .el-input {
         width: 180px;
+    }
+    .upload-demo{
+        display: inline-block;
+
+    }
+    .el-button--small{
+        padding:13px 15px;
     }
 </style>
 
