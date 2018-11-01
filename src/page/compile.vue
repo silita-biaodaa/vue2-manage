@@ -168,17 +168,15 @@
             <!-- 资质关系组件 -->
             <el-form-item  v-for="(rela,index) in titurela" :key="index" label="资质关系" class="rela" >
               <!-- 资质和等级 -->
-              <el-select  v-model="rela.quaId" placeholder="请选择资质和等级" style="width:65%" clearable filterable >
-                    <el-option
-                    v-for="item in company"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-              </el-select>
+               <el-cascader
+                placeholder="资质选择"
+                :options="vueles"
+                filterable
+                 :props="props"
+                v-model="rela['qualIds']"
+              ></el-cascader> 
               <el-button size="mini" type="danger" class="delete" @click="deleteItem(index)">删除</el-button> 
               <el-button size="mini" type="primary" class="delete" @click="addItem(index)">添加</el-button> 
-                
                 <!-- 第二个动态组件  -->
                <div v-for='(item,indexx) in titurela[index].tbNtQuaGroups' :key='indexx' class="rela-sel" >
                   <el-select  v-model="item.relType" placeholder="请选择资质关系" clearable class="sel-conc"
@@ -190,23 +188,20 @@
                     :value="item.value">
                     </el-option>
                   </el-select>
-                    <el-select  v-model="item.quaId" placeholder="请选择资质和等级" clearable  style="width:65%"
-                    filterable>
-                    <el-option
-                    v-for="item in company"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                  </el-select>
+                  <el-cascader
+                    placeholder="资质选择"
+                    :options="vueles"
+                    filterable
+                    :props="props"
+                    v-model="item['qualIds']"
+                  ></el-cascader> 
+
                 <el-button size="mini" type="danger" @click="deleteeItem(index,indexx)">删除</el-button> 
                
                 </div>
 
               <!-- 资质关系 -->
-                <!-- <el-form-item  v-show="func(index)" class="el-rela" > -->
-                <el-form-item   class="el-rela" >
-
+                <el-form-item  v-show="func(index)" class="el-rela" >
                   <div class="labe-rela">条件类别:</div>
                   <el-select  v-model="rela.relType" placeholder="请选择资质关系"  clearable filterable class="conc-re" >
                         <el-option
@@ -222,7 +217,7 @@
 
             <el-form-item class="btn">
               <el-button @click="emptyForm('edits')">清空</el-button>
-              <el-button type="primary" @click="onSubmit">保存</el-button>
+              <el-button type="primary" @click="onSubmit" :disabled="this.Invalid" >保存</el-button>
               <el-button type="primary" @click="addrela">新增资质关系</el-button>
             </el-form-item>  
           </el-form>
@@ -316,7 +311,7 @@
                   </el-table>
 
                   <div style="margin-top: 10px">
-                       <el-upload class="updown-list" action="http://pre-admin.biaodaa.com/upload/uploadZhaoBiaoFile/" :data="sendKid()" :on-preview="handlePreview"  :on-success="handleSuccess" name='files' :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
+                       <el-upload class="updown-list" action="http://admin.biaodaa.com/upload/uploadZhaoBiaoFile/" :data="sendKid()" :on-preview="handlePreview"  :on-success="handleSuccess" name='files' :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
                          <el-button type="primary">
                            上传招标文件
                          </el-button>
@@ -388,7 +383,7 @@
  import  Edit  from "@/page/edit";
 //  import moment from 'moment'
 import Vue from 'vue'
- import { delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
+ import { bidApt,delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
 export default {
   data () {
     return {
@@ -444,7 +439,8 @@ export default {
         // filingPfm:'', //备案要求
         // ntTdStatus:'',// 招标状态           
       },
-      titurela:[{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}], // 资质关系逻辑
+      quaI:[],
+      titurela:[{tbNtQuaGroups:[]}], // 资质关系逻辑
       company:[
           {
             value: '老板',
@@ -530,7 +526,15 @@ export default {
        position:'',
        isShow: true,
        mainCo :[],
-    }
+      vueles:[],
+         props:{
+           value: 'key',
+           label:'value',
+           children: 'qualList'
+         },
+       Invalid:false  
+ 
+      } 
   },
   mounted () {
 
@@ -544,6 +548,7 @@ export default {
     this.listMode()  // 评标办法
     this.listTender()   // 获取编辑列表
     this.listarr()  // 上下一条得数据，获取刷选条件
+    this.listAtt()  // 获取资质关系组
   },
   filters: {
     condi:function(val) {
@@ -873,7 +878,6 @@ export default {
     },
     "form.cityCodeName":{
         handler:function(val){
-          console.log(val,875);
           
            if(val) {
               if(val.length >= 32 ) {
@@ -890,7 +894,6 @@ export default {
                   })
               } else {
                   return listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-                                  console.log(res.data[0].countys,890);
                                   this.counties = res.data[0].countys
                             })
               }
@@ -903,7 +906,15 @@ export default {
   },
   methods: {
     textt() {
-       console.log(this.titurela,902);
+        console.log(this.quaId)
+        console.dir(this.titurela,965);
+        console.log(this)
+        
+    },
+    listAtt(){
+      bidApt({}).then(res => {
+         this.vueles = res.data
+      })
     },
     // 判断是否隐藏多余的下拉框
     func(index) {
@@ -920,7 +931,12 @@ export default {
     //  删除
     deleteItem(index) {
          // 此处的有待的商定的功能性！
-
+         if(this.titurela.length == 1) {
+            return this.$message({
+               type:'warning',
+               message:'必须保留一组资质关系'
+            })
+         }
         if(index == (this.titurela.length - 1) ) {
           if(!(this.titurela[ index - 1 ].relType == undefined) ) {
               Vue.delete(this.titurela[index - 1 ],'relType')
@@ -956,7 +972,6 @@ export default {
       if(localStorage.getItem('tensele')) {
           this.engine = JSON.parse(localStorage.getItem('tensele'))
           listMain({source:this.code,proviceCode:this.code,cityCode:this.engine.cityCode,ntStatus:this.engine.ntStatus,ntCategory:1,title:this.engine.title,pubDate:this.engine.pubDate,pubEndDate:this.engine.pubEndDate,currentPage:this.engine.currentPage,pageSize:this.engine.pageSize }).then(res => {
-              console.log(res,953);
               if(res.code ===1){
                   res.data.datas.forEach(item => {
                       this.arrpkid.push(item.pkid)
@@ -972,9 +987,7 @@ export default {
           }) 
       } else {
           this.isShow = false
-      }
-       
-
+      }       
     },
     // 加载地区 
     listregion() {
@@ -990,10 +1003,8 @@ export default {
     //评标办法
     listMode() {
         listPbMode({type:this.code}).then(res => {
-          console.log(res,991)
            if(res.code === 1 ) {
              this.ways = res.data
-            //  console.log(res.data,869)
            }
         })
     },
@@ -1034,16 +1045,14 @@ export default {
         //           res.data.splice(index,1)
         //       }
         //   })
-          // 资质关系组若为空的 
-          // titurela:[{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}]
 
           if(res.data[0].pkid) {
             this.state = res.data[0].url
             this.condition = res.data[0].ntStatus
             this.compileData = res.data.concat()
             this.form = JSON.parse(JSON.stringify(res.data[0]))
-            if(res.data[0].tbNtRegexGroups.length == 0) {
-               this.titurela = [{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}]
+            if(res.data[0].tbNtRegexGroups == null) {
+               this.titurela = [{tbNtQuaGroups:[]}]
             } else {
                 this.titurela = res.data[0].tbNtRegexGroups
                 if(res.data[0].tbNtRegexGroups.length == 1) {
@@ -1053,13 +1062,11 @@ export default {
           } else {
               this.emptyForm('edits')
 
-              //  this.compileData = res.data.concat()
              if(localStorage.getItem('setTitle')) {   //单个跳转过来，后期重点优化得程序
                 this.form.title = localStorage.getItem('setTitle')
                 this.form.pubDate = localStorage.getItem('setPud')
              } else {
-              //  this.form.title = this.arrtitle[this.position]
-                // this.form.pubDate = this.arrpub[this.position]
+
                this.form = JSON.parse(JSON.stringify(res.data[0]))   
              }
            
@@ -1088,9 +1095,9 @@ export default {
                   type:'warning',
                   message:'该公告无法设置'
                 })
-      }else {
-          this.redactFormVisible = true
-      }
+        }else {
+            this.redactFormVisible = true
+        }
     },
     handleSelect(key, keyPath) {
       // console.log(key, keyPath); 
@@ -1120,7 +1127,6 @@ export default {
                this.isShow = false 
             }
             if(this.arrpkid.length == 0) {
-               
                return this.$router.push({path:'/tender'})
             }
             this.$router.push({
@@ -1188,12 +1194,7 @@ export default {
       });
     },
       onSubmit() {   //保存按钮
-      // this.bidBondsEndTime = this.form.bidBondsEndTime / 1000
-      // // console.log(this.form.bidBondsEndTime.getTime());
-      // this.enrollEndTime = this.form.enrollEndTime / 1000
-      // this.auditTime = this.form.auditTime / 1000
-      // this.bidEndTime = this.form.bidEndTime / 1000
-
+       this.Invalid = true
       if(this.typecompile === '编辑') {   
         if(this.form.cityCodeName === '') {
             return this.$message({
@@ -1210,7 +1211,9 @@ export default {
                     message:'请选择项目类型',
                     type:'warning'
                   })
-        }        
+        }
+        //  else if( !this.titurela)       
+         
           // insertNt({source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:moment(this.form.bidBondsEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollEndTime:moment(this.form.enrollEndTime).format('YYYY-MM-DD hh:mm:ss'),enrollAddr:this.form.enrollAddr,auditTime:moment(this.form.auditTime).format('YYYY-MM-DD hh:mm:ss'),bidEndTime:moment(this.form.bidEndTime).format('YYYY-MM-DD hh:mm:ss'),openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr}).then( res=> {
           insertNt({pkid:this.form.pkid,source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr,tbNtRegexGroups:this.titurela}).then( res=> {
                console.log(res,1181)
@@ -1227,6 +1230,7 @@ export default {
              }
              this.listTender()
              this.condition = '1'
+             
          })
 
       } else {
@@ -1246,6 +1250,10 @@ export default {
           })
           
       }
+      setTimeout(() => {
+        this.Invalid = false,
+        console.log(11111)
+      }, 1000);
 
     },
     // 修改或者添加信息字段
@@ -1259,7 +1267,7 @@ export default {
           }
           this.form[key] = ''
         }
-        this.titurela = [{tbNtQuaGroups:[]},{tbNtQuaGroups:[]}]
+        this.titurela = [{tbNtQuaGroups:[]}]
     },  
      handleClick(tab, event) {  // 被选中tab标签实例
       //  console.log(tab, event);
@@ -1549,7 +1557,6 @@ export default {
  .compile {
    position: relative;
    overflow: hidden;
-
    .urlma { 
      margin-bottom: 15px;
    }
@@ -1581,6 +1588,7 @@ export default {
   }
   .redact-c {
     padding: 10px 20px;
+    
     .btn {
       text-align: center;
     }
@@ -1600,6 +1608,9 @@ export default {
       }   
     }
     .rela{
+      .el-input__inner {
+       width: 100% ;
+    }
     .el-form-item{
      margin-top: 8px;
      margin-bottom: 0px;

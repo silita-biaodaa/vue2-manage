@@ -18,7 +18,7 @@
 
                   <el-col :span="12" class="right-c">                  
                       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color='#EBEEF5' menu-trigger='click'  @select="handleSelect"  >
-                        <el-menu-item index="1" @click='bidedit' >编辑</el-menu-item>
+                        <el-menu-item index="1" @click='bidediT' >编辑</el-menu-item>
                         <el-menu-item index="2" @click='bidalter' >变更</el-menu-item> 
                       </el-menu>
                   </el-col>
@@ -99,7 +99,9 @@
                  class="bidtask"
                 >
                 <el-button @click="addDomain" size='mini' class="bidadd" type="danger" v-show="taskadd(index)" >增加</el-button>                   
-                <el-form-item label="第一中标候选人">
+                <el-form-item label="第一中标候选人" >
+                   <!-- <div :class="['labe', one0 ?'old':'new']">项目工期</div>  -->
+                  <!-- <div class='labe'>第一中标候选人</div> -->
                     <el-select v-model="item.oneCandidate" value-key='creditCode' filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
@@ -585,7 +587,10 @@ export default {
         bidtitle:[],
         bidpub:[],
         isShow:true,
-        state:''
+        state:'',
+        // one0:true,
+        // oneCandidate1:true,
+                
       }
   },
   watch: {
@@ -629,6 +634,8 @@ export default {
   methods: {
     textt(){
       console.log(this.bidForm);
+      console.log(this['oneCandidate' + 1]);
+      console.log(this);
                     
     },
     // 获取企业关系列表的
@@ -678,11 +685,12 @@ export default {
     // 获取中标编辑明细
     biddetail(){
       bidList({ntId:this.pkid,source:this.source}).then(res => {
+           console.log(res,683)
              res.data.forEach((item,index) => {
               if(item.pkid == null) {
                   res.data.splice(index,1)
               }
-          })
+            })
             res.data.forEach(item => {
                 item.first = new Array()
                 item.second = new Array()
@@ -1165,7 +1173,7 @@ export default {
       
     },
     //  点击编辑
-    bidedit() {
+    bidediT() {
       this.bidstr = '编辑'
       this.activeIndex = '1' 
     },
@@ -1173,6 +1181,14 @@ export default {
     bidalter() {
       this.bidstr = '变更'
       this.activeIndex = '2'
+      this.first.forEach( (el,index) => {
+         if(el.changeFieldName == null)  {
+            return 
+         }
+           el.changeFieldName.split(',').forEach( el => {
+              this.first[index].el = el.changeFieldValue.split(',')[index] 
+           })
+      })
     },
     handleSelect(key, keyPath) {
       // console.log(key, keyPath); 
@@ -1230,6 +1246,12 @@ export default {
 </script>
 <style lang="less" >
   .bidding {
+     .new {
+       color: red;
+     }
+     .old{
+       color: #000;
+     }
       .menu-c {
       box-sizing: border-box;
       padding: 0 10px;
