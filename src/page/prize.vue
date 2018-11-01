@@ -25,10 +25,11 @@
         <!--多选框-->
         <el-row style="margin-top: 30px;">
             <el-col :span="24" style="line-height:50px;">
-                        <span class="grid-content bg-purple-dark ">奖项级别：<el-select style="margin-left: 5px;" class="el-input"
-                            v-model="prizeLevel"
-                            @change="getData(1)"
-                            placeholder="请选择">
+                        <span class="grid-content bg-purple-dark ">奖项级别：<el-select style="margin-left: 5px;"
+                                                                                   class="el-input"
+                                                                                   v-model="prizeLevel"
+                                                                                   @change="getData(1)"
+                                                                                   placeholder="请选择">
               <el-option
                   v-for="item in prizeLevelList"
                   :key="item.value"
@@ -101,10 +102,11 @@
                     <el-upload
                         class="upload-demo"
                         action="" :http-request='uploadFileMethod' :show-file-list="false">
-                        <el-button style="margin-left:10px;" type="primary"  size="small">上传Excel</el-button>
+                        <el-button style="margin-left:10px;" type="primary" size="small">上传Excel</el-button>
                     </el-upload>
                     <el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>
-                    <el-button style="margin-left: 10px;"  @click="downLoadExcel" v-show="excelPath">{{excelPath}}</el-button>
+                    <el-button style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}
+                    </el-button>
                 </el-row>
             </el-col>
         </el-row>
@@ -194,9 +196,9 @@
                 input10: '',
                 tableData: [],
                 currentPage: 1,
-                pageSize:20,
-                pageCount:20,
-                totalSize:1,
+                pageSize: 20,
+                pageCount: 20,
+                totalSize: 1,
                 total: '',
                 province: '',
                 shi: '',
@@ -209,7 +211,7 @@
                 year: "",
                 comName: "",
                 selectDataList: [],
-                excelPath:'',
+                excelPath: '',
 
             }
         },
@@ -226,8 +228,8 @@
             getData(param) {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(1111)
-                if(param!=null){
-                    this.currentPage=1;
+                if (param != null) {
+                    this.currentPage = 1;
                 }
                 let dataParam = JSON.stringify({
                         tabType: "win_record",
@@ -239,24 +241,24 @@
                         proTypeName: this.proTypeName,
                         proName: this.proName,
                         year: this.year,
-                        currentPage: this.currentPage?this.currentPage:"1",
-                        pageSize: this.pageSize+""
+                        currentPage: this.currentPage ? this.currentPage : "1",
+                        pageSize: this.pageSize + ""
 
 
                     }
                 );
-                getJsonData(postBaseUrl+"/corp/requ/list", dataParam).then(res => {
+                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
-                    if(dataArray==null||dataArray.length==0){
+                    if (dataArray == null || dataArray.length == 0) {
                         this.tableData = dataArray.list;
                         this.totalSize = 0;
                         this.pageCount = 0;
-                        this.currentPage =  1;
-                    }else{
+                        this.currentPage = 1;
+                    } else {
                         this.tableData = dataArray.list;
-                        this.totalSize = res.data.total?res.data.total:0;
-                        this.pageCount = res.data.pageCount?res.data.pageCount:0;
-                        this.currentPage = res.data.currentPage?res.data.currentPage:1;
+                        this.totalSize = res.data.total ? res.data.total : 0;
+                        this.pageCount = res.data.pageCount ? res.data.pageCount : 0;
+                        this.currentPage = res.data.currentPage ? res.data.currentPage : 1;
                     }
 
                     console.log(88888888);
@@ -265,29 +267,29 @@
 //            获取省市
             getProvinceData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
-                getJsonData(postBaseUrl+'/common/area').then(res => {
-                    let dataArray =new Array();
+                getJsonData(postBaseUrl + '/common/area').then(res => {
+                    let dataArray = new Array();
                     let obj = new Object();
-                    obj.areaCode="";
-                    obj.areaName ="全部";
+                    obj.areaCode = "";
+                    obj.areaName = "全部";
                     let arr = new Array();
                     let sunObj = new Object();
-                    sunObj.areaCode="";
-                    sunObj.areaName ="全部";
+                    sunObj.areaCode = "";
+                    sunObj.areaName = "全部";
                     arr.push(sunObj);
-                    obj.citys= arr;
+                    obj.citys = arr;
                     dataArray.push(obj);
-                    if( res.data!=null&& res.data.length>0){
+                    if (res.data != null && res.data.length > 0) {
                         dataArray = dataArray.concat(res.data);
                     }
                     this.options = dataArray;
-                    this.shi1=arr;
+                    this.shi1 = arr;
                     console.log(7777)
                 })
             },
             // 选省
             choseProvince: function (e) {
-                this.shi="";
+                this.shi = "";
                 for (var index2 in this.options) {
                     if (e === this.options[index2].areaCode) {
                         // this.province = this.options[index2].areaName;
@@ -356,16 +358,16 @@
                         pkids: pkidStr,
                     }
                 );
-                getJsonData(postBaseUrl+'/corp/requ/del', dataParam).then(res => {
+                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
                     this.$message({
                         type: 'info',
                         message: res.msg
                     });
-                   let currentPage = this.currentPage;
-                   if(currentPage>1){
-                       currentPage=currentPage-1;
-                       this.currentPage = currentPage;
-                   }
+                    let currentPage = this.currentPage;
+                    if (currentPage > 1) {
+                        currentPage = currentPage - 1;
+                        this.currentPage = currentPage;
+                    }
                     this.getData();
                 });
             },
@@ -410,28 +412,31 @@
             selectAll(objArr) {
                 this.selectDataList = objArr;
             },
-            downLoadExcel(){
+            downLoadExcel() {
                 window.location.url = this.excelPath;
             },
 
             //上传文件
-            uploadFileMethod(param){
+            uploadFileMethod(param) {
                 console.log(55555)
                 let file = param.file;
                 let formData = new FormData();
-                formData.append('file',file);
+                formData.append('file', file);
                 formData.append('tabType', 'win_record');
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
-                axios.post(postBaseUrl+'/upload/uploadCompanyFile', formData, {
-                    headers: {'Content-Type': 'multipart/form-data','Authorization':  localStorage.getItem("Authorization")}
+                axios.post(postBaseUrl + '/upload/uploadCompanyFile', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': localStorage.getItem("Authorization")
+                    }
                 }).then(res => {
-                    if(res.data.code==405){
+                    if (res.data.code == 405) {
                         this.$message({
                             type: 'info',
-                            message: res.data.msg+" 地址为："+res.data.data
+                            message: res.data.msg + " 地址为：" + res.data.data
                         });
-                        this.excelPath=res.data.data;
-                    }else {
+                        this.excelPath = res.data.data;
+                    } else {
                         this.$message({
                             type: 'info',
                             message: res.data.msg
@@ -458,10 +463,11 @@
     /*.el-button {*/
     /*line-height: 0;*/
     /*}*/
-    .upload-demo{
+    .upload-demo {
         display: inline-block;
 
     }
+
     .bdd_header {
         margin-left: 30px;
         margin-right: 30px;
@@ -474,11 +480,13 @@
     .el-input {
         width: 180px;
     }
-    .bdd_color{
+
+    .bdd_color {
         color: yellow;
     }
-    .el-button--small{
-        padding:13px 15px;
+
+    .el-button--small {
+        padding: 13px 15px;
     }
 </style>
 
