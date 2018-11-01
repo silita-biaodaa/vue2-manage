@@ -532,8 +532,8 @@ export default {
            label:'value',
            children: 'qualList'
          },
-       Invalid:false  
- 
+       Invalid:false,  
+       intact:false 
       } 
   },
   mounted () {
@@ -1197,20 +1197,38 @@ export default {
        this.Invalid = true
       if(this.typecompile === '编辑') {   
         if(this.form.cityCodeName === '') {
+             this.Invalid = false
             return this.$message({
                     message:'请选择项目地区',
                     type:'warning'
                   })
         } else if ( !this.form.countyCode) {
+             this.Invalid = false
            return this.$message({
                     message:'请选择项目县区',
                     type:'warning'
                   })
         } else if(!this.form.proType) {
+             this.Invalid = false
           return this.$message({
                     message:'请选择项目类型',
                     type:'warning'
                   })
+        } else {
+          this.titurela.forEach( el => {
+             if( el.qualIds == null ) {
+                this.intact = true
+                 
+             }
+          })
+          if(this.intact) {
+             this.intact = false 
+             this.Invalid = false
+             return this.$message({
+                          message:'请保证资质的关系组全部填写',
+                          type:'warning'
+                        })    
+          }
         }
         //  else if( !this.titurela)       
          
@@ -1251,8 +1269,7 @@ export default {
           
       }
       setTimeout(() => {
-        this.Invalid = false,
-        console.log(11111)
+        this.Invalid = false
       }, 1000);
 
     },
