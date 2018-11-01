@@ -224,8 +224,8 @@
         methods: {
             //  获奖信息接口
             getData(param) {
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-//                console.log(1111)
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(1111)
                 if(param!=null){
                     this.currentPage=1;
                 }
@@ -245,7 +245,7 @@
 
                     }
                 );
-                getJsonData("/corp/requ/list", dataParam).then(res => {
+                getJsonData(postBaseUrl+"/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
                     if(dataArray==null||dataArray.length==0){
                         this.tableData = dataArray.list;
@@ -264,8 +264,8 @@
             },
 //            获取省市
             getProvinceData() {
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                getJsonData('/common/area').then(res => {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                getJsonData(postBaseUrl+'/common/area').then(res => {
                     let dataArray =new Array();
                     let obj = new Object();
                     obj.areaCode="";
@@ -343,8 +343,8 @@
 
 //            删除获奖信息
             deleteData() {
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-//                console.log(666);
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                console.log(666);
                 let selectDataList = this.selectDataList;
                 let pkidStr = "";
                 for (let i = 0; i < selectDataList.length; i++) {
@@ -356,7 +356,7 @@
                         pkids: pkidStr,
                     }
                 );
-                getJsonData('/corp/requ/del', dataParam).then(res => {
+                getJsonData(postBaseUrl+'/corp/requ/del', dataParam).then(res => {
                     this.$message({
                         type: 'info',
                         message: res.msg
@@ -421,8 +421,8 @@
                 let formData = new FormData();
                 formData.append('file',file);
                 formData.append('tabType', 'win_record');
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                axios.post('/upload/uploadCompanyFile', formData, {
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                axios.post(postBaseUrl+'/upload/uploadCompanyFile', formData, {
                     headers: {'Content-Type': 'multipart/form-data','Authorization':  localStorage.getItem("Authorization")}
                 }).then(res => {
                     if(res.data.code==405){
