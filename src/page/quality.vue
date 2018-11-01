@@ -53,7 +53,9 @@
             </el-select>
 </span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">等级：<el-select class="bdd_pur"
-                                                                                                  v-model="ssessLevel" @change="getData" placeholder="请选择">
+                                                                                                  v-model="ssessLevel"
+                                                                                                  @change="getData"
+                                                                                                  placeholder="请选择">
     <el-option
         v-for="item in ssessLevelList"
         :key="item.value"
@@ -72,10 +74,11 @@
                     <el-upload
                         class="upload-demo"
                         action="" :http-request='uploadFileMethod' :show-file-list="false">
-                        <el-button style="margin-left:10px;" type="primary"  size="small">上传Excel</el-button>
+                        <el-button style="margin-left:10px;" type="primary" size="small">上传Excel</el-button>
                     </el-upload>
                     <el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>
-                    <el-button style="margin-left: 10px;"  @click="downLoadExcel" v-show="excelPath">{{excelPath}}</el-button>
+                    <el-button style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}
+                    </el-button>
                 </el-row>
             </el-col>
         </el-row>
@@ -150,7 +153,7 @@
                 yearArr: [],
                 ssessLevel: '',
                 ssessLevelList: [],
-                excelPath:''
+                excelPath: ''
             }
         },
 
@@ -195,18 +198,18 @@
                     }
                 );
 
-                getJsonData(postBaseUrl+"/corp/requ/list", dataParam).then(res => {
+                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
-                    if(dataArray==null||dataArray.length==0){
+                    if (dataArray == null || dataArray.length == 0) {
                         this.tableData = dataArray.list;
                         this.totalSize = 0;
                         this.pageCount = 0;
-                        this.currentPage =  1;
-                    }else{
+                        this.currentPage = 1;
+                    } else {
                         this.tableData = dataArray.list;
-                        this.totalSize = res.data.total?res.data.total:0;
-                        this.pageCount = res.data.pageCount?res.data.pageCount:0;
-                        this.currentPage = res.data.currentPage?res.data.currentPage:1;
+                        this.totalSize = res.data.total ? res.data.total : 0;
+                        this.pageCount = res.data.pageCount ? res.data.pageCount : 0;
+                        this.currentPage = res.data.currentPage ? res.data.currentPage : 1;
                     }
 
                     console.log(88888888);
@@ -255,7 +258,7 @@
                         pkids: " ",
                     }
                 );
-                getJsonData(postBaseUrl+"/corp/requ/list", dataParam).then(res => {
+                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
                     console.log(5555);
                 });
             },
@@ -298,14 +301,14 @@
                         pkids: pkidStr,
                     }
                 );
-                getJsonData(postBaseUrl+'/corp/requ/del', dataParam).then(res => {
+                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
                     this.$message({
                         type: 'info',
                         message: res.msg
                     });
                     let currentPage = this.currentPage;
-                    if(currentPage>1){
-                        currentPage=currentPage-1;
+                    if (currentPage > 1) {
+                        currentPage = currentPage - 1;
                         this.currentPage = currentPage;
                     }
                     this.getData();
@@ -366,10 +369,10 @@
             selectAll(objArr) {
                 this.selectDataList = objArr;
             },
-            downLoadExcel(){
+            downLoadExcel() {
                 window.location.url = this.excelPath;
             },
-         //上传文件
+            //上传文件
             uploadFileMethod(param) {
                 console.log(55555)
                 let file = param.file;
@@ -377,16 +380,19 @@
                 formData.append('file', file);
                 formData.append('tabType', 'highway_grade');
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
-                axios.post(postBaseUrl+'/upload/uploadCompanyFile', formData, {
-                    headers: {'Content-Type': 'multipart/form-data','Authorization':  localStorage.getItem("Authorization")}
+                axios.post(postBaseUrl + '/upload/uploadCompanyFile', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': localStorage.getItem("Authorization")
+                    }
                 }).then(res => {
-                    if(res.data.code==405){
+                    if (res.data.code == 405) {
                         this.$message({
                             type: 'info',
-                            message: res.data.msg+" 地址为："+res.data.data
+                            message: res.data.msg + " 地址为：" + res.data.data
                         });
-                        this.excelPath=res.data.data;
-                    }else {
+                        this.excelPath = res.data.data;
+                    } else {
                         this.$message({
                             type: 'info',
                             message: res.data.msg
@@ -426,15 +432,18 @@
     .el-input {
         width: 180px;
     }
+
     .el-breadcrumb__inner {
         color: red;
     }
-    .upload-demo{
+
+    .upload-demo {
         display: inline-block;
 
     }
-    .el-button--small{
-        padding:13px 15px;
+
+    .el-button--small {
+        padding: 13px 15px;
     }
 </style>
 
