@@ -58,7 +58,7 @@
         </el-col>
         <el-col :span="24" style="line-height:50px;">
            <span class="grid-content bg-purple-dark">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;质：<el-select
-               class="bdd_pur" v-model="nature" @change="getData" placeholder="请选择">
+               class="bdd_pur" v-model="property" @change="getData" placeholder="请选择">
             <el-option
                 v-for="item in natureList"
                 :key="item.value"
@@ -148,7 +148,7 @@
                 tableData: [],
                 currentPage: 1,
                 pageSize: 20,
-                pageCount:1,
+                pageCount:20,
                 totalSize:1,
                 total:1,
                 compname:'',
@@ -158,7 +158,7 @@
                 issue:'',
                 valid:'',
                 natureList:[],
-                nature:'',
+                property:'',
             }
         },
         mounted() {
@@ -173,14 +173,14 @@
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(999);
                 let dataParam = JSON.stringify({
-                    currentPage: 1,
-                    pageSize: 20,
+                    currentPage: this.currentPage?this.currentPage:1,
+                    pageSize: this.pageSize?this.pageSize:20,
                     tabType: "undesirable",
                     comName: this.compname,
                     proName: this.project,
                     badInfo: this.action,
                     issueOrg: this.Release,
-                    property: "",
+                    property: this.property,
                     issueDate: this.issueDate,
                     expired: this.valid,
                 })
@@ -332,11 +332,14 @@
             selectAll(objArr) {
                 this.selectDataList = objArr;
             },
-            handleSizeChange() {
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.getData();
 
             },
-            handleCurrentChange() {
-
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getData();
             },
         }
     }

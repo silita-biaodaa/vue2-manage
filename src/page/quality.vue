@@ -23,13 +23,13 @@
             <el-col :span="24" style="line-height:50px;">
                 <span class="grid-content bg-purple-dark">项目名称：<el-input style="margin-left: 5px;"
                                                                          placeholder="请输入内容"
-                                                                         v-model.trim="input10"
+                                                                         v-model.trim="comName"
                                                                          clearable>
         </el-input></span>
                 <span style="margin-left:19px;" class="grid-content bg-purple-dark ">省份：
-
                     <el-select
                         v-model="province"
+                        @change="getData"
                         placeholder="省级地区">
               <el-option
                   v-for="item in options"
@@ -47,7 +47,7 @@
               <el-option
                   v-for="item in yearArr"
                   :key="item.year"
-                  :label="item.year"
+                  :label="item.name"
                   :value="item.year">
               </el-option>
             </el-select>
@@ -66,7 +66,7 @@
         <el-row>
             <el-col :span="24" style="margin-top: 30px;">
                 <el-row>
-                    <el-button type="primary">查询</el-button>
+                    <el-button type="primary" @click="getData">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
                     <el-button type="primary">上传Excel</el-button>
                     <el-button type="primary">导出Excel</el-button>
@@ -133,13 +133,8 @@
                 assessLevel: '',
                 currentPage: 1,
                 pageSize: 20,
-                province: '',
                 assessProvCode: '',
-                assessLevel: '',
-                assessYear: '',
-                province: '',
                 curYear:'',
-                assessLevel: '',
                 options3: '',
                 pageCount: 20,
                 totalSize: 100,
@@ -147,7 +142,6 @@
                 input10: '',
                 options: [],
                 yearArr: [],
-                assessLevel:'',
                 ssessLevel:'',
                 ssessLevelList:[],
             }
@@ -157,7 +151,6 @@
             this.getData();
             this.getProvinceData();
             this.getYearArray();
-            this.getdelete();
             this.getPrizeList();
 
 
@@ -168,7 +161,14 @@
             getProvinceData() {
                 //获取省份列表
                 getJsonData("/common/area").then(res => {
-                    let dataArray = res.data;
+                    let dataArray = new Array();
+                    let obj = new Object();
+                    obj.areaCode="";
+                    obj.areaName="全部";
+                    dataArray.push(obj);
+                     if( res.data!=null&& res.data.length>0){
+                        dataArray = dataArray.concat(res.data);
+                    }
                     this.options = dataArray;
                 });
             },
@@ -177,15 +177,15 @@
                 console.log(1111)
                 //获取公路信用评价等级列表
                 let dataParam = JSON.stringify({
-                        currentPage: 1,
-                        pageSize:this.pageSize,
+                        currentPage:this.currentPage?this.currentPage:1,
+                        pageSize:this.pageSize?this.pageSize:20,
                         tabType: "highway_grade",
-                        comName: "",
-                        province: "",
-                        assessProvCode: "",
+                        comName: this.comName,
+                        province:this.getProvinceName(this.province),
+                        assessProvCode: this.province,
                         assessLevel:this.ssessLevel,
                         assessYear: this.assessYear,
-                        pageCount:this.pageCount,
+
                     }
                 );
 
@@ -199,21 +199,42 @@
                     console.log(1111);
                 });
             },
+            getProvinceName(code){
+                if(code==""){
+                    return "";
+                }
+                let provinceArr = this.options;
+                if(provinceArr!=null&&provinceArr.length>0){
+                    for(let i=0;i<provinceArr.length;i++){
+                        if(provinceArr[i].areaCode==code){
+                            return provinceArr[i].areaName;
+                        }
+                    }
+                }
+                return "";
+
+            },
             getYearArray() {
+                 let yearArr = new Array();
+                let object = new Object();//定义对象接收年份
+                    object.year = "";
+                    object.name = "全部";
+                    yearArr.push(object);
                 let curDate = new Date();//获取当天日期
                 let curYear = curDate.getFullYear();//获取当年年份
-                let yearArr = new Array();
+
                 for (let i = 0; i < 10; i++) {//取最近10年的数据
                     let curYearNum = Number(curYear);//转化为数字类型进行计算
                     let obj = new Object();//定义对象接收年份
                     obj.year = curYearNum-i;  //定义变量接收年份,当前年份减i
+                    obj.name = curYearNum-i;  //定义变量接收年份,当前年份减i
                     yearArr.push(obj);//将对象push到数组中
                 }
                 this.yearArr = yearArr;//接收数组
             },
 
 //            公路信用等级删除接口
-            getdelete(){
+            deleteRoadData(){
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 console.log(555);
                 let dataParam = JSON.stringify({
@@ -234,7 +255,7 @@
                     });
                     return;
                 }
-                this.$confirm('此操作将删除该条企业, 是否继续?', '提示', {
+                this.$confirm('此操作将删除数据, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -300,19 +321,19 @@
                         obj.value="";
                         obj.name="全部";
                     }else if(i==1){
-                        obj.value="1";
-                        obj.name="AA";
+                        obj.value="AAA";
+                        obj.name="AAA";
                     }else if(i==2){
-                        obj.value="2";
+                        obj.value="A";
                         obj.name="A";
                     }else if(i==3){
-                        obj.value="3";
+                        obj.value="B";
                         obj.name="B";
                     }else if(i==4){
-                        obj.value="4";
+                        obj.value="C";
                         obj.name="C";
                     }else if(i==5){
-                        obj.value="4";
+                        obj.value="D";
                         obj.name="D";
                     }
                     //把对象填充到数组中
@@ -354,6 +375,9 @@
 
     .el-input {
         width: 180px;
+    }
+    .el-breadcrumb__inner {
+        color: red;
     }
 </style>
 

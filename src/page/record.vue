@@ -32,6 +32,7 @@
                     clearable>
         </el-input></span>
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">省份：<el-select class="bdd_pur"
+                                                                                                  @change="getData"
                                                                                                   v-model="province"
                                                                                                   placeholder="省级地区">
             <el-option
@@ -44,7 +45,6 @@
           </span>
             </el-col>
         </el-row>
-
         <el-row>
             <el-col :span="24" style="line-height:50px;">
                        <span class="grid-content bg-purple-dark">发布日期：<el-input
@@ -133,11 +133,10 @@
                 currentPage4: '',
                 currentPage: 1,
                 options: [],
-                pageSize:10,
-                pageCount:1,
+                pageSize:20,
+                pageCount:20,
                 totalSize:1,
                 total:1,
-                pageCount:1,
                 province:'',
                 licenses:'',
                 comNames:'',
@@ -158,7 +157,15 @@
             getProvinceData() {
                 //获取省份列表
                 getJsonData("/common/area").then(res => {
-                    let dataArray = res.data;
+
+                    let dataArray = new Array();
+                    let obj = new Object();
+                    obj.areaCode="";
+                    obj.areaName="全部";
+                    dataArray.push(obj);
+                    if( res.data!=null&& res.data.length>0){
+                        dataArray = dataArray.concat(res.data);
+                    }
                     this.options = dataArray;
                 });
             },
@@ -166,15 +173,15 @@
                 let postBaseUrl = "http://pre-admin.biaodaa.com"
                 console.log(333);
                 let dataParam = JSON.stringify({
-                    currentPage: 1,
-                    pageSize: 10,
+                    currentPage: this.currentPage,
+                    pageSize: this.pageSize,
                     tabType: "safety_permission_cert",
                     comName: this.comNames,
                     certNo: this.licenses,
-                    certProvCode: "",
+                    certProvCode: this.province,
                     expired: this.items,
                     issueDate: this.Time,
-                    pageCount:"",
+
                 });
                 getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
@@ -182,7 +189,6 @@
                     console.log(9999);
                     this.totalSize = res.data.total;
                     this.pageCount = res.data.pageCount;
-                    this.pageSize = res.data.currentPage;
                 });
 
             },
@@ -234,11 +240,13 @@
                 });
             },
 
-            handleSizeChange() {
-
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.getData();
             },
-            handleCurrentChange(){
-
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getData();
             },
             select(objArr){
                 this.selectDataList=objArr;

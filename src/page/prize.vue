@@ -6,7 +6,7 @@
             <el-col :span="20">
                 <div class="grid-content bg-purple">
                     <el-breadcrumb separator="/">
-                        <el-breadcrumb-item  :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/quality'}">公路信用评价等级</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/record' }">安全生产许可证</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/safety' }">不良记录</el-breadcrumb-item>
@@ -25,7 +25,7 @@
         <!--多选框-->
         <el-row style="margin-top: 30px;">
             <el-col :span="24" style="line-height:50px;">
-                        <span class="grid-content bg-purple-dark">奖项级别：<el-select
+                        <span class="grid-content bg-purple-dark ">奖项级别：<el-select style="margin-left: 5px;" class="el-input"
                             v-model="prizeLevel"
                             @change="getData"
                             placeholder="请选择">
@@ -36,7 +36,7 @@
                   :value="item.value">
               </el-option>
             </el-select></span>
-                <span style="margin-left:20px;" class="grid-content bg-purple-dark">所属地区：<el-select class="bdd_pur"
+                <span style="margin-left:40px;" class="grid-content bg-purple-dark">所属地区：<el-select class="bdd_pur"
                                                                                                     v-model="province"
                                                                                                     @change="choseProvince"
                                                                                                     placeholder="省级地区">
@@ -70,7 +70,7 @@
                                                                          v-model.trim="year" clearable>
 
         </el-input></span>
-                <span style="margin-left:19px;" class="grid-content bg-purple-dark">企业名称：<el-input
+                <span style="margin-left:40px;" class="grid-content bg-purple-dark">企业名称：<el-input
                     placeholder="请输入内容"
                     v-model.trim="comName"
                     clearable>
@@ -98,7 +98,11 @@
                 <el-row>
                     <el-button type="primary" @click="getData">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
-                    <el-button type="primary">上传Excel</el-button>
+                    <el-upload
+                        class="upload-demo"
+                        action="" :http-request='uploadFileMethod' :show-file-list="false">
+                        <el-button class="custom-btn" size="small">上传</el-button>
+                    </el-upload>
                     <el-button type="primary">导出Excel</el-button>
                 </el-row>
             </el-col>
@@ -189,9 +193,9 @@
                 input10: '',
                 tableData: [],
                 currentPage: 1,
-                pageSize: 20,
-                pageCount: 20,
-                totalSize: 1,
+                pageSize:20,
+                pageCount:20,
+                totalSize: 10,
                 total: '',
                 province: '',
                 shi: '',
@@ -230,8 +234,8 @@
                         proTypeName: this.proTypeName,
                         proName: this.proName,
                         year: this.year,
-                        currentPage: this.currentPage,
-                        pageSize: this.pageSize
+                        currentPage: this.currentPage?this.currentPage:"1",
+                        pageSize: this.pageSize+""
 
 
                     }
@@ -242,7 +246,6 @@
                     this.totalSize = res.data.total;
                     this.pageCount = res.data.pageCount;
                     this.currentPage = res.data.currentPage;
-
                     console.log(88888888);
                 });
             },
@@ -250,17 +253,31 @@
             getProvinceData() {
                 let postBaseUrl = "http://pre-admin.biaodaa.com";
                 getJsonData(postBaseUrl + '/common/area').then(res => {
-                    let dataArray = res.data;
+                    let dataArray =new Array();
+                    let obj = new Object();
+                    obj.areaCode="";
+                    obj.areaName ="全部";
+                    let arr = new Array();
+                    let sunObj = new Object();
+                    sunObj.areaCode="";
+                    sunObj.areaName ="全部";
+                    arr.push(sunObj);
+                    obj.citys= arr;
+                    dataArray.push(obj);
+                    if( res.data!=null&& res.data.length>0){
+                        dataArray = dataArray.concat(res.data);
+                    }
                     this.options = dataArray;
+                    this.shi1=arr;
                     console.log(7777)
                 })
             },
             // 选省
             choseProvince: function (e) {
+                this.shi="";
                 for (var index2 in this.options) {
                     if (e === this.options[index2].areaCode) {
                         // this.province = this.options[index2].areaName;
-
                         let cityArray = this.options[index2].citys;
                         if (cityArray != null && cityArray.length > 0) {
                             let dataBean = new Object();
@@ -296,7 +313,7 @@
                     });
                     return;
                 }
-                this.$confirm('此操作将删除该条数据, 是否继续?', '提示', {
+                this.$confirm('此操作将删除数据, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -337,7 +354,6 @@
             handleSizeChange(val) {
                 this.pageSize = val;
                 this.getData();
-
             },
             handleCurrentChange(val) {
                 this.currentPage = val;
@@ -376,6 +392,26 @@
             selectAll(objArr) {
                 this.selectDataList = objArr;
             },
+            //上传文件
+            uploadFileMethod(param){
+                console.log(55555)
+                let file = param.file;
+                let formData = new FormData();
+                formData.append('file',file);
+                formData.append('tabType', 'win_record');
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                axios.post(postBaseUrl+'/upload/uploadCompanyFile', formData, {
+                    headers: {'Content-Type': 'multipart/form-data','Authorization':  localStorage.getItem("Authorization")}
+                }).then(res => {
+                    this.$message({
+                        type: 'info',
+                        message: res.data.msg
+                    });
+                }).catch(error => {
+                    console.log(error)
+                })
+            }
+
 
         },
 
@@ -389,7 +425,10 @@
     /*.el-button {*/
     /*line-height: 0;*/
     /*}*/
+    .upload-demo{
+        display: inline-block;
 
+    }
     .bdd_header {
         margin-left: 30px;
         margin-right: 30px;

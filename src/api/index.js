@@ -173,7 +173,7 @@ export const exportE = form => {
         }
     }).then(res => res.data)
 }
-// 导出中标EXCEL 
+// 导出中标EXCEL
 export const exportX = form => {
     return axios({ // 用axios发送post请求
         method: 'post',
@@ -239,7 +239,7 @@ export const delpost = params => {
 export const listNtgp = params => {
     return axios.post('zhaobiao/listNtAssociateGp', params).then(res => res.data)
 }
-// 
+//
 export const listreli = params => {
     return axios.post('zhaobiao/deleteNtAssociateGp', params).then(res => res.data)
 }
@@ -279,19 +279,19 @@ export const bidList = params => {
 export const delDidList = params => {
     return axios.post('zhongbiao/deleteTbNtBids', params).then(res => res.data)
 }
-// 获取中标文件列表 
+// 获取中标文件列表
 export const bidFiles = params => {
     return axios.post('zhongbiao/listZhaoBiaoFiles', params).then(res => res.data)
 }
-// 获取中标关联公告列表 
+// 获取中标关联公告列表
 export const bidRela = params => {
     return axios.post('zhongbiao/listNtAssociateGp', params).then(res => res.data)
 }
-// 获取招标编辑明细列表 
+// 获取招标编辑明细列表
 export const bidzhaoList = params => {
     return axios.post('zhongbiao/listNtTenders', params).then(res => res.data)
 }
-// 删除招标编辑明细列表 
+// 删除招标编辑明细列表
 export const biddelList = params => {
     return axios.post('zhongbiao/deleteNtTenders', params).then(res => res.data)
 }
@@ -338,8 +338,4 @@ export const ongSave = params => {
 // 获取内容
 export const ongText = params => {
     return axios.post('correction/getSnatchurlcontent', params).then(res => res.data)
-}
-// 获取资质等级
-export const bidApt = params => {
-    return axios.post('qual/qualGrade/notic/list', params).then(res => res.data)
 }
