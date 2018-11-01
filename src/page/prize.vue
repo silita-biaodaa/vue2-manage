@@ -98,7 +98,11 @@
                 <el-row>
                     <el-button type="primary" @click="getData">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
-                    <el-button type="primary">上传Excel</el-button>
+                    <el-upload
+                        class="upload-demo"
+                        action="" :http-request='uploadFileMethod' :show-file-list="false">
+                        <el-button class="custom-btn" size="small">上传</el-button>
+                    </el-upload>
                     <el-button type="primary">导出Excel</el-button>
                 </el-row>
             </el-col>
@@ -388,6 +392,26 @@
             selectAll(objArr) {
                 this.selectDataList = objArr;
             },
+            //上传文件
+            uploadFileMethod(param){
+                console.log(55555)
+                let file = param.file;
+                let formData = new FormData();
+                formData.append('file',file);
+                formData.append('tabType', 'win_record');
+                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                axios.post(postBaseUrl+'/upload/uploadCompanyFile', formData, {
+                    headers: {'Content-Type': 'multipart/form-data','Authorization':  localStorage.getItem("Authorization")}
+                }).then(res => {
+                    this.$message({
+                        type: 'info',
+                        message: res.data.msg
+                    });
+                }).catch(error => {
+                    console.log(error)
+                })
+            }
+
 
         },
 
@@ -401,7 +425,10 @@
     /*.el-button {*/
     /*line-height: 0;*/
     /*}*/
+    .upload-demo{
+        display: inline-block;
 
+    }
     .bdd_header {
         margin-left: 30px;
         margin-right: 30px;
