@@ -28,12 +28,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/proxy':{
-      //   target:'http://admin.biaodaa.com',
-      //   changeOrigin:true,
-      //   pathRewrite:{
-      //     '^/proxy':''
-      //   }
+      '/proxy':{
+        target:'http://admin.biaodaa.com',
+        changeOrigin:true,
+        pathRewrite:{
+          '^/proxy':''
+        }
       }
     },
     context: [ //代理路径
