@@ -1054,9 +1054,9 @@ export default {
                this.titurela = [{tbNtQuaGroups:[]}]
             } else {
                 this.titurela = res.data[0].tbNtRegexGroups
-                if(res.data[0].tbNtRegexGroups.length == 1) {
-                    this.titurela.push({tbNtQuaGroups:[]})
-                } 
+                // if(res.data[0].tbNtRegexGroups.length == 1) {
+                //     this.titurela.push({tbNtQuaGroups:[]})
+                // } 
             }  
           } else {
               this.emptyForm('edits')
@@ -1456,6 +1456,9 @@ export default {
     },
     // 添加编辑明细得
     addtop() {
+       this.titurela.forEach(el => {
+          el.ntEditId = ''
+       })
        this.addcompile()       
       setTimeout(() => {
         this.form.segment = ''
