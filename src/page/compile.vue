@@ -383,7 +383,7 @@
  import  Edit  from "@/page/edit";
 //  import moment from 'moment'
 import Vue from 'vue'
- import { bidApt,delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
+ import { bidAt,delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
 export default {
   data () {
     return {
@@ -917,7 +917,7 @@ export default {
         
     },
     listAtt(){
-      bidApt({}).then(res => {
+      bidAt({}).then(res => {
          this.vueles = res.data
       })
     },
