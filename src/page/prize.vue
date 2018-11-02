@@ -16,9 +16,9 @@
                 </div>
             </el-col>
             <el-col :span="4">
-                <div class="grid-content bg-purple">
-                    <el-button @click="handleEdit(scope.$index,scope.row)" type="primary  }">查看数据维护日志</el-button>
-                </div>
+                <!--<div class="grid-content bg-purple">-->
+                    <!--<el-button @click="handleEdit(scope.$index,scope.row)" type="primary  }">查看数据维护日志</el-button>-->
+                <!--</div>-->
             </el-col>
         </el-row>
 
@@ -104,7 +104,7 @@
                         action="" :http-request='uploadFileMethod' :show-file-list="false">
                         <el-button style="margin-left:10px;" type="primary" size="small">上传Excel</el-button>
                     </el-upload>
-                    <el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>
+                    <!--<el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>-->
                     <el-button style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}
                     </el-button>
                 </el-row>
@@ -172,6 +172,7 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
                 :page-sizes="[10, 20, 60]"
                 :page-size="pageSize"
                 :page-count="pageCount"
@@ -226,8 +227,8 @@
         methods: {
             //  获奖信息接口
             getData(param) {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                console.log(1111)
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+//                console.log(1111)
                 if (param != null) {
                     this.currentPage = 1;
                 }
@@ -247,7 +248,7 @@
 
                     }
                 );
-                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
+                getJsonData("/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
                     if (dataArray == null || dataArray.length == 0) {
                         this.tableData = dataArray.list;
@@ -266,8 +267,8 @@
             },
 //            获取省市
             getProvinceData() {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                getJsonData(postBaseUrl + '/common/area').then(res => {
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                getJsonData('/common/area').then(res => {
                     let dataArray = new Array();
                     let obj = new Object();
                     obj.areaCode = "";
@@ -345,8 +346,8 @@
 
 //            删除获奖信息
             deleteData() {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                console.log(666);
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+//                console.log(666);
                 let selectDataList = this.selectDataList;
                 let pkidStr = "";
                 for (let i = 0; i < selectDataList.length; i++) {
@@ -358,7 +359,7 @@
                         pkids: pkidStr,
                     }
                 );
-                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
+                getJsonData('/corp/requ/del', dataParam).then(res => {
                     this.$message({
                         type: 'info',
                         message: res.msg
@@ -423,8 +424,8 @@
                 let formData = new FormData();
                 formData.append('file', file);
                 formData.append('tabType', 'win_record');
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                axios.post(postBaseUrl + '/upload/uploadCompanyFile', formData, {
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                axios.post('/upload/uploadCompanyFile', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': localStorage.getItem("Authorization")
@@ -488,5 +489,6 @@
     .el-button--small {
         padding: 13px 15px;
     }
+
 </style>
 

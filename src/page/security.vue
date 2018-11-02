@@ -14,15 +14,15 @@
                 </div>
             </el-col>
             <el-col :span="4">
-                <div class="grid-content bg-purple">
-                    <el-button type="primary">查看数据维护日志</el-button>
-                </div>
+                <!--<div class="grid-content bg-purple">-->
+                    <!--<el-button type="primary">查看数据维护日志</el-button>-->
+                <!--</div>-->
             </el-col>
         </el-row>
         <el-row style="margin-top: 30px;">
             <el-col :span="24" style="line-height:50px;">
                         <span class="grid-content bg-purple-dark">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级别：<el-select
-                            class="el-input" v-model="certLevel" @change="getData" placeholder="请选择">
+                            class="el-input" v-model="certLevel" @change="getData(1)" placeholder="请选择">
             <el-option
                 v-for="item in distinctionList"
                 :key="item.value"
@@ -31,7 +31,7 @@
             </el-option>
           </el-select></span>
                 <span style="margin-left:15px;" class="grid-content bg-purple-dark">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等级：<el-select
-                    class="el-input" v-model="certResult" @change="getData" placeholder="请选择">
+                    class="el-input" v-model="certResult" @change="getData(1)" placeholder="请选择">
 
               <el-option
                   v-for="item in ssessLevelList"
@@ -52,7 +52,7 @@
             </el-option>
           </el-select>
                     <el-select class="bdd_pur" v-model="shi"
-                               @change="getData"
+                               @change="getData(1)"
                                placeholder="市级地区">
             <el-option
                 v-for="item in shi1"
@@ -95,7 +95,7 @@
                         action="" :http-request='uploadFileMethod' :show-file-list="false">
                         <el-button style="margin-left:10px;" type="primary" size="small">上传Excel</el-button>
                     </el-upload>
-                    <el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>
+                    <!--<el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>-->
                     <el-button style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}
                     </el-button>
                 </el-row>
@@ -147,6 +147,7 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
                 :page-sizes="[10, 20, 50, 100]"
                 :page-size="pageSize"
                 :page-count="pageCount"
@@ -195,8 +196,8 @@
         },
         methods: {
             getData(param) {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                console.log(1111)
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+//                console.log(1111)
                 if (param != null) {
                     this.currentPage = 1;
                 }
@@ -213,7 +214,7 @@
                     expired: this.times,
                     issueDate: this.evaluation,
                 });
-                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
+                getJsonData("/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
                     if (dataArray == null || dataArray.length == 0) {
                         this.tableData = dataArray.list;
@@ -235,8 +236,8 @@
 
             //获取省市
             getProvinceData() {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                getJsonData(postBaseUrl + '/common/area').then(res => {
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                getJsonData('/common/area').then(res => {
                     let dataArray = new Array();
                     let obj = new Object();
                     obj.areaCode = "";
@@ -327,8 +328,8 @@
 
             //            删除获奖信息
             deleteData() {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                console.log(666);
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+//                console.log(666);
                 let selectDataList = this.selectDataList;
                 let pkidStr = "";
                 for (let i = 0; i < selectDataList.length; i++) {
@@ -340,7 +341,7 @@
                         pkids: pkidStr,
                     }
                 );
-                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
+                getJsonData('/corp/requ/del', dataParam).then(res => {
                     this.$message({
                         type: 'info',
                         message: res.msg
@@ -406,8 +407,8 @@
                 let formData = new FormData();
                 formData.append('file', file);
                 formData.append('tabType', 'safety_cert');
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                axios.post(postBaseUrl + '/upload/uploadCompanyFile', formData, {
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                axios.post('/upload/uploadCompanyFile', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': localStorage.getItem("Authorization")
@@ -466,5 +467,6 @@
     .el-button--small {
         padding: 13px 15px;
     }
+
 </style>
 

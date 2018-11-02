@@ -7,16 +7,16 @@
                         <el-breadcrumb-item :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/quality'}">公路信用评价等级</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/record' }">安全生产许可证</el-breadcrumb-item>
-                        <el-breadcrumb-item :to="{ path: '/safety' }">不良记录</el-breadcrumb-item>
+                        <el-breadcrumb-item  :to="{ path: '/safety' }">不良记录</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/security' }">安全认证</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/' }"></el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
             </el-col>
             <el-col :span="4">
-                <div class="grid-content bg-purple">
-                    <el-button type="primary">查看数据维护日志</el-button>
-                </div>
+                <!--<div class="grid-content bg-purple">-->
+                    <!--<el-button type="primary">查看数据维护日志</el-button>-->
+                <!--</div>-->
             </el-col>
         </el-row>
         <el-row style="margin-top: 30px;">
@@ -58,7 +58,7 @@
         </el-col>
         <el-col :span="24" style="line-height:50px;">
            <span class="grid-content bg-purple-dark">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;质：<el-select
-               class="bdd_pur" v-model="property" @change="getData" placeholder="请选择">
+               class="bdd_pur" v-model="property" @change="getData(1)" placeholder="请选择">
             <el-option
                 v-for="item in natureList"
                 :key="item.value"
@@ -79,7 +79,7 @@
                             action="" :http-request='uploadFileMethod' :show-file-list="false">
                             <el-button style="margin-left:10px;" type="primary" size="small">上传Excel</el-button>
                         </el-upload>
-                        <el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>
+                        <!--<el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>-->
                         <el-button style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}
                         </el-button>
                     </el-row>
@@ -130,6 +130,7 @@
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
                     :page-sizes="[10, 20, 50, 100]"
                     :page-size="pageSize"
                     :page-count="pageCount"
@@ -177,8 +178,8 @@
         },
         methods: {
             getData(param) {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                console.log(1111)
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+//                console.log(1111)
                 if (param != null) {
                     this.currentPage = 1;
                 }
@@ -196,7 +197,7 @@
                     issueDate: this.issueDate,
                     expired: this.valid,
                 })
-                getJsonData(postBaseUrl + "/corp/requ/list", dataParam).then(res => {
+                getJsonData("/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
                     if (dataArray == null || dataArray.length == 0) {
                         this.tableData = dataArray.list;
@@ -217,8 +218,8 @@
             },
 //            获取省市
             getProvinceData() {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                getJsonData(postBaseUrl + '/common/area').then(res => {
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                getJsonData('/common/area').then(res => {
                     let dataArray = res.data;
                     this.options = dataArray;
                     console.log(7777)
@@ -326,8 +327,8 @@
 
 //            删除不良信息
             deleteData() {
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                console.log(666);
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+//                console.log(666);
                 let selectDataList = this.selectDataList;
                 let pkidStr = "";
                 for (let i = 0; i < selectDataList.length; i++) {
@@ -339,7 +340,7 @@
                         pkids: pkidStr,
                     }
                 );
-                getJsonData(postBaseUrl + '/corp/requ/del', dataParam).then(res => {
+                getJsonData('/corp/requ/del', dataParam).then(res => {
                     this.$message({
                         type: 'info',
                         message: res.msg
@@ -368,8 +369,8 @@
                 let formData = new FormData();
                 formData.append('file', file);
                 formData.append('tabType', 'undesirable');
-                let postBaseUrl = "http://pre-admin.biaodaa.com";
-                axios.post(postBaseUrl + '/upload/uploadCompanyFile', formData, {
+//                let postBaseUrl = "http://pre-admin.biaodaa.com";
+                axios.post('/upload/uploadCompanyFile', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': localStorage.getItem("Authorization")
