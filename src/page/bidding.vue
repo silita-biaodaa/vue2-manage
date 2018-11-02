@@ -90,6 +90,9 @@
                       </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label='资质关系'>
+                  <el-input v-model="bidForm.qualRelationStr"  autosize  type="textarea" style="width:80%" disabled ></el-input>
+                </el-form-item>
                 <!-- 第一中标候选人 -->
                 <!-- 等企业上线，还需要进行一次的修改的完善的 -->
 
@@ -985,7 +988,7 @@ export default {
     },
     // 删除所选中得候选人列表 
     removeDomain(i) {
-       if( this.bidForm.first.length >= 1 ) {
+       if( !(this.bidForm.first.length == 1) ) {
          this.bidForm.first[i].number = ''
          this.delArr.push(this.bidForm.first[i])
           this.bidForm.first.splice(i, 1);
@@ -1018,7 +1021,7 @@ export default {
     },
 
     removeSecond(i) {
-      if(  this.bidForm.second.length >= 1) {
+      if( !(this.bidForm.second.length == 1) ) {
           this.bidForm.second[i].number = ''
          this.delArr.push(this.bidForm.second[i])
           this.bidForm.second.splice(i, 1);
@@ -1037,7 +1040,7 @@ export default {
       this.bidForm.third.push({number:3});
     },
     removeThird(i) {
-      if(this.bidForm.third.length >= 0) {
+      if(!(this.bidForm.third.length == 1)) {
          this.bidForm.third[i].number = ''
          this.delArr.push(this.bidForm.third[i])
           this.bidForm.third.splice(i, 1);
@@ -1085,26 +1088,25 @@ export default {
           if(this.bidstr == '编辑') {
               console.log(this.bidForm.proType,1086)
           if( this.bidForm.cityCodeName == '') {
-                console.log('1')
+
               return this.$message({
                 type:'warning',
                 message:'项目地区不能为空~'
               })
           } else if( this.bidForm.countyCode == '') {
-                console.log('2')
+
             return this.$message({
               type:'warning',
               message:'项目县区不能为空~'
             })
           } else if( this.bidForm.proType == null || this.bidForm.proType == '' ) {
-                console.log('3')
 
                return this.$message({
                          type:'warning',
                          message:'项目类型不能为空~'
                        })
           }  else if(this.bidForm.first[0].oneCandidate == '' || this.bidForm.first[0].oneCandidate == null ) {
-                console.log('4')
+
 
                 return this.$message({
                         type:'warning',
