@@ -313,7 +313,7 @@
                   </el-table>
 
                   <div style="margin-top: 10px">
-                       <el-upload class="updown-list" action="http://admin.biaodaa.com/upload/uploadZhaoBiaoFile/" :data="sendKid()" :on-preview="handlePreview"  :on-success="handleSuccess" name='files' :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
+                       <el-upload class="updown-list" action="http://pre-admin.biaodaa.com/upload/uploadZhaoBiaoFile/" :data="sendKid()" :on-preview="handlePreview"  :on-success="handleSuccess" name='files' :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
                          <el-button type="primary">
                            上传招标文件
                          </el-button>
@@ -1041,7 +1041,7 @@ export default {
           // this.mainCo = res.data[0]     // 暂时得思先行保存，渲染标题，公式日期
           this.condition = res.data[0].ntStatus
           this.careaName = res.data[0].cityCode   // 接口数据请求得地区
-          
+          console.log(res.data[0].pkid,1044)
           if(res.data[0].pkid) {
             this.state = res.data[0].url
             this.condition = res.data[0].ntStatus
@@ -1057,7 +1057,7 @@ export default {
             }  
           } else {
               this.emptyForm('edits')
-
+              this.compileData = []
              if(localStorage.getItem('setTitle')) {   //单个跳转过来，后期重点优化得程序
                 this.form.title = localStorage.getItem('setTitle')
                 this.form.pubDate = localStorage.getItem('setPud')

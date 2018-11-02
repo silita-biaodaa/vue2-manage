@@ -692,7 +692,7 @@ export default {
     // 获取中标编辑明细
     biddetail(){
       this.pkid = this.$route.params.id
-          this.source = this.$route.params.code
+      this.source = this.$route.params.code
       bidList({ntId:this.pkid,source:this.source}).then(res => {
            console.log(res,683)
 
@@ -715,16 +715,19 @@ export default {
 
              if(res.data[0].pkid) {
                 this.biddData = res.data
-                this.bidplaces = res.data[0].countys
                 // console.log(this.bidForm,716)
                  this.bidForm = JSON.parse(JSON.stringify(res.data[0]))
+                this.bidplaces = res.data[0].countys
+
                 this.judgenull()
                 this.setpkid = res.data[0].pkid
              } else {
                 this.setpkid = ''
+                this.bidplaces = res.data[0].countys
+
                 this.bidForm = JSON.parse(JSON.stringify(res.data[0]))
                  this.judgenull()
-
+                this.biddData = []
              }
 
 
@@ -885,12 +888,11 @@ export default {
                     type:'success',
                     message:'删除成功'
                   })
-                  this.biddetail()
                  this.biddlist = []
                   this.biddpkids = ''
                   this.biddpkid = []
+                  this.biddetail()
                 }
-                 
             })
           
       }).catch(() => {
@@ -1112,8 +1114,8 @@ export default {
         // setTimeout(function() {
                   bidSave({pkid:this.setpkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,pubDate:this.bidForm.pubDate,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.first}).then(res => {
                   this.$message({
-                    type:'保存中标信息',
-                    message: res
+                    type:'success',
+                    message: '保存编辑明细成功'
                   })            
                     bidList({ntId:this.pkid,source:this.source}).then(res => {
                         res.data.forEach(item => {
@@ -1138,8 +1140,8 @@ export default {
                 this.first = this.first.concat(this.delArr,this.bidForm.first,this.bidForm.second,this.bidForm.third)
                     bidSave({tdEditCode:this.bidForm.editCode,pkid:this.bidForm.pkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,pubDate:this.bidForm.pubDate,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.first}).then(res => {
                   this.$message({
-                    type:'保存中标信息',
-                    message: res
+                    type:'success',
+                    message: '导入编辑明细成功'
                   })            
                     bidList({ntId:this.pkid,source:this.source}).then(res => {
                         res.data.forEach(item => {
