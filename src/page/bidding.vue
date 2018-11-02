@@ -643,14 +643,8 @@ export default {
   },
   methods: {
     textt(){
-      // console.log(this.bidForm);
-      // console.log(this['oneCandidate' + 1]);
-      // console.log(this);
-      // console.log(this.$refs,649);
         console.log(this.$refs,650)  
-        // this.$refs['one0'].style.color = red;     
         console.log(this.$refs['one0'].accessKey,652);
-         
     },
     // 获取企业关系列表的
     gaincompany() {
@@ -701,8 +695,7 @@ export default {
       this.pkid = this.$route.params.id
       this.source = this.$route.params.code
       bidList({ntId:this.pkid,source:this.source}).then(res => {
-           console.log(res,683)
-
+            console.log(res,689)
             this.condition = res.data[0].ntStatus
             this.state = res.data[0].url
             res.data.forEach(item => {
@@ -725,7 +718,6 @@ export default {
                 // console.log(this.bidForm,716)
                  this.bidForm = JSON.parse(JSON.stringify(res.data[0]))
                 this.bidplaces = res.data[0].countys
-
                 this.judgenull()
                 this.setpkid = res.data[0].pkid
              } else {
