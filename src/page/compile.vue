@@ -172,6 +172,7 @@
                 placeholder="资质选择"
                 :options="vueles"
                 filterable
+                clearable
                  :props="props"
                 v-model="rela['qualIds']"
               ></el-cascader> 
@@ -192,6 +193,7 @@
                     placeholder="资质选择"
                     :options="vueles"
                     filterable
+                    clearable
                     :props="props"
                     v-model="item['qualIds']"
                   ></el-cascader> 
@@ -1214,27 +1216,36 @@ export default {
                     type:'warning'
                   })
         } else {
-          if(this.titurela[0].qualIds == null && this.titurela[0].tbNtQuaGroups.length == 0 ) {
+          if(this.titurela[0].qualIds == (null || []) && this.titurela[0].tbNtQuaGroups.length == (0 || null )) {
+              console.log('进来这里了');
+              
               this.titurela = []
           } else {
-                  this.titurela.forEach( el => {
-                if( el.qualIds == null ) {
-                    this.intact = true
-                    
-                }
-              })
-              if(this.intact) {
-                this.intact = false 
-                this.Invalid = false
-                return this.$message({
-                              message:'请保证资质的关系组全部填写',
-                              type:'warning'
-                            })    
-              }
+                 if(this.titurela[0].qualIds.length == 0 && this.titurela[0].tbNtQuaGroups.length == 0 ) {
+
+                     this.titurela = []
+
+                 } else {
+                           this.titurela.forEach( el => {
+                            if( el.qualIds == null ) {
+                                this.intact = true
+                                
+                            }
+                          })
+                          if(this.intact) {
+                            this.intact = false 
+                            this.Invalid = false
+                            return this.$message({
+                                          message:'请保证资质的关系组全部填写',
+                                          type:'warning'
+                                        })    
+                          }
+                 }
+             
           }
          
         }     
-         
+         console.log(this.titurela,1239)
           insertNt({pkid:this.form.pkid,source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr,tbNtRegexGroups:this.titurela}).then( res=> {
                console.log(res,1181)
              if(res.code == 1 ) {
@@ -1290,12 +1301,19 @@ export default {
      handleClick(tab, event) {  // 被选中tab标签实例
      },
       handleSelectionChange(val) { 
+        console.log(val)
           this.delcom = val
           this.activeIndex = '1'
           Object.keys(this.forms).forEach(key => {
                 this.forms[key] = false
             })
+
           this.form = JSON.parse(JSON.stringify(val[0]))
+          if(val[0].tbNtRegexGroups) {
+            this.titurela = val[0].tbNtRegexGroups
+          } else {
+            this.titurela = [{tbNtQuaGroups:[]}]
+          }
       },
       handleFileChange(val) {   //  招标文件的
            this.deurl = val       
@@ -1316,14 +1334,31 @@ export default {
               message:'请先选择中要操作数据'
            })
         }
+        // const { href } = this.$router.resolve({
+        //       name:'bidding',params: {id:row.pkid,code:this.coDe}
+        //   })
+   
+        //   window.open(href, '_blank')
          if(this.reli[0].relType == 1) {
                this.isShow = false
-               this.$router.push({name:'compile',params: {id:this.reli[0].ntId,code:this.code}})
+                const { href } = this.$router.resolve({
+                    name:'compile',params: {id:this.reli[0].ntId,code:this.code}
+                })
+
                this.texttop()
+            this.reli.length = 0
+            window.open(href, '_blank')
+
          } else {
-           this.$router.push({name:'bidding',params: {id:this.reli[0].ntId,code:this.code}})
+           const { href } = this.$router.resolve({
+              name:'bidding',params: {id:this.reli[0].ntId,code:this.code}
+          })
+            this.reli.length = 0
+          window.open(href, '_blank')
+
          }
-         this.reli.length = 0
+          // window.open(href, '_blank')
+
       },
       sendKid() {
       return { 
@@ -1549,13 +1584,15 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next){
+    console.log(from,1569)
+    // console.log(next)
       if(from.name == 'bidding' ) {
           localStorage.removeItem('parentId')
           localStorage.removeItem('tensele')
           next()
       } else if(from.name == 'compile') {
           if(localStorage.getItem('tensele')) {
-             console.log('等等等等')  
+            //  console.log('等等等等')  
           }
       } else {
           localStorage.removeItem('setTitle')

@@ -422,7 +422,7 @@
                  </el-table-column>
                </el-table>
                <div style="margin-top: 10px">
-                    <el-button type="primary" >编辑公告</el-button>
+                    <el-button type="primary" @click='bidskip' >编辑公告</el-button>
                     <el-button type="primary" @click='bidnew' >新增关联公告</el-button>
                     <el-button type="primary" @click='bidrelief' >解除关联公告</el-button>                       
                </div>
@@ -483,9 +483,9 @@
                       </el-table-column>    
                </el-table>
                <div style="margin-top: 10px">
-                    <el-button type="primary" >修改编辑明细</el-button>
+                    <el-button type="primary"  @click="bidrun" >修改编辑明细</el-button>
                     <el-button type="primary" @click='delzhaobid' >删除编辑明细</el-button>
-                    <el-button type="primary" >导入招标编辑明细</el-button>                       
+                    <el-button type="primary" @click='bidin' >导入招标编辑明细</el-button>                       
                </div>
             </el-tab-pane> 
               
@@ -588,9 +588,10 @@ export default {
         bidpub:[],
         isShow:true,
         state:'',
-        // one0:true,
-        // oneCandidate1:true,
-                
+        firstt:[],
+        secondt:[],
+        thirdt:[],        
+        zhao:false
       }
   },
   watch: {
@@ -617,11 +618,17 @@ export default {
         
         deep: true
       }
-    }
+    },
+    "$route"(to,from) {
+        if(to.name === 'bidding') {
+           this.biddetail() // 获取中标编辑明细
+           this.gainbidfile() // 获取招标文件
+           this.gainRelation() // 获取相关的公告文件列表
+           this.gainzhaoList()     // 获取相关的招标编辑明细
+        }
+    },
   },
   created () {
-    this.pkid = this.$route.params.id
-    this.source = this.$route.params.code
     this.bidid = localStorage.getItem('bidId')
     this.biddetail() // 获取中标编辑明细
     this.gainbidfile() // 获取招标文件
@@ -684,13 +691,13 @@ export default {
     },
     // 获取中标编辑明细
     biddetail(){
+      this.pkid = this.$route.params.id
+          this.source = this.$route.params.code
       bidList({ntId:this.pkid,source:this.source}).then(res => {
            console.log(res,683)
-             res.data.forEach((item,index) => {
-              if(item.pkid == null) {
-                  res.data.splice(index,1)
-              }
-            })
+
+            this.condition = res.data[0].ntStatus
+            this.state = res.data[0].url
             res.data.forEach(item => {
                 item.first = new Array()
                 item.second = new Array()
@@ -705,18 +712,19 @@ export default {
                        }
                   })  
             }); 
-                console.log(res.data[0],687)
 
-             if(res.data.length >= 1) {
+             if(res.data[0].pkid) {
                 this.biddData = res.data
                 this.bidplaces = res.data[0].countys
-                this.bidForm = JSON.parse(JSON.stringify(res.data[0]))
-                this.setpkid = res.data[0].pkid
-                this.condition = res.data[0].ntStatus
-                this.state = res.data[0].url
+                // console.log(this.bidForm,716)
+                 this.bidForm = JSON.parse(JSON.stringify(res.data[0]))
                 this.judgenull()
+                this.setpkid = res.data[0].pkid
              } else {
                 this.setpkid = ''
+                this.bidForm = JSON.parse(JSON.stringify(res.data[0]))
+                 this.judgenull()
+
              }
 
 
@@ -747,11 +755,7 @@ export default {
          if(res.code == 1) {
            res.data.datas.forEach(item => {
                   this.bidpkid.push(item.pkid)
-                  this.bidtitle.push(item.title)
-                  this.bidpub.push(item.pubDate)
            })
-            this.bidForm.title = this.bidtitle[this.position]
-            this.bidForm.pubDate = this.bidpub[this.position]
             if(this.bidpkid.length == 1 ) {
                 this.isShow = false   
             }
@@ -766,6 +770,7 @@ export default {
     },
     // 相关公告被多选选中
     bidRelaChange(val) {
+        console.log(val)
         this.biddlist = val        
     },
     // 收集每个相关公告的数据集中成一个对象
@@ -782,6 +787,7 @@ export default {
     },
     // 相关招标编辑明细
     bidRelaedChange(val) {
+        console.log(val)
         this.biddlist = val
     },
     relaedbox(row) {
@@ -858,6 +864,7 @@ export default {
     },
     // 添加编辑明细的时候额
     addbid() {
+      this.bidForm.editCode = ''
       this.bidForm.segment = '' 
       this.texttop()
     },
@@ -1105,7 +1112,7 @@ export default {
               }
            })
 
-           if(this.breakt) {
+           if(this.breakt && !this.zhao) {
                  this.first = this.first.concat(this.delArr,this.bidForm.first,this.bidForm.second,this.bidForm.third)
         // setTimeout(function() {
                   bidSave({pkid:this.setpkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,pubDate:this.bidForm.pubDate,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.first}).then(res => {
@@ -1133,7 +1140,33 @@ export default {
                 })
                 this.first = []
            } else {
-             
+                this.first = this.first.concat(this.delArr,this.bidForm.first,this.bidForm.second,this.bidForm.third)
+                    bidSave({tdEditCode:this.bidForm.editCode,pkid:this.bidForm.pkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,pubDate:this.bidForm.pubDate,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.first}).then(res => {
+                  this.$message({
+                    type:'保存中标信息',
+                    message: res
+                  })            
+                    bidList({ntId:this.pkid,source:this.source}).then(res => {
+                        res.data.forEach(item => {
+                            item.first = new Array()
+                            item.second = new Array()
+                            item.third = new Array()
+                              item.bidsCands.forEach(el => {
+                                  if(el.number == 1 ) {
+                                      item.first.push(el)
+                                  } else if (el.number == 2) {
+                                    item.second.push(el)
+                                  } else {
+                                    item.third.push(el)
+                                  }
+                              })
+                        });
+                      this.biddData = res.data
+                      this.zhao = false 
+                    })    
+                })
+                this.first = []
+
            }
           
          }
@@ -1200,14 +1233,83 @@ export default {
       this.$router.replace('/relevance')
     },
     lastlist() {
+         if(parseInt(this.position) == 0) {
+          return this.$message({
+             type:'warning',
+             message:'已经是第一条公告，无法跳转~'
+          })
+      } else {
+        this.position = parseInt(this.position) - 1
+        // this.form = {}
+        this.$router.push({
+              name:'bidding',params:{id:this.bidpkid[this.position],code:this.source}
+            })
+      }
 
     },
     nextlist() {
+           if(parseInt(this.position) == this.bidpkid.length - 1 ) {
+          return this.$message({
+             type:'warning',
+             message:'已经是最后一条公告，无法跳转~'
+          })
+      } else {
+        this.position = parseInt(this.position) + 1
+        // this.form = {}
+        this.$router.push({
+              name:'bidding',params:{id:this.bidpkid[this.position],code:this.source}
+            })
+      }
+    },
+    bidskip() {
+      console.log(1111);
+       if(this.biddlist.length == 0) {
+           return this.$message({
+              type:'warning',
+              message:'请先选择中要操作数据'
+           })
+        }
+         if(this.biddlist[0].relType == 1) {
+               this.isShow = false
+               this.$router.push({name:'compile',params: {id:this.biddlist[0].ntId,code:this.source}})
+               this.texttop()
+         } else {
+           this.$router.push({name:'bidding',params: {id:this.biddlist[0].ntId,code:this.source}})
+         }
+         this.biddlist.length = 0
+    },
+    bidrun() {
+         const { href } = this.$router.resolve({
+              name:'compile',params: {id:this.biddlist[0].ntId,code:this.source}
+          })
+          // console.log(href)
+          window.open(href, '_blank')
+          //  this.$router.push({name:'compile',params: {id:this.biddlist[0].ntId,code:this.source}})
 
+    },
+    bidin() {
+       this.firstt = this.bidForm.first
+        this.secondt = this.bidForm.second
+        this.thirdt = this.bidForm.third
+        this.$message({
+           type:'warning',
+           message:'请注意填写正确的标段信息，否则自动默认为一标段'
+        })
+        this.bidForm =  this.biddlist[0]
+        this.bidForm.segment = ''
+        this.bidForm.editCode = ''
+        this.bidForm.cityCodeName = this.biddlist[0].cityCodeName
+        this.bidForm.careaName = this.biddlist[0].cityCode
+        this.bidForm.countyCode = this.biddlist[0].countyCode
+        this.bidForm.first = this.firstt
+        this.bidForm.second = this.secondt
+        this.bidForm.third = this.thirdt
+        this.zhao = true
+        this.texttop()
     }
   },
    beforeRouteEnter(to, from, next){
-      if(from.name == 'Compile' ) {
+      if(from.name == 'compile' ) {
           localStorage.removeItem('parentId')
           localStorage.removeItem('tensele')
           localStorage.removeItem('setTitle')
