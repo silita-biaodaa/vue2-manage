@@ -131,7 +131,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page.sync="currentPage"
-                    :page-sizes="[10, 20, 50, 100]"
+                    :page-sizes="[10, 20, 60]"
                     :page-size="pageSize"
                     :page-count="pageCount"
                     layout="total, sizes, prev, pager, next, jumper"
@@ -195,7 +195,7 @@
                     badInfo: this.action,
                     issueOrg: this.Release,
                     property: this.property,
-                    issueDate: this.issueDate,
+                    issueDate: this.issue,
                     expired: this.valid,
                 })
                 getJsonData("/corp/requ/list", dataParam).then(res => {

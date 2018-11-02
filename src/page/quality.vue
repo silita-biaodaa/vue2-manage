@@ -348,8 +348,8 @@
                         obj.value = "";
                         obj.name = "全部";
                     } else if (i == 1) {
-                        obj.value = "AAA";
-                        obj.name = "AAA";
+                        obj.value = "AA";
+                        obj.name = "AA";
                     } else if (i == 2) {
                         obj.value = "A";
                         obj.name = "A";
