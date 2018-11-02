@@ -5,7 +5,7 @@
                 <div class="grid-content bg-purple">
                     <el-breadcrumb separator="/">
                         <el-breadcrumb-item :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
-                        <el-breadcrumb-item  :to="{ path: '/quality'}">公路信用评价等级</el-breadcrumb-item>
+                        <el-breadcrumb-item  :to="{ path: '/quality'}"><span style="color:dodgerblue">公路信用评价等级</span></el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/record' }">安全生产许可证</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/safety' }">不良记录</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/security' }">安全认证</el-breadcrumb-item>
@@ -65,7 +65,7 @@
   </el-select></span>
             </el-col>
         </el-row>
-        <!--查询按钮-->
+        <!--按钮查询-->
         <el-row>
             <el-col :span="24" style="margin-top: 30px;">
                 <el-row>
@@ -74,14 +74,15 @@
                     <el-upload
                         class="upload-demo"
                         action="" :http-request='uploadFileMethod' :show-file-list="false">
-                        <el-button style="margin-left:10px;" type="primary" size="small">上传Excel</el-button>
+                        <el-button style="margin-left:10px;" type="primary" size="small">{{upLoadExcelTxt}}</el-button>
                     </el-upload>
                     <!--<el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>-->
-                    <el-button style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}
-                    </el-button>
+                    <div style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}<span  @click="deletPath">&nbsp;&nbsp;<i style="color: #3a8ee6" class="el-icon-circle-close-outline"></i></span>
+                    </div>
                 </el-row>
             </el-col>
         </el-row>
+
         <el-table
             :data="tableData"
             @select="select"
@@ -154,7 +155,8 @@
                 yearArr: [],
                 ssessLevel: '',
                 ssessLevelList: [],
-                excelPath: ''
+                excelPath: '',
+                upLoadExcelTxt:'上传Excel'
             }
         },
 
@@ -377,6 +379,13 @@
             },
             //上传文件
             uploadFileMethod(param) {
+                let upLoadExcelTxt =  this.upLoadExcelTxt;
+                if(upLoadExcelTxt=="传输中……"){
+                    return;
+                }
+                this.upLoadExcelTxt = "传输中……";
+
+
                 console.log(55555)
                 let file = param.file;
                 let formData = new FormData();
@@ -389,6 +398,7 @@
                         'Authorization': localStorage.getItem("Authorization")
                     }
                 }).then(res => {
+                    this.upLoadExcelTxt = "上传Excel";
                     if (res.data.code == 405) {
                         this.$message({
                             type: 'info',
@@ -407,7 +417,9 @@
                     console.log(error)
                 })
 
-
+            },
+            deletPath(){
+                this.excelPath = "";
             }
 
         },

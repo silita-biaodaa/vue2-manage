@@ -6,7 +6,7 @@
                     <el-breadcrumb separator="/">
                         <el-breadcrumb-item :to="{ path: '/prize' }">获奖信息</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/quality'}">公路信用评价等级</el-breadcrumb-item>
-                        <el-breadcrumb-item  :to="{ path: '/record' }">安全生产许可证</el-breadcrumb-item>
+                        <el-breadcrumb-item  :to="{ path: '/record' }"><span style="color:dodgerblue">安全生产许可证</span></el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/safety' }">不良记录</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/security' }">安全认证</el-breadcrumb-item>
                         <el-breadcrumb-item :to="{ path: '/' }"></el-breadcrumb-item>
@@ -69,11 +69,11 @@
                     <el-upload
                         class="upload-demo"
                         action="" :http-request='uploadFileMethod' :show-file-list="false">
-                        <el-button style="margin-left:10px;" type="primary" size="small">上传Excel</el-button>
+                        <el-button style="margin-left:10px;" type="primary" size="small">{{upLoadExcelTxt}}</el-button>
                     </el-upload>
                     <!--<el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>-->
-                    <el-button style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}
-                    </el-button>
+                    <div style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}<span  @click="deletPath">&nbsp;&nbsp;<i style="color: #3a8ee6" class="el-icon-circle-close-outline"></i></span>
+                    </div>
                 </el-row>
             </el-col>
         </el-row>
@@ -153,6 +153,7 @@
                 Time: '',
                 items: '',
                 excelPath: '',
+                upLoadExcelTxt:'上传Excel'
 
             }
         },
@@ -285,11 +286,18 @@
             },
             //上传文件
             uploadFileMethod(param) {
+                let upLoadExcelTxt =  this.upLoadExcelTxt;
+                if(upLoadExcelTxt=="传输中……"){
+                    return;
+                }
+                this.upLoadExcelTxt = "传输中……";
+
+
                 console.log(55555)
                 let file = param.file;
                 let formData = new FormData();
                 formData.append('file', file);
-                formData.append('tabType', 'safety_permission_cert');
+                formData.append('tabType','safety_permission_cert');
 //                let postBaseUrl = "http://pre-admin.biaodaa.com";
                 axios.post('/upload/uploadCompanyFile', formData, {
                     headers: {
@@ -297,6 +305,7 @@
                         'Authorization': localStorage.getItem("Authorization")
                     }
                 }).then(res => {
+                    this.upLoadExcelTxt = "上传Excel";
                     if (res.data.code == 405) {
                         this.$message({
                             type: 'info',
@@ -315,6 +324,9 @@
                     console.log(error)
                 })
 
+            },
+            deletPath(){
+                this.excelPath = "";
             }
 
         },
