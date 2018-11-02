@@ -103,7 +103,7 @@
                 >
                 <el-button @click="addDomain" size='mini' class="bidadd" type="danger" v-show="taskadd(index)" >增加</el-button>                   
                 <el-form-item label="第一中标候选人" >
-                   <!-- <div :class="['labe', one0 ?'old':'new']">项目工期</div>  -->
+                   <!-- <div :ref="'one' + index">项目工期</div>  -->
                   <!-- <div class='labe'>第一中标候选人</div> -->
                     <el-select v-model="item.oneCandidate" value-key='creditCode' filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
@@ -643,10 +643,14 @@ export default {
   },
   methods: {
     textt(){
-      console.log(this.bidForm);
-      console.log(this['oneCandidate' + 1]);
-      console.log(this);
-                    
+      // console.log(this.bidForm);
+      // console.log(this['oneCandidate' + 1]);
+      // console.log(this);
+      // console.log(this.$refs,649);
+        console.log(this.$refs,650)  
+        // this.$refs['one0'].style.color = red;     
+        console.log(this.$refs['one0'].accessKey,652);
+         
     },
     // 获取企业关系列表的
     gaincompany() {
@@ -793,7 +797,7 @@ export default {
     },
     // 相关招标编辑明细
     bidRelaedChange(val) {
-        console.log(val)
+        console.log(val,796)
         this.biddlist = val
     },
     relaedbox(row) {
@@ -1309,6 +1313,7 @@ export default {
         this.bidForm.pbMode = this.biddlist[0].pbMode
         this.bidForm.tdEditCode = this.biddlist[0].editCode
         this.bidForm.pkid = this.biddlist[0].pkid
+        this.bidForm.qualRelationStr = this.biddlist[0].qualRelationStr
         this.bidForm.editCode = ''
          this.bidForm.segment = ''
         this.bidForm.cityCodeName = this.biddlist[0].cityCodeName
