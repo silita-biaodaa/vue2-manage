@@ -260,17 +260,17 @@
                       <el-table-column prop="bidBonds" label="项目保证金(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column width="120" label="保证金截至时间" show-overflow-tooltip> 
-                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD HH:mm') | nuvalue }}</template>
+                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD HH:mm') }}</template>
                       </el-table-column>
                       <el-table-column prop="enrollAddr" label="报名地点" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column label="资格审查截止时间" width="150" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD HH:mm') | nuvalue }}</template>
+                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD HH:mm') }}</template>
                       </el-table-column> 
                       <el-table-column prop="certAuditAddr" label="资格审查地点" width="150" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column  label="投标截止时间" width="150" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD HH:mm') | nuvalue }}</template>                          
+                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD HH:mm')  }}</template>                          
                       </el-table-column> 
                       <el-table-column prop="openingPerson" label="开标人员" width="120" show-overflow-tooltip>
                       </el-table-column> 
@@ -553,11 +553,6 @@ export default {
     this.listAtt()  // 获取资质关系组
   },
   filters: {
-    nuvalue:function (val) {
-      if(val == null)  {
-         return ''
-      }
-    },
     condi:function(val) {
       switch (val) {
         case '0':
@@ -1216,12 +1211,13 @@ export default {
                     type:'warning'
                   })
         } else {
-          if(this.titurela[0].qualIds == (null || []) && this.titurela[0].tbNtQuaGroups.length == (0 || null )) {
+          if(this.titurela[0].qualIds == null && this.titurela[0].tbNtQuaGroups.length == 0 ) {
               console.log('进来这里了');
               
               this.titurela = []
           } else {
-                 if(this.titurela[0].qualIds.length == 0 && this.titurela[0].tbNtQuaGroups.length == 0 ) {
+      
+                 if(this.titurela[0].qualIds.length == 0  && this.titurela[0].tbNtQuaGroups.length == 0 ) {
 
                      this.titurela = []
 

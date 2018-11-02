@@ -19,7 +19,7 @@
                   <el-col :span="12" class="right-c">                  
                       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color='#EBEEF5' menu-trigger='click'  @select="handleSelect"  >
                         <el-menu-item index="1" @click='bidediT' >编辑</el-menu-item>
-                        <el-menu-item index="2" @click='bidalter' >变更</el-menu-item> 
+                        <!-- <el-menu-item index="2" @click='bidalter' >变更</el-menu-item>  -->
                       </el-menu>
                   </el-col>
               </el-row>
@@ -453,17 +453,17 @@
                       <el-table-column prop="bidBonds" label="项目保证金(万元)" width="150" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column width="120" label="保证金截至时间" show-overflow-tooltip> 
-                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD HH:mm') }}</template>
+                         <template slot-scope="scope">{{ scope.row.bidBondsEndTime | dateFormat('YYYY-MM-DD HH:mm')  }}</template>
                       </el-table-column>
                       <el-table-column prop="enrollAddr" label="报名地点" width="120" show-overflow-tooltip>
                       </el-table-column>
                       <el-table-column label="资格审查截止时间" width="150" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD HH:mm')}}</template>
+                         <template slot-scope="scope">{{ scope.row.auditTime | dateFormat('YYYY-MM-DD HH:mm')  }}</template>
                       </el-table-column> 
                       <el-table-column prop="certAuditAddr" label="资格审查地点" width="150" show-overflow-tooltip>
                       </el-table-column> 
                       <el-table-column  label="投标截止时间" width="150" show-overflow-tooltip>
-                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD HH:mm')}}</template>                          
+                         <template slot-scope="scope">{{ scope.row.bidEndTime | dateFormat('YYYY-MM-DD HH:mm')  }}</template>                          
                       </el-table-column> 
                       <el-table-column prop="openingPerson" label="开标人员" width="120" show-overflow-tooltip>
                       </el-table-column> 
@@ -1096,12 +1096,7 @@ export default {
               type:'warning',
               message:'项目类型不能为空~'
             })
-          } else if( this.bidForm.pbMode === '') {
-            return this.$message({
-              type:'warning',
-              message:'评标办法不能为空~'
-            })
-          } else {
+          }  else {
             this.bidForm.first.forEach(item => {
               if( item.oneCandidate == '' || item.oneCandidate == null ) {
                 this.breakt = false 
@@ -1117,7 +1112,7 @@ export default {
         // setTimeout(function() {
                   bidSave({pkid:this.setpkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,pubDate:this.bidForm.pubDate,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.first}).then(res => {
                   this.$message({
-                    type:'success',
+                    type:'保存中标信息',
                     message: res
                   })            
                     bidList({ntId:this.pkid,source:this.source}).then(res => {

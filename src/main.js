@@ -36,7 +36,12 @@ router.beforeEach((to, from, next) => {
 import moment from 'moment'
 // 定义全局的过滤器
 Vue.filter('dateFormat', function (dataStr, pattern = "YYYY-MM-DD") {
-	return moment(dataStr).format(pattern)
+	if (dataStr) {
+		return moment(dataStr).format(pattern)
+	} else {
+		return ''
+	}
+	
 })
 
 new Vue({
