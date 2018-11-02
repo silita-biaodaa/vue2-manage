@@ -1083,33 +1083,39 @@ export default {
     onSubmit() {
             this.breakt = true
           if(this.bidstr == '编辑') {
-              if( this.bidForm.cityCodeName == '') {
-            return this.$message({
-              type:'warning',
-              message:'项目地区不能为空~'
-            })
+              console.log(this.bidForm.proType,1086)
+          if( this.bidForm.cityCodeName == '') {
+                console.log('1')
+              return this.$message({
+                type:'warning',
+                message:'项目地区不能为空~'
+              })
           } else if( this.bidForm.countyCode == '') {
+                console.log('2')
             return this.$message({
               type:'warning',
               message:'项目县区不能为空~'
             })
-          } else if( this.bidForm.proType == '') {
-            return this.$message({
-              type:'warning',
-              message:'项目类型不能为空~'
-            })
-          }  else {
-            this.bidForm.first.forEach(item => {
-              if( item.oneCandidate == '' || item.oneCandidate == null ) {
-                this.breakt = false 
+          } else if( this.bidForm.proType == null || this.bidForm.proType == '' ) {
+                console.log('3')
+
+               return this.$message({
+                         type:'warning',
+                         message:'项目类型不能为空~'
+                       })
+          }  else if(this.bidForm.first[0].oneCandidate == '' || this.bidForm.first[0].oneCandidate == null ) {
+                console.log('4')
+
                 return this.$message({
-                          type:'warning',
-                          message:'中标第一候选人不能为空~'
-                        })
-              }
-           })
+                        type:'warning',
+                        message:'中标第一候选人不能为空~'
+                      })
+
+          } else {
+       
 
            if(this.breakt && !this.zhao) {
+               console.log('111')
                  this.first = this.first.concat(this.delArr,this.bidForm.first,this.bidForm.second,this.bidForm.third)
         // setTimeout(function() {
                   bidSave({pkid:this.setpkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,pubDate:this.bidForm.pubDate,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.first}).then(res => {
@@ -1138,10 +1144,10 @@ export default {
                 this.first = []
            } else {
                 this.first = this.first.concat(this.delArr,this.bidForm.first,this.bidForm.second,this.bidForm.third)
-                    bidSave({tdEditCode:this.bidForm.editCode,pkid:this.bidForm.pkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,pubDate:this.bidForm.pubDate,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.first}).then(res => {
+                    bidSave({tdEditCode:this.bidForm.tdEditCode,pkid:this.bidForm.pkid,source:this.source,ntId:this.pkid,segment:this.bidForm.segment,controllSum:this.bidForm.controllSum,pubDate:this.bidForm.pubDate,proSum:this.bidForm.proSum,proType:this.bidForm.proType,proDuration:this.bidForm.proDuration,pbMode:this.bidForm.pbMode,title:this.bidForm.title,pubDate:this.bidForm.pubDate,cityCode:this.careaName,countyCode:this.bidForm.countyCode,binessType:this.bidForm.binessType,bidsCands:this.first}).then(res => {
                   this.$message({
                     type:'success',
-                    message: '导入编辑明细成功'
+                    message: '导入编辑明细成功保存成功'
                   })            
                     bidList({ntId:this.pkid,source:this.source}).then(res => {
                         res.data.forEach(item => {
@@ -1292,9 +1298,17 @@ export default {
            type:'warning',
            message:'请注意填写正确的标段信息，否则自动默认为一标段'
         })
-        this.bidForm =  this.biddlist[0]
-        this.bidForm.segment = ''
+        // this.bidForm =  this.biddlist[0]
+        this.bidForm.controllSum = this.biddlist[0].controllSum
+        this.bidForm.proSum = this.biddlist[0].proSum
+        this.bidForm.proDuration = this.biddlist[0].proDuration
+        this.bidForm.proType = this.biddlist[0].proType
+        this.bidForm.binessType = this.biddlist[0].binessType
+        this.bidForm.pbMode = this.biddlist[0].pbMode
+        this.bidForm.tdEditCode = this.biddlist[0].editCode
+        this.bidForm.pkid = this.biddlist[0].pkid
         this.bidForm.editCode = ''
+         this.bidForm.segment = ''
         this.bidForm.cityCodeName = this.biddlist[0].cityCodeName
         this.bidForm.careaName = this.biddlist[0].cityCode
         this.bidForm.countyCode = this.biddlist[0].countyCode
@@ -1320,17 +1334,17 @@ export default {
   filters: {
      condi:function(val) {
       switch (val) {
-        case '0':
-          return '未处理'
+       case '0':
+          return '未编辑'
           break;
          case '1':
-          return '未审核'
+          return '已编辑'
           break;
           case '2':
-          return '已通过'
+          return '已审核'
           break;
           case '4':
-          return '审核未通过'
+          return '未通过'
           break;
           case '5':
           return '已处理'

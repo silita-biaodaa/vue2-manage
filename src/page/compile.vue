@@ -556,16 +556,16 @@ export default {
     condi:function(val) {
       switch (val) {
         case '0':
-          return '未处理'
+          return '未编辑'
           break;
          case '1':
-          return '未审核'
+          return '已编辑'
           break;
           case '2':
-          return '已通过'
+          return '已审核'
           break;
           case '4':
-          return '审核未通过'
+          return '未通过'
           break;
           case '5':
           return '已处理'

@@ -125,16 +125,16 @@ export default {
                 label: '全部'
             }, {
                 value: '0',
-                label: '新建'
+                label: '未编辑'
             }, {
                 value: '1',
-                label: '未审核'
+                label: '已编辑'
             }, {
                 value: '2',
-                label: '已通过'
+                label: '已审核'
             }, {
                 value: '4',
-                label: '审核未通过'
+                label: '未通过'
             },
             {
                 value:'5',
