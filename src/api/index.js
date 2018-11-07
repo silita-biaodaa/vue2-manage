@@ -3,8 +3,8 @@ import axios from 'axios'
 
 // const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
 // const baseURL = 'http://192.168.1.131:8080/'
-// const baseURL = 'http://pre-admin.biaodaa.com/'
-const baseURL = 'http://admin.biaodaa.com/'
+const baseURL = 'http://pre-admin.biaodaa.com/'
+// const baseURL = 'http://admin.biaodaa.com/'
 
 
 axios.defaults.baseURL = baseURL
@@ -343,3 +343,7 @@ export const ongText = params => {
 export const bidAt = params => {
     return axios.post('qual/qualGrade/notic/list', params).then(res => res.data)
 }
+// // 获取资质等级
+// export const bidAt = params => {
+//     return axios.post('zhongbiao/listDetailChangeFields', params).then(res => res.data)
+// }

@@ -35,7 +35,7 @@
            <div class="edit-r" @click='nextlist' v-show="isShow" >
              <i class="el-icon-arrow-right" ></i>
            </div>
-            <Edit></Edit>
+            <Edit :matter ='matter' ></Edit>
         </el-col>
         <el-col :span="12" class="redact-c">
             
@@ -385,7 +385,7 @@
  import  Edit  from "@/page/edit";
 //  import moment from 'moment'
 import Vue from 'vue'
- import { bidAt,delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
+ import { cyccontent,bidAt,delpost,insertNtC,listMain,nsertNtC,getNt,updateStatus,listFixed,listTenders,listFiles,listFilesPath,deleteFiles,listArea,listPbMode,deletePkid,listGp,insertNt,listNtgp,listreli } from '@/api/index';
 export default {
   data () {
     return {
@@ -535,7 +535,8 @@ export default {
            children: 'qualList'
          },
        Invalid:false,  
-       intact:false 
+       intact:false ,
+       matter:''
       } 
   },
   mounted () {
@@ -551,6 +552,7 @@ export default {
     this.listTender()   // 获取编辑列表
     this.listarr()  // 上下一条得数据，获取刷选条件
     this.listAtt()  // 获取资质关系组
+    this.substance()
   },
   filters: {
     condi:function(val) {
@@ -876,6 +878,7 @@ export default {
             this.listNtgpn()
             this.listTender()
             this.listFile()
+            this.substance()
         }
     },
     "form.cityCodeName":{
@@ -907,6 +910,14 @@ export default {
 
   },
   methods: {
+    substance() {
+      cyccontent({source:this.code,ntId:this.pkid}).then( res => {
+        //  console.log(res,912)
+         if(res.code == 1) {
+            this.matter = res.data.content
+         }
+      })
+    },
     textt() {
         console.log(this.quaId)
         console.dir(this.titurela,965);

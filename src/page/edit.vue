@@ -37,7 +37,7 @@
     </el-upload>
     <!-- <button @click="save">点击获取保存</button> -->
 
-    <el-button type="primary" @click="save" class="content-btn" >保存</el-button>
+    <!-- <el-button type="primary" @click="save" class="content-btn" >保存</el-button> -->
     <!-- <div class="box ql-editor" ref="htmlContainer"></div>   富文本预览效果  --> 
   </div>
 </template>
@@ -52,7 +52,7 @@ import Quill from "quill";
 
 export default {
   props: {
-    editcontent: "",
+     matter:'',
     propId: ""
   },
 
@@ -95,7 +95,14 @@ export default {
     // return location.protocol === 'http:' ? 'http://upload.qiniu.com' : 'https://up.qbox.me'
     // }
   },
+  created() {
+    this.gainid()
+  },
   methods: {
+    gainid() {
+        // console.log(this.$route.params.id,100)
+        // console.log(1111)
+    },
     save () {
       var reg=new RegExp("(?=[^>]*(?=<))\s","g");
       console.log(this.content.replace(/(?=[^>]*(?=<))\s/g, "&nbsp;"));
@@ -264,7 +271,7 @@ export default {
   },
 
   created() {
-    this.content = this.editcontent;
+    this.content = this.matter;
 
     this.$refs = {
       myQuillEditor: HTMLInputElement,

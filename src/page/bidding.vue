@@ -18,8 +18,8 @@
 
                   <el-col :span="12" class="right-c">                  
                       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color='#EBEEF5' menu-trigger='click'  @select="handleSelect"  >
-                        <el-menu-item index="1" @click='bidediT' >编辑</el-menu-item>
-                        <!-- <el-menu-item index="2" @click='bidalter' >变更</el-menu-item>  -->
+                        <el-menu-item index="1" @click='bidediT'>编辑</el-menu-item>
+                        <el-menu-item index="2" @click='bidalter'>变更</el-menu-item> 
                       </el-menu>
                   </el-col>
               </el-row>
@@ -85,6 +85,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="评标办法" >
+                  <!-- <div ref="pbmo">第一中标候选人</div> -->
                     <el-select v-model="bidForm.pbMode" filterable placeholder="请选择评标办法" style="width:80%">
                       <el-option v-for="item in bidMode" :key="item.code"  :label="item.name" :value="item.code">
                       </el-option>
@@ -102,43 +103,59 @@
                  class="bidtask"
                 >
                 <el-button @click="addDomain" size='mini' class="bidadd" type="danger" v-show="taskadd(index)" >增加</el-button>                   
-                <el-form-item label="第一中标候选人" >
-                   <!-- <div :ref="'one' + index">项目工期</div>  -->
-                  <!-- <div class='labe'>第一中标候选人</div> -->
+                <el-form-item  >
+                  <div :ref="'oneC' + index" class="labe" >第一中标候选人</div>
+
                     <el-select v-model="item.oneCandidate" value-key='creditCode' filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="第一联合人之一">
+                <el-form-item >
+                  <div :ref="'twoC' + index" class="labe" >第一联合人之一</div>
+
                     <el-select v-model="item.twoCandidate"   filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="第一联合人之二">
+                <el-form-item >
+                  <div :ref="'thre' + index" class="labe" >第一联合人之二</div>
+                  
                     <el-select v-model="item.threeCandidate"   filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label='中标金额（万元）'>
+                <el-form-item>
+                  <div :ref="'fQuo' + index" class="labe" >中标金额(万元)</div>
+
                   <el-input v-model="item.fQuote"  ></el-input>
                 </el-form-item>
-                <el-form-item label='项目负责人'>
+                <el-form-item >
+                  <div :ref="'fPro' + index" class="labe" >项目负责人</div>
+
                   <el-input v-model="item.fProLeader"  ></el-input>
                 </el-form-item>
-                <el-form-item label='技术负责人'>
+                <el-form-item >
+                  <div :ref="'fTec' + index" class="labe" >技术负责人</div>
+
                   <el-input v-model="item.fTechLeader"  ></el-input>
                 </el-form-item> 
-                <el-form-item label='施工员'>
+                <el-form-item >
+                  <div :ref="'fBui' + index" class="labe" >施工员</div>
+
                   <el-input v-model="item.fBuilder"  ></el-input>
                 </el-form-item> 
-                <el-form-item label='安全员'>
+                <el-form-item >
+                  <div :ref="'fSaf' + index" class="labe" >安全员</div>
+
                   <el-input v-model="item.fSafety"  ></el-input>
                 </el-form-item>
-                <el-form-item label='质量员'>
+                <el-form-item >
+                  <div :ref="'fQua' + index" class="labe" >质量员</div>
+
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
                 <el-button @click.prevent="removeDomain(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
@@ -151,40 +168,58 @@
                  class="bidtask"
                 >
                 <el-button @click="addtDomain" size='mini' class="bidadd" type="danger" v-show="taskadd(index)" >增加</el-button>                   
-                <el-form-item label="第二中标候选人">
+                <el-form-item >
+                  <div :ref="'oneCa' + index" class="labe" >第二中标候选人</div>
+
                     <el-select v-model="item.oneCandidate" filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="第二联合人之一">
+                <el-form-item >
+                  <div :ref="'twoCa' + index" class="labe" >第二联合人之一</div>
+
                     <el-select v-model="item.twoCandidate" filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="第二联合人之二">
+                <el-form-item >
+                  <div :ref="'three' + index" class="labe" >第二联合人之二</div>
+
                     <el-select v-model="item.threeCandidate" filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName "  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label='中标金额（万元）'>
+                <el-form-item >
+                  <div :ref="'fQuot' + index" class="labe" >中标金额（万元）</div>
+
                   <el-input v-model="item.fQuote"  ></el-input>
                 </el-form-item>
-                <el-form-item label='项目负责人'>
+                <el-form-item >
+                  <div :ref="'fProL' + index" class="labe" >项目负责人</div>
+
                   <el-input v-model="item.fProLeader"  ></el-input>
                 </el-form-item>
-                <el-form-item label='技术负责人'>
+                <el-form-item >
+                  <div :ref="'fTech' + index" class="labe" >技术负责人</div>
+
                   <el-input v-model="item.fTechLeader"  ></el-input>
                 </el-form-item> 
-                <el-form-item label='施工员'>
+                <el-form-item >
+                  <div :ref="'fBuil' + index" class="labe" >施工员</div>
+
                   <el-input v-model="item.fBuilder"  ></el-input>
                 </el-form-item> 
-                <el-form-item label='安全员'>
+                <el-form-item >
+                  <div :ref="'fSafe' + index" class="labe" >安全员</div>
+
                   <el-input v-model="item.fSafety"  ></el-input>
                 </el-form-item>
-                <el-form-item label='质量员'>
+                <el-form-item >
+                  <div :ref="'fQual' + index" class="labe" >质量员</div>
+
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
                 <el-button @click.prevent="removeSecond(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
@@ -196,40 +231,58 @@
                  class="bidtask"
                 >
                 <el-button @click="addthird" size='mini' class="bidadd" type="danger" v-show="taskadd(index)" >增加</el-button>                   
-                <el-form-item label="第三中标候选人">
+                <el-form-item >
+                  <div :ref="'oneCan' + index" class="labe" >第三中标候选人</div>
+
                     <el-select v-model="item.oneCandidate" filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="第三联合人之一">
+                <el-form-item >
+                  <div :ref="'twoCan' + index" class="labe" >第三联合人之一</div>
+
                     <el-select v-model="item.twoCandidate" filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="第三联合人之二">
+                <el-form-item >
+                  <div :ref="'threeC' + index" class="labe" >第三联合人之二</div>
+
                     <el-select v-model="item.threeCandidate" filterable placeholder="请选择企业名称" style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label='中标金额（万元）'>
+                <el-form-item >
+                  <div :ref="'fQuote' + index" class="labe" >中标金额（万元）</div>
+
                   <el-input v-model="item.fQuote"  ></el-input>
                 </el-form-item>
-                <el-form-item label='项目负责人'>
+                <el-form-item >
+                  <div :ref="'fProLe' + index" class="labe" >项目负责人</div>
+
                   <el-input v-model="item.fProLeader"  ></el-input>
                 </el-form-item>
-                <el-form-item label='技术负责人'>
+                <el-form-item >
+                  <div :ref="'fTechL' + index" class="labe" >技术负责人</div>
+
                   <el-input v-model="item.fTechLeader"  ></el-input>
                 </el-form-item> 
-                <el-form-item label='施工员'>
+                <el-form-item >
+                  <div :ref="'fBuild' + index" class="labe" >施工员</div>
+
                   <el-input v-model="item.fBuilder"  ></el-input>
                 </el-form-item> 
                 <el-form-item label='安全员'>
+                  <div :ref="'fSafet' + index" class="labe" >安全员</div>
+
                   <el-input v-model="item.fSafety"  ></el-input>
                 </el-form-item>
-                <el-form-item label='质量员'>
+                <el-form-item >
+                  <div :ref="'fQuali' + index" class="labe" >质量员</div>
+
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
                 <el-button @click.prevent="removeThird(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
@@ -643,8 +696,13 @@ export default {
   },
   methods: {
     textt(){
-        console.log(this.$refs,650)  
-        console.log(this.$refs['one0'].accessKey,652);
+        // console.log(document.querySelector('#one0').style.color)
+        // console.log(document.querySelector('#one0').style.color)
+        // document.querySelector('#one0').style.color  = 'red'
+        // console.dir(document.querySelector('#one0'));
+            // console.dir((this.$refs.one0)[0].style.color,651)
+        (this.$refs['on0'])[0].style.color = 'red'
+        // console.log(this.$refs,653)
     },
     // 获取企业关系列表的
     gaincompany() {
@@ -1297,6 +1355,7 @@ export default {
            message:'请注意填写正确的标段信息，否则自动默认为一标段'
         })
         // this.bidForm =  this.biddlist[0]
+        console.log(this.biddlist[0],1342)
         this.bidForm.controllSum = this.biddlist[0].controllSum
         this.bidForm.proSum = this.biddlist[0].proSum
         this.bidForm.proDuration = this.biddlist[0].proDuration

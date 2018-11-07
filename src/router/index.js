@@ -170,6 +170,11 @@ const routes = [
 									name:'recovery',
 									component: resolve => require(['@/page/error/recovery.vue'], resolve)
 								},
+								{
+									path: '/wrong/:id/:code',
+									name: 'wrong',
+									component: resolve => require(['@/page/error/wrong.vue'], resolve)
+								},
 					]
 		}
 
