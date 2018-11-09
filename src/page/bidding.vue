@@ -576,7 +576,7 @@
 </template>
 <script>
 import bidEdit from '@/page/edit';
-import { listMain,bidSave,bidcompany,listFixed,listPbMode,listArea,updateStatus,bidList,delDidList,bidFiles,listreli,listTenders,bidRela,bidzhaoList,biddelList } from '@/api/index'
+import { changeF,listMain,bidSave,bidcompany,listFixed,listPbMode,listArea,updateStatus,bidList,delDidList,bidFiles,listreli,listTenders,bidRela,bidzhaoList,biddelList } from '@/api/index'
 export default {
   data () {
      return {
@@ -693,6 +693,7 @@ export default {
     this.gaindown()
     this.gaincompany()
     this.gainnext()
+    this.fieilds()
   },
   methods: {
     textt(){
@@ -703,6 +704,12 @@ export default {
             // console.dir((this.$refs.one0)[0].style.color,651)
         (this.$refs['on0'])[0].style.color = 'red'
         // console.log(this.$refs,653)
+    },
+    // 变更字段得获取得
+    fieilds() {
+      changeF({ntId:this.pkid,pkid:this.bidForm.pkid}).then( res => {
+        //  console.log(res,709)
+      })
     },
     // 获取企业关系列表的
     gaincompany() {
@@ -786,7 +793,7 @@ export default {
                  this.judgenull()
                 this.biddData = []
              }
-
+            console.log(this.bidForm,796)
 
 
           //    if(res.data.length >= 1) {

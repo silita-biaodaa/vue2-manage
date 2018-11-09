@@ -10,7 +10,6 @@
                  </div>
                  <div class="handle-c">
                     <span @click='deletemark'>删除</span>
-                    <span @click='textt'>测试</span>
                  </div>
               </el-col>
 
@@ -239,10 +238,6 @@ export default {
     gainDate() {
         this.code = this.$route.params.code
         this.pkid = this.$route.params.id
-    },
-    textt() {
-      // console.log(this.aptituform);
-      
     },
     addaptitu() {
       this.aptituform.push({})

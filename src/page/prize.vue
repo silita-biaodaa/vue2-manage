@@ -1,44 +1,4 @@
 
-
-<style lang="less" scoped>
-    @import '../style/mixin.less';
-
-    /*.el-button {*/
-    /*line-height: 0;*/
-    /*}*/
-    .upload-demo {
-        display: inline-block;
-
-    }
-    .el-breadcrumb__item:nth-child(1){
-        color:#ff0000;
-    }
-    .el-breadcrumb__inner{
-        color:#ff0000;
-    }
-    .bdd_header {
-        margin-left: 30px;
-        margin-right: 30px;
-    }
-
-    .bdd_pur {
-        width: 88px;
-    }
-
-    .el-input {
-        width: 180px;
-    }
-
-    .bdd_color {
-        color: yellow;
-    }
-
-    .el-button--small {
-        padding: 13px 15px;
-    }
-
-</style>
-
 <template>
     <div class="bdd_header">
 
@@ -66,11 +26,12 @@
         <!--多选框-->
         <el-row style="margin-top: 30px;">
             <el-col :span="24" style="line-height:50px;">
-                        <span class="grid-content bg-purple-dark ">奖项级别：<el-select style="margin-left: 5px;"
-                                                                                   class="el-input"
-                                                                                   v-model="prizeLevel"
-                                                                                   @change="getData(1)"
-                                                                                   placeholder="请选择">
+                        <span class="grid-content bg-purple-dark ">奖项级别：
+            <el-select style="margin-left: 5px;"
+               class="el-input"
+               v-model="prizeLevel"
+               @change="getData(1)"
+               placeholder="请选择">
               <el-option
                   v-for="item in prizeLevelList"
                   :key="item.value"
@@ -78,10 +39,11 @@
                   :value="item.value">
               </el-option>
             </el-select></span>
-                <span style="margin-left:40px;" class="grid-content bg-purple-dark">所属地区：<el-select class="bdd_pur"
-                                                                                                    v-model="province"
-                                                                                                    @change="choseProvince"
-                                                                                                    placeholder="省级地区">
+                <span style="margin-left:40px;" class="grid-content bg-purple-dark">所属地区：
+            <el-select class="bdd_pur"
+                     v-model="province"
+                     @change="choseProvince"
+                     placeholder="省级地区">
             <el-option
                 v-for="item in options"
                 :key="item.pkid"
@@ -108,9 +70,9 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <span class="grid-content bg-purple-dark">获奖年度：<el-input style="margin-left: 5px;" placeholder="请输入内容"
-                                                                         v-model.trim="year" clearable>
-
+                <span class="grid-content bg-purple-dark">获奖年度：
+        <el-input style="margin-left: 5px;" placeholder="请输入内容"
+           v-model.trim="year" clearable>
         </el-input></span>
                 <span style="margin-left:40px;" class="grid-content bg-purple-dark">企业名称：<el-input
                     placeholder="请输入内容"
@@ -127,9 +89,10 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <span class="grid-content bg-purple-dark">项目类型：<el-input style="margin-left: 5px;margin-top: 10px;"
-                                                                         placeholder="请输入内容"
-                                                                         v-model.trim="proTypeName" clearable>
+                <span class="grid-content bg-purple-dark">项目类型：
+        <el-input style="margin-left: 5px;margin-top: 10px;"
+             placeholder="请输入内容"
+             v-model.trim="proTypeName" clearable>
         </el-input></span>
 
             </el-col>
@@ -145,9 +108,15 @@
                         action="" :http-request='uploadFileMethod' :show-file-list="false">
                         <el-button style="margin-left:10px;" type="primary" size="small">{{upLoadExcelTxt}}</el-button>
                     </el-upload>
+                    <el-button type="primary" v-show="excelPath" style="margin-left: 10px;" >
+                        <a download="w3logo" :href="excelPath" class="bdd_no" >查看结果
+                        </a><span  @click="deletPath"><i style="color: #ffffff" class="el-icon-circle-close-outline"></i></span>
+                    </el-button>
+                    
                     <!--<el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>-->
-                    <div style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}<span  @click="deletPath">&nbsp;&nbsp;<i style="color: #3a8ee6" class="el-icon-circle-close-outline"></i></span>
-                    </div>
+                    <!-- <div v-show="excelPath" ><a style="margin-left: 10px;" download="w3logo" :href="excelPath" >{{excelPath}} -->
+                    <!-- </a><span  @click="deletPath">&nbsp;&nbsp;<i style="color: #3a8ee6" class="el-icon-circle-close-outline"></i></span></div> -->
+                    
                 </el-row>
             </el-col>
         </el-row>
@@ -302,8 +271,6 @@
                         this.pageCount = res.data.pageCount ? res.data.pageCount : 0;
                         this.currentPage = res.data.currentPage ? res.data.currentPage : 1;
                     }
-
-                    console.log(88888888);
                 });
             },
 //            获取省市
@@ -466,10 +433,9 @@
                 }
                 this.upLoadExcelTxt = "传输中……";
 
-
-                console.log(55555)
                 let file = param.file;
                 let formData = new FormData();
+                console.log(formData,432)
                 formData.append('file', file);
                 formData.append('tabType', 'win_record');
 //                let postBaseUrl = "http://pre-admin.biaodaa.com";
@@ -510,3 +476,47 @@
 
 </script>
 
+
+
+<style lang="less" scoped>
+    @import '../style/mixin.less';
+
+    /*.el-button {*/
+    /*line-height: 0;*/
+    /*}*/
+    .upload-demo {
+        display: inline-block;
+
+    }
+    .el-breadcrumb__item:nth-child(1){
+        color:#ff0000;
+    }
+    .el-breadcrumb__inner{
+        color:#ff0000;
+    }
+    .bdd_header {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    .bdd_pur {
+        width: 88px;
+    }
+
+    .el-input {
+        width: 180px;
+    }
+
+    .bdd_color {
+        color: yellow;
+    }
+
+    .el-button--small {
+        padding: 13px 15px;
+    }
+    .bdd_no {
+       text-decoration:none;
+       color:#fff;  
+    }
+
+</style>

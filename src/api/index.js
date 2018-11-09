@@ -343,7 +343,7 @@ export const ongText = params => {
 export const bidAt = params => {
     return axios.post('qual/qualGrade/notic/list', params).then(res => res.data)
 }
-// // 获取资质等级
-// export const bidAt = params => {
-//     return axios.post('zhongbiao/listDetailChangeFields', params).then(res => res.data)
-// }
+// 获取资质等级
+export const changeF = params => {
+    return axios.post('zhongbiao/listDetailChangeFields', params).then(res => res.data)
+}

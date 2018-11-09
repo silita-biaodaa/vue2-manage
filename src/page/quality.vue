@@ -76,9 +76,13 @@
                         action="" :http-request='uploadFileMethod' :show-file-list="false">
                         <el-button style="margin-left:10px;" type="primary" size="small">{{upLoadExcelTxt}}</el-button>
                     </el-upload>
+                    <el-button type="primary" v-show="excelPath" style="margin-left: 10px;" >
+                        <a download="w3logo" :href="excelPath" class="bdd_no" >查看结果
+                        </a><span  @click="deletPath"><i style="color: #ffffff" class="el-icon-circle-close-outline"></i></span>
+                    </el-button>
                     <!--<el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>-->
-                    <div style="margin-left: 10px;" @click="downLoadExcel" v-show="excelPath">{{excelPath}}<span  @click="deletPath">&nbsp;&nbsp;<i style="color: #3a8ee6" class="el-icon-circle-close-outline"></i></span>
-                    </div>
+                    <!-- <div style="margin-left: 10px;" v-show="excelPath">{{excelPath}}<span  @click="deletPath">&nbsp;&nbsp;<i style="color: #3a8ee6" class="el-icon-circle-close-outline"></i></span> -->
+                    <!-- </div> -->
                 </el-row>
             </el-col>
         </el-row>
@@ -459,6 +463,10 @@
 
     .el-button--small {
         padding: 13px 15px;
+    }
+    .bdd_no {
+        text-decoration: none;
+        color:#fff; 
     }
 </style>
 
