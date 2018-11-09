@@ -71,13 +71,15 @@
                 <el-row>
                     <el-button type="primary" @click="getData(1)">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
+                    <el-button type="primary" @click="allDelete">全部删除</el-button>
+                    <el-button type="primary" @click="educe">导出Excel</el-button>
                     <el-upload
                         class="upload-demo"
+                        :disabled="func"
                         action="" :http-request='uploadFileMethod' :show-file-list="false">
                         <el-button style="margin-left:10px;" type="primary" size="small">{{upLoadExcelTxt}}</el-button>
                     </el-upload>
-                    <el-button type="primary" v-show="excelPath" style="margin-left: 10px;" >
-                        <a download="w3logo" :href="excelPath" class="bdd_no" >查看结果
+                    <el-button type="primary" v-show="excelPath" style="margin-left: 10px;"  >
                         </a><span  @click="deletPath"><i style="color: #ffffff" class="el-icon-circle-close-outline"></i></span>
                     </el-button>
                     <!--<el-button style="margin-left: 10px;" type="primary">导出Excel</el-button>-->
@@ -160,7 +162,8 @@
                 ssessLevel: '',
                 ssessLevelList: [],
                 excelPath: '',
-                upLoadExcelTxt:'上传Excel'
+                upLoadExcelTxt:'上传Excel',
+                func:false
             }
         },
 
@@ -388,9 +391,8 @@
                     return;
                 }
                 this.upLoadExcelTxt = "传输中……";
-
-
-                console.log(55555)
+                this.excelPath = ''
+                this.func = true
                 let file = param.file;
                 let formData = new FormData();
                 formData.append('file', file);
@@ -403,16 +405,17 @@
                     }
                 }).then(res => {
                     this.upLoadExcelTxt = "上传Excel";
+                    this.func = false
                     if (res.data.code == 405) {
                         this.$message({
                             type: 'info',
-                            message: res.data.msg + " 地址为：" + res.data.data
+                            message:'上传失败,请下载上传结果查看'
                         });
                         this.excelPath = res.data.data;
                     } else {
                         this.$message({
-                            type: 'info',
-                            message: res.data.msg
+                            type: 'success',
+                            message:'上传成功~'
                         });
                         this.getData();
                     }
@@ -424,6 +427,34 @@
             },
             deletPath(){
                 this.excelPath = "";
+            },
+            allDelete() {
+                this.$confirm('是否删除筛选全部数据 , 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+              educe() {
+                // exportX({}).then(res=> {
+                //         const blob = new Blob([res]);
+                //         const fileName = '安全生成许可证.xlsx';
+                //         const elink = document.createElement('a');
+                //         elink.download = fileName;
+                //         elink.style.display = 'none';
+                //         elink.href = URL.createObjectURL(blob);
+                //         document.body.appendChild(elink);
+                //         elink.click();
+                //         URL.revokeObjectURL(elink.href); // 释放URL 对象
+                //         document.body.removeChild(elink);
+                // })
             }
 
         },
