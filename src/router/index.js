@@ -6,7 +6,6 @@ import Tender from '@/page/tender'
 import Bin from '@/page/bin'
 import UserList from '@/page/userlist'
 import Quality from '@/page/quality'
-import Record from '@/page/record'
 import Safety from '@/page/safety'
 import Security from '@/page/security'
 import Prize from '@/page/prize'
@@ -87,7 +86,7 @@ const routes = [
                             },
                             {
                                 path:'/record',
-                                component:Record,
+																component: resolve => require(['@/page/record.vue'], resolve),
                                 name:'record'
                             },
                             {
@@ -135,11 +134,11 @@ const routes = [
 								 component:Editer,
 								 name:'editer'
 							 },
-							 {
-								path:'/rease',
-								component:Rease,
-								name:'rease'
-							 },
+							//  {
+							// 	path:'/rease',
+							// 	component:Rease,
+							// 	name:'rease'
+							//  },
 							 {
 								 path:'/quillediter',
 								 component: Quillediter
@@ -175,6 +174,11 @@ const routes = [
 									name: 'wrong',
 									component: resolve => require(['@/page/error/wrong.vue'], resolve)
 								},
+								{
+									path:'/opinion',
+									name: 'opinion',
+									component: resolve => require(['@/page/opinion/opinions.vue'], resolve)
+								}
 					]
 		}
 

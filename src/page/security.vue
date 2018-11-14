@@ -90,8 +90,12 @@
                 <el-row>
                     <el-button type="primary" @click="getData(1)">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
-                     <el-button type="primary" @click="allDelete">全部删除</el-button>
-                     <el-button type="primary" @click="educe">导出Excel</el-button>   
+                    <el-button type="primary" @click="allDelete">全部删除</el-button>
+                    <el-button type="primary"  @click="educe"  >生成Excel</el-button>
+                    <el-button type="primary" v-show='excel1' >
+                        <a  :href="excel1" class="bdd_no"  download="w3logo" >导出Excel 
+                        </a>
+                    </el-button>    
                     <el-upload
                         class="upload-demo"
                         :disabled="func"
@@ -168,7 +172,7 @@
 <script>
     import axios from 'axios'
     import {
-        getJsonData
+        getJsonData,reCol,EXport1
     } from '../api/index.js'
 
     export default {
@@ -196,7 +200,8 @@
                 times: '',
                 excelPath: '',
                 upLoadExcelTxt:'上传Excel',
-                func:false
+                func:false,
+                excel1:''
             }
         },
         mounted() {
@@ -461,7 +466,15 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    
+                     reCol({tabType: "safety_cert",comName: this.comepname,certProvCode: this.province,certCityCode: this.shi,certLevel: this.certLevel,certResult: this.certResult,expired: this.times,issueDate: this.evaluation}).then( res=> {
+                        if(res.code == 1 ) {
+                            this.getData(1)
+                             this.$message({
+                                 type:'success',
+                                 message:'筛选数据全删成功'
+                             })
+                        }
+                    })
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -470,18 +483,11 @@
                 });
             },
               educe() {
-                // exportX({}).then(res=> {
-                //         const blob = new Blob([res]);
-                //         const fileName = '不良记录.xlsx';
-                //         const elink = document.createElement('a');
-                //         elink.download = fileName;
-                //         elink.style.display = 'none';
-                //         elink.href = URL.createObjectURL(blob);
-                //         document.body.appendChild(elink);
-                //         elink.click();
-                //         URL.revokeObjectURL(elink.href); // 释放URL 对象
-                //         document.body.removeChild(elink);
-                // })
+                  EXport1({tabType: "safety_cert",comName: this.comepname,certProvCode: this.province,certCityCode: this.shi,certLevel: this.certLevel,certResult: this.certResult,expired: this.times,issueDate: this.evaluation}).then( res=> {
+                      if(res.code == 1 ) {
+                           this.excel1 = res.data
+                      }
+                  })
             }
 
 

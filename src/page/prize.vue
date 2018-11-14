@@ -104,7 +104,12 @@
                     <el-button type="primary" @click="getData(1)">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
                     <el-button type="primary" @click="allDelete">全部删除</el-button>
-                    <el-button type="primary" @click="educe">导出Excel</el-button>
+                    <el-button type="primary"  @click="educe"  >生成Excel</el-button>
+                    <el-button type="primary" v-show='excel1' >
+                        <a  :href="excel1" class="bdd_no"  download="w3logo" >导出Excel 
+                        </a>
+                    </el-button>
+
                     <el-upload
                         class="upload-demo"
                         :disabled="func" 
@@ -198,7 +203,7 @@
 <script>
     import axios from 'axios'
     import {
-        getJsonData
+        getJsonData,EXport1,reCol
     } from '../api/index.js'
 
     export default {
@@ -227,7 +232,9 @@
                 selectDataList: [],
                 excelPath: '',
                 upLoadExcelTxt:'上传Excel',
-                func:false
+                func:false,
+                exceLrose:'',
+                excel1:''
             }
         },
 
@@ -240,6 +247,9 @@
         },
 
         methods: {
+            text() {
+               console.log(this.year)     
+            },
             //  获奖信息接口
             getData(param) {
 //                let postBaseUrl = "http://pre-admin.biaodaa.com";
@@ -478,7 +488,15 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    
+                    reCol({tabType:'win_record',comName:this.comName,level:this.prizeLevel,year:this.year,provCode:this.province,cityCode:this.shi,awdName:this.prizeName,proTypeName:this.proTypeName,proName:this.proName}).then( res=> {
+                        if(res.code ==1) {
+                            this.getData(1)
+                            this.$message({
+                                type:'success',
+                                message:'删选数据意见全部删除'
+                            })
+                        }
+                    })
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -488,18 +506,11 @@
                
             },
             educe() {
-                // exportX({}).then(res=> {
-                //         const blob = new Blob([res]);
-                //         const fileName = '获奖信息.xlsx';
-                //         const elink = document.createElement('a');
-                //         elink.download = fileName;
-                //         elink.style.display = 'none';
-                //         elink.href = URL.createObjectURL(blob);
-                //         document.body.appendChild(elink);
-                //         elink.click();
-                //         URL.revokeObjectURL(elink.href); // 释放URL 对象
-                //         document.body.removeChild(elink);
-                // })
+                EXport1({tabType: "win_record",comName: this.comName,level: this.prizeLevel,provCode: this.province,cityCode: this.shi,awdName: this.prizeName,year: this.year,proTypeName: this.proTypeName,proName: this.proName,}).then( res => {
+                    if(res.code == 1) {
+                         this.excel1 = res.data
+                    }
+                })
             }
 
 

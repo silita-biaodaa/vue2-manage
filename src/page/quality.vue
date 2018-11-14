@@ -43,7 +43,7 @@
                 <span style="margin-left:20px;" class="grid-content bg-purple-dark">年度：<el-select
                     v-model="curYear"
                     @change="queryYear"
-                    placeholder="省级地区">
+                    placeholder="年份">
               <el-option
                   v-for="item in yearArr"
                   :key="item.year"
@@ -72,7 +72,11 @@
                     <el-button type="primary" @click="getData(1)">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
                     <el-button type="primary" @click="allDelete">全部删除</el-button>
-                    <el-button type="primary" @click="educe">导出Excel</el-button>
+                    <el-button type="primary"  @click="educe"  >生成Excel</el-button>
+                    <el-button type="primary" v-show='excel1' >
+                        <a download="w3logo" :href="excel1" class="bdd_no"  >导出Excel 
+                        </a>
+                    </el-button>
                     <el-upload
                         class="upload-demo"
                         :disabled="func"
@@ -137,7 +141,7 @@
 <script>
     import axios from 'axios'
     import {
-        getJsonData
+        getJsonData,EXport1,reCol
     } from '../api/index.js'
 
     export default {
@@ -163,7 +167,8 @@
                 ssessLevelList: [],
                 excelPath: '',
                 upLoadExcelTxt:'上传Excel',
-                func:false
+                func:false,
+                excel1:''
             }
         },
 
@@ -434,27 +439,30 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    
+                    reCol({tabType:'highway_grade',comName:this.comName,assessProvCode:this.province,assessLevel:this.ssessLevel,assessYear:this.curYear}).then( res=> {
+                        if(res.code == 1) {
+                            this.getData(1)
+                             this.$message({
+                                 type:'success',
+                                 message:'筛选数据全删成功'
+                             })
+                        }
+                    })
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '已取消删除'
+                        message: '已取消删除'   
                     });
                 });
             },
               educe() {
-                // exportX({}).then(res=> {
-                //         const blob = new Blob([res]);
-                //         const fileName = '安全生成许可证.xlsx';
-                //         const elink = document.createElement('a');
-                //         elink.download = fileName;
-                //         elink.style.display = 'none';
-                //         elink.href = URL.createObjectURL(blob);
-                //         document.body.appendChild(elink);
-                //         elink.click();
-                //         URL.revokeObjectURL(elink.href); // 释放URL 对象
-                //         document.body.removeChild(elink);
-                // })
+                this.curYear = this.curYear ? this.curYear : null; 
+                EXport1({tabType:'highway_grade',comName:this.comName,assessProvCode:this.province,assessYear:this.curYear,assessLevel:this.ssessLevel}).then(res=> {
+                      console.log(res,460)
+                     if(res.code == 1 ) {
+                         this.excel1 = res.data
+                     }  
+                })
             }
 
         },

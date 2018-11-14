@@ -2,8 +2,8 @@ import axios from 'axios'
 
 
 // const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
-// const baseURL = 'http://192.168.1.131:8080/'
-const baseURL = 'http://pre-admin.biaodaa.com/'
+const baseURL = 'http://192.168.1.131:8080/'
+// const baseURL = 'http://pre-admin.biaodaa.com/'
 // const baseURL = 'http://admin.biaodaa.com/'
 
 
@@ -347,3 +347,12 @@ export const bidAt = params => {
 export const changeF = params => {
     return axios.post('zhongbiao/listDetailChangeFields', params).then(res => res.data)
 }
+// 导出Excel获奖信息
+export const EXport1 = params => {
+    return axios.post('export/exportExcel', params).then(res => res.data)
+}
+// 全选删除
+export const reCol = params => {
+    return axios.post('corp/requ/check/del', params).then(res => res.data)
+}
+

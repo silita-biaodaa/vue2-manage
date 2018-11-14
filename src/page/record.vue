@@ -67,7 +67,11 @@
                     <el-button type="primary" @click="getData(1)">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
                     <el-button type="primary" @click="allDelete">全部删除</el-button>
-                    <el-button type="primary" @click="educe">导出Excel</el-button>
+                    <el-button type="primary"  @click="educe"  >生成Excel</el-button>
+                    <el-button type="primary" v-show='excel1' >
+                        <a  :href="excel1" class="bdd_no"  download="w3logo" >导出Excel 
+                        </a>
+                    </el-button>
                     <el-upload
                         class="upload-demo"
                         :disabled="func"
@@ -137,7 +141,7 @@
 <script>
     import axios from 'axios'
     import {
-        getJsonData
+        getJsonData,reCol,EXport1
     } from '../api/index.js'
 
     export default {
@@ -161,7 +165,8 @@
                 items: '',
                 excelPath: '',
                 upLoadExcelTxt:'上传Excel',
-                func:false
+                func:false,
+                excel1:''
 
             }
         },
@@ -169,8 +174,6 @@
         mounted() {
             this.getData();
             this.getProvinceData();
-//            this.getYearArray();
-//            this.getdelete();
         },
         methods: {
             //  获取省份接口
@@ -189,8 +192,6 @@
                 });
             },
             getData(param) {
-//                let postBaseUrl = "http://pre-admin.biaodaa.com";
-//                console.log(1111)
                 if (param != null) {
                     this.currentPage = 1;
                 }
@@ -207,6 +208,7 @@
                 });
                 getJsonData("/corp/requ/list", dataParam).then(res => {
                     let dataArray = res.data;
+                    console.log(res.data,206)
                     if (dataArray == null || dataArray.length == 0) {
                         this.tableData = dataArray.list;
                         this.totalSize = 0;
@@ -219,7 +221,6 @@
                         this.currentPage = res.data.currentPage ? res.data.currentPage : 1;
                     }
 
-                    console.log(88888888);
                 });
 
             },
@@ -342,7 +343,15 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    
+                    reCol({tabType: "safety_permission_cert",comName: this.comNames,certNo: this.licenses,certProvCode: this.province,expired: this.items,issueDate: this.Time}).then(res => {
+                        if(res.code == 1) {
+                            this.getData(1)
+                            this.$message({
+                                type:'success',
+                                message:'筛选数据全删成功'
+                            }) 
+                        }
+                    })
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -351,18 +360,11 @@
                 });
             },
               educe() {
-                // exportX({}).then(res=> {
-                //         const blob = new Blob([res]);
-                //         const fileName = '安全认证.xlsx';
-                //         const elink = document.createElement('a');
-                //         elink.download = fileName;
-                //         elink.style.display = 'none';
-                //         elink.href = URL.createObjectURL(blob);
-                //         document.body.appendChild(elink);
-                //         elink.click();
-                //         URL.revokeObjectURL(elink.href); // 释放URL 对象
-                //         document.body.removeChild(elink);
-                // })
+                EXport1({tabType: "safety_permission_cert",comName: this.comNames,certNo: this.licenses,certProvCode: this.province,expired: this.items,issueDate: this.Time}).then(res => {
+                     if(res.code == 1) {
+                         this.excel1 = res.data
+                    }
+                })
             }
 
         },
