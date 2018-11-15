@@ -91,11 +91,7 @@
                     <el-button type="primary" @click="getData(1)">查询</el-button>
                     <el-button type="primary" @click="deleteConfirm">删除</el-button>
                     <el-button type="primary" @click="allDelete">全部删除</el-button>
-                    <el-button type="primary"  @click="educe"  >生成Excel</el-button>
-                    <el-button type="primary" v-show='excel1' >
-                        <a  :href="excel1" class="bdd_no"  download="w3logo" >导出Excel 
-                        </a>
-                    </el-button>    
+                    <el-button type="primary"  @click="educe"  >导出Excel</el-button>
                     <el-upload
                         class="upload-demo"
                         :disabled="func"
@@ -486,6 +482,12 @@
                   EXport1({tabType: "safety_cert",comName: this.comepname,certProvCode: this.province,certCityCode: this.shi,certLevel: this.certLevel,certResult: this.certResult,expired: this.times,issueDate: this.evaluation}).then( res=> {
                       if(res.code == 1 ) {
                            this.excel1 = res.data
+                            const elink = document.createElement('a');
+                             elink.href = this.excel1
+                             elink.download = 'w3logo'
+                            document.body.appendChild(elink);
+                            elink.click();
+                            document.body.removeChild(elink);
                       }
                   })
             }
