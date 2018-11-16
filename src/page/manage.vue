@@ -50,7 +50,7 @@
 							<el-menu-item index="compile">行业资质</el-menu-item>
 							<el-menu-item index="quillediter">平台公示</el-menu-item>
 							<el-menu-item index="addgoods">消息中心</el-menu-item>
-							<el-menu-item index="visitor">意见反馈</el-menu-item>
+							<el-menu-item index="opinion">意见反馈</el-menu-item>
 						</el-submenu>
 						<el-submenu index="5">
 							<template slot="title">

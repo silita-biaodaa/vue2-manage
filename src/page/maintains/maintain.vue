@@ -87,7 +87,7 @@
                     <!-- 富文本预览效果   -->
               </div>
               <div class="main-btu"> 
-                <button class="query-btn" @click="preview">预览</button>
+                <el-button type="success" ><span  @click="preview" >预览</span>  <span  @click="deletPath"><i style="color: #ffffff" class="el-icon-circle-close-outline"></i></span></el-button>
                 <el-button type="success" @click="suptext"  >保存公告</el-button>
               </div>
               <div class="box ql-editor" ref="htmlContainer"></div>   
@@ -192,7 +192,11 @@ export default {
       .addHandler("video", this.videoHandler); // 为视频ICON绑定事件
   },
   methods: {
+    deletPath() {
+       this.$refs.htmlContainer.innerHTML = null
+    },
        preview () {
+          console.log(this.$refs.htmlContainer.innerHTML,199)
             if (!this.content || this.content === '') {
                 this.$message.warning('内容为空，无预览效果！');
                 return;
@@ -209,7 +213,6 @@ export default {
         // this.$refs.htmlContainer.innerHTML = this.$refs.myQuillEditor.getContent();
         },
     suptext() {
-      console.log(this.value1)
         if( this.formInline.city  && this.formLabelAlign.name && this.formLabelAlign.region && this.content && this.citys ) {
              if(this.isActivated) {
                 addNotice({source:this.citys,proviceCode:this.citys,cityCode:this.formInline.city,title:this.formLabelAlign.name,ntCategory:'1',pubDate:this.value1,url:this.formLabelAlign.region,content:this.content}).then( res => {
@@ -236,7 +239,7 @@ export default {
         } else {
            return this.$message({
               type:'warning',
-              message:'所以项都是必填项！'
+              message:'所有项都是必填项！'
            })
         }
     },
@@ -482,7 +485,7 @@ export default {
   
   .main-btu {
     margin-top: 5px;
-    margin-left: 90%;
+    margin-left: 80%;
   }
 }
 </style>

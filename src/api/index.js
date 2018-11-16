@@ -359,5 +359,10 @@ export const reCol = params => {
 export const addNotice = params => {
     return axios.post('notice/add', params).then(res => res.data)
 }
+// 意见反馈
+export const feedback = params => {
+    return axios.post('feedback/list', params).then(res => res.data)
+}
+
 
 

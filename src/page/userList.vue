@@ -1,9 +1,9 @@
 <template>
     <!--导航栏-->
     <el-container>
-        <el-breadcrumb separator="/">
+        <!-- <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path:'/userlist' }">首页</el-breadcrumb-item>
-        </el-breadcrumb>
+        </el-breadcrumb> -->
         <!--搜索框-->
         <el-header>
             <div><span>所属地区：
