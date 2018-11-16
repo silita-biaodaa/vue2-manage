@@ -134,11 +134,11 @@ const routes = [
 								 component:Editer,
 								 name:'editer'
 							 },
-							//  {
-							// 	path:'/rease',
-							// 	component:Rease,
-							// 	name:'rease'
-							//  },
+							 {
+								path:'/rease',
+								component:Rease,
+								name:'rease'
+							 },
 							 {
 								 path:'/quillediter',
 								 component: Quillediter
@@ -178,6 +178,11 @@ const routes = [
 									path:'/opinion',
 									name: 'opinion',
 									component: resolve => require(['@/page/opinion/opinions.vue'], resolve)
+								},
+								{
+									path:'/maintain',
+									name: 'maintain',
+									component: resolve => require(['@/page/maintains/maintain.vue'], resolve)
 								}
 					]
 		}

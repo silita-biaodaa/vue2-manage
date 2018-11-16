@@ -16,12 +16,11 @@
 
     <el-upload 
     class="upload-demo" 
-    action="http://192.168.0.97:8383/v1/base/image_upload"
+    action="http://pre-admin.biaodaa.com/upload/uploadImage/"
   
     :before-upload='beforeUpload' 
     :data="uploadData" 
     :on-success='upScuccess' 
-    name="files" 
     :on-error="handleAvatarFail" 
     :headers="headers" 
     ref="upload" 
@@ -35,10 +34,10 @@
       点击上传</el-button>
   
     </el-upload>
-    <!-- <button @click="save">点击获取保存</button> -->
-
-    <!-- <el-button type="primary" @click="save" class="content-btn" >保存</el-button> -->
-    <!-- <div class="box ql-editor" ref="htmlContainer"></div>   富文本预览效果  --> 
+    <!-- <button @click="save">点击获取保存</button>  -->
+    <button class="query-btn" @click="preview">预览</button>
+    <el-button type="primary" @click="save" class="content-btn" >保存</el-button>
+    <div class="box ql-editor" ref="htmlContainer"></div>   富文本预览效果  
   </div>
 </template>
 
@@ -58,13 +57,13 @@ export default {
 
   data() {
     return {
-      loading: false, //图片上传状态来确定是否显示得 loading 动画 
-      headers: {token: localStorage.getItem('Authorization')}, 
-      //图片上传得请求头得token值
-      content: "", // 文章内容，这里可以输入要传进去得文章内容得
-      editorOption: {
-        placeholder: "请输入内容",
-        modules: {
+          loading: false, //图片上传状态来确定是否显示得 loading 动画 
+          headers: {Authorization: localStorage.getItem('Authorization')}, 
+          //图片上传得请求头得token值
+          content: "", // 文章内容，这里可以输入要传进去得文章内容得
+          editorOption: {
+          placeholder: "请输入内容",
+          modules: {
           // 配置富文本
           toolbar: [
             ["bold", "italic", "underline", "strike"],
@@ -83,7 +82,7 @@ export default {
       },
       addRange: [],
       uploadData: {
-        editor: 1
+        file: ''
       },
       photoUrl: "", // 上传图片地址
       uploadType: "" // 上传的文件类型（图片、视频）
@@ -96,13 +95,24 @@ export default {
     // }
   },
   created() {
-    this.gainid()
   },
   methods: {
-    gainid() {
-        // console.log(this.$route.params.id,100)
-        // console.log(1111)
-    },
+      preview () {
+            if (!this.content || this.content === '') {
+                this.$message.warning('内容为空，无预览效果！');
+                return;
+            }
+            // var reg=new RegExp('(?=[^>]*(?=<))\s','g');
+            console.log(this.content.replace(/(?=[^>]*(?=<))\s/g, '&nbsp;'));
+            // this.dialogVisible = true;
+            // 防止html容器还没渲染完成
+            setTimeout(() => {
+                console.log(this.$refs.htmlContainer);
+                this.$refs.htmlContainer.innerHTML = this.content.replace(/(?=[^>]*(?=<))\s/g, '&nbsp;');
+            }, 100);
+            // this.$refs.htmlContainer.innerHTML = this.content.replace(/(?=[^>]*(?=<))\s/g, '&nbsp;');
+        // this.$refs.htmlContainer.innerHTML = this.$refs.myQuillEditor.getContent();
+        },
     save () {
       var reg=new RegExp("(?=[^>]*(?=<))\s","g");
       console.log(this.content.replace(/(?=[^>]*(?=<))\s/g, "&nbsp;"));
@@ -113,7 +123,10 @@ export default {
     // 这个钩子还支持 promise
 
     beforeUpload(file) {   //上传图片前操作
-      return this.qnUpload(file);
+      console.log(file)
+      console.log(file.name,133)
+      this.uploadData.file = file.type 
+      // return this.qnUpload(file);
     },
 
     // 图片上传前获得数据token数据
@@ -167,9 +180,11 @@ export default {
     // 图片上传成功回调 插入到编辑器中
 
     upScuccess(e, file, fileList) {
+      console.log(111)
+      console.log(e)
       this.loading = false;
 
-      this.fullscreenLoading = false;
+      // this.fullscreenLoading = false;
 
       let vm = this;
 
@@ -177,9 +192,9 @@ export default {
 
       if (this.uploadType === "image") {
         // 获得文件上传后的URL地址
-        url = e.data[0].URL;
+        url = e.data;
         console.log(e);
-        console.log(url);
+        console.log(url,);
       } else if (this.uploadType === "video") {
         url = vm.url + e.message;
       }
@@ -267,6 +282,7 @@ export default {
     handleAvatarFail (err, file) {
       console.log(123);
       console.log(err);
+      console.log(file)
     }
   },
 

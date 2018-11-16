@@ -357,6 +357,12 @@
                 });
             },
               educe() {
+                  if( !this.tableData ) {
+                       return this.$message({
+                           type:'warning',
+                           message:'暂无数据可导出!'
+                       }) 
+                   }   
                 EXport1({tabType: "safety_permission_cert",comName: this.comNames,certNo: this.licenses,certProvCode: this.province,expired: this.items,issueDate: this.Time}).then(res => {
                      if(res.code == 1) {
                          this.excel1 = res.data

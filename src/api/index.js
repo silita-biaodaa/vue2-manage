@@ -355,4 +355,9 @@ export const EXport1 = params => {
 export const reCol = params => {
     return axios.post('corp/requ/check/del', params).then(res => res.data)
 }
+// 全选删除
+export const addNotice = params => {
+    return axios.post('notice/add', params).then(res => res.data)
+}
+
 

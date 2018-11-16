@@ -503,6 +503,13 @@
                
             },
             educe() {
+                   if (!this.tableData ) {
+                       return this.$message({
+                           type:'warning',
+                           message:'暂无数据可导出!'
+                       }) 
+                   }     
+
                 EXport1({tabType: "win_record",comName: this.comName,level: this.prizeLevel,provCode: this.province,cityCode: this.shi,awdName: this.prizeName,year: this.year,proTypeName: this.proTypeName,proName: this.proName,}).then( res => {
                     if(res.code == 1) {
                          this.excel1 = res.data

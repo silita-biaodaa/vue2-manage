@@ -238,8 +238,6 @@
                         this.pageCount = res.data.pageCount ? res.data.pageCount : 0;
                         this.currentPage = res.data.currentPage ? res.data.currentPage : 1;
                     }
-
-                    console.log(88888888);
                 });
 
             },
@@ -479,6 +477,12 @@
                 });
             },
               educe() {
+                  if(!this.tableData) {
+                       return this.$message({
+                           type:'warning',
+                           message:'暂无数据可导出!'
+                       }) 
+                   }   
                   EXport1({tabType: "safety_cert",comName: this.comepname,certProvCode: this.province,certCityCode: this.shi,certLevel: this.certLevel,certResult: this.certResult,expired: this.times,issueDate: this.evaluation}).then( res=> {
                       if(res.code == 1 ) {
                            this.excel1 = res.data

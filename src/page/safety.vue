@@ -220,8 +220,6 @@
                         this.pageCount = res.data.pageCount ? res.data.pageCount : 0;
                         this.currentPage = res.data.currentPage ? res.data.currentPage : 1;
                     }
-
-                    console.log(88888888);
                 });
 
 
@@ -232,7 +230,6 @@
                 getJsonData('/common/area').then(res => {
                     let dataArray = res.data;
                     this.options = dataArray;
-                    console.log(7777)
                 })
                 this.queryData();
             },
@@ -250,8 +247,6 @@
                     this.total = res.data.total;
                     this.pageCount = res.data.pageCount;
                     this.pageSize = res.data.pageSize;
-                    console.log(8888888888888);
-
                 });
 
             },
@@ -448,6 +443,12 @@
                 });
             },
               educe() {
+                  if( !this.tableData ) {
+                       return this.$message({
+                           type:'warning',
+                           message:'暂无数据可导出!'
+                       }) 
+                   }   
                 EXport1({tabType: "undesirable",comName:this.compname,proName: this.project,badInfo: this.action,issueOrg: this.Release,property: this.property,issueDate: this.issue,expired: this.valid}).then( res=> {
                     console.log(res,456)
                     if(res.code == 1) {

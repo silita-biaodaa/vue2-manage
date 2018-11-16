@@ -452,6 +452,12 @@
                 });
             },
               educe() {
+                  if( !this.tableData ) {
+                       return this.$message({
+                           type:'warning',
+                           message:'暂无数据可导出!'
+                       }) 
+                   }   
                 this.curYear = this.curYear ? this.curYear : null; 
                 EXport1({tabType:'highway_grade',comName:this.comName,assessProvCode:this.province,assessYear:this.curYear,assessLevel:this.ssessLevel}).then(res=> {
 

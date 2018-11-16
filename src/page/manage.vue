@@ -77,6 +77,8 @@
 							<el-menu-item index="/aptitudes">资质维护</el-menu-item>
 							<el-menu-item index="/method">评标办法维护</el-menu-item>
 							<el-menu-item index="/maintenance">等级维护</el-menu-item>
+							<el-menu-item index="/maintain">公告维护</el-menu-item>
+
 						</el-submenu>
 							<el-submenu index="8">
 							<template slot="title">
