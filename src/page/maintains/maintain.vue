@@ -253,7 +253,6 @@ export default {
     },
     getprovince() {
         listArea({areaParentId:'0'}).then( res => {
-          console.log(res,198)
            if(res.code == 1) {
              res.data.forEach( el => {
                 el.areaCode = el.pkid + el.areaCode

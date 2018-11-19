@@ -363,6 +363,15 @@ export const addNotice = params => {
 export const feedback = params => {
     return axios.post('feedback/list', params).then(res => res.data)
 }
+// 用户统计
+export const userAll = params => {
+    return axios.post('user/count', params).then(res => res.data)
+}
+// 用户数据
+export const userData = params => {
+    return axios.post('user/list', params).then(res => res.data)
+}
+
 
 
 
