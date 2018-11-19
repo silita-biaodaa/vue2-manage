@@ -371,6 +371,10 @@ export const userAll = params => {
 export const userData = params => {
     return axios.post('user/list', params).then(res => res.data)
 }
+// 锁定
+export const userLock = params => {
+    return axios.post('user/lock', params).then(res => res.data)
+}
 
 
 

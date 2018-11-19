@@ -139,11 +139,12 @@
                 </template>
               </el-table-column>
               <el-table-column label="操作">
-                <template slot-scope="scope">
+                <template slot-scope="scope">                 
                   <el-button
                     size="mini"
                     type="danger"
-                    @click="handleDelete(scope.$index, scope.row)"  :disabled="btn(scope.row)" >锁定</el-button>
+                    @click="handleDelete(scope.$index, scope.row)">{{ scope.row.isEnable | btn }}                                      
+                    </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -168,7 +169,7 @@
  </div>
 </template>
 <script>
-import { listArea,userAll,userData } from '@/api/index'
+import { listArea,userAll,userData,userLock } from '@/api/index'
 export default {
   data () {
      return {
@@ -232,6 +233,15 @@ export default {
     this.register()
     this.gainDate()
   },
+  filters: {
+    btn(val) {
+       if(val) {
+          return '未锁定'
+       } else {
+          return '已锁定'
+       }
+    }
+  },
   methods: {
     gainDate() {
         userData({currentPage:this.pagenum,pageSize:this.pagesize,provCode:this.citys,cityCode:this.city,startDate:this.newtime[0],endDate:this.newtime[1],sex:this.gender,keyWord:this.select,}).then( res=> {
@@ -274,7 +284,29 @@ export default {
       })
     },
     handleDelete(i,val) {
+       if(val.isEnable) {
+         userLock({pkid:val.pkid,isEnable:0}).then(res=> {
+             if(res.code ==1) {
+                this.$message({
+                   type:'success',
+                   message:'用户锁定成功'
+                })
+                this.gainDate()
+             }
+         })
+       } else {
+         userLock({pkid:val.pkid,isEnable:1}).then(res=> {
+             if(res.code ==1) {
+                this.$message({
+                   type:'success',
+                   message:'用户解锁成功'
+                })
+                this.gainDate()
+             }
+         })
+       }
 
+        
     },
     handleCurrentChange(val) {  // 当前页改变的函数
       this.pagenum = val
@@ -285,13 +317,6 @@ export default {
       this.pagenum = 1
       this.gainData()
    },
-   btn(val) {
-      if(val.isEnable) {
-        return false
-      } else {
-         return true 
-      }
-   }
   },
   components: {
   }
