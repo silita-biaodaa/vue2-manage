@@ -64,7 +64,7 @@
         <el-col :span="6" class="user-sel" >
             <el-input
               placeholder="请输入姓名，公司，职位，手机号码"
-              v-model="select"
+              v-model.trim="select"
               clearable>
             </el-input>
         </el-col>
