@@ -68,7 +68,7 @@
               clearable>
             </el-input>
         </el-col>
-        <el-button type="primary"  @click='gainDate' >查询</el-button>
+        <el-button type="primary"  @click='gainData' >查询</el-button>
      </el-row>
       <el-row>
         <el-col>
@@ -186,11 +186,17 @@ export default {
         pagenum:1,
         pagesize:15,
         today:0,
+        startDate:'',
+        endDate:'',
         total:0,
         tableData:[],
         all:0,
         newtime:'',
         sex:[
+          {
+            label:'全部',
+            value:''
+          },
           {label:'男',
            value:'1' 
           },{
@@ -244,7 +250,9 @@ export default {
   },
   methods: {
     gainDate() {
-        userData({currentPage:this.pagenum,pageSize:this.pagesize,provCode:this.citys,cityCode:this.city,startDate:this.newtime[0],endDate:this.newtime[1],sex:this.gender,keyWord:this.select,}).then( res=> {
+       this.startDate = this.newtime ? this.newtime[0] : ''
+       this.endDate = this.newtime ? this.newtime[1] : ''
+        userData({currentPage:this.pagenum,pageSize:this.pagesize,provCode:this.citys,cityCode:this.city,startDate:this.startDate,endDate:this.endDate,sex:this.gender,keyWord:this.select,}).then( res=> {
             if(res.code == 1) {
                this.tableData =res.data.list
                this.total = res.data.total
@@ -253,15 +261,20 @@ export default {
           
       )
     },
+    gainData( ) {
+        this.pagenum = 1
+        this.gainDate()
+    },
      getprovince() {
         listArea({areaParentId:'0'}).then( res => {
           if(res.code == 1) {
-            this.optionsss = res.data
-            this.optionsss.unshift({areaShortName:'全部',areaCode:''})
+            res.data.unshift({areaShortName:'全部',areaCode:''})
+            this.optionsss = JSON.parse(JSON.stringify(res.data))
              res.data.forEach( el => {
                 el.areaCode = el.pkid + el.areaCode
              });
               this.options = res.data  
+              console.log(this.optionsss,265)
            }
         })
     },
@@ -270,6 +283,7 @@ export default {
        this.province =  val.slice(0,32)
        this.citys = val.slice(32)
        listArea({areaParentId:this.province}).then(res => {
+         res.data.unshift({areaName:'全部',areaCode:''})
           this.optionss = res.data
        })
     },
@@ -332,6 +346,7 @@ export default {
    },
   },
   components: {
+
   }
 }
 </script>

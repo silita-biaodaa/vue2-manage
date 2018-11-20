@@ -65,7 +65,7 @@
 								<i class="el-icon-setting"></i>
 								<span>用户管理</span>
 							</template>
-							<el-menu-item index="/users">管理员设置</el-menu-item>
+							<el-menu-item index="/users">用户管理</el-menu-item>
 							<!-- <el-menu-item index="sendMessage">发送通知</el-menu-item> -->
 						</el-submenu>
 						<el-submenu index="7">
