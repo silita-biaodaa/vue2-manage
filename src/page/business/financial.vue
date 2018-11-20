@@ -16,7 +16,7 @@
               :picker-options="pickerOptions2">
             </el-date-picker>
          </el-col>
-         <el-col :span='5'>
+         <el-col :span='6'>
               <el-input
                   placeholder="请输入借款人姓名，项目名称进行搜索"
                   v-model.trim="select"
@@ -84,7 +84,7 @@
                 label="提交时间"
                 width="180">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.created }}</span>
+                  <span >{{ scope.row.created }}</span>
                 </template>
               </el-table-column>           
             </el-table>
@@ -175,7 +175,9 @@ export default {
       this.gainData()
    },
    educe() {
-        finEX({proName:this.select,created:this.times[0],createdTwo:this.times[1]},{responseType: 'blob'}).then(res=> {
+        this.startDate = this.newtime ? this.newtime[0] : ''
+       this.endDate = this.newtime ? this.newtime[1] : ''
+        finEX({proName:this.select,created:this.startDate,createdTwo:this.endDate},{responseType: 'blob'}).then(res=> {
                const blob = new Blob([res]);
                 const fileName = '金融数据.xlsx';
                 const elink = document.createElement('a');

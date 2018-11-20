@@ -379,11 +379,18 @@ export const userLock = params => {
 export const finData = params => {
     return axios.post('FinService/listFinService', params).then(res => res.data)
 }
-// 锁定
-export const finEX = params => {
-    return axios.post('FinService/exportFinService', params).then(res => res.data)
-}
 
+export const finEX = form => {
+    return axios({ // 用axios发送post请求
+        method: 'post',
+        url: 'FinService/exportFinService', // 请求地址
+        data: form, // 参数
+        responseType: 'blob', // 表明返回服务器返回的数据类型
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.data)
+}
 
 
 
