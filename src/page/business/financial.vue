@@ -155,7 +155,9 @@ export default {
       this.gainData()
   },
   gainData() {
-     finData({proName:this.select,created:this.times[0],createdTwo:this.times[1],currentPage:this.pagenum,pageSize:this.pagesize}).then(res=> {
+     this.startDate = this.times ? this.times[0] : ''
+       this.endDate = this.times ? this.times[1] : ''
+     finData({proName:this.select,created:this.startDate,createdTwo:this.endDate,currentPage:this.pagenum,pageSize:this.pagesize}).then(res=> {
         if(res.code == 1) {
           console.log(res)
            this.tableData = res.data.datas 
