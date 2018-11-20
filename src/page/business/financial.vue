@@ -18,13 +18,13 @@
          </el-col>
          <el-col :span='5'>
               <el-input
-                  placeholder="请输入内容"
-                  v-model="select"
+                  placeholder="请输入借款人姓名，项目名称进行搜索"
+                  v-model.trim="select"
                   clearable>
                 </el-input>
          </el-col>
          <el-col :span='7' class="fin" >
-              <el-button type="primary"  @click='gainData' >查询</el-button>
+              <el-button type="primary"  @click='gainDate' >查询</el-button>
               <el-button type="primary"  @click='educe' >导出Excel</el-button>
          </el-col>
      </el-row>
@@ -35,54 +35,54 @@
                 label="地区"
                 width="100">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.proRegion }}</span>
+                  <span >{{ scope.row.proRegion }}</span>
                 </template>
               </el-table-column>
               <el-table-column
                 label="开标时间"
                 width="150">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.proOpenTime }}</span>
+                  <span >{{ scope.row.proOpenTime }}</span>
                 </template>
               </el-table-column>
               <el-table-column
                 label="项目名称"
                 width="220">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.proName }}</span>
+                  <span >{{ scope.row.proName }}</span>
                 </template>
               </el-table-column>
               <el-table-column
                 label="借款金额"
-                width="200">
+                width="150">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.balance }}</span>
+                  <span >{{ scope.row.balance }}</span>
                 </template>
               </el-table-column>
               <el-table-column
                 label="借款人"
                 width="150">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.borrower }}</span>
+                  <span>{{ scope.row.borrower }}</span>
                 </template>
               </el-table-column>
                <el-table-column
                 label="联系方式"
                 width="150">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.borrowerPhone }}</span>
+                  <span >{{ scope.row.borrowerPhone }}</span>
                 </template>
               </el-table-column>
                <el-table-column
                 label="借款时间"
                 width="150">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.borrowerTime }}</span>
+                  <span >{{ scope.row.borrowerTime }}</span>
                 </template>
               </el-table-column>
               <el-table-column
                 label="提交时间"
-                width="150">
+                width="180">
                 <template slot-scope="scope">
                   <span style="margin-left: 10px">{{ scope.row.created }}</span>
                 </template>
@@ -150,6 +150,10 @@ export default {
      this.gainData()
   },
   methods: {
+  gainDate() {
+      this.pagenum = 1
+      this.gainData()
+  },
   gainData() {
      finData({proName:this.select,created:this.times[0],createdTwo:this.times[1],currentPage:this.pagenum,pageSize:this.pagesize}).then(res=> {
         if(res.code == 1) {
