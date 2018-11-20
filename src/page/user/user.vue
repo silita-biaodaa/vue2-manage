@@ -63,7 +63,7 @@
      <el-row class="user-con" >
         <el-col :span="6" class="user-sel" >
             <el-input
-              placeholder="请输入内容"
+              placeholder="请输入姓名，公司，职位，手机号码"
               v-model="select"
               clearable>
             </el-input>
@@ -284,38 +284,51 @@ export default {
       })
     },
     handleDelete(i,val) {
-       if(val.isEnable) {
-         userLock({pkid:val.pkid,isEnable:0}).then(res=> {
-             if(res.code ==1) {
-                this.$message({
-                   type:'success',
-                   message:'用户锁定成功'
-                })
-                this.gainDate()
-             }
-         })
-       } else {
-         userLock({pkid:val.pkid,isEnable:1}).then(res=> {
-             if(res.code ==1) {
-                this.$message({
-                   type:'success',
-                   message:'用户解锁成功'
-                })
-                this.gainDate()
-             }
-         })
-       }
+         this.$confirm('此操作将变更用户状态, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+           if(val.isEnable) {
+          userLock({pkid:val.pkid,isEnable:0}).then(res=> {
+              if(res.code ==1) {
+                 this.$message({
+                    type:'success',
+                    message:'用户锁定成功'
+                 })
+                 this.gainDate()
+              }
+          })
+        } else {
+          userLock({pkid:val.pkid,isEnable:1}).then(res=> {
+              if(res.code ==1) {
+                 this.$message({
+                    type:'success',
+                    message:'用户解锁成功'
+                 })
+                 this.gainDate()
+              }
+          })
+        }
+        
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+       
 
         
     },
     handleCurrentChange(val) {  // 当前页改变的函数
       this.pagenum = val
-      this.gainData()
+      this.gainDate()
    },
    handleSizeChange(val) {  // 每页条数发生改变时做出的函数
       this.pagesize = val  
       this.pagenum = 1
-      this.gainData()
+      this.gainDate()
    },
   },
   components: {

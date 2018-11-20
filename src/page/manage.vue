@@ -26,7 +26,7 @@
 							<el-menu-item index="/addGoods">中标</el-menu-item>
 							<el-menu-item index="/recycle">回收站</el-menu-item>
 							<el-menu-item index="/userList">企信</el-menu-item>
-							<el-menu-item index="/service">金融服务</el-menu-item>
+							<el-menu-item index="/financial">金融服务</el-menu-item>
 							<el-menu-item index="/relevance">相关公告</el-menu-item>
 						</el-submenu>
                      <el-submenu index="4">

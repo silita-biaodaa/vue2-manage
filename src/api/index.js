@@ -375,6 +375,14 @@ export const userData = params => {
 export const userLock = params => {
     return axios.post('user/lock', params).then(res => res.data)
 }
+// 锁定
+export const finData = params => {
+    return axios.post('FinService/listFinService', params).then(res => res.data)
+}
+// 锁定
+export const finEX = params => {
+    return axios.post('FinService/exportFinService', params).then(res => res.data)
+}
 
 
 

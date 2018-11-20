@@ -188,6 +188,11 @@ const routes = [
 									path: '/users',
 									name: 'users',
 									component: resolve => require(['@/page/user/user.vue'], resolve)
+								},
+								{
+									path: '/financial',
+									name: 'financial',
+									component: resolve => require(['@/page/business/financial.vue'], resolve)
 								}
 					]
 		}
