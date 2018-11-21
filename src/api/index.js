@@ -379,7 +379,7 @@ export const userLock = params => {
 export const finData = params => {
     return axios.post('FinService/listFinService', params).then(res => res.data)
 }
-// 锁定
+// 金融Excel
 export const finEX = form => {
     return axios({ // 用axios发送post请求
         method: 'post',

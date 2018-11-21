@@ -176,7 +176,7 @@ export default {
    },
    educe() {
         this.startDate = this.newtime ? this.newtime[0] : ''
-       this.endDate = this.newtime ? this.newtime[1] : ''
+        this.endDate = this.newtime ? this.newtime[1] : ''
         finEX({proName:this.select,created:this.startDate,createdTwo:this.endDate},{responseType: 'blob'}).then(res=> {
                const blob = new Blob([res]);
                 const fileName = '金融数据.xlsx';
@@ -190,8 +190,6 @@ export default {
                 document.body.removeChild(elink);
           })
    }
-  },
-  components: {
   }
 }
 </script>

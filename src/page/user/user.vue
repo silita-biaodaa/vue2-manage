@@ -75,13 +75,6 @@
              <el-table
               :data="tableData"
               style="width: 100%">
-              <!-- <el-table-column
-                label="ID"
-                width="100">
-                <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.pkid }}</span>
-                </template>
-              </el-table-column> -->
               <el-table-column
                 label="昵称"
                 width="100">
@@ -274,7 +267,6 @@ export default {
                 el.areaCode = el.pkid + el.areaCode
              });
               this.options = res.data  
-              console.log(this.optionsss,265)
            }
         })
     },
@@ -345,9 +337,6 @@ export default {
       this.gainDate()
    },
   },
-  components: {
-
-  }
 }
 </script>
 <style lang="less" scoped>
