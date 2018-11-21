@@ -87,13 +87,24 @@
                     <!-- 富文本预览效果   -->
               </div>
               <div class="main-btu"> 
-                <el-button type="success" ><span  @click="preview" >预览</span>  <span  @click="deletPath"><i style="color: #ffffff" class="el-icon-circle-close-outline"></i></span></el-button>
-                <el-button type="success" @click="suptext"  >保存公告</el-button>
+                  <el-button type="success" @click="iphone"  >手机预览</el-button>
+                  <el-button type="success" ><span  @click="preview" >预览</span>  <span  @click="deletPath"><i style="color: #ffffff" class="el-icon-circle-close-outline"></i></span></el-button>
+                  <el-button type="success" @click="suptext"  >保存公告</el-button>
               </div>
               <div class="box ql-editor" ref="htmlContainer"></div>   
               
         </div>
     </div>
+    <el-dialog title="手机预览效果(最后效果请参考手机APP)" :visible.sync="urliphoneVisible">
+        <div class="iphone">
+          <div class="demo-page" v-html="content">
+              
+          </div>
+          </div>    
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="urliphoneVisible = false">关 闭</el-button>
+        </div>
+    </el-dialog>
     
  </div>
 </template>
@@ -155,7 +166,8 @@ export default {
         file: ''
       },
       photoUrl: "", // 上传图片地址
-      uploadType: "" // 上传的文件类型（图片、视频）
+      uploadType: "", // 上传的文件类型（图片、视频）
+      urliphoneVisible:false
     }
   },
    created() {
@@ -192,6 +204,9 @@ export default {
       .addHandler("video", this.videoHandler); // 为视频ICON绑定事件
   },
   methods: {
+    iphone() {
+        this.urliphoneVisible = true
+    },
     deletPath() {
        this.$refs.htmlContainer.innerHTML = null
     },
@@ -484,7 +499,27 @@ export default {
   
   .main-btu {
     margin-top: 5px;
-    margin-left: 80%;
+    margin-left: 70%;
+  }
+  .iphone {
+      margin: 20px 20px 0;
+      background-image: url( ../../assets/img/phone.5909f66.png);
+      background-repeat: no-repeat;
+      background-size: 100%;
+      height: 100%;
+      padding: 100px 16px;
+      box-sizing: border-box;
+      width: 365px;
+    .demo-page {
+        width: 100%;
+        height: 580px;
+        background-color: #fff;
+        overflow: auto;
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
   }
 }
 </style>
