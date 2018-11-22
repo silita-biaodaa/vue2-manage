@@ -968,7 +968,9 @@ export default {
     },
     //  选中的时候发生的变化
     handleSelectionChange(val) {
-        this.biddlist = val        
+        this.biddlist = val
+        this.bidForm = val[0]
+                
     },
     // 点击当前编辑明细选中
     pilebox(row) {

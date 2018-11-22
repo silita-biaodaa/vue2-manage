@@ -313,7 +313,7 @@
                   </el-table>
 
                   <div style="margin-top: 10px">
-                       <el-upload class="updown-list" action="http://admin.biaodaa.com/upload/uploadZhaoBiaoFile/" :data="sendKid()" :on-preview="handlePreview"  :on-success="handleSuccess" name='files' :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
+                       <el-upload class="updown-list" action="http://pre-admin.biaodaa.com/upload/uploadZhaoBiaoFile/" :data="sendKid()" :on-preview="handlePreview"  :on-success="handleSuccess" name='files' :headers="setHeader()" :before-remove="beforeRemove" :show-file-list='false' multiple :on-exceed="handleExceed" :file-list="fileList">
                          <el-button type="primary">
                            上传招标文件
                          </el-button>
@@ -1242,6 +1242,12 @@ export default {
                     message:'请选择项目类型',
                     type:'warning'
                   })
+        } else if(!this.form.segment){
+            this.Invalid = false
+            return this.$message({
+                    message:'标段信息为必填项',
+                    type:'warning'
+            })
         } else {
           if(this.titurela[0].qualIds == null && this.titurela[0].tbNtQuaGroups.length == 0 ) {
               this.titurela = []
@@ -1397,12 +1403,14 @@ export default {
     handlePreview(file) {
     },
     handleSuccess(response, file, fileList) {   //当文件上传成功的时候的回调函数
+        
       if (response.code === 1) {
+         this.listFile()
         this.$message({
           type: 'success',
           message: response.msg
         })
-        this.listFile()
+        
       }else {
          this.$message({
           type: 'warning',
