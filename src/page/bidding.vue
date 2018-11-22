@@ -106,7 +106,7 @@
                 <el-form-item  >
                   <div :ref="'oneC' + index" class="labe" >第一中标候选人</div>
 
-                    <el-select v-model="item.oneCandidate" value-key='creditCode' filterable placeholder="请选择企业名称" style="width:80%">
+                    <el-select v-model="item.oneCandidate" value-key='creditCode' filterable placeholder="请选择企业名称" clearable  style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
@@ -115,7 +115,7 @@
                 <el-form-item >
                   <div :ref="'twoC' + index" class="labe" >第一联合人之一</div>
 
-                    <el-select v-model="item.twoCandidate"   filterable placeholder="请选择企业名称" style="width:80%">
+                    <el-select v-model="item.twoCandidate"   filterable placeholder="请选择企业名称" clearable  style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
@@ -123,7 +123,7 @@
                 <el-form-item >
                   <div :ref="'thre' + index" class="labe" >第一联合人之二</div>
                   
-                    <el-select v-model="item.threeCandidate"   filterable placeholder="请选择企业名称" style="width:80%">
+                    <el-select v-model="item.threeCandidate"   filterable placeholder="请选择企业名称" clearable  style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
@@ -171,7 +171,7 @@
                 <el-form-item >
                   <div :ref="'oneCa' + index" class="labe" >第二中标候选人</div>
 
-                    <el-select v-model="item.oneCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                    <el-select v-model="item.oneCandidate" filterable placeholder="请选择企业名称" clearable  style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
@@ -179,7 +179,7 @@
                 <el-form-item >
                   <div :ref="'twoCa' + index" class="labe" >第二联合人之一</div>
 
-                    <el-select v-model="item.twoCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                    <el-select v-model="item.twoCandidate" filterable placeholder="请选择企业名称" clearable  style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
@@ -187,7 +187,7 @@
                 <el-form-item >
                   <div :ref="'three' + index" class="labe" >第二联合人之二</div>
 
-                    <el-select v-model="item.threeCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                    <el-select v-model="item.threeCandidate" filterable placeholder="请选择企业名称" clearable  style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName "  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
@@ -234,7 +234,7 @@
                 <el-form-item >
                   <div :ref="'oneCan' + index" class="labe" >第三中标候选人</div>
 
-                    <el-select v-model="item.oneCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                    <el-select v-model="item.oneCandidate" filterable placeholder="请选择企业名称" clearable  style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
@@ -242,7 +242,7 @@
                 <el-form-item >
                   <div :ref="'twoCan' + index" class="labe" >第三联合人之一</div>
 
-                    <el-select v-model="item.twoCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                    <el-select v-model="item.twoCandidate" filterable placeholder="请选择企业名称" clearable  style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
@@ -250,7 +250,7 @@
                 <el-form-item >
                   <div :ref="'threeC' + index" class="labe" >第三联合人之二</div>
 
-                    <el-select v-model="item.threeCandidate" filterable placeholder="请选择企业名称" style="width:80%">
+                    <el-select v-model="item.threeCandidate" filterable placeholder="请选择企业名称" clearable  style="width:80%">
                       <el-option v-for="item in taskcompany" :key="item.companyName"  :label="item.companyName" :value="item.companyName">
                       </el-option>
                     </el-select>
