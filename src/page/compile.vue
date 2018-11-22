@@ -536,7 +536,8 @@ export default {
          },
        Invalid:false,  
        intact:false ,
-       matter:''
+       matter:'',
+       mapping:1,
       } 
   },
   mounted () {
@@ -1044,15 +1045,34 @@ export default {
       })
         
     },
+    //  保存字段匹配
+    mate() {
+         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
+              res.data.forEach( (el,i) => {
+                 if(el.segment == this.mapping) {
+                    this.form = JSON.parse(JSON.stringify(res.data[i]))
+                     this.state = res.data[i].url
+                     this.condition = res.data[i].ntStatus
+                      this.compileData = res.data.concat()
+                       if(res.data[i].tbNtRegexGroups == null) {
+                          this.titurela = [{tbNtQuaGroups:[]}]
+                        } else {
+                            this.titurela = res.data[i].tbNtRegexGroups
+                            // if(res.data[0].tbNtRegexGroups.length == 1) {
+                            //     this.titurela.push({tbNtQuaGroups:[]})
+                            // } 
+                        }  
+                 }
+              })
+         }) 
+    },
      // 获取编辑列表
     listTender() {
         
         listTenders({ntId:this.pkid,source:this.code}).then(res=> {
-            console.log(res,1025)
           // this.mainCo = res.data[0]     // 暂时得思先行保存，渲染标题，公式日期
           this.condition = res.data[0].ntStatus
           this.careaName = res.data[0].cityCode   // 接口数据请求得地区
-          console.log(res.data[0].pkid,1044)
           if(res.data[0].pkid) {
             this.state = res.data[0].url
             this.condition = res.data[0].ntStatus
@@ -1224,8 +1244,6 @@ export default {
                   })
         } else {
           if(this.titurela[0].qualIds == null && this.titurela[0].tbNtQuaGroups.length == 0 ) {
-              console.log('进来这里了');
-              
               this.titurela = []
           } else {
       
@@ -1253,9 +1271,8 @@ export default {
           }
          
         }     
-         console.log(this.titurela,1239)
+          this.mapping = this.form.segment
           insertNt({pkid:this.form.pkid,source:this.code,ntId:this.pkid,title:this.form.title,segment:this.form.segment,pubDate:this.form.pubDate,controllSum:this.form.controllSum,proSum:this.form.proSum,proDuration:this.form.proDuration,cityCode:this.careaName,countyCode:this.form.countyCode,pbMode:this.form.pbMode,bidBonds:this.form.bidBonds,bidBondsEndTime:this.form.bidBondsEndTime,enrollEndTime:this.form.enrollEndTime,enrollAddr:this.form.enrollAddr,auditTime:this.form.auditTime,bidEndTime:this.form.bidEndTime,openingPerson:this.form.openingPerson,openingAddr:this.form.openingAddr,proType:this.form.proType,binessType:this.form.binessType,filingPfm:this.form.filingPfm,ntTdStatus:this.form.ntTdStatus,certAuditAddr:this.form.certAuditAddr,tbNtRegexGroups:this.titurela}).then( res=> {
-               console.log(res,1181)
              if(res.code == 1 ) {
                this.$message({
                     message:res.msg,
@@ -1267,7 +1284,7 @@ export default {
                     type:'warning'
                   })
              }
-             this.listTender()
+             this.mate()
              this.condition = '1'
              
          })

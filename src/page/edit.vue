@@ -1,18 +1,11 @@
 <template>
   <div class="quillEditor" v-loading="loading">
-  
-    <!-- quill-editor插件标签 分别绑定各个事件-->
-  
     <quill-editor 
     v-model="content" 
     ref="myQuillEditor" 
     :options="editorOption" 
     @change="onEditorChange($event)">
     </quill-editor>
-  
-    <!-- 文件上传input 将它隐藏-->
-  
-   <!-- action='http://120.79.116.245:19004/upload/quaAlias/' -->
 
     <el-upload 
     class="upload-demo" 
@@ -34,10 +27,7 @@
       点击上传</el-button>
   
     </el-upload>
-    <!-- <button @click="save">点击获取保存</button>  -->
-    <button class="query-btn" @click="preview">预览</button>
-    <el-button type="primary" @click="save" class="content-btn" >保存</el-button>
-    <div class="box ql-editor" ref="htmlContainer"></div>   富文本预览效果  
+    <el-button type="primary" @click="save" class="content-btn" >保存</el-button> 
   </div>
 </template>
 
@@ -47,7 +37,6 @@ import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 import Quill from "quill";
-// import store from "@/store";
 
 export default {
   props: {
@@ -89,10 +78,6 @@ export default {
     };
   },
   computed: {
-    // 上传七牛的actiond地址，http 和 https 不一样
-    // qnLocation() {
-    // return location.protocol === 'http:' ? 'http://upload.qiniu.com' : 'https://up.qbox.me'
-    // }
   },
   created() {
   },
@@ -102,90 +87,26 @@ export default {
                 this.$message.warning('内容为空，无预览效果！');
                 return;
             }
-            // var reg=new RegExp('(?=[^>]*(?=<))\s','g');
-            console.log(this.content.replace(/(?=[^>]*(?=<))\s/g, '&nbsp;'));
-            // this.dialogVisible = true;
-            // 防止html容器还没渲染完成
             setTimeout(() => {
                 console.log(this.$refs.htmlContainer);
                 this.$refs.htmlContainer.innerHTML = this.content.replace(/(?=[^>]*(?=<))\s/g, '&nbsp;');
             }, 100);
-            // this.$refs.htmlContainer.innerHTML = this.content.replace(/(?=[^>]*(?=<))\s/g, '&nbsp;');
-        // this.$refs.htmlContainer.innerHTML = this.$refs.myQuillEditor.getContent();
         },
     save () {
       var reg=new RegExp("(?=[^>]*(?=<))\s","g");
-      console.log(this.content.replace(/(?=[^>]*(?=<))\s/g, "&nbsp;"));
-      // this.$refs.htmlContainer.innerHTML = this.$refs.myQuillEditor.getContent();
     },
-    // 图片上传之前调取的函数
-
-    // 这个钩子还支持 promise
 
     beforeUpload(file) {   //上传图片前操作
-      console.log(file)
-      console.log(file.name,133)
       this.uploadData.file = file.type 
-      // return this.qnUpload(file);
     },
-
-    // 图片上传前获得数据token数据
 
     qnUpload(file) {
       this.loading = true;
-
-      // this.fullscreenLoading = true
-
-      // const suffix = file.name.split('.')
-
-      // const ext = suffix.splice(suffix.length - 1, 1)[0]
-
-      // console.log(this.uploadType)
-
-      // if (this.uploadType === 'image') { // 如果是点击插入图片
-
-      // // TODO 图片格式/大小限制
-
-      // alert('上传图片')
-
-      // return this.$axios('common/get_qiniu_token').then(res => {
-
-      // this.uploadData = {
-
-      // key: `image/${suffix.join('.')}_${new Date().getTime()}.${ext}`,
-
-      // token: res.data
-
-      // }
-
-      // })
-
-      // } else if (this.uploadType === 'video') { // 如果是点击插入视频
-
-      // return this.$axios('common/get_qiniu_token').then(res => {
-
-      // this.uploadData = {
-
-      // key: `video/${suffix.join('.')}_${new Date().getTime()}.${ext}`,
-
-      // token: res
-
-      // }
-
-      // })
-
-      // }
     },
-
-    // 图片上传成功回调 插入到编辑器中
-
     upScuccess(e, file, fileList) {
       console.log(111)
       console.log(e)
       this.loading = false;
-
-      // this.fullscreenLoading = false;
-
       let vm = this;
 
       let url = "";
@@ -200,16 +121,8 @@ export default {
       }
 
       if (url != null && url.length > 0) {
-        // 将文件上传后的URL地址插入到编辑器文本中
 
         let value = url;
-
-        // API: https://segmentfault.com/q/1010000008951906
-
-        // this.$refs.myTextEditor.quillEditor.getSelection();
-
-        // 获取光标位置对象，里面有两个属性，一个是index 还有 一个length，这里要用range.index，即当前光标之前的内容长度，然后再利用 insertEmbed(length, 'image', imageUrl)，插入图片即可。
-
         vm.addRange = vm.$refs.myQuillEditor.quill.getSelection();
 
         value = value.indexOf("http") !== -1 ? value : "http:" + value;
@@ -227,8 +140,6 @@ export default {
       this.$refs["upload"].clearFiles(); // 插入成功后清除input的内容
     },
 
-    // 点击图片ICON触发事件
-
     imgHandler(state) {
       this.addRange = this.$refs.myQuillEditor.quill.getSelection();
 
@@ -241,8 +152,6 @@ export default {
       this.uploadType = "image";
     },
 
-    // 获取html
-
     onEditorChange({  //内容发生改变得事件  
       editor,
 
@@ -251,12 +160,7 @@ export default {
       text
     }) {
       this.$emit("transferuser", html);
-      // 转换空格
-      // this.$refs.htmlContainer.innerHTML = html.replace(/(?=[^>]*(?=<))\s/g, "&nbsp;");
-      //上面 这一行 代码给注释
     },
-
-    // 点击视频ICON触发事件
 
     videoHandler(state) {
       this.addRange = this.$refs.myQuillEditor.quill.getSelection();
@@ -270,19 +174,11 @@ export default {
       this.uploadType = "video";
     },
 
-    test() {
-      console.log("test触发了");
-
-      // this.content = store.getters.quill_msg
-    },
-
     editor(val) {
       this.content = val;
     },
     handleAvatarFail (err, file) {
-      console.log(123);
-      console.log(err);
-      console.log(file)
+
     }
   },
 
@@ -296,8 +192,6 @@ export default {
     };
   },
 
-  // 页面加载后执行 为编辑器的图片图标和视频图标绑定点击事件
-
   mounted() {
     this.$on("handleChange", function() {
       this.test();
@@ -306,14 +200,6 @@ export default {
     this.$on("editormsg", function(val) {
       this.editor(val);
     });
-
-    // this.content = store.getters.token
-
-    // 为图片ICON绑定事件 getModule 为编辑器的内部属性
-
-    // this.$refs.myQuillEditor.quill.editor.delta.ops = []
-
-    console.log(this.$refs.myQuillEditor.quill);
 
     this.$refs.myQuillEditor.quill
       .getModule("toolbar")
