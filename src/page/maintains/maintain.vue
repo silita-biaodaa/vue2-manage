@@ -236,6 +236,11 @@ export default {
                           type:'success',
                           message:'保存招标公告成功' 
                        })
+                    } else {
+                       this.$message({
+                          type:'warning',
+                          message: res.msg 
+                       })
                     }
                 })
              } else {
@@ -244,6 +249,11 @@ export default {
                        this.$message({
                           type:'success',
                           message:'保存中标公告成功' 
+                       })
+                    } else {
+                       this.$message({
+                          type:'warning',
+                          message: res.msg 
                        })
                     }
                 })
