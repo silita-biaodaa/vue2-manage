@@ -1,5 +1,8 @@
+// 引入path 模块
 var path = require('path')
+// 引入之前的config模块
 var config = require('../config')
+//  作用就是讲打包的CSS文件通过link的方式引入的html中，如果的不使用这个的插件的，那么的css 就会打包的到的head 中的style 中去
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 exports.assetsPath = function (_path) {

@@ -701,7 +701,7 @@ export default {
         // console.log(document.querySelector('#one0').style.color)
         // document.querySelector('#one0').style.color  = 'red'
         // console.dir(document.querySelector('#one0'));
-            // console.dir((this.$refs.one0)[0].style.color,651)
+        // console.dir((this.$refs.one0)[0].style.color,651)
         (this.$refs['on0'])[0].style.color = 'red'
         // console.log(this.$refs,653)
     },

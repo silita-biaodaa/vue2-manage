@@ -4,8 +4,8 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../manage/index.html'),
-    assetsRoot: path.resolve(__dirname, '../manage'),
+    index: path.resolve(__dirname, '../manage/index.html'),  // 编译之后的路径
+    assetsRoot: path.resolve(__dirname, '../manage'),  // 打包之后文件根路径
     assetsSubDirectory: 'static',
     assetsPublicPath: '/manage/',
     productionSourceMap: false,
@@ -13,8 +13,8 @@ module.exports = {
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
-    productionGzip: false,
-    productionGzipExtensions: ['js', 'css'],
+    productionGzip: false,  // 是否压缩
+    productionGzipExtensions: ['js', 'css'],   // GZIP 模式下需要压缩的文件的扩展名，设置后会对相应的扩展名的文件进行压缩
     // Run the build command with an extra argument to
     // View the bundle analyzer report after build finishes:
     // `npm run build --report`
@@ -22,19 +22,19 @@ module.exports = {
     bundleAnalyzerReport: process.env.npm_config_report
   },
   dev: {
-    env: require('./dev.env'),
+    env: require('./dev.env'),  
     port: 8002,
-    autoOpenBrowser: true,
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    proxyTable: {
-      // '/proxy':{
-      //   target:'http://admin.biaodaa.com',
-      //   changeOrigin:true,
-      //   pathRewrite:{
-      //     '^/proxy':''
-      //   }
-      // }
+    autoOpenBrowser: true,  
+    assetsSubDirectory: 'static', // 静态文件夹
+    assetsPublicPath: '/',  // 发布路径
+    proxyTable: {   //常用来配置代理的API的地方
+      '/proxy':{
+        target:'http://admin.biaodaa.com',
+        changeOrigin:true,
+        pathRewrite:{
+          '^/proxy':''
+        }
+      }
     },
     context: [ //代理路径
         '/shopping',

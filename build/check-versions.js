@@ -13,7 +13,7 @@ var versionRequirements = [
     versionRequirement: packageConfig.engines.node
   },
 ]
-
+// 去系统路径中寻找得npm  exec() 方法就是上面得说的执行得一个，返回版本信息的函数，
 if (shell.which('npm')) {
   versionRequirements.push({
     name: 'npm',
