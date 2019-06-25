@@ -41,7 +41,7 @@ import Quill from "quill";
 export default {
   props: {
      matter:'',
-    propId: ""
+     propId: ""
   },
 
   data() {
@@ -183,7 +183,10 @@ export default {
   },
 
   created() {
-    this.content = this.matter;
+     setInterval(() => {
+      this.content = this.matter;
+    }, 100);
+  
 
     this.$refs = {
       myQuillEditor: HTMLInputElement,
@@ -193,6 +196,8 @@ export default {
   },
 
   mounted() {
+   
+    
     this.$on("handleChange", function() {
       this.test();
     });

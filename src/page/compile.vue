@@ -548,6 +548,7 @@ export default {
     this.listfixe()   // 固定下拉框
     this.listNtgpn()   // 相关公告 获取id和source 
     this.listFile()    // 相关文件
+    
     this.listregion()  // 加载地区
     this.listMode()  // 评标办法
     this.listTender()   // 获取编辑列表
@@ -913,8 +914,9 @@ export default {
   methods: {
     substance() {
       cyccontent({source:this.code,ntId:this.pkid}).then( res => {
-        //  console.log(res,912)
          if(res.code == 1) {
+           console.log(res.data.content);
+           
             this.matter = res.data.content
          }
       })
