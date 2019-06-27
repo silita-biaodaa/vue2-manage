@@ -12,7 +12,6 @@
                  <div class="handle-c">
                     <span @click='handlemark'>设置</span>
                     <span @click='deletemark'>删除</span>
-                    <span @click='textt'>测试</span>
                  </div>
               </el-col>
 
@@ -35,7 +34,10 @@
            <div class="edit-r" @click='nextlist' v-show="isShow" >
              <i class="el-icon-arrow-right" ></i>
            </div>
-            <Edit :matter ='matter' ></Edit>
+           <div class="ql-editor" v-html="matter" >
+
+           </div>
+            <!-- <Edit :matter ='matter' ></Edit> -->
         </el-col>
         <el-col :span="12" class="redact-c">
             
@@ -67,21 +69,21 @@
             <el-form-item >
               <div class="labe"><i class="el-icon-warning"></i>项目地区</div>
               <el-select v-model="form.cityCodeName" filterable placeholder="请选择项目地区" style="width:80%">
-                <el-option v-for="item in areas" :key="item.areaCode"  :label="item.areaName" :value="item.areaCode">
+                <el-option v-for="item in areas" :key="item.pkid"  :label="item.areaName" :value="item.areaCode">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item >
               <div class="labe"><i class="el-icon-warning"></i>项目县区</div>
               <el-select v-model="form.countyCode" filterable placeholder="请选择项目县区" style="width:80%">
-                <el-option v-for="item in counties" :key="item.areaCode" :label="item.areaName" :value="item.areaCode">
+                <el-option v-for="item in counties" :key="item.pkid" :label="item.areaName" :value="item.areaCode">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item >
               <div :class="['labe',forms.ispbMode?'new':'old']">评标办法</div>
               <el-select v-model="form.pbMode" @change="text('pbMode')" filterable placeholder="请选择评标办法" style="width:80%">
-                <el-option v-for="item in ways" :key="item.code" :label="item.name" :value="item.code">
+                <el-option v-for="(item,i) in ways" :key="i" :label="item.name" :value="item.code">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -160,7 +162,7 @@
             <el-form-item >
               <div :class="['labe',forms.isntTdStatus?'new':'old']">招标状态</div>
               <el-select v-model="form.ntTdStatus" @change="text('ntTdStatus')" filterable placeholder="请选择招标状态" style="width:80%">
-                <el-option v-for="sta in statuss" :key="sta.value" :label="sta.name" :value="sta.value">
+                <el-option v-for="(sta,i) in statuss" :key="i" :label="sta.name" :value="sta.value">
                 </el-option>
               </el-select> 
             </el-form-item>
@@ -548,7 +550,6 @@ export default {
     this.listfixe()   // 固定下拉框
     this.listNtgpn()   // 相关公告 获取id和source 
     this.listFile()    // 相关文件
-    
     this.listregion()  // 加载地区
     this.listMode()  // 评标办法
     this.listTender()   // 获取编辑列表
@@ -893,7 +894,7 @@ export default {
                   this.careaName= val.substring(32)
                   listArea({areaParentId:this.cpkid}).then(res => {
                       if(res.code === 1) {
-                          this.counties = res.data   
+                          this.counties = res.data    
                           if(this.counties.length ==0 ) {
                             
                           }            
@@ -912,19 +913,14 @@ export default {
 
   },
   methods: {
-    substance() {
+    substance() { // 获取公共详情
       cyccontent({source:this.code,ntId:this.pkid}).then( res => {
          if(res.code == 1) {
-           console.log(res.data.content);
-           
             this.matter = res.data.content
          }
       })
     },
     textt() {
-        console.log(this.quaId)
-        console.dir(this.titurela,965);
-        console.log(this)
         
     },
     listAtt(){
@@ -1013,6 +1009,7 @@ export default {
                    itme.areaCode = itme.pkid + itme.areaCode
                 }) 
                this.areas = res.data
+               
             }
         })
     },
@@ -1044,6 +1041,8 @@ export default {
         this.type1s = res.data.projectType
         this.records = res.data.filingRequirements
         this.statuss = res.data.biddingStatus
+        console.log(this.statuss);
+        
       })
         
     },
@@ -1619,15 +1618,12 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next){
-    console.log(from,1569)
-    // console.log(next)
       if(from.name == 'bidding' ) {
           localStorage.removeItem('parentId')
           localStorage.removeItem('tensele')
           next()
       } else if(from.name == 'compile') {
           if(localStorage.getItem('tensele')) {
-            //  console.log('等等等等')  
           }
       } else {
           localStorage.removeItem('setTitle')
@@ -1797,7 +1793,8 @@ export default {
           right:0;
         }   
         .ql-editor {
-        height: 815px;
+          height: 815px;
+          border: 1px solid #f5f5f5;
         }
       }
       .right-c {

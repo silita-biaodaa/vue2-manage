@@ -15,11 +15,6 @@ export default {
     // this.inList()
   },
   methods: {
-      // inList() {
-      //     checkType().then(res => {
-      //       console.log(res)
-      //     })
-      // }
   },
   components: {
   }

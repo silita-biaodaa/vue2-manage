@@ -80,13 +80,13 @@
 							<el-menu-item index="/maintain">公告维护</el-menu-item>
 
 						</el-submenu>
-							<el-submenu index="8">
+						<!-- <el-submenu index="8">
 							<template slot="title">
 								<i class="el-icon-warning"></i>
 								<span>纠错</span>
 								</template>
 							<el-menu-item index="/errhome">招，中标</el-menu-item>
-						</el-submenu>
+						</el-submenu> -->
 
 				</el-menu>
 			</el-aside>

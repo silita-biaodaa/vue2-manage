@@ -1,5 +1,5 @@
 <template>
-	<div class="login_page fillcontain">
+	<div class="login_page fillcontain" @keyup.enter="submitForm('loginForm')"  >
 		<transition name="form-fade" mode="in-out">
 			<section class="form_contianer" v-show="showLogin">
 				<div class="manage_tip">
@@ -15,7 +15,7 @@
 						<el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
+						<el-button type="primary" @click="submitForm('loginForm')"    class="submit_btn">登录</el-button>
 					</el-form-item>
 				</el-form>
 				<p class="tip">温馨提示：</p>
@@ -26,7 +26,6 @@
 </template>
 
 <script>
-// import {login, getAdminInfo} from '@/api/getData'
 import { mapActions, mapState } from 'vuex'
 import { register } from '@/api/index'
 
@@ -57,7 +56,7 @@ export default {
 
 	},
 	methods: {
-		...mapActions(['getAdminData']),
+		// ...mapActions(['getAdminData']),
 		submitForm(formName) {
 			this.$refs[formName].validate(valide => {
 				// 只有校验通过，才执行函数

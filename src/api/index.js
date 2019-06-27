@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-
 // const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
 // const baseURL = 'http://192.168.1.131:8080/'
 const baseURL = 'http://pre-admin.biaodaa.com/'
@@ -25,9 +24,10 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) { // ①10010 token过期（30天） ②10011 token无效
     if (response.data.code === 402 || response.data.code === 401) {
         localStorage.removeItem('Authorization')
-        this.$router.replace({
-            path: '/login' // 到登录页重新获取token
-        })
+        // this.$router.replace({
+        //     path: '/login' // 到登录页重新获取token
+        // })
+        location.href = '/#/logo'
     }
     return response
 }, function (error) {

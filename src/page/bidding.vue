@@ -12,7 +12,6 @@
                     <div class="handle-c">
                         <span @click="biddmark" >设置</span>
                         <span @click='deletebidd'>删除</span>
-                        <span @click='textt'>测试</span>
                     </div>
                   </el-col>
 
@@ -35,7 +34,10 @@
            <div class="edit-r" @click='nextlist' v-show="isShow" >
              <i class="el-icon-arrow-right" ></i>
            </div>
-            <bidEdit></bidEdit>
+            <div class="ql-editor" v-html="matter" >
+
+           </div>
+            <!-- <bidEdit></bidEdit> -->
          </el-col>
          <el-col :span='12'  class="redact-c" >
             <el-form ref="edits" :model="bidForm" label-width="200px" class="demo-ruleForm"  >
@@ -158,7 +160,7 @@
 
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
-                <el-button @click.prevent="removeDomain(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
+                <el-button @click.prevent="removeDomain(index)" size='mini' class="biddel" type="danger" v-if="!(index == 0)"  >删除</el-button>                   
                 </div> 
 
                  <!-- 第二中标候选人 -->
@@ -222,7 +224,7 @@
 
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
-                <el-button @click.prevent="removeSecond(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
+                <el-button @click.prevent="removeSecond(index)" size='mini' class="biddel" type="danger"   v-if="!(index == 0)" >删除</el-button>                   
                 </div>
                 <!-- 第三中标候选人 -->
                 <div
@@ -285,7 +287,7 @@
 
                   <el-input v-model="item.fQuality"  ></el-input>
                 </el-form-item>
-                <el-button @click.prevent="removeThird(index)" size='mini' class="biddel" type="danger" >删除</el-button>                   
+                <el-button @click.prevent="removeThird(index)" size='mini' class="biddel" type="danger"  v-if="!(index == 0)" >删除</el-button>                   
                 </div> 
 
                 <el-form-item class="btn">
@@ -576,7 +578,7 @@
 </template>
 <script>
 import bidEdit from '@/page/edit';
-import { changeF,listMain,bidSave,bidcompany,listFixed,listPbMode,listArea,updateStatus,bidList,delDidList,bidFiles,listreli,listTenders,bidRela,bidzhaoList,biddelList } from '@/api/index'
+import { cyccontent,changeF,listMain,bidSave,bidcompany,listFixed,listPbMode,listArea,updateStatus,bidList,delDidList,bidFiles,listreli,listTenders,bidRela,bidzhaoList,biddelList } from '@/api/index'
 export default {
   data () {
      return {
@@ -647,7 +649,8 @@ export default {
         firstt:[],
         secondt:[],
         thirdt:[],        
-        zhao:false
+        zhao:false,
+        matter:''
       }
   },
   watch: {
@@ -681,6 +684,7 @@ export default {
            this.gainbidfile() // 获取招标文件
            this.gainRelation() // 获取相关的公告文件列表
            this.gainzhaoList()     // 获取相关的招标编辑明细
+           this.substance()
         }
     },
   },
@@ -694,8 +698,16 @@ export default {
     this.gaincompany()
     this.gainnext()
     this.fieilds()
+    this.substance()
   },
   methods: {
+    substance() { // 获取公共详情
+      cyccontent({source:this.source,ntId:this.pkid}).then( res => {
+         if(res.code == 1) {
+            this.matter = res.data.content
+         }
+      })
+    },
     textt(){
         // console.log(document.querySelector('#one0').style.color)
         // console.log(document.querySelector('#one0').style.color)
@@ -1485,7 +1497,9 @@ export default {
           right:0;
         }   
        .ql-editor {
-        height: 1400px;
+          height: 1400px;
+          border: 1px solid #f5f5f5;
+          width: 100%;
         }
     }
      .redact-c {

@@ -160,21 +160,6 @@ const routes = [
 									name:'recycle'
 								},
 								{
-									path:'/errhome',
-									name:'errhome',
-									component: resolve => require(['@/page/error/erhome.vue'], resolve)
-								},
-								{
-									path:'/recovery/:id/:code',
-									name:'recovery',
-									component: resolve => require(['@/page/error/recovery.vue'], resolve)
-								},
-								{
-									path: '/wrong/:id/:code',
-									name: 'wrong',
-									component: resolve => require(['@/page/error/wrong.vue'], resolve)
-								},
-								{
 									path:'/opinion',
 									name: 'opinion',
 									component: resolve => require(['@/page/opinion/opinions.vue'], resolve)
