@@ -556,8 +556,8 @@
           <el-form :model="biddForm" :rules="biddrules" ref="biddForm" label-width="100px" class="demo-ruleForm">          
             <el-form-item label="公告状态" prop="resource">
               <el-radio-group v-model="biddForm.resource">
-                <el-radio label="0">未处理</el-radio>
-                <el-radio label="5">已处理</el-radio>
+                <el-radio label="0">未编辑</el-radio>
+                <el-radio label="5">已编辑</el-radio>
               </el-radio-group>
             </el-form-item>
             
@@ -949,14 +949,18 @@ export default {
     },
     // 多选删除编辑的
     delcompilebid() {
+       this.biddlist.forEach(item => {
+            this.biddpkid.push(item.pkid)
+          })     
+          if(this.biddpkid.length == 0) {
+            return false
+          }
         this.$confirm('此操作将永久删除该标段信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          this.biddlist.forEach(item => {
-            this.biddpkid.push(item.pkid)
-          })          
+              
           this.biddpkids = this.biddpkid.join('|')
           delDidList({idsStr:this.biddpkids,source:this.source}).then(res => {
                 if(res.code === 1 ) {

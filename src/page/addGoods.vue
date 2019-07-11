@@ -120,25 +120,15 @@ export default {
      provinces: [],
         state:'',  //公共状态数据
         states:[
-            {
+             {
                 value: '',
                 label: '全部'
             }, {
                 value: '0',
-                label: '新建'
+                label: '未编辑'
             }, {
                 value: '1',
-                label: '未审核'
-            }, {
-                value: '2',
-                label: '已通过'
-            }, {
-                value: '4',
-                label: '审核未通过'
-            },
-            {
-                value:'5',
-                label:'已处理'
+                label: '已编辑'
             }
         ],
          pickerOptions2: {
@@ -185,24 +175,25 @@ export default {
   },
   watch: {
      times:function () {
-         this.pubDate = this.times[0]
-         this. pubEndDate = this.times[1]
+         if(this.times) {
+            this.pubDate = this.times[0] 
+            this. pubEndDate = this.times[1]      
+          } else {
+             this.pubDate = ''
+             this. pubEndDate = ''
+          }
      },
      province:function() {
         this.city = ''
         this.pkid= this.province.substring(0,32)
         this.coDe= this.province.substring(32)
-        listArea({areaParentId:this.pkid}).then(res => {
-            if(res.code === 1) {               
-                this.citys = res.data
-                this.citys.unshift({areaName:'全部',areaCode:''})
-            }
-        })
+         this.gainCity()
      }
   },
   created () {
       this.listTen()
       this.listForm()
+      this.gainCity()
   }, 
   filters: {
      sum:function(val){
@@ -236,13 +227,16 @@ methods: {
                  this.provinces = res.data
               }
           })
-            listArea({areaParentId:this.pkid}).then(res => {
+        
+
+      },
+      gainCity() {
+         listArea({areaParentId:this.pkid}).then(res => {
             if(res.code === 1) {               
                 this.citys = res.data
                 this.citys.unshift({areaName:'全部',areaCode:''})
             }
         })
-
       },
       listForm() {
           listMain({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:2,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize}).then(res => {
@@ -314,7 +308,7 @@ methods: {
           }, 100);                    
       },
       exportexcel(){
-          exportX({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:2,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize},{responseType: 'blob'}).then(res=> {
+          exportX({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:2,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize},{responseType: 'blob',timeout:300000}).then(res=> {
                const blob = new Blob([res]);
                 const fileName = '中标公告.xlsx';
                 const elink = document.createElement('a');

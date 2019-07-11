@@ -178,6 +178,7 @@ export const exportX = form => {
     return axios({ // 用axios发送post请求
         method: 'post',
         url: 'zhongbiao/exportBidsDetail', // 请求地址
+        // timeout:300000,
         data: form, // 参数
         responseType: 'blob', // 表明返回服务器返回的数据类型
         headers: {
@@ -391,6 +392,9 @@ export const finEX = form => {
         }
     }).then(res => res.data)
 }
-
+// 删除中标公告
+export const delbiding = params => {
+    return axios.post('zhongbiao/delNtMain', params).then(res => res.data)
+}
 
 

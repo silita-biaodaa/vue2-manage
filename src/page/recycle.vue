@@ -31,11 +31,12 @@
                   border
                   @selection-change="handleRelevance"
                   @row-click='mulcheckbox'
-                  @row-contextmenu='contentlist'
+                  @row-dblclick='contentlist'
                   ref="moviesTable"
                   style="width: 100%">
                   <el-table-column
                     type="selection"
+                     align='center'
                     width="55">
                   </el-table-column>
                   <el-table-column
@@ -55,10 +56,11 @@
                   </el-table-column>
                   <el-table-column
                     label="状态"
+                    align='center'
                     width="150">
-                    <template slot-scope="scope">{{ scope.row.delType | del }}</template>
+                    <template slot-scope="scope"   >{{ scope.row.delType | del }}</template>
                   </el-table-column>
-                 <el-table-column label="操作">
+                 <el-table-column label="操作"  min-width="180" >
                         <template slot-scope="scope">
                             <el-button size="mini" @click="relevanEdit(scope.$index, scope.row)">恢复</el-button>
                             <el-button size="mini" type="danger" @click="relevanDelete(scope.$index, scope.row)">删除</el-button>
@@ -90,7 +92,7 @@
               :title="title"
               :visible.sync="dialogVisible"
               width="50%">
-              <span>{{this.context}}</span>
+              <span v-html="context" ></span>
               <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
               </span>
@@ -284,7 +286,7 @@ export default {
       text-align: center;
    }
    .el-button+.el-button {
-     margin-left: 40px;
+     margin-left: 20px;
    }
    .baa_ai_n {
 	    width: 90%;

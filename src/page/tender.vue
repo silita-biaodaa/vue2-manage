@@ -129,17 +129,18 @@ export default {
             }, {
                 value: '1',
                 label: '已编辑'
-            }, {
-                value: '2',
-                label: '已审核'
-            }, {
-                value: '4',
-                label: '未通过'
-            },
-            {
-                value:'5',
-                label:'已处理'
             }
+            // , {
+            //     value: '2',
+            //     label: '已审核'
+            // }, {
+            //     value: '4',
+            //     label: '未通过'
+            // },
+            // {
+            //     value:'5',
+            //     label:'已处理'
+            // }
         ],
          pickerOptions2: {
             shortcuts: [{
@@ -185,23 +186,26 @@ export default {
   },
   watch: {
      times:function () {
-         this.pubDate = this.times[0]
-         this. pubEndDate = this.times[1]
+         if(this.times) {
+            this.pubDate = this.times[0] 
+            this. pubEndDate = this.times[1]      
+          } else {
+             this.pubDate = ''
+             this. pubEndDate = ''
+          }
+         
+        
      },
      province:function() {
         this.city = ''
         this.pkid= this.province.substring(0,32)
         this.coDe= this.province.substring(32)
-        listArea({areaParentId:this.pkid}).then(res => {
-            if(res.code === 1) {               
-                this.citys = res.data
-                this.citys.unshift({areaName:'全部',areaCode:''})
-            }
-        })
+        this.gainCity()
      }
   },
   created () {
       this.listTen()
+      this.gainCity()
       this.listForm()
   }, 
   filters: {
@@ -228,7 +232,6 @@ export default {
 methods: {
       listTen() {         
           listArea({areaParentId:0}).then(res => {
-              console.log(res,232)
               if(res.code === 1 ) {
                  res.data.forEach(itme => {
                     itme.areaCode = itme.pkid + itme.areaCode
@@ -236,13 +239,16 @@ methods: {
                  this.provinces = res.data
               }
           })
-            listArea({areaParentId:this.pkid}).then(res => {
+           
+
+      },
+      gainCity() {
+           listArea({areaParentId:this.pkid}).then(res => {
             if(res.code === 1) {               
                 this.citys = res.data
                 this.citys.unshift({areaName:'全部',areaCode:''})
             }
-        })
-
+           })
       },
       listForm() {
           listMain({source:this.coDe,proviceCode:this.coDe,cityCode:this.city,ntStatus:this.state,ntCategory:1,title:this.firm,pubDate:this.pubDate,pubEndDate:this.pubEndDate,currentPage:this.pagenum,pageSize:this.pagesize}).then(res => {
@@ -303,14 +309,12 @@ methods: {
           this.listForm()
       },
       handleSizeChange(val) {  // 每页条数发生改变时做出的函数
-        console.log(val)
          this.pagesize = val  
           this.listForm()
       },
       changetable() {
-            this.pagenum = 1
+          this.pagenum = 1
           setTimeout(() => {
-              console.log(this.coDe)
               return this.listForm()
           }, 100);                    
       },

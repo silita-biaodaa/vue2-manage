@@ -1,6 +1,6 @@
-<template>
-	<div class="login_page fillcontain" @keyup.enter="submitForm('loginForm')"  >
-		<transition name="form-fade" mode="in-out">
+<template >
+	<div class="login_page fillcontain"  @keyup.enter="submitForm('loginForm')"   >
+		<transition name="form-fade" mode="in-out" >
 			<section class="form_contianer" v-show="showLogin">
 				<div class="manage_tip">
 					<p>标大大后台管理系统</p>
@@ -22,6 +22,7 @@
 				<p class="tip">注册过的用户可凭账号密码登录</p>
 			</section>
 		</transition>
+		<input type="text" v-focus  class="logo-put"  @keyup.enter="submitForm('loginForm')"  >
 	</div>
 </template>
 
@@ -55,6 +56,11 @@ export default {
 	computed: {
 
 	},
+	directives: {
+       focus:function (el) {
+         el.focus();
+       }
+    },
 	methods: {
 		// ...mapActions(['getAdminData']),
 		submitForm(formName) {
@@ -92,7 +98,9 @@ export default {
 .login_page {
 	background-color: #324057;
 }
-
+.logo-put {
+  opacity: 0;
+}
 .manage_tip {
 	position: absolute;
 	width: 100%;

@@ -353,8 +353,8 @@
           <el-form :model="handleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">          
             <el-form-item label="公告状态" prop="resource">
               <el-radio-group v-model="handleForm.resource">
-                <el-radio label="0">未处理</el-radio>
-                <el-radio label="5">已处理</el-radio>
+                <el-radio label="0">未编辑</el-radio>
+                <el-radio label="5">已编辑</el-radio>
               </el-radio-group>
             </el-form-item>
             
@@ -1491,14 +1491,18 @@ export default {
       });
     },
     delcompile() {
+        this.delcom.forEach(item => {
+            this.delcomp.push(item.pkid)
+          })                    
+          if(this.delcomp.length == 0) {
+            return false
+          } 
        this.$confirm('此操作将永久删除该标段信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          this.delcom.forEach(item => {
-            this.delcomp.push(item.pkid)
-          })          
+        
       this.delcompl = this.delcomp.join('|')
       this.emptyForm('edits')
         deletePkid({idsStr:this.delcompl,source:this.code}).then(res => {

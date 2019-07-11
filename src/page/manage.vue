@@ -17,7 +17,7 @@
 						<div class="logo">
 							<img src="../assets/img/download_logo.png">
 						</div>
-						<el-submenu index="3">
+						<el-submenu index="2">
 							<template slot="title">
 								<i class="el-icon-plus"></i>
 								<span>业务</span>
@@ -29,19 +29,14 @@
 							<el-menu-item index="/financial">金融服务</el-menu-item>
 							<el-menu-item index="/relevance">相关公告</el-menu-item>
 						</el-submenu>
-                     <el-submenu index="4">
-                        <template slot="title">
-                            <i class="el-icon-loading"></i>
-                            <span>企业数据维护</span>
-                        </template>
-                         <el-menu-item index="/prize">数据维护</el-menu-item>
-                         <!--<el-menu-item index="/viwedata">查看数据日志</el-menu-item>-->
-                         <!--<el-menu-item index="/prize">获奖信息</el-menu-item>-->
-                         <!--<el-menu-item index="/quality">公路信用评价等级</el-menu-item>-->
-                         <!--<el-menu-item index="/record">安全生产许可证</el-menu-item>-->
-                         <!--<el-menu-item index="/safety">不良记录</el-menu-item>-->
-                         <!--<el-menu-item index="/security">安全认证</el-menu-item>-->
-                    </el-submenu>
+             <el-submenu index="3">
+                <template slot="title">
+                    <i class="el-icon-loading"></i>
+                    <span>企业数据维护</span>
+                </template>
+                 <el-menu-item index="/prize">数据维护</el-menu-item>
+
+            </el-submenu>
 						<el-submenu index="4">
 							<template slot="title">
 								<i class="el-icon-star-on"></i>
