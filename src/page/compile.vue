@@ -67,14 +67,14 @@
               <el-input v-model="form.proDuration" @blur="text('proDuration')" ></el-input>
             </el-form-item>
             <el-form-item >
-              <div class="labe"><i class="el-icon-warning"></i>项目地区</div>
+              <div class="labe"><i class="labe-i" >*</i>项目地区</div>
               <el-select v-model="form.cityCodeName" filterable placeholder="请选择项目地区" style="width:80%">
                 <el-option v-for="item in areas" :key="item.pkid"  :label="item.areaName" :value="item.areaCode">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item >
-              <div class="labe"><i class="el-icon-warning"></i>项目县区</div>
+              <div class="labe"><i class="labe-i" >*</i>项目县区</div>
               <el-select v-model="form.countyCode" filterable placeholder="请选择项目县区" style="width:80%">
                 <el-option v-for="item in counties" :key="item.pkid" :label="item.areaName" :value="item.areaCode">
                 </el-option>
@@ -139,7 +139,7 @@
               <el-input v-model="form.openingAddr" @blur="text('openingAddr')" ></el-input>
             </el-form-item>
             <el-form-item >
-              <div :class="['labe',forms.isproType?'new':'old']"><i class="el-icon-warning"></i>项目类型</div>
+              <div :class="['labe',forms.isproType?'new':'old']"><i class="labe-i" >*</i>项目类型</div>
               <el-select v-model="form.proType" @blur="text('proType')" filterable placeholder="请选择项目类型" style="width:80%">
                 <el-option v-for="item in type1s" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
@@ -1689,9 +1689,12 @@ export default {
       font-size: 12px;
       padding-right: 12px;
       box-sizing: border-box;
-      .el-icon-warning {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .labe-i {
         color: red;
-        margin-right: 5px;
+        font-size: 25px;
       }   
     }
     .rela{
@@ -1716,7 +1719,6 @@ export default {
           width: 100px;
           text-align: center;
           font-size: 12px;
-          // padding-right: 12px;
           box-sizing: border-box;
       }
       .el-select {
