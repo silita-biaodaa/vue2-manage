@@ -110,7 +110,7 @@
     </div>
 </template>
 <script>
-import { exportX,listArea,listStatus,listMain,listExcel,delpost } from '@/api/index';
+import { exportX,listArea,listStatus,listMain,listExcel,delbiding } from '@/api/index';
 export default {
   data () {
     return {
@@ -278,7 +278,7 @@ methods: {
               cancelButtonText: '取消',
               type: 'warning'
           }).then(() => {
-              delpost({pkid:row.pkid,source:this.coDe}).then(res => {
+              delbiding({pkid:row.pkid,source:this.coDe}).then(res => {
                      this.$message({
                         type: 'success',
                         message: res.msg
