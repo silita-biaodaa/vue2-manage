@@ -74,7 +74,8 @@
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="项目类型" >
+                <el-form-item >
+                     <div class="labe"><i class="labe-i" >*</i>项目类型</div>
                     <el-select v-model="bidForm.proType"  placeholder="请选择项目类型" style="width:80%">
                       <el-option v-for="item in bidType" :key="item.value"  :label="item.name" :value="item.value">
                       </el-option>
@@ -1473,6 +1474,23 @@ export default {
           }
         }
       }
+    }
+    .labe {
+      position: absolute;
+      top: 0;
+      left: -200px;
+      width: 200px;
+      text-align: center;
+      font-size: 12px;
+      padding-right: 12px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .labe-i {
+        color: red;
+        font-size: 25px;
+      }   
     }
     .bid-edit {
        position: relative;

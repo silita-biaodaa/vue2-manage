@@ -77,14 +77,14 @@
               style="width: 100%">
               <el-table-column
                 label="昵称"
-                width="100">
+                width="200">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.nikeName }}</span>
+                  <span >{{ scope.row.nikeName }}</span>
                 </template>
               </el-table-column>
               <el-table-column
                 label="姓名"
-                width="100">
+                width="200">
                 <template slot-scope="scope">
                   <span style="margin-left: 10px">{{ scope.row.userName }}</span>
                 </template>
@@ -93,7 +93,7 @@
                 label="性别"
                 width="100">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.sex }}</span>
+                  <span >{{ scope.row.sex }}</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -107,7 +107,7 @@
                 label="手机号码"
                 width="150">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.phoneNo }}</span>
+                  <span >{{ scope.row.phoneNo }}</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -128,7 +128,7 @@
                 label="注册时间"
                 width="150">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.created }}</span>
+                  <span >{{ scope.row.created }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
@@ -320,7 +320,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: '已取消锁定'
         });
       });
        
