@@ -29,6 +29,10 @@ import Bidding from '@/page/bidding'
 Vue.use(Router)
 
 const routes = [
+	  {
+	  	path: '/',
+	  	redirect: '/login'
+	  },
 		{
 			path:'/login',
 			component:Login,
