@@ -396,5 +396,11 @@ export const finEX = form => {
 export const delbiding = params => {
     return axios.post('zhongbiao/delNtMain', params).then(res => res.data)
 }
-
-
+//活跃用户统计
+export const activeUnum = () => {
+    return axios.post('user/active/count').then(res => res.data);
+}
+//活跃用户筛选搜索
+export const activeUlist = params => {
+    return axios.post('user/active/list', params).then(res => res.data);
+}

@@ -24,7 +24,6 @@
                            </el-option>
                          </el-select>
                     </el-col>
-
                     <el-col :span="5">
                         公告状态：
                         <el-select v-model="state" placeholder="请选择状态" style='width:60%' @change='changetable' >
@@ -42,7 +41,6 @@
                 </el-row>
             </el-col>  
         </el-row>
-
         <el-row>
             <el-col :span="24" class="fl-right">                
                 <el-input placeholder="请输入内容" v-model="firm" style="width:30%" @change="firmchange">
@@ -104,9 +102,6 @@
                     </div> 
                 </el-col>                 
             </el-row>
-
-       
-
     </div>
 </template>
 <script>

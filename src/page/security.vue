@@ -350,6 +350,8 @@
                         tabType: "safety_cert",
                         pkids: pkidStr,
                     }
+
+                    
                 );
                 getJsonData('/corp/requ/del', dataParam).then(res => {
                     this.$message({
