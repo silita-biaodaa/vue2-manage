@@ -404,3 +404,19 @@ export const activeUnum = () => {
 export const activeUlist = params => {
     return axios.post('user/active/list', params).then(res => res.data);
 }
+//用户信息统计
+export const userNum = () => {
+    return axios.post('user/count').then(res => res.data);
+}
+//用户列表
+export const userList = params => {
+    return axios.post('user/info/list', params).then(res => res.data);
+}
+//个人用户信息
+export const personInfo = params => {
+    return axios.post('user/info/personage',params).then(res => res.data);
+}
+//邀请人信息
+export const invitInfo = params => {
+    return axios.post('user/inviter',params).then(res => res.data);
+}
