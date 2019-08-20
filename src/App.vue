@@ -39,6 +39,7 @@ export default {};
       .add_input {
         .el-input__inner {
           border: none;
+          padding: 0;
         }
       }
       input::-webkit-input-placeholder {
