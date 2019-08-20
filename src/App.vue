@@ -36,14 +36,36 @@ export default {};
           border-bottom-color: @border-color;
         }
       }
-      .el-input__inner {
-        border: none;
+      .add_input {
+        .el-input__inner {
+          border: none;
+        }
       }
       input::-webkit-input-placeholder {
         color: #509ee3;
         font-size: 12px;
       }
     }
+  }
+}
+.el-message-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .el-message-box__title{
+    span {
+      font-size: 18px;
+    }
+  }
+  span {
+    font-size: 15px;
+  }
+  input {
+    border: 1px solid #ddd;
+    height: 30px;
+    width: 40px;
+    border-radius: 6px;
+    margin: 0 5px;
   }
 }
 </style>

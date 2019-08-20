@@ -420,3 +420,19 @@ export const personInfo = params => {
 export const invitInfo = params => {
     return axios.post('user/inviter',params).then(res => res.data);
 }
+//赠送会员
+export const addVip = params => {
+    return axios.post('vip/add',params).then(res => res.data);
+}
+//会员信息
+export const vipInfo = () => {
+    return axios.post('vip/profits/detail').then(res => res.data);
+}
+//添加备注
+export const userRemarks = params => {
+    return axios.post('user/updateRemark',params).then(res => res.data);
+}
+//订单统计
+export const orderNum = () => {
+    return axios.post('user/order/count').then(res => res.data);
+}
