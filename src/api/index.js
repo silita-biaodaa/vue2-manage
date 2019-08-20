@@ -425,8 +425,8 @@ export const addVip = params => {
     return axios.post('vip/add',params).then(res => res.data);
 }
 //会员信息
-export const vipInfo = () => {
-    return axios.post('vip/profits/detail').then(res => res.data);
+export const vipInfo = params => {
+    return axios.post('vip/profits/detail',params).then(res => res.data);
 }
 //添加备注
 export const userRemarks = params => {
