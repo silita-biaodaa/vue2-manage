@@ -436,3 +436,7 @@ export const userRemarks = params => {
 export const orderNum = () => {
     return axios.post('user/order/count').then(res => res.data);
 }
+//订单管理
+export const orderManage = params => {
+    return axios.post('order/list',params).then(res => res.data);
+}

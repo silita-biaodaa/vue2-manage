@@ -37,9 +37,14 @@ export default {};
         }
       }
       .add_input {
-        .el-input__inner {
-          border: none;
-          padding: 0;
+        .el-form-item {
+          height: 30px;
+        }
+        .el-input{
+          .el-input__inner {
+            border: none;
+            padding: 0;
+          }
         }
       }
       input::-webkit-input-placeholder {
