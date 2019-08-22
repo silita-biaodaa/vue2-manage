@@ -367,7 +367,7 @@ methods: {
     }
     
     .baa_ai {
-        border: 1px solid #ccc;
+        // border: 1px solid #ccc;
     }
     
     .block {
