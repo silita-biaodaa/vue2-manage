@@ -29,21 +29,39 @@ export default {};
   .el-form {
     width: 100%;
     height: 100%;
-    .el-form-item {
-      .el-form-item__content {
-        line-height: 0 !important;
-        tr {
-          border-bottom-color: @border-color;
+    .form_remarks {
+      border-bottom: 1px solid #ddd;
+      border-left: 1px solid #ddd;
+      border-right: 1px solid #ddd;
+      background-color: @border-color;
+      .el-form-item {
+        margin-bottom: 0;
+        .el-form-item__content {
+          line-height: 0 !important;
+          tr {
+            border-bottom-color: @border-color;
+          }
         }
-      }
-      .add_input {
-        .el-form-item {
-          height: 30px;
-        }
-        .el-input{
-          .el-input__inner {
-            border: none;
-            padding: 0;
+        .add_input {
+          padding-left: 10px;
+          span {
+            font-size: 14px;
+            color: #909399;
+            font-weight: 700;
+          }
+          .el-form-item {
+            height: 30px;
+            margin-bottom: 0;
+          }
+          .el-textarea {
+            .el-textarea__inner {
+              width: 800px;
+              padding: 0;
+              resize: none;
+              max-height: 200px !important;
+              overflow-y: scroll;
+              overflow:auto;
+            }
           }
         }
       }
@@ -58,7 +76,7 @@ export default {};
   display: flex;
   flex-direction: row;
   align-items: center;
-  .el-message-box__title{
+  .el-message-box__title {
     span {
       font-size: 18px;
     }
