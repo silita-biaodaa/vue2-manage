@@ -197,6 +197,16 @@ const routes = [
 				path: '/financial',
 				name: 'financial',
 				component: resolve => require(['@/page/business/financial.vue'], resolve)
+			},
+			{
+				path: '/adminAccount',
+				name: 'adminAccount',
+				component: resolve => require(['@/page/admin/adminAccount.vue'], resolve)
+			},
+			{
+				path: '/adminRecord',
+				name: 'adminRecord',
+				component: resolve => require(['@/page/admin/adminRecord.vue'], resolve)
 			}
 		]
 	}

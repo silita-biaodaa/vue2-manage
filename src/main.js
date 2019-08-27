@@ -4,10 +4,13 @@ import router from './router'
 import store from './store/'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
+import 'lib-flexible/flexible';
 import jlPopup from './components/userPopup.vue';
+import addPopup from './components/addPopup.vue';
 
 //自定义组件
-Vue.component('jlPopup',jlPopup )
+Vue.component('jlPopup',jlPopup);
+Vue.component('addPopup',addPopup);
 
 Vue.config.productionTip = false;
 

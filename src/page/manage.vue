@@ -66,6 +66,14 @@
           </el-submenu>
           <el-submenu index="7">
             <template slot="title">
+              <i class="el-icon-s-custom"></i>
+              <span>管理员账号</span>
+            </template>
+            <el-menu-item index="/adminAccount">账号管理</el-menu-item>
+            <el-menu-item index="/adminRecord">操作日志</el-menu-item>
+          </el-submenu>
+          <el-submenu index="8">
+            <template slot="title">
               <i class="el-icon-warning"></i>
               <span>设置</span>
             </template>
