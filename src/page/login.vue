@@ -13,34 +13,18 @@
           <el-form-item prop="password">
             <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
           </el-form-item>
-          <el-form-item>
+          <!-- <el-form-item>
              <div class="forget_word fr" @click="fogetWord">忘记密码？</div>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn" @keyup.enter.native="submitForm('loginForm')">登录</el-button>
           </el-form-item>
         </el-form>
-        <!-- <el-form :model="loginForm" :rules="rules" ref="loginForm" v-show="(!showLogin)">
-          <div>找回密码</div>
-          <el-form-item prop="phone">
-            <el-input v-model="loginForm.username" placeholder="请输入您的手机号码">
-            </el-input>
-          </el-form-item> -->
-          <!-- <el-form-item prop="password">
-            <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
-          </el-form-item>
-          <el-form-item>
-             <div class="forget_word fr" @click="fogetWord">忘记密码？</div>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登录</el-button>
-          </el-form-item> -->
-        <!-- </el-form> -->
         <p class="tip">温馨提示：</p>
         <p class="tip">注册过的用户可凭账号密码登录</p>
       </section>
     </transition>
-    <!-- <el-input type="text" v-focus class="logo-put" @keyup.enter.native="submitForm('loginForm')"></el-input> -->
+    <el-input type="text" v-focus class="logo-put" @keyup.enter.native="submitForm('loginForm')"></el-input>
   </div>
 </template>
 
@@ -101,11 +85,6 @@ export default {
       });
   },
   //找回密码表单
-
-	//点击忘记密码切换至忘记密码
-    fogetWord() {
-      this.showLogin = false;
-	  }
   },
   watch: {}
 };

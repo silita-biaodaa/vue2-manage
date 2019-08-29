@@ -63,6 +63,8 @@
             <el-menu-item index="/userInfo">用户信息</el-menu-item>
             <el-menu-item index="/orderManage">订单管理</el-menu-item>
             <el-menu-item index="/activeUser">活跃用户</el-menu-item>
+            <el-menu-item index="/feedBack">企业排名</el-menu-item>
+            <el-menu-item index="/feedBack">意见反馈</el-menu-item>
           </el-submenu>
           <el-submenu index="7">
             <template slot="title">

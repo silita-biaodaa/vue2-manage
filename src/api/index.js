@@ -440,3 +440,23 @@ export const orderNum = () => {
 export const orderManage = params => {
     return axios.post('order/list',params).then(res => res.data);
 }
+//反馈统计
+export const feedCount = () => {
+    return axios.post('feedback/count').then(res => res.data);
+}
+//反馈列表
+export const feedList = params => {
+    return axios.post('feedback/new/list',params).then(res => res.data);
+}
+//修改意见反馈备注
+export const upRemark = params => {
+    return axios.post('feedback/updateRemark',params).then(res => res.data);
+}
+//账号管理列表
+export const manageList= params => {
+    return axios.post('user/account/list', params).then(res => res.data);
+}
+//管理员锁定解锁
+export const manageLock = params => {
+    return axios.post('backstage/user/updateLock', params).then(res => res.data);
+}

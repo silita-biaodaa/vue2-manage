@@ -194,6 +194,11 @@ const routes = [
 				component: resolve => require(['@/page/user/orderManage.vue'], resolve)
 			},
 			{
+				path: '/feedBack',
+				name: 'feedBack',
+				component: resolve => require(['@/page/user/feedBack.vue'], resolve)
+			},
+			{
 				path: '/financial',
 				name: 'financial',
 				component: resolve => require(['@/page/business/financial.vue'], resolve)
