@@ -362,7 +362,7 @@ export const addNotice = params => {
 }
 // 意见反馈
 export const feedback = params => {
-    return axios.post('feedback/list', params).then(res => res.data)
+    return axios.post('feedback/new/list', params).then(res => res.data)
 }
 // 用户统计
 export const userAll = params => {
@@ -463,4 +463,8 @@ export const manageLock = params => {
 //操作日志列表
 export const operate = params => {
     return axios.post('feedback/list',params).then(res => res.data);
+}
+//修改操作状态
+export const operateState = params => {
+    return axios.post('feedback/updateState',params).then(res => res.data);
 }
