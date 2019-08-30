@@ -454,9 +454,13 @@ export const upRemark = params => {
 }
 //账号管理列表
 export const manageList= params => {
-    return axios.post('user/account/list', params).then(res => res.data);
+    return axios.post('backstage/user/accountList', params).then(res => res.data);
 }
 //管理员锁定解锁
 export const manageLock = params => {
     return axios.post('backstage/user/updateLock', params).then(res => res.data);
+}
+//操作日志列表
+export const operate = params => {
+    return axios.post('feedback/list',params).then(res => res.data);
 }
