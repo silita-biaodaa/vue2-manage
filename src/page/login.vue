@@ -51,7 +51,6 @@ export default {
 	},
 	mounted() {
     this.showLogin = true;
-    checkPhone(this.loginForm.phone);
 	},
 	computed: {
 
@@ -67,7 +66,7 @@ export default {
 			this.$refs[formName].validate(valide => {
 				// 只有校验通过，才执行函数
 				if (valide) {
-					register({ phone: this.loginForm.username, password: this.loginForm.password }).then(res => {
+					register({ phone: this.loginForm.phone, password: this.loginForm.password }).then(res => {
 						// 如果成功要跳转至首页, 将token保存到localStorage, 将username保存到vuex的state中
 						if (res.code === 1) {
 							localStorage.setItem('Authorization', res.data) 
