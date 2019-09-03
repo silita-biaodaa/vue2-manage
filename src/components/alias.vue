@@ -1,7 +1,7 @@
 <template>
     <div class="alia">  
         <div class="right-apti">
-          <p>资&nbsp&nbsp&nbsp质:</p>
+          <p>资&nbsp;&nbsp;&nbsp;质:</p>
           <el-input placeholder="曾丹是个傻子" v-model="input2" disabled>
           </el-input>
         </div> 

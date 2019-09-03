@@ -17,6 +17,15 @@ export default {};
 .el-main {
   min-width: 1330px;
 }
+.el-textarea {
+  .el-textarea__inner {
+    resize: none;
+     -ms-overflow-style: none;
+  }
+}
+textarea::-webkit-scrollbar {
+  display: none;
+}
 .dialog {
   tr {
     border-top-color: @border-color;
@@ -60,7 +69,7 @@ export default {};
               resize: none;
               max-height: 200px !important;
               overflow-y: scroll;
-              overflow:auto;
+              overflow: auto;
             }
           }
         }
@@ -69,6 +78,11 @@ export default {};
         color: #509ee3;
         font-size: 12px;
       }
+    }
+  }
+  .popup_form,.popup_form_btn {
+    .el-form-item__content {
+      margin-left: 0 !important;
     }
   }
 }

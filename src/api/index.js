@@ -468,3 +468,7 @@ export const operate = params => {
 export const operateState = params => {
     return axios.post('feedback/updateState',params).then(res => res.data);
 }
+//管理员对用户解锁锁定
+export const updateLock = params => {
+    return axios.post('/user/lock',params).then(res => res.data);
+}
