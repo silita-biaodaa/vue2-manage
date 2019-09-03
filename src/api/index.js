@@ -462,7 +462,7 @@ export const manageLock = params => {
 }
 //操作日志列表
 export const operate = params => {
-    return axios.post('feedback/list',params).then(res => res.data);
+    return axios.post('logs/list',params).then(res => res.data);
 }
 //修改操作状态
 export const operateState = params => {
@@ -471,4 +471,8 @@ export const operateState = params => {
 //管理员对用户解锁锁定
 export const updateLock = params => {
     return axios.post('/user/lock',params).then(res => res.data);
+}
+//重置初始密码
+export const setPassWord = params => {
+    return axios.post('backstage/user/updateResetPassword',params).then(res => res.data);
 }

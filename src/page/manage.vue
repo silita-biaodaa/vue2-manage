@@ -107,6 +107,9 @@
               <el-dropdown-item command="singout">
                 <el-button type="text" @click="logout">退出</el-button>
               </el-dropdown-item>
+              <el-dropdown-item>
+                <el-button type="text" @click="logout">修改密码</el-button>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-header>
