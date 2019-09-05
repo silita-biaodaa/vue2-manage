@@ -24,6 +24,7 @@ import Detail from '@/page/detail'
 import Relevance from '@/page/relevance'
 import Recycle from '@/page/recycle'
 import Bidding from '@/page/bidding'
+import PassWord from '@/page/passWord'
 
 
 Vue.use(Router)
@@ -92,6 +93,11 @@ const routes = [
 				path: '/record',
 				component: resolve => require(['@/page/record.vue'], resolve),
 				name: 'record'
+			},
+			{
+				path: '/passWord',
+				component: PassWord,
+				name: 'passWord'
 			},
 			{
 				path: '/safety',

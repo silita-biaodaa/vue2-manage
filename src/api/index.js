@@ -476,3 +476,11 @@ export const updateLock = params => {
 export const setPassWord = params => {
     return axios.post('backstage/user/updateResetPassword',params).then(res => res.data);
 }
+//修改密码
+export const updatePsd = params => {
+    return axios.post('backstage/user/updatePassword',params).then(res => res.data);
+}
+//展示菜单
+export const List= () => {
+    return axios.post('module/list').then(res => res.data);
+}

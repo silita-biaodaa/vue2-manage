@@ -44,14 +44,12 @@
             <el-menu-item index="compile">行业资质</el-menu-item>
             <el-menu-item index="quillediter">平台公示</el-menu-item>
             <el-menu-item index="addgoods">消息中心</el-menu-item>
-            <!-- <el-menu-item index="opinion">意见反馈</el-menu-item> -->
           </el-submenu>
           <el-submenu index="5">
             <template slot="title">
               <i class="el-icon-edit"></i>
               <span>应用工具</span>
             </template>
-            <!-- <el-menu-item index="uploadImg">上传图片</el-menu-item> -->
             <el-menu-item index="vueEdit">评标预测</el-menu-item>
           </el-submenu>
           <el-submenu index="6">
@@ -74,7 +72,13 @@
             <el-menu-item index="/adminAccount">账号管理</el-menu-item>
             <el-menu-item index="/adminRecord">操作日志</el-menu-item>
           </el-submenu>
-          <el-submenu index="8">
+          <el-menu-item index="passWord">
+            <template slot="title">
+              <i class="el-icon-lock"></i>
+              <span>修改密码</span>
+            </template>
+          </el-menu-item>
+          <el-submenu index="9">
             <template slot="title">
               <i class="el-icon-warning"></i>
               <span>设置</span>
@@ -85,13 +89,6 @@
             <el-menu-item index="/maintenance">等级维护</el-menu-item>
             <el-menu-item index="/maintain">公告维护</el-menu-item>
           </el-submenu>
-          <!-- <el-submenu index="8">
-							<template slot="title">
-								<i class="el-icon-warning"></i>
-								<span>纠错</span>
-								</template>
-							<el-menu-item index="/errhome">招，中标</el-menu-item>
-          </el-submenu>-->
         </el-menu>
       </el-aside>
       <el-container>
@@ -99,16 +96,14 @@
         <el-header>
           <i class="myicon myicon-menu toggle-btn" @click="toggleCollapse"></i>
           <div class="system-title">后台运营系统</div>
-
           <el-dropdown menu-align="start">
             <img src="../assets/img/2.png" class="avator" />
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="home">首页</el-dropdown-item>
               <el-dropdown-item command="singout">
                 <el-button type="text" @click="logout">退出</el-button>
               </el-dropdown-item>
-              <el-dropdown-item>
-                <el-button type="text" @click="logout">修改密码</el-button>
+              <el-dropdown-item command="passWord">
+                <el-button type="text" @click="editWord">修改密码</el-button>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -143,14 +138,12 @@ export default {
     logout() {
       localStorage.removeItem("Authorization");
       this.$router.push({ name: "login" });
+    },
+    editWord() {
+      this.$router.push({ name: "passWord" });
     }
   },
-  mounted() {
-    // let params = { params: { query: '', pagenum: 1, pagesize: 1 } }
-    // getUserList(params).then(res => {
-    //   console.log(res)
-    // })
-  }
+  mounted() {}
 };
 </script>
 
