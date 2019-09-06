@@ -16,6 +16,7 @@ export default {};
 }
 .el-main {
   min-width: 1330px;
+  height: 100%;
 }
 .el-textarea {
   .el-textarea__inner {
