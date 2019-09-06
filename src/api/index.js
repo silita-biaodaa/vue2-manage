@@ -500,3 +500,7 @@ export const updateAccount = params => {
 export const role = params => {
     return axios.post('role/list', params).then(res => res.data);
 }
+//添加角色权限
+export const powerRole = params => {
+    return axios.post('role/addRole',params).then(res => res.data);
+}
