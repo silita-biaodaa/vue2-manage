@@ -22,7 +22,7 @@
               <i :class="index.icon"></i>
               <span>{{index.title}}</span>
             </template>
-            <el-menu-item :class="childNum==a?'':'showColor'" v-for="(item,a) in childList" :key="a" @click="jump(item.url,a)">{{item.title}}</el-menu-item>
+            <el-menu-item :class="childNum == a&&tabNum==i? '':'showColor'" v-for="(item,a) in index.data" :key="a" @click="jump(item.url,a,i)">{{item.title}}</el-menu-item>
             <!-- <el-menu-item index="/addGoods">中标</el-menu-item>
             <el-menu-item index="/recycle">回收站</el-menu-item>
             <el-menu-item index="/userList">企信</el-menu-item>
@@ -126,8 +126,9 @@ export default {
     return {
       isCollapse: false,
       meunList: null,
-      childList: null,
+      childList: [],
       childNum: 0,
+      tabNum:0
     };
   },
   methods: {
@@ -147,8 +148,9 @@ export default {
     editWord() {
       this.$router.push({ name: "passWord" });
     },
-    jump(path,i){
+    jump(path,i,index){
       this.childNum=i;
+      this.tabNum=index;
       this.$router.push({name:path});
     }
   },
@@ -156,8 +158,7 @@ export default {
   beforeMount() {
     List().then(res => {
       if (res.code == "1") {
-        this.meunList = res.data;
-        this.childList = res.data[0].data;
+        this.meunList = res.data.menu;
       } else {
         console.info('菜单导航栏接口不通');
       }

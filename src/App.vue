@@ -26,6 +26,11 @@ export default {};
 textarea::-webkit-scrollbar {
   display: none;
 }
+.adminRecord {
+  .el-table__header-wrapper {
+    border-bottom: 1px solid #EBEEF5;
+  }
+}
 .dialog {
   tr {
     border-top-color: @border-color;

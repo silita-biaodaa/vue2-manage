@@ -496,3 +496,7 @@ export const addAccount = params => {
 export const updateAccount = params => {
     return axios.post('backstage/user/updateAdministrator',params).then(res => res.data);
 }
+//角色管理列表
+export const role = params => {
+    return axios.post('role/list', params).then(res => res.data);
+}
