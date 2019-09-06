@@ -72,14 +72,11 @@ export default {
             // 如果成功要跳转至首页, 将token保存到localStorage, 将username保存到vuex的state中
             if (res.code === 1) {
               localStorage.setItem("Authorization", res.data);
-              setCookie("phone", this.loginForm.phone, 1);
+              if(localStorage.getItem("phone")) {
+                localStorage.removeItem("phone");
+              }
+              localStorage.setItem("phone", this.loginForm.phone);
               this.$router.push({ name: "home" });
-              List().then(res => {
-                if (res.code == "1") {
-                } else {
-                  console.info();
-                }
-              });
             } else {
               // 如果失败，展示提示信息
               this.$message({
