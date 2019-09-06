@@ -33,8 +33,8 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import { register } from "@/api/index";
-import { checkPhone } from "../public";
+import { register, List } from "@/api/index";
+import { checkPhone, setCookie, removeCookie, getCookies } from "../public";
 
 export default {
   data() {
@@ -72,7 +72,14 @@ export default {
             // 如果成功要跳转至首页, 将token保存到localStorage, 将username保存到vuex的state中
             if (res.code === 1) {
               localStorage.setItem("Authorization", res.data);
+              setCookie("phone", this.loginForm.phone, 1);
               this.$router.push({ name: "home" });
+              List().then(res => {
+                if (res.code == "1") {
+                } else {
+                  console.info();
+                }
+              });
             } else {
               // 如果失败，展示提示信息
               this.$message({
@@ -87,7 +94,7 @@ export default {
       });
     }
   },
-  watch: {}
+  created() {}
 };
 </script>
 

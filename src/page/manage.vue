@@ -17,18 +17,18 @@
           <div class="logo">
             <img src="../assets/img/download_logo.png" />
           </div>
-          <el-submenu index="2">
+          <!-- <el-submenu v-for="(index,i) in meunList" :key="i" :index="'das'+i" >
             <template slot="title">
-              <i class="el-icon-plus"></i>
-              <span>业务</span>
+              <i :class="index.icon"></i>
+              <span>{{index.title}}</span>
             </template>
-            <el-menu-item index="/tender">招标</el-menu-item>
-            <el-menu-item index="/addGoods">中标</el-menu-item>
+            <el-menu-item :class="childNum==a?'':'showColor'" v-for="(item,a) in childList" :key="a" @click="jump(item.url,a)">{{item.title}}</el-menu-item> -->
+            <!-- <el-menu-item index="/addGoods">中标</el-menu-item>
             <el-menu-item index="/recycle">回收站</el-menu-item>
             <el-menu-item index="/userList">企信</el-menu-item>
             <el-menu-item index="/financial">金融服务</el-menu-item>
-            <el-menu-item index="/relevance">相关公告</el-menu-item>
-          </el-submenu>
+            <el-menu-item index="/relevance">相关公告</el-menu-item> -->
+          <!-- </el-submenu> -->
           <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-loading"></i>
@@ -71,6 +71,7 @@
             </template>
             <el-menu-item index="/adminAccount">账号管理</el-menu-item>
             <el-menu-item index="/adminRecord">操作日志</el-menu-item>
+            <el-menu-item index="/adminRole">角色管理</el-menu-item>
           </el-submenu>
           <el-menu-item index="passWord">
             <template slot="title">
@@ -119,10 +120,14 @@
 </template>
 
 <script>
+import { List } from "@/api/index";
 export default {
   data() {
     return {
-      isCollapse: false
+      isCollapse: false,
+      meunList: null,
+      childList: null,
+      childNum: 0,
     };
   },
   methods: {
@@ -141,9 +146,23 @@ export default {
     },
     editWord() {
       this.$router.push({ name: "passWord" });
+    },
+    jump(path,i){
+      this.childNum=i;
+      this.$router.push({name:path});
     }
   },
-  mounted() {}
+  mounted() {},
+  beforeMount() {
+    List().then(res => {
+      if (res.code == "1") {
+        this.meunList = res.data;
+        this.childList = res.data[0].data;
+      } else {
+        console.info('菜单导航栏接口不通');
+      }
+    });
+  }
 };
 </script>
 
@@ -201,6 +220,9 @@ export default {
     width: 36px;
     border-radius: 50%;
     margin-right: 37px;
+  }
+  .showColor{
+    color: #fff !important;
   }
 }
 </style>

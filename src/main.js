@@ -7,10 +7,12 @@ import 'element-ui/lib/theme-chalk/index.css';
 import 'lib-flexible/flexible';
 import jlPopup from './components/userPopup.vue';
 import addPopup from './components/addPopup.vue';
+import powerPopup from './components/powerPopup.vue';
 
 //自定义组件
 Vue.component('jlPopup', jlPopup);
 Vue.component('addPopup', addPopup);
+Vue.component('powerPopup', powerPopup);
 
 Vue.config.productionTip = false;
 

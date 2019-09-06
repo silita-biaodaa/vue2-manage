@@ -218,7 +218,12 @@ const routes = [
 				path: '/adminRecord',
 				name: 'adminRecord',
 				component: resolve => require(['@/page/admin/adminRecord.vue'], resolve)
-			}
+			},
+			{
+				path: '/adminRole',
+				name: 'adminRole',
+				component: resolve => require(['@/page/admin/adminRole.vue'], resolve)
+			},
 		]
 	}
 ]

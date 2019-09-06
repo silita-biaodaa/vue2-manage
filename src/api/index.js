@@ -484,3 +484,15 @@ export const updatePsd = params => {
 export const List= () => {
     return axios.post('module/list').then(res => res.data);
 }
+//获取角色
+export const roleAll = () => {
+    return axios.post('role/roleAll').then(res => res.data);
+}
+//添加管理员
+export const addAccount = params => {
+    return axios.post('backstage/user/add',params).then(res => res.data);
+}
+//编辑管理员
+export const updateAccount = params => {
+    return axios.post('backstage/user/updateAdministrator',params).then(res => res.data);
+}
