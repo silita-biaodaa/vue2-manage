@@ -504,3 +504,7 @@ export const role = params => {
 export const powerRole = params => {
     return axios.post('role/addRole',params).then(res => res.data);
 }
+//可添加角色查询
+export const searchRole = () => {
+    return axios.post('module/addUserModule').then(res => res.data);
+}

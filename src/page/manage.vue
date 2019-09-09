@@ -17,19 +17,19 @@
           <div class="logo">
             <img src="../assets/img/download_logo.png" />
           </div>
-          <el-submenu v-for="(index,i) in meunList" :key="i" :index="'das'+i" >
+          <!-- <el-submenu v-for="(index,i) in meunList" :key="i" :index="'das'+i" >
             <template slot="title">
               <i :class="index.icon"></i>
               <span>{{index.title}}</span>
             </template>
-            <el-menu-item :class="childNum == a&&tabNum==i? '':'showColor'" v-for="(item,a) in index.data" :key="a" @click="jump(item.url,a,i)">{{item.title}}</el-menu-item>
+            <el-menu-item :class="childNum == a&&tabNum==i? '':'showColor'" v-for="(item,a) in index.data" :key="a" @click="jump(item.url,a,i)">{{item.title}}</el-menu-item> -->
             <!-- <el-menu-item index="/addGoods">中标</el-menu-item>
             <el-menu-item index="/recycle">回收站</el-menu-item>
             <el-menu-item index="/userList">企信</el-menu-item>
             <el-menu-item index="/financial">金融服务</el-menu-item>
             <el-menu-item index="/relevance">相关公告</el-menu-item> -->
-          </el-submenu>
-          <!-- <el-submenu index="3">
+          <!-- </el-submenu> -->
+          <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-loading"></i>
               <span>企业数据维护</span>
@@ -89,7 +89,7 @@
             <el-menu-item index="/method">评标办法维护</el-menu-item>
             <el-menu-item index="/maintenance">等级维护</el-menu-item>
             <el-menu-item index="/maintain">公告维护</el-menu-item>
-          </el-submenu> -->
+          </el-submenu>
         </el-menu>
       </el-aside>
       <el-container>
