@@ -19,8 +19,8 @@
         <el-input placeholder="请输入内容" v-model="firm" style="width:30%" @change="firmchange">
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
-        <el-button type="primary" @click="correlation" class="rele-btn">批量恢复</el-button>
-        <el-button type="primary" @click="focusdel">批量删除</el-button>
+        <el-button type="primary" @click="correlation" class="rele-btn" v-show="isAllows">批量恢复</el-button>
+        <el-button type="primary" @click="focusdel" v-show="isAllows">批量删除</el-button>
       </el-col>
     </el-row>
     <el-row>
@@ -46,11 +46,12 @@
           </el-table-column>
           <el-table-column label="操作" min-width="180">
             <template slot-scope="scope">
-              <el-button size="mini" @click="relevanEdit(scope.$index, scope.row)">恢复</el-button>
+              <el-button size="mini" @click="relevanEdit(scope.$index, scope.row)" v-show="isAllows">恢复</el-button>
               <el-button
                 size="mini"
                 type="danger"
                 @click="relevanDelete(scope.$index, scope.row)"
+                v-show="isAllows"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -109,12 +110,14 @@ export default {
       reStr: "",
       title: "",
       dialogVisible: false,
-      context: ""
+      context: "",
+      isAllows: null, //接受路由可操作的值;
     };
   },
   created() {
     this.listsou();
     this.recyclist();
+    this.isAllows = this.$router.query.isAllows;
   },
   filters: {
     del: function(val) {

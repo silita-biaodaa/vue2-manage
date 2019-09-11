@@ -33,7 +33,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import { register, List } from "@/api/index";
+import { register, List, searchPower } from "@/api/index";
 import { checkPhone, setCookie, removeCookie, getCookies } from "../public";
 
 export default {

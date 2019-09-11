@@ -179,11 +179,11 @@ const routes = [
 				name: 'maintain',
 				component: resolve => require(['@/page/maintains/maintain.vue'], resolve)
 			},
-			{
-				path: '/users',
-				name: 'users',
-				component: resolve => require(['@/page/user/user.vue'], resolve)
-			},
+			// {
+			// 	path: '/users',
+			// 	name: 'users',
+			// 	component: resolve => require(['@/page/user/user.vue'], resolve)
+			// },
 			{
 				path: '/userInfo',
 				name: 'userInfo',

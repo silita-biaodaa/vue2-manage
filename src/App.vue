@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { searchPower } from "@/api/index";
 export default {};
 </script>
 

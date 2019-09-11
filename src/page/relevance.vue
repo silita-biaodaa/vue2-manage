@@ -61,8 +61,8 @@
                   </el-table-column>
                  <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <el-button size="mini" @click="relevanEdit(scope.$index, scope.row)">编辑</el-button>
-                            <el-button size="mini" type="danger" @click="relevanDelete(scope.$index, scope.row)">删除</el-button>
+                            <el-button size="mini" @click="relevanEdit(scope.$index, scope.row)" v-show="isAllows">编辑</el-button>
+                            <el-button size="mini" type="danger" @click="relevanDelete(scope.$index, scope.row)" v-show="isAllows">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -104,7 +104,8 @@ export default {
       pkid:localStorage.getItem('relipkid'),
       arrreli:[],
       arMsg:[],
-      reStr:''
+      reStr:'',
+      isAllows: null,
     }
   },
 
@@ -112,7 +113,7 @@ export default {
     // this.showtitle()
      this.listsou() 
      this.listRele()
-      
+     this.isAllows = this.$router.query.isAllows; 
   },
   filters: {
     relnt:function(val) {

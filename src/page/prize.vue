@@ -102,9 +102,9 @@
             <el-col :span="24" style="margin-top: 30px;">
                 <el-row>
                     <el-button type="primary" @click="getData(1)">查询</el-button>
-                    <el-button type="primary" @click="deleteConfirm">删除</el-button>
-                    <el-button type="primary" @click="allDelete">全部删除</el-button>
-                    <el-button type="primary"  @click="educe"  >导出Excel</el-button>
+                    <el-button type="primary" @click="deleteConfirm" v-show="isAllows">删除</el-button>
+                    <el-button type="primary" @click="allDelete" v-show="isAllows">全部删除</el-button>
+                    <el-button type="primary"  @click="educe" v-show="isAllows">导出Excel</el-button>
                    
 
                     <el-upload
@@ -231,7 +231,8 @@
                 upLoadExcelTxt:'上传Excel',
                 func:false,
                 exceLrose:'',
-                excel1:''
+                excel1:'',
+                isAllows: null,
             }
         },
 
@@ -241,6 +242,9 @@
             // this.getYearArray();
             this.getPrizeList();
 
+        },
+        created() {
+            this.isAllows = this.$router.query.isAllows;
         },
 
         methods: {

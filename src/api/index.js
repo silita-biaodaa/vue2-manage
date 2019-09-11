@@ -508,3 +508,11 @@ export const powerRole = params => {
 export const searchRole = () => {
     return axios.post('module/addUserModule').then(res => res.data);
 }
+//角色权限可查询
+export const searchPower = params => {
+    return axios.post('module/updateUserModule',params).then(res => res.data);
+}
+//保存编辑权限
+export const eaitPower = params => {
+    return axios.post('role/updateRole',params).then(res => res.data);
+}

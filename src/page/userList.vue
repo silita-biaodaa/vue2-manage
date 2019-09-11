@@ -41,7 +41,7 @@
                     <el-button slot="append" @click="queryData" icon="el-icon-search"></el-button>
                 </el-input>
                 <span style="float: right">
-                              <router-link to="/rease"><el-button type="primary">增加企业</el-button></router-link>
+                              <router-link to="/rease"><el-button type="primary" v-show="isAllows">增加企业</el-button></router-link>
                         <el-button type="primary">批量数据维护</el-button>
                         </span>
             </div>
@@ -64,7 +64,7 @@
                 <template slot-scope="scope">
                     <el-button
                         size="mini"
-                        @click="handleEdit(scope.$index, scope.row)">编辑
+                        @click="handleEdit(scope.$index, scope.row)" v-show="isAllows">编辑
                     </el-button>
                     <el-button
                         size="mini"
@@ -114,7 +114,8 @@
                 currentPage: 0,
                 pageSize: 20,
                 total: 0,
-                pageCount: 0
+                pageCount: 0,
+                isAllows: null, //接受路由可操作的值;
             };
         },
         mounted() {//进入页面调用方法
@@ -207,6 +208,9 @@
                     }
                 }
             }
+        },
+        created() {
+            this.isAllows = this.$router.query.isAllows;
         }
     };
 </script>

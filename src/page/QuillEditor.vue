@@ -10,11 +10,11 @@
                 <quill-editor class="margin20" v-model="content" ref="myQuillEditor" :options="editorOption" @change="onEditorChange($event)"></quill-editor>
                 <!-- 文件上传input 将它隐藏-->
                 <el-upload class="upload-demo" action="http://192.168.0.97:8383/v1/base/image_upload" :before-upload='beforeUpload' :data="uploadData" :on-success='upScuccess' name="files" :on-error="handleAvatarFail" :headers="headers" ref="upload" style="display:none">
-                    <el-button size="small" type="primary" id="imgInput" element-loading-text="插入中,请稍候">点击上传</el-button>
+                    <el-button size="small" type="primary" id="imgInput" element-loading-text="插入中,请稍候" v-show="isAllows">点击上传</el-button>
                 </el-upload>
                 <div class="btn-container">
                     <button class="query-btn" @click="preview">预览</button>
-                    <button class="query-btn" @click="save">保存</button>
+                    <button class="query-btn" @click="save" v-show="isAllows">保存</button>
                 </div>
                 <el-dialog
                     title="提示"
@@ -75,7 +75,8 @@ export default {
                 editor: 1
             },
             photoUrl: '', // 上传图片地址
-            uploadType: '' // 上传的文件类型（图片、视频）
+            uploadType: '', // 上传的文件类型（图片、视频）
+            isAllows: null,
         };
     },
     computed: {
@@ -242,6 +243,7 @@ export default {
             myQuillEditor: HTMLInputElement,
             imgInput: HTMLInputElement
         };
+        this.isAllows = this.$router.query.isAllows;
     },
     // 页面加载后执行 为编辑器的图片图标和视频图标绑定点击事件
     mounted () {

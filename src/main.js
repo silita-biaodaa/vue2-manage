@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
 			next({ path: '/login' })
 		} else {
 		// 如果没有登录，但你访问的login，那就不干涉你，让你访问
-			next()
+			next();
 		}	
 	}
 })

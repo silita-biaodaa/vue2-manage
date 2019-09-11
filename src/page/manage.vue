@@ -22,14 +22,32 @@
               <i :class="index.icon"></i>
               <span>{{index.title}}</span>
             </template>
-            <el-menu-item :class="childNum == a&&tabNum==i? '':'showColor'" v-for="(item,a) in index.data" :key="a" @click="jump(item.url,a,i)">{{item.title}}</el-menu-item>
-            <!-- <el-menu-item index="/addGoods">中标</el-menu-item>
+            <el-menu-item :class="childNum == a&&tabNum==i? '':'showColor'" v-for="(item,a) in index.data" :key="a" 
+            @click="jump(item.url,a,i, item.optiond)">
+              {{item.title}}
+              </el-menu-item>
+          </el-submenu>
+          <!-- <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-loading"></i>
+              <span>企业数据维护</span>
+            </template>
+            <el-menu-item index="/addGoods">中标</el-menu-item>
             <el-menu-item index="/recycle">回收站</el-menu-item>
             <el-menu-item index="/userList">企信</el-menu-item>
             <el-menu-item index="/financial">金融服务</el-menu-item>
-            <el-menu-item index="/relevance">相关公告</el-menu-item> -->
+            <el-menu-item index="/relevance">相关公告</el-menu-item>
           </el-submenu>
-          <!-- <el-submenu index="3">
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="el-icon-star-on"></i>
+              <span>运营</span>
+            </template>
+            <el-menu-item index="compile">行业资质</el-menu-item>
+            <el-menu-item index="quillediter">平台公示</el-menu-item>
+            <el-menu-item index="addgoods">消息中心</el-menu-item>
+          </el-submenu>
+          <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-loading"></i>
               <span>企业数据维护</span>
@@ -57,7 +75,6 @@
               <i class="el-icon-setting"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="/users">用户管理</el-menu-item>
             <el-menu-item index="/userInfo">用户信息</el-menu-item>
             <el-menu-item index="/orderManage">订单管理</el-menu-item>
             <el-menu-item index="/activeUser">活跃用户</el-menu-item>
@@ -98,7 +115,7 @@
           <i class="myicon myicon-menu toggle-btn" @click="toggleCollapse"></i>
           <div class="system-title">后台运营系统</div>
           <el-dropdown menu-align="start">
-            <img src="../assets/img/2.png" class="avator" />
+            <div class="color-fff userName">{{userName}}</div>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="singout">
                 <el-button type="text" @click="logout">退出</el-button>
@@ -128,7 +145,9 @@ export default {
       meunList: null,
       childList: [],
       childNum: 0,
-      tabNum:0
+      tabNum:0,
+      userName: "",
+      isAllowS: false,
     };
   },
   methods: {
@@ -148,10 +167,11 @@ export default {
     editWord() {
       this.$router.push({ name: "passWord" });
     },
-    jump(path,i,index){
+    jump(path,i,index,optiond){
+      this.isAllows = (optiond == "operability");
       this.childNum=i;
       this.tabNum=index;
-      this.$router.push({name:path});
+      this.$router.push({name:path, query: {isAllows: this.isAllows}});
     }
   },
   mounted() {},
@@ -159,6 +179,7 @@ export default {
     List().then(res => {
       if (res.code == "1") {
         this.meunList = res.data.menu;
+        this.userName = res.data.adminName;
       } else {
         console.info('菜单导航栏接口不通');
       }
@@ -170,6 +191,7 @@ export default {
 
 <style lang="less" scoped>
 @import "../style/icon";
+@import "../style/mixin";
 .home {
   height: 100%;
   .el-menu-admin:not(.el-menu--collapse) {
@@ -215,7 +237,9 @@ export default {
   .welcome {
     color: white;
   }
-
+  .userName {
+    cursor: pointer;
+  }
   .avator {
     height: 36px;
     width: 36px;

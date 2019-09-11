@@ -25,7 +25,7 @@
          </el-col>
          <el-col :span='7' class="fin" >
               <el-button type="primary"  @click='gainDate' >查询</el-button>
-              <el-button type="primary"  @click='educe' >导出Excel</el-button>
+              <el-button type="primary"  @click='educe' v-show="isAllows">导出Excel</el-button>
          </el-col>
      </el-row>
       <el-table
@@ -144,10 +144,12 @@ export default {
          pagenum:1,
          pagesize:15,
         total:0,
+        isAllows: null,
     }
   },
   created () {
-     this.gainData()
+     this.gainData();
+     this.isAllows = this.$router.query.isAllows;
   },
   methods: {
   gainDate() {
