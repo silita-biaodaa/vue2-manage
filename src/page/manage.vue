@@ -17,7 +17,7 @@
           <div class="logo">
             <img src="../assets/img/download_logo.png" />
           </div>
-          <!-- <el-submenu v-for="(index,i) in meunList" :key="i" :index="'das'+i" >
+          <el-submenu v-for="(index,i) in meunList" :key="i" :index="'das'+i" >
             <template slot="title">
               <i :class="index.icon"></i>
               <span>{{index.title}}</span>
@@ -26,8 +26,8 @@
             @click="jump(item.url,a,i, item.optiond)">
               {{item.title}}
               </el-menu-item>
-          </el-submenu> -->
-          <el-submenu index="2">
+          </el-submenu>
+          <!-- <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-loading"></i>
               <span>企业数据维护</span>
@@ -106,7 +106,7 @@
             <el-menu-item index="/method">评标办法维护</el-menu-item>
             <el-menu-item index="/maintenance">等级维护</el-menu-item>
             <el-menu-item index="/maintain">公告维护</el-menu-item>
-          </el-submenu>
+          </el-submenu> -->
         </el-menu>
       </el-aside>
       <el-container>
@@ -179,7 +179,6 @@ export default {
     List().then(res => {
       if (res.code == "1") {
         this.meunList = res.data.menu;
-        localStorage.setItem("loginName", res.data.adminName);
         this.userName = res.data.adminName;
       } else {
         console.info('菜单导航栏接口不通');
