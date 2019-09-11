@@ -149,7 +149,7 @@ export default {
   },
   created () {
      this.gainData();
-     this.isAllows = this.$router.query.isAllows;
+     this.isAllows = this.$route.query.isAllows;
   },
   methods: {
   gainDate() {

@@ -210,7 +210,7 @@
             }
         },
         created() {
-            this.isAllows = this.$router.query.isAllows;
+            this.isAllows = this.$route.query.isAllows;
         }
     };
 </script>

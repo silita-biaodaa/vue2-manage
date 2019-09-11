@@ -243,7 +243,7 @@ export default {
             myQuillEditor: HTMLInputElement,
             imgInput: HTMLInputElement
         };
-        this.isAllows = this.$router.query.isAllows;
+        this.isAllows = this.$route.query.isAllows;
     },
     // 页面加载后执行 为编辑器的图片图标和视频图标绑定点击事件
     mounted () {

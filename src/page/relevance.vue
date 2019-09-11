@@ -113,7 +113,7 @@ export default {
     // this.showtitle()
      this.listsou() 
      this.listRele()
-     this.isAllows = this.$router.query.isAllows; 
+     this.isAllows = this.$route.query.isAllows; 
   },
   filters: {
     relnt:function(val) {

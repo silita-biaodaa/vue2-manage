@@ -117,7 +117,7 @@ export default {
   created() {
     this.listsou();
     this.recyclist();
-    this.isAllows = this.$router.query.isAllows;
+    this.isAllows = this.$route.query.isAllows;
   },
   filters: {
     del: function(val) {
