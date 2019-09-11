@@ -90,11 +90,6 @@ export default {
         }
       });
     },
-    showMeun() {
-      searchPower().then(res => {
-        
-      })
-    },
   },
   created() {}
 };
