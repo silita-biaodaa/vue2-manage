@@ -89,7 +89,12 @@ export default {
           console.log("校验不通过");
         }
       });
-    }
+    },
+    showMeun() {
+      searchPower().then(res => {
+        
+      })
+    },
   },
   created() {}
 };
