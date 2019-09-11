@@ -513,6 +513,6 @@ export const searchPower = params => {
     return axios.post('module/updateUserModule',params).then(res => res.data);
 }
 //保存编辑权限
-export const eaitPower = params => {
+export const editPower = params => {
     return axios.post('role/updateRole',params).then(res => res.data);
 }
