@@ -169,8 +169,8 @@ export default {
     },
     jump(path,i,index,optiond){
       this.isAllows = (optiond == "operability");
-      this.childNum=i;
       this.tabNum=index;
+      this.childNum=i;
       this.$router.push({name:path, query: {isAllows: this.isAllows}});
     }
   },
