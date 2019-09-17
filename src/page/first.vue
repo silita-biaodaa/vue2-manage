@@ -12,12 +12,11 @@ export default {
     }
   },
   created () {
-    // this.inList()
   },
   methods: {
   },
   components: {
-  }
+  },
 }
 </script>
 <style lang="less" scoped>
