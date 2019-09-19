@@ -2,8 +2,8 @@ import axios from 'axios'
 
 // const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
 // const baseURL = 'http://192.168.1.131:8080/'
-// const baseURL = 'http://pre-admin.biaodaa.com/'
-const baseURL = 'http://admin.biaodaa.com/'
+const baseURL = 'http://pre-admin.biaodaa.com/'
+// const baseURL = 'http://admin.biaodaa.com/'
 
 
 axios.defaults.baseURL = baseURL
@@ -515,4 +515,28 @@ export const searchPower = params => {
 //保存编辑权限
 export const editPower = params => {
     return axios.post('role/updateRole',params).then(res => res.data);
+}
+//获取评标列表
+export const evaluList = params => {
+    return axios.post('common/list',params).then(res => res.data);
+}
+//单个或批量删除该评标办法名称
+export const deleteInfo = params => {
+    return axios.post('common/deleteDicCommonIds',params).then(res => res.data);
+}
+//添加评标办法
+export const addName = params => {
+    return axios.post('dataMaintain/insertPbMode',params).then(res => res.data);
+}
+//查询评标办法别名
+export const alias = params => {
+    return axios.post('dataMaintain/listPbModeAlias',params).then(res => res.data);
+}
+//删除评标办法别名
+export const deleteAlias = params => {
+    return axios.post('dataMaintain/deletePbModeAlias',params).then(res => res.data);
+}
+//添加评标办法别名
+export const addAliasList = params => {
+    return axios.post('dataMaintain/insertPbModeAlias',params).then(res => res.data);
 }

@@ -26,7 +26,6 @@ import Recycle from '@/page/recycle'
 import Bidding from '@/page/bidding'
 import PassWord from '@/page/passWord'
 
-
 Vue.use(Router)
 
 const routes = [
@@ -224,6 +223,11 @@ const routes = [
 				name: 'adminRole',
 				component: resolve => require(['@/page/admin/adminRole.vue'], resolve)
 			},
+			{
+				path: '/evaluation', 
+				name: 'evaluation',
+				component: resolve => require(['@/page/dictionary/evaluation.vue'], resolve)
+			}
 		]
 	}
 ]
