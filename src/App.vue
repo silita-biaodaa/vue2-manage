@@ -22,7 +22,7 @@ export default {};
 .el-textarea {
   .el-textarea__inner {
     resize: none;
-     -ms-overflow-style: none;
+    -ms-overflow-style: none;
   }
 }
 textarea::-webkit-scrollbar {
@@ -82,7 +82,8 @@ textarea::-webkit-scrollbar {
       }
     }
   }
-  .popup_form,.popup_form_btn {
+  .popup_form,
+  .popup_form_btn {
     .el-form-item__content {
       margin-left: 0 !important;
     }
@@ -108,4 +109,12 @@ textarea::-webkit-scrollbar {
     margin: 0 5px;
   }
 }
+.evaluation .dialog .el-form-item {
+  padding: 0 !important;
+}
+.evaluation .handle_btn {
+    .el-form-item__content {
+      margin-left: 0 !important;
+    }
+  }
 </style>

@@ -540,3 +540,11 @@ export const deleteAlias = params => {
 export const addAliasList = params => {
     return axios.post('dataMaintain/insertPbModeAlias',params).then(res => res.data);
 }
+//修改评标办法名称
+export const updateName = params => {
+    return axios.post('common/updateDicCommonId',params).then(res => res.data);
+}
+//修改评标别名名称
+export const updateAlias = params => {
+    return axios.post('dataMaintain/updatePbModeAlias',params).then(res => res.data);
+}
