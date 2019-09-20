@@ -101,9 +101,9 @@
               <i class="el-icon-document-copy"></i>
               <span>词典</span>
             </template>
-            <el-menu-item index="/explain">资质名称维护</el-menu-item>
-            <el-menu-item index="/aptitudes">资质等级维护</el-menu-item>
-            <el-menu-item index="/method">资质解析词典</el-menu-item>
+            <el-menu-item index="/mainQualification">资质名称维护</el-menu-item>
+            <el-menu-item index="/level">资质等级维护</el-menu-item>
+            <el-menu-item index="/parsing">资质解析词典</el-menu-item>
             <el-menu-item index="/evaluation">评标办法词典</el-menu-item>
           </el-submenu>
           <el-submenu index="10">

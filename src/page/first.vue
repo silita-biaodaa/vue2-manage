@@ -1,9 +1,9 @@
 <template>
   <div class="first">
     <el-row :span="24" class="drc color-f62 mb20 ft18 blod">
-      <el-col :span="3">昨日新增公告：{{ yesterdayCount }}</el-col>
-      <el-col :span="3">昨日新增公告：{{ totalCount }}</el-col>
-      <el-col :span="3">全国公告总数：{{ untreatedCount }}</el-col>
+      <el-col :span="8">昨日新增公告：{{ yesterdayCounts }}</el-col>
+      <el-col :span="8">昨日新增公告：{{ todayCounts }}</el-col>
+      <el-col :span="8">全国公告总数：{{ totalCounts }}</el-col>
     </el-row>
     <el-divider></el-divider>
     <div class="mb50">
@@ -37,43 +37,21 @@
       </el-row>
     </div>
     <div class="charts" style="width:'100%',height:'6.54rem'">
-      <div class="charts-title">24小时内最高：99.99</div>
       <div id="myChart" :style="{width:'100%',height:'300px'}"></div>
     </div>
   </div>
 </template>
 <script>
-import { checkType } from "@/api/index";
+import { noticeNum, listArea, siteNoticeNum } from "@/api/index";
 import echarts from 'echarts'
 export default {
   data() {
     return {
-      yesterdayCount: "", //昨日新增公告
-      totalCount: "", //昨日新增公告
-      untreatedCount: "", //全国公告总数
-      province: "",
-      provinces: [
-        {
-          areaCode: "",
-          areaName: "全部"
-        },
-        {
-          areaCode: "0",
-          areaName: "注册"
-        },
-        {
-          areaCode: "1",
-          areaName: "付费"
-        },
-        {
-          areaCode: "2",
-          areaName: "续费"
-        },
-        {
-          areaCode: "3",
-          areaName: "过期"
-        }
-      ],
+      yesterdayCounts: "", //昨日新增公告
+      todayCounts: "", //今日新增公告
+      totalCounts: "", //全国公告总数
+      province: "湖南省",
+      provinces: [],
       newtime: [new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()),new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())],
     };
   },
@@ -105,9 +83,34 @@ export default {
     myChart.setOption(option);
   },
   methods: {
+    noticeTotal() {
+      noticeNum({}).then(res => {
+        if(res.code == '1') {
+          const { todayCounts, totalCounts, yesterdayCounts } = res.data;
+          this.todayCounts = todayCounts;
+          this.totalCounts = totalCounts;
+          this.yesterdayCounts = yesterdayCounts;
+        }else {
+          console.info('公告统计接口不通');
+        }
+      })
+    },
+    getArea() {
+      listArea({ areaParentId: 0 }).then(res => {
+        if (res.code == "1") {
+          this.provinces = res.data;
+        } else {
+          console.info("获取省份接口不通");
+        }
+      });
+    },
     changetable() {
       console.info(11);
     }
+  },
+  created() {
+    this.noticeTotal();
+    this.getArea();
   },
   components: {}
 };

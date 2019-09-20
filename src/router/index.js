@@ -227,6 +227,21 @@ const routes = [
 				path: '/evaluation', 
 				name: 'evaluation',
 				component: resolve => require(['@/page/dictionary/evaluation.vue'], resolve)
+			},
+			{
+				path: '/mainQualification',
+				name: 'mainQualification',
+				component: resolve => require(['@/page/dictionary/mainQualification.vue'], resolve)
+			},
+			{
+				path: '/level',
+				name: 'level',
+				component: resolve => require(['@/page/dictionary/level.vue'], resolve)
+			},
+			{
+				path: '/parsing',
+				name: 'parsing',
+				component: resolve => require(['@/page/dictionary/parsing.vue'], resolve)
 			}
 		]
 	}

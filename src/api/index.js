@@ -548,3 +548,11 @@ export const updateName = params => {
 export const updateAlias = params => {
     return axios.post('dataMaintain/updatePbModeAlias',params).then(res => res.data);
 }
+//公告统计
+export const noticeNum = () => {
+    return axios.post('notice/noticeCount').then(res => res.data);
+}
+//公告站点统计
+export const siteNoticeNum = params => {
+    return axios.post('notice/siteNoticeCount',params).then(res => res.data);
+}
