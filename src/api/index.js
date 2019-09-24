@@ -556,3 +556,31 @@ export const noticeNum = () => {
 export const siteNoticeNum = params => {
     return axios.post('notice/siteNoticeCount',params).then(res => res.data);
 }
+//资质列表
+export const qualList = params => {
+    return axios.post('qual/list',params).then(res => res.data);
+}
+//资质筛选列表
+export const screenList = () => {
+    return axios.post('qual/qualSpinner').then(res => res.data);
+}
+//删除资质
+export const deteleQual = params => {
+    return axios.post('qual/del',params).then(res => res.data);
+}
+//添加资质
+export const addQual = params => {
+    return axios.post('qual/add',params).then(res => res.data);
+}
+//资质别名列表
+export const aliasList = params => {
+    return axios.post('alias/list',params).then(res => res.data);
+}
+//删除资质别名
+export const deleteQualAlias = params => {
+    return axios.post('alias/del',params).then(res => res.data);
+}
+//添加资质别名
+export const addAliasName = params => {
+    return axios.post('alias/add',params).then(res => res.data);
+}

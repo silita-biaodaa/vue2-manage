@@ -9,11 +9,13 @@ import 'lib-flexible/flexible';
 import jlPopup from './components/userPopup.vue';
 import addPopup from './components/addPopup.vue';
 import powerPopup from './components/powerPopup.vue';
+import addAlias from './components/addAlias.vue';
 
 //自定义组件
 Vue.component('jlPopup', jlPopup);
 Vue.component('addPopup', addPopup);
 Vue.component('powerPopup', powerPopup);
+Vue.component('addAlias',addAlias);
 
 Vue.config.productionTip = false;
 

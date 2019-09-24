@@ -112,9 +112,23 @@ textarea::-webkit-scrollbar {
 .evaluation .dialog .el-form-item {
   padding: 0 !important;
 }
-.evaluation .handle_btn {
+.evaluation, .mainQualification {
+  .handle_btn {
     .el-form-item__content {
       margin-left: 0 !important;
     }
   }
+}
+.mainQualification,
+.level {
+  .right_list {
+    .el-table__empty-block {
+      display: none;
+    }
+    .el-table td,.el-table th.is-leaf {
+      border: none !important;
+      padding: 0;
+    }
+  }
+}
 </style>
