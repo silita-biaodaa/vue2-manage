@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import { searchPower } from "@/api/index";
 export default {};
 </script>
 
@@ -112,7 +111,7 @@ textarea::-webkit-scrollbar {
 .evaluation .dialog .el-form-item {
   padding: 0 !important;
 }
-.evaluation, .mainQualification {
+.evaluation, .mainQualification, .level {
   .handle_btn {
     .el-form-item__content {
       margin-left: 0 !important;

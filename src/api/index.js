@@ -584,3 +584,15 @@ export const deleteQualAlias = params => {
 export const addAliasName = params => {
     return axios.post('alias/add',params).then(res => res.data);
 }
+//资质等级查询
+export const searchLevel = params => {
+    return axios.post('grade/cate/list',params).then(res => res.data);
+}
+//资质等级列表
+export const levelList = params => {
+    return axios.post('grade/list',params).then(res => res.data);
+}
+//资质等级别别名列表
+export const levelAlias = params => {
+    return axios.post('alias/list',params).then(res => res.data);
+}
