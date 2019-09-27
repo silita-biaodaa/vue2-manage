@@ -578,7 +578,7 @@ export const aliasList = params => {
 }
 //删除资质别名
 export const deleteQualAlias = params => {
-    return axios.post('alias/del',params).then(res => res.data);
+    return axios.post('alias/qual/del',params).then(res => res.data);
 }
 //添加资质别名
 export const addAliasName = params => {
@@ -586,11 +586,11 @@ export const addAliasName = params => {
 }
 //资质等级查询
 export const searchLevel = params => {
-    return axios.post('grade/cate/list',params).then(res => res.data);
+    return axios.post('grade/option/cate/list',params).then(res => res.data);
 }
 //资质等级列表
 export const levelList = params => {
-    return axios.post('grade/sec/list',params).then(res => res.data);
+    return axios.post('grade/list',params).then(res => res.data);
 }
 //资质等级别别名列表
 export const levelAlias = params => {
@@ -603,4 +603,8 @@ export const aliasMode = params => {
 //修改资质属性
 export const changeMode = params => {
     return axios.post('qual/updateBizType',params).then(res => res.data);
+}
+//修改资质
+export const changeQual = params => {
+    return axios.post('qual/upd',params).then(res => res.data);
 }
