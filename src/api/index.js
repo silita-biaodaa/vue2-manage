@@ -590,9 +590,17 @@ export const searchLevel = params => {
 }
 //资质等级列表
 export const levelList = params => {
-    return axios.post('grade/list',params).then(res => res.data);
+    return axios.post('grade/sec/list',params).then(res => res.data);
 }
 //资质等级别别名列表
 export const levelAlias = params => {
     return axios.post('alias/list',params).then(res => res.data);
+}
+//资质维护中资质属性
+export const aliasMode = params => {
+    return axios.post('qual/getBizType',params).then(res => res.data);
+}
+//修改资质属性
+export const changeMode = params => {
+    return axios.post('qual/updateBizType',params).then(res => res.data);
 }
