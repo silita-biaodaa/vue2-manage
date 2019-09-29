@@ -586,11 +586,11 @@ export const addAliasName = params => {
 }
 //资质等级查询
 export const searchLevel = params => {
-    return axios.post('grade/option/cate/list',params).then(res => res.data);
+    return axios.post('grade/option/list',params).then(res => res.data);
 }
 //资质等级列表
 export const levelList = params => {
-    return axios.post('grade/list',params).then(res => res.data);
+    return axios.post('grade/sec/list',params).then(res => res.data);
 }
 //资质等级别别名列表
 export const levelAlias = params => {
@@ -607,4 +607,8 @@ export const changeMode = params => {
 //修改资质
 export const changeQual = params => {
     return axios.post('qual/upd',params).then(res => res.data);
+}
+//修改等级
+export const changeLevelList = params => {
+    return axios.post('rel/upd',params).then(res => res.data);
 }
