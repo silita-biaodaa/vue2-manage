@@ -111,7 +111,7 @@ textarea::-webkit-scrollbar {
 .evaluation .dialog .el-form-item {
   padding: 0 !important;
 }
-.evaluation, .mainQualification, .level {
+.evaluation, .mainQualification, .level, .parsing {
   .handle_btn {
     .el-form-item__content {
       margin-left: 0 !important;
