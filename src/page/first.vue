@@ -35,15 +35,19 @@
           ></el-date-picker>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col class="ft14 text-r mr100">合计:{{total?total:0}}条</el-col>
+      </el-row>
     </div>
-    <div class="charts" style="width:'100%',height:'6.54rem'">
-      <div id="myChart" :style="{width:'100%',height:'300px'}"></div>
+    <div class="charts" style="width:'100%',height:'10rem'" v-if="showEcharts">
+      <div id="myChart" :style="{width:'400px',height:'600px'}"></div>
     </div>
   </div>
 </template>
 <script>
 import { noticeNum, listArea, siteNoticeNum } from "@/api/index";
 import echarts from 'echarts'
+import { timestampToTime } from "../public";
 export default {
   data() {
     return {
@@ -53,6 +57,10 @@ export default {
       province: "湖南省",
       provinces: [],
       newtime: [new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()),new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())],
+      yAxisData: [],
+      seriesData: [],
+      showEcharts: true,
+      total: "",
     };
   },
   mounted() {
@@ -71,12 +79,19 @@ export default {
        },
        yAxis: {
         type: 'category',
-        data: ['0', '6H', '9H', '12H', '15H', '18H', '24H']
+        data: this.yAxisData,
        },
        series: [{
-        data: [1, 3, 4, 7, 4, 6, 9],
+        data: this.seriesData,
         type: 'bar',
-        barWidth: '60%',
+        label: {
+          normal: {
+            show: true,
+            position: 'right',
+            color: "#000000"
+          }
+        },
+        barWidth: '80%',
       }]
      }
     // 使用刚指定的配置项和数据显示图表。
@@ -104,13 +119,40 @@ export default {
         }
       });
     },
+    getTableNum() {
+      var startDate = timestampToTime(this.newtime[0]).slice(0,10);
+      var endDate = timestampToTime(this.newtime[0]).slice(0,10);
+      const params = {
+        source: this.province == "湖南省"?"hunan":this.province,
+        // startDate: startDate,
+        // endDate: endDate
+      }
+      siteNoticeNum(params).then(res => {
+        if(res.code == "1") {
+          const { list, sumTotal } = res.data;
+          this.total = sumTotal;
+          if(list.length > 0) {
+            this.showEcharts = true;
+            for(let i of list) {
+              this.yAxisData.push(i.name);
+              console.info('this.yAxisData',this.yAxisData);
+              this.seriesData.push(i.siteCount);
+              console.info('this.seriesData',this.seriesData);
+            }
+          }else {
+            this.showEcharts = false;
+          }
+        }
+      });
+    },
     changetable() {
-      console.info(11);
+      this.getTableNum();
     }
   },
   created() {
     this.noticeTotal();
     this.getArea();
+    this.getTableNum();
   },
   components: {}
 };
