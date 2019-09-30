@@ -55,7 +55,7 @@ export default {
       yesterdayCounts: "", //昨日新增公告
       todayCounts: "", //今日新增公告
       totalCounts: "", //全国公告总数
-      province: "湖南省",
+      province: "全国",
       provinces: [],
       newtime: [
         new Date(
@@ -96,6 +96,7 @@ export default {
       listArea({ areaParentId: 0 }).then(res => {
         if (res.code == "1") {
           this.provinces = res.data;
+          // this.provinces
         } else {
           console.info("获取省份接口不通");
         }
@@ -111,7 +112,7 @@ export default {
       var startDate = this.newtime == null?"" : timestampToTime(this.newtime[0]).slice(0, 10);
       var endDate = this.newtime == null?"" : timestampToTime(this.newtime[0]).slice(0, 10);
       const params = {
-        source: this.province == "湖南省" ? "hunan" : this.province,
+        source: this.province == "全国" ? "" : this.province,
         startDate: startDate,
         endDate: endDate
       };

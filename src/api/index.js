@@ -590,7 +590,7 @@ export const searchLevel = params => {
 }
 //资质等级列表
 export const levelList = params => {
-    return axios.post('grade/list',params).then(res => res.data);
+    return axios.post('grade/sec/list',params).then(res => res.data);
 }
 //资质等级别别名列表
 export const levelAlias = params => {
@@ -615,4 +615,8 @@ export const changeLevelList = params => {
 //资质解析筛选
 export const qualAnalysis = params => {
     return axios.post('qual/qualAnalysis',params).then(res => res.data);
+}
+//等级列表
+export const levelListData = params => {
+    return axios.post('grade/list',params).then(res => res.data);
 }
