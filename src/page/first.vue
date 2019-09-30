@@ -32,6 +32,7 @@
             end-placeholder="结束日期"
             value-format="yyyy-MM-dd"
             @change="changetable"
+            @clear="clearDate"
           ></el-date-picker>
         </el-col>
       </el-row>
@@ -39,14 +40,14 @@
         <el-col class="ft14 text-r mr100">合计:{{total?total:0}}条</el-col>
       </el-row>
     </div>
-    <div class="charts" style="width:'100%',height:'10rem'" v-if="showEcharts">
-      <div id="myChart" :style="{width:'400px',height:'600px'}"></div>
+    <div class="charts" v-if="showEcharts">
+      <div id="myChart" :style="{width:'100%',height:'1000px'}"></div>
     </div>
   </div>
 </template>
 <script>
 import { noticeNum, listArea, siteNoticeNum } from "@/api/index";
-import echarts from 'echarts'
+import echarts from "echarts";
 import { timestampToTime } from "../public";
 export default {
   data() {
@@ -56,59 +57,40 @@ export default {
       totalCounts: "", //全国公告总数
       province: "湖南省",
       provinces: [],
-      newtime: [new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()),new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())],
+      newtime: [
+        new Date(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          new Date().getDate()
+        ),
+        new Date(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          new Date().getDate()
+        )
+      ],
       yAxisData: [],
       seriesData: [],
       showEcharts: true,
-      total: "",
+      total: ""
     };
   },
   mounted() {
-     /*ECharts图表*/
-    var myChart = echarts.init(document.getElementById('myChart'));
-    var option = {
-      color: ['#3398DB'],
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis: {
-        type: 'value'
-       },
-       yAxis: {
-        type: 'category',
-        data: this.yAxisData,
-       },
-       series: [{
-        data: this.seriesData,
-        type: 'bar',
-        label: {
-          normal: {
-            show: true,
-            position: 'right',
-            color: "#000000"
-          }
-        },
-        barWidth: '80%',
-      }]
-     }
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+    /*ECharts图表*/
+    this.$nextTick(function() {});
   },
   methods: {
     noticeTotal() {
       noticeNum({}).then(res => {
-        if(res.code == '1') {
+        if (res.code == "1") {
           const { todayCounts, totalCounts, yesterdayCounts } = res.data;
           this.todayCounts = todayCounts;
           this.totalCounts = totalCounts;
           this.yesterdayCounts = yesterdayCounts;
-        }else {
-          console.info('公告统计接口不通');
+        } else {
+          console.info("公告统计接口不通");
         }
-      })
+      });
     },
     getArea() {
       listArea({ areaParentId: 0 }).then(res => {
@@ -119,27 +101,66 @@ export default {
         }
       });
     },
+    resizeCharts (chartBox) {
+      myChart.style.width = chartBox.style.width + 'px'
+      myChart.style.height = chartBox.style.height + 'px'
+    },
     getTableNum() {
-      var startDate = timestampToTime(this.newtime[0]).slice(0,10);
-      var endDate = timestampToTime(this.newtime[0]).slice(0,10);
+      this.yAxisData = [];
+      this.seriesData = [];
+      var startDate = this.newtime == null?"" : timestampToTime(this.newtime[0]).slice(0, 10);
+      var endDate = this.newtime == null?"" : timestampToTime(this.newtime[0]).slice(0, 10);
       const params = {
-        source: this.province == "湖南省"?"hunan":this.province,
-        // startDate: startDate,
-        // endDate: endDate
-      }
+        source: this.province == "湖南省" ? "hunan" : this.province,
+        startDate: startDate,
+        endDate: endDate
+      };
       siteNoticeNum(params).then(res => {
-        if(res.code == "1") {
+        if (res.code == "1") {
           const { list, sumTotal } = res.data;
           this.total = sumTotal;
-          if(list.length > 0) {
+          if (list.length !== 0) {
             this.showEcharts = true;
-            for(let i of list) {
+            for (let i of list) {
               this.yAxisData.push(i.name);
-              console.info('this.yAxisData',this.yAxisData);
               this.seriesData.push(i.siteCount);
-              console.info('this.seriesData',this.seriesData);
+              var option = {
+                color: ["#3398DB"],
+                grid: {
+                  left: "3%",
+                  right: "4%",
+                  bottom: "3%",
+                  containLabel: true
+                },
+                xAxis: {
+                  type: "value"
+                },
+                yAxis: {
+                  type: "category",
+                  data: this.yAxisData
+                },
+                series: [
+                  {
+                    data: this.seriesData,
+                    type: "bar",
+                    label: {
+                      normal: {
+                        show: true,
+                        position: "right",
+                        color: "#000000"
+                      }
+                    },
+                    barWidth: "80%"
+                  }
+                ]
+              };
+              let chartBox = document.getElementsByClassName('charts')[0];
+              var myChart = echarts.init(document.getElementById("myChart"));
+              this.resizeCharts(chartBox);
+              // 使用刚指定的配置项和数据显示图表。
+              myChart.setOption(option);
             }
-          }else {
+          } else {
             this.showEcharts = false;
           }
         }
@@ -147,6 +168,9 @@ export default {
     },
     changetable() {
       this.getTableNum();
+    },
+    clearDate() {
+      console.info(1111);
     }
   },
   created() {
