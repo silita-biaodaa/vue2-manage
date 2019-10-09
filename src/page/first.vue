@@ -40,11 +40,12 @@
         <el-col class="ft14 text-r mr100">合计:{{total?total:0}}条</el-col>
       </el-row>
     </div>
-    <div class="charts" v-if="showEcharts">
-      <div id="myChart" :style="{width:'100%',height:'1000px'}"></div>
+    <div class="charts" v-if="showEcharts" v-loading="loading">
+      <div id="myChart" :style="{width:'100%',height: '1000px'}"></div>
     </div>
   </div>
 </template>
+
 <script>
 import { noticeNum, listArea, siteNoticeNum } from "@/api/index";
 import echarts from "echarts";
@@ -55,6 +56,7 @@ export default {
       yesterdayCounts: "", //昨日新增公告
       todayCounts: "", //今日新增公告
       totalCounts: "", //全国公告总数
+      mid: "1000px",
       province: "全国",
       provinces: [],
       newtime: [
@@ -72,7 +74,8 @@ export default {
       yAxisData: [],
       seriesData: [],
       showEcharts: true,
-      total: ""
+      total: "",
+      loading: true
     };
   },
   mounted() {
@@ -96,21 +99,28 @@ export default {
       listArea({ areaParentId: 0 }).then(res => {
         if (res.code == "1") {
           this.provinces = res.data;
-          // this.provinces
+          var data = { areaName: "全国", areaCode: "" };
+          this.provinces.unshift(data);
         } else {
           console.info("获取省份接口不通");
         }
       });
     },
-    resizeCharts (chartBox) {
-      myChart.style.width = chartBox.style.width + 'px'
-      myChart.style.height = chartBox.style.height + 'px'
+    resizeCharts(chartBox) {
+      myChart.style.width = chartBox.style.width + "px";
+      myChart.style.height = chartBox.style.height + "px";
     },
     getTableNum() {
       this.yAxisData = [];
       this.seriesData = [];
-      var startDate = this.newtime == null?"" : timestampToTime(this.newtime[0]).slice(0, 10);
-      var endDate = this.newtime == null?"" : timestampToTime(this.newtime[0]).slice(0, 10);
+      var startDate =
+        this.newtime == null
+          ? ""
+          : timestampToTime(this.newtime[0]).slice(0, 10);
+      var endDate =
+        this.newtime == null
+          ? ""
+          : timestampToTime(this.newtime[0]).slice(0, 10);
       const params = {
         source: this.province == "全国" ? "" : this.province,
         startDate: startDate,
@@ -150,16 +160,26 @@ export default {
                         position: "right",
                         color: "#000000"
                       }
-                    },
-                    barWidth: "80%"
+                    }
                   }
                 ]
               };
-              let chartBox = document.getElementsByClassName('charts')[0];
+              let chartBox = document.getElementsByClassName("charts")[0];
               var myChart = echarts.init(document.getElementById("myChart"));
+              // myChart.showLoading();
               this.resizeCharts(chartBox);
+              this.loading = false;
               // 使用刚指定的配置项和数据显示图表。
               myChart.setOption(option);
+              //用于使chart自适应高度和宽度
+              window.onresize = function () {
+                  //重置容器高宽
+                  this.resizeCharts(chartBox);
+                  myChart.resize();
+              };
+              myChart.on("click", "yAxis.data", function(params) {
+                console.info("params", params);
+              });
             }
           } else {
             this.showEcharts = false;

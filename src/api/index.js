@@ -578,7 +578,7 @@ export const aliasList = params => {
 }
 //删除资质别名
 export const deleteQualAlias = params => {
-    return axios.post('alias/del',params).then(res => res.data);
+    return axios.post('alias/qual/del',params).then(res => res.data);
 }
 //添加资质别名
 export const addAliasName = params => {
@@ -619,6 +619,10 @@ export const qualAnalysis = params => {
 //等级列表
 export const levelListData = params => {
     return axios.post('grade/list',params).then(res => res.data);
+}
+//删除等级别名
+export const deleteLevelAlias = params => {
+    return axios.post('alias/del',params).then(res => res.data)
 }
 //资质解析别名添加
 export const addAnalysisAlias = params => {
