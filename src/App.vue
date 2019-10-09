@@ -14,7 +14,7 @@ export default {
 @import "./style/common";
 @border-color: #ffffff;
 .el-header {
-  min-width: 600px;
+  min-width: 1330px;
 }
 .el-main {
   min-width: 1330px;
@@ -129,6 +129,7 @@ textarea::-webkit-scrollbar {
     .el-table td,.el-table th.is-leaf {
       border: none !important;
       padding: 0;
+      padding-bottom: 10px;
     }
   }
 }
