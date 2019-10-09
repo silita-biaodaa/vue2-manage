@@ -2,10 +2,8 @@ import axios from 'axios'
 
 // const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
 // const baseURL = 'http://192.168.1.131:8080/'
-const baseURL = 'http://pre-admin.biaodaa.com/'
-// const baseURL = 'http://admin.biaodaa.com/'
-
-
+// const baseURL = 'http://pre-admin.biaodaa.com/'
+const baseURL = 'http://admin.biaodaa.com/'
 axios.defaults.baseURL = baseURL
 
 axios.interceptors.request.use(function (config) {
