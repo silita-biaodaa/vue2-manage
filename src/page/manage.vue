@@ -27,6 +27,12 @@
               {{item.title}}
               </el-menu-item>
           </el-submenu> -->
+          <el-menu-item index="home">
+            <template slot="title">
+              <i class="el-icon-s-home"></i>
+              <span>首页</span>
+            </template>
+          </el-menu-item>
           <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-loading"></i>
