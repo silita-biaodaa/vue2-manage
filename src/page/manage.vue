@@ -33,6 +33,12 @@
               {{item.title}}
               </el-menu-item>
           </el-submenu>
+          <el-menu-item index="passWord">
+            <template slot="title">
+              <i class="el-icon-lock"></i>
+              <span>修改密码</span>
+            </template>
+          </el-menu-item>
           <!-- <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-loading"></i>

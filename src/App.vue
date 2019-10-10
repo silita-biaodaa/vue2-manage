@@ -128,8 +128,7 @@ textarea::-webkit-scrollbar {
     }
     .el-table td,.el-table th.is-leaf {
       border: none !important;
-      padding: 0;
-      padding-bottom: 10px;
+      padding: 5px 0;
     }
   }
 }

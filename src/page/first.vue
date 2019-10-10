@@ -120,7 +120,7 @@ export default {
       var endDate =
         this.newtime == null
           ? ""
-          : timestampToTime(this.newtime[0]).slice(0, 10);
+          : timestampToTime(this.newtime[1]).slice(0, 10);
       const params = {
         source: this.province == "全国" ? "" : this.province,
         startDate: startDate,
