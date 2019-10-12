@@ -15,7 +15,7 @@
               v-for="item in provinces"
               :key="item.areaCode"
               :label="item.areaName"
-              :value="item.areaCode"
+              :value="item.areaName"
             ></el-option>
           </el-select>
         </el-col>
@@ -40,8 +40,8 @@
         <el-col class="ft14 text-r mr100">合计:{{total?total:0}}条</el-col>
       </el-row>
     </div>
-    <div class="charts" v-if="showEcharts" v-loading="loading">
-      <div id="myChart" :style="{width:'100%',height: '1000px'}"></div>
+    <div class="charts" v-if="showEcharts">
+      <div id="myChart" :style="{width:'100%'}"></div>
     </div>
   </div>
 </template>
@@ -75,7 +75,8 @@ export default {
       seriesData: [],
       showEcharts: true,
       total: "",
-      loading: true
+      loading: false,
+      code: "",
     };
   },
   mounted() {
@@ -121,8 +122,13 @@ export default {
         this.newtime == null
           ? ""
           : timestampToTime(this.newtime[1]).slice(0, 10);
+          for(let i of this.provinces) {
+            if(this.province == i.areaName) {
+              this.code = i.areaCode
+            }
+          };
       const params = {
-        source: this.province == "全国" ? "" : this.province,
+        source: this.code,
         startDate: startDate,
         endDate: endDate
       };
@@ -139,7 +145,6 @@ export default {
                 color: ["#3398DB"],
                 grid: {
                   left: "3%",
-                  right: "4%",
                   bottom: "3%",
                   containLabel: true
                 },
@@ -148,12 +153,16 @@ export default {
                 },
                 yAxis: {
                   type: "category",
-                  data: this.yAxisData
+                  data: this.yAxisData,
+                  axisLabel: {
+                    interval:0
+                  }
                 },
                 series: [
                   {
                     data: this.seriesData,
                     type: "bar",
+                    barWidth: '25px',
                     label: {
                       normal: {
                         show: true,
@@ -164,22 +173,16 @@ export default {
                   }
                 ]
               };
-              let chartBox = document.getElementsByClassName("charts")[0];
+              var chartBox = document.getElementsByClassName("charts")[0];
               var myChart = echarts.init(document.getElementById("myChart"));
-              // myChart.showLoading();
-              this.resizeCharts(chartBox);
-              this.loading = false;
-              // 使用刚指定的配置项和数据显示图表。
               myChart.setOption(option);
-              //用于使chart自适应高度和宽度
-              window.onresize = function () {
-                  //重置容器高宽
-                  this.resizeCharts(chartBox);
-                  myChart.resize();
-              };
-              myChart.on("click", "yAxis.data", function(params) {
-                console.info("params", params);
-              });
+              this.autoHeight = this.yAxisData.length * 35 + 50;
+              myChart.getDom().style.height = `${this.autoHeight}px`;
+              myChart.getDom().childNodes[0].style.height = `${this.autoHeight}px`;
+              myChart.getDom().childNodes[0].childNodes[0].setAttribute("height",`${this.autoHeight}`);
+              myChart.getDom().childNodes[0].childNodes[0].style.height = `${this.autoHeight}px`;
+              //改变大小后重新加载图表;
+              myChart.resize();
             }
           } else {
             this.showEcharts = false;
@@ -191,7 +194,6 @@ export default {
       this.getTableNum();
     },
     clearDate() {
-      console.info(1111);
     }
   },
   created() {
@@ -204,4 +206,14 @@ export default {
 </script>
 <style lang="less" scoped>
 @import "../style/mixin";
+.first {
+  .charts {
+    max-height: 800px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  .charts::-webkit-scrollbar {
+    display: none;
+  }
+}
 </style>
