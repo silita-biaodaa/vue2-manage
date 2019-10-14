@@ -159,13 +159,23 @@ export default {
           containLabel: true
         },
         xAxis: {
-          type: "value"
+          type: "value",
+          axisLabel: {
+            textStyle:{
+              fontSize:14,
+              fontWeight: 700
+            }
+          }
         },
         yAxis: {
           type: "category",
           data: yAxisData,
           axisLabel: {
-            interval: 0
+            interval: 0,
+            textStyle:{
+              fontSize:14,
+              fontWeight: 700
+            }
           },
           barGap: '-100%',
         },
@@ -173,12 +183,13 @@ export default {
           {
             data: seriesData,
             type: "bar",
-            barWidth: 20,
+            barWidth: '20px',
             label: {
               normal: {
                 show: true,
                 position: "right",
-                color: "#000000"
+                color: "#000000",
+                fontSize:14
               }
             }
           }
