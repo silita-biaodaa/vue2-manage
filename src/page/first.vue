@@ -2,7 +2,7 @@
   <div class="first">
     <el-row :span="24" class="drc color-f62 mb20 ft18 blod">
       <el-col :span="8">昨日新增公告：{{ yesterdayCounts }}</el-col>
-      <el-col :span="8">昨日新增公告：{{ todayCounts }}</el-col>
+      <el-col :span="8">今日新增公告：{{ todayCounts }}</el-col>
       <el-col :span="8">全国公告总数：{{ totalCounts }}</el-col>
     </el-row>
     <el-divider></el-divider>
@@ -154,8 +154,8 @@ export default {
         color: ["#3398DB"],
         grid: {
           left: "3%",
-          bottom: '3%',
-          height: '97%',
+          bottom: '2%',
+          height: '96%',
           containLabel: true
         },
         xAxis: {
