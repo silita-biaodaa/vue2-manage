@@ -33,8 +33,8 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import { register, List, searchPower } from "@/api/index";
-import { checkPhone, setCookie, removeCookie, getCookies } from "../public";
+import { register, List, searchPower, siteNoticeNum } from "@/api/index";
+import { checkPhone, setCookie, removeCookie, getCookies, timestampToTime } from "../public";
 
 export default {
   data() {
@@ -47,7 +47,9 @@ export default {
         phone: [{ required: true, validator: checkPhone, trigger: "blur" }],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       },
-      showLogin: false
+      showLogin: false,
+      yAxisData: [],
+      seriesData: [],
     };
   },
   mounted() {
@@ -90,8 +92,38 @@ export default {
         }
       });
     },
+    //首页站点数据优化;
+    getTableNum() {
+      this.yAxisData = [];
+      this.seriesData = [];
+      var time = timestampToTime(new Date()).slice(0,10);
+      const params = {
+        source: "",
+        startDate: time,
+        endDate: time
+      };
+      siteNoticeNum(params).then(res => {
+        if (res.code == "1") {
+          const { list, sumTotal } = res.data;
+          this.total = sumTotal;
+          if (list.length !== 0) {
+            this.showEcharts = true;
+            for (let i of list) {
+              this.yAxisData.push(i.name);
+              this.seriesData.push(i.siteCount);
+              localStorage.setItem("yAxisData", this.yAxisData);
+              localStorage.setItem("seriesData", this.seriesData);
+            }
+          } else {
+            console.info("首页站点统计接口不通");
+          }
+        }
+      });
+    },
   },
-  created() {}
+  created() {
+    // this.getTableNum();
+  }
 };
 </script>
 

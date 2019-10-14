@@ -37,7 +37,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col class="ft14 text-r mr100">合计:{{total?total:0}}条</el-col>
+        <el-col class="ft14 text-r mr100">合计 :&nbsp;&nbsp;{{total?total:0}}条</el-col>
       </el-row>
     </div>
     <div class="charts" v-if="showEcharts">
@@ -76,7 +76,7 @@ export default {
       showEcharts: true,
       total: "",
       loading: false,
-      code: "",
+      code: ""
     };
   },
   mounted() {
@@ -122,11 +122,11 @@ export default {
         this.newtime == null
           ? ""
           : timestampToTime(this.newtime[1]).slice(0, 10);
-          for(let i of this.provinces) {
-            if(this.province == i.areaName) {
-              this.code = i.areaCode
-            }
-          };
+      for (let i of this.provinces) {
+        if (this.province == i.areaName) {
+          this.code = i.areaCode;
+        }
+      }
       const params = {
         source: this.code,
         startDate: startDate,
@@ -141,48 +141,7 @@ export default {
             for (let i of list) {
               this.yAxisData.push(i.name);
               this.seriesData.push(i.siteCount);
-              var option = {
-                color: ["#3398DB"],
-                grid: {
-                  left: "3%",
-                  bottom: "3%",
-                  containLabel: true
-                },
-                xAxis: {
-                  type: "value"
-                },
-                yAxis: {
-                  type: "category",
-                  data: this.yAxisData,
-                  axisLabel: {
-                    interval:0
-                  }
-                },
-                series: [
-                  {
-                    data: this.seriesData,
-                    type: "bar",
-                    barWidth: '25px',
-                    label: {
-                      normal: {
-                        show: true,
-                        position: "right",
-                        color: "#000000"
-                      }
-                    }
-                  }
-                ]
-              };
-              var chartBox = document.getElementsByClassName("charts")[0];
-              var myChart = echarts.init(document.getElementById("myChart"));
-              myChart.setOption(option);
-              this.autoHeight = this.yAxisData.length * 35 + 50;
-              myChart.getDom().style.height = `${this.autoHeight}px`;
-              myChart.getDom().childNodes[0].style.height = `${this.autoHeight}px`;
-              myChart.getDom().childNodes[0].childNodes[0].setAttribute("height",`${this.autoHeight}`);
-              myChart.getDom().childNodes[0].childNodes[0].style.height = `${this.autoHeight}px`;
-              //改变大小后重新加载图表;
-              myChart.resize();
+              this.getCharts(this.yAxisData,this.seriesData);
             }
           } else {
             this.showEcharts = false;
@@ -190,11 +149,61 @@ export default {
         }
       });
     },
+    getCharts(yAxisData,seriesData) {
+      var option = {
+        color: ["#3398DB"],
+        grid: {
+          left: "3%",
+          bottom: '3%',
+          height: '97%',
+          containLabel: true
+        },
+        xAxis: {
+          type: "value"
+        },
+        yAxis: {
+          type: "category",
+          data: yAxisData,
+          axisLabel: {
+            interval: 0
+          },
+          barGap: '-100%',
+        },
+        series: [
+          {
+            data: seriesData,
+            type: "bar",
+            barWidth: 20,
+            label: {
+              normal: {
+                show: true,
+                position: "right",
+                color: "#000000"
+              }
+            }
+          }
+        ]
+      };
+      var chartBox = document.getElementsByClassName("charts")[0];
+      var myChart = echarts.init(document.getElementById("myChart"));
+      myChart.setOption(option);
+      this.autoHeight = yAxisData.length * 35 + 50;
+      myChart.getDom().style.height = `${this.autoHeight}px`;
+      myChart.getDom().childNodes[0].style.height = `${this.autoHeight}px`;
+      myChart
+        .getDom()
+        .childNodes[0].childNodes[0].setAttribute(
+          "height",
+          `${this.autoHeight}`
+        );
+      myChart.getDom().childNodes[0].childNodes[0].style.height = `${this.autoHeight}px`;
+      //改变大小后重新加载图表;
+      myChart.resize();
+    },
     changetable() {
       this.getTableNum();
     },
-    clearDate() {
-    }
+    clearDate() {}
   },
   created() {
     this.noticeTotal();
