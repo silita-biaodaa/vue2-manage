@@ -41,7 +41,7 @@
       </el-row>
     </div>
     <div class="charts" v-if="showEcharts">
-      <div id="myChart" :style="{width:'100%'}"></div>
+      <div id="myChart" :style="{width:'100%',height: '100%'}"></div>
     </div>
   </div>
 </template>
@@ -154,7 +154,7 @@ export default {
         color: ["#3398DB"],
         grid: {
           left: "3%",
-          bottom: '2%',
+          bottom: '4%',
           height: '96%',
           containLabel: true
         },
@@ -177,7 +177,6 @@ export default {
               fontWeight: 700
             }
           },
-          barGap: '-100%',
         },
         series: [
           {
