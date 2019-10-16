@@ -76,7 +76,8 @@ export default {
       showEcharts: true,
       total: "",
       loading: false,
-      code: ""
+      code: "",
+      list: "",
     };
   },
   mounted() {
@@ -136,6 +137,7 @@ export default {
         if (res.code == "1") {
           const { list, sumTotal } = res.data;
           this.total = sumTotal;
+          this.list = list;
           if (list.length !== 0) {
             this.showEcharts = true;
             for (let i of list) {
@@ -170,6 +172,7 @@ export default {
         yAxis: {
           type: "category",
           data: yAxisData,
+          triggerEvent: true,
           axisLabel: {
             interval: 0,
             textStyle:{
@@ -209,6 +212,17 @@ export default {
       myChart.getDom().childNodes[0].childNodes[0].style.height = `${this.autoHeight}px`;
       //改变大小后重新加载图表;
       myChart.resize();
+      myChart.on('click',function(param){
+        // console.info('this.list',this.list);
+        console.info('param',param.value);
+        // for(let i of this.list) {
+        //   // console.info('this.list',this.list);
+        //   // if(param.value == ) {
+
+        //   // }
+        // }
+      });
+      console.info('this.list',this.list);
     },
     changetable() {
       this.getTableNum();

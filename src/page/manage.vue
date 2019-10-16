@@ -10,6 +10,7 @@
           class="el-menu-admin"
           @open="handleOpen"
           @close="handleClose"
+          :default-openeds= 'openMenu'
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
@@ -170,6 +171,7 @@ export default {
       tabNum:0,
       userName: "",
       isAllowS: false,
+      openMenu: [2],
     };
   },
   methods: {

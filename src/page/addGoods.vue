@@ -248,7 +248,6 @@ export default {
   methods: {
     listTen() {
       listArea({ areaParentId: 0 }).then(res => {
-        console.log(res, 232);
         if (res.code === 1) {
           res.data.forEach(itme => {
             itme.areaCode = itme.pkid + itme.areaCode;
