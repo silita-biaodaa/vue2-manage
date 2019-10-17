@@ -212,17 +212,14 @@ export default {
       myChart.getDom().childNodes[0].childNodes[0].style.height = `${this.autoHeight}px`;
       //改变大小后重新加载图表;
       myChart.resize();
+      var categoryList = this.list;
       myChart.on('click',function(param){
-        // console.info('this.list',this.list);
-        console.info('param',param.value);
-        // for(let i of this.list) {
-        //   // console.info('this.list',this.list);
-        //   // if(param.value == ) {
-
-        //   // }
-        // }
+        for(let i of categoryList) {
+          if(param.value == i.name) {
+            window.open(i.url);
+          }
+        }
       });
-      console.info('this.list',this.list);
     },
     changetable() {
       this.getTableNum();

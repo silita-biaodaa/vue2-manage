@@ -67,7 +67,7 @@ textarea::-webkit-scrollbar {
           }
           .el-textarea {
             .el-textarea__inner {
-              width: 800px;
+              width: 700px;
               padding: 0;
               resize: none;
               max-height: 200px !important;
