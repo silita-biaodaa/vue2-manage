@@ -74,6 +74,11 @@ const routes = [
 				name: 'home'
 			},
 			{
+				path: '/showCSS',
+				component: resolve => require(['@/page/showCSS.vue'], resolve),
+				name: 'showCSS'
+			},
+			{
 				path: '/userlist',
 				component: UserList,
 				name: 'userList'
