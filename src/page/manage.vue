@@ -16,7 +16,7 @@
           <div class="logo">
             <img src="../assets/img/download_logo.png" />
           </div>
-          <el-menu-item index="home">
+          <el-menu-item index="home" @click="jumpHome">
             <template slot="title">
               <i class="el-icon-s-home"></i>
               <span>首页</span>
@@ -39,7 +39,7 @@
               {{item.title}}
               </el-menu-item>
           </el-submenu>
-          <el-menu-item index="passWord">
+          <el-menu-item index="passWord" @click="jumpPassWord">
               <template slot="title">
                 <i class="el-icon-lock"></i>
                 <span>修改密码</span>
@@ -209,6 +209,12 @@ export default {
       localStorage.setItem("submenuKey",this.submenuKey);
       //这里缓存 itemkey
       localStorage.setItem("itemKey",this.itemKey);
+    },
+    jumpHome() {
+     this.$router.push({ name: "home" });
+    },
+    jumpPassWord() {
+      this.$router.push({ name: "passWord" });
     },
     gethcitemKey(){ //获取缓存itemkey
       var a = localStorage.getItem("itemKey");
