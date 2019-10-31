@@ -2,7 +2,7 @@
   <div class="login_page fillcontain" @keyup.enter="submitForm('loginForm')">
     <transition name="form-fade" mode="in-out">
       <section class="form_contianer" v-show="showLogin">
-        <div class="manage_tip">
+        <div class="manage_tip text-c">
           <p>标大大后台管理系统</p>
         </div>
         <el-form :model="loginForm" :rules="rules" ref="loginForm">
@@ -14,12 +14,13 @@
           <el-form-item prop="password">
             <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
           </el-form-item>
+          <el-checkbox class="mb20 ft16" v-model="checked" @click="seleckLogin">点击免15天登陆</el-checkbox>
           <el-form-item>
             <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登录</el-button>
           </el-form-item>
         </el-form>
-        <p class="tip">温馨提示：</p>
-        <p class="tip">注册过的用户可凭账号密码登录</p>
+        <p class="tip text-c">温馨提示：</p>
+        <p class="tip text-c">注册过的用户可凭账号密码登录</p>
       </section>
     </transition>
     <input
@@ -50,6 +51,7 @@ export default {
       showLogin: false,
       yAxisData: [],
       seriesData: [],
+      checked: false,
     };
   },
   mounted() {
@@ -73,9 +75,11 @@ export default {
           }).then(res => {
             // 如果成功要跳转至首页, 将token保存到localStorage, 将username保存到vuex的state中
             if (res.code === 1) {
-              localStorage.setItem("Authorization", res.data);
-              if(localStorage.getItem("phone")) {
-                localStorage.removeItem("phone");
+              if(this.checked == false) {
+                localStorage.setItem("Authorization", res.data);
+              }else {
+                this.checked = false;
+                localStorage.setItem("checked",this.checked);
               }
               localStorage.setItem("phone", this.loginForm.phone);
               this.$router.push({ name: "home" });
@@ -120,6 +124,9 @@ export default {
         }
       });
     },
+    seleckLogin() {
+      this.checked = !this.checked;
+    },
   },
   created() {
     // this.getTableNum();
@@ -147,11 +154,10 @@ export default {
 }
 
 .form_contianer {
-  .wh(320px, 210px);
-  .ctp(320px, 210px);
+  .wh(320px, 260px);
+  .ctp(320px, 260px);
   padding: 25px;
   border-radius: 5px;
-  text-align: center;
   background-color: #fff;
   .submit_btn {
     width: 100%;

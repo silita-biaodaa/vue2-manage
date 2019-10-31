@@ -10,6 +10,7 @@ import jlPopup from './components/userPopup.vue';
 import addPopup from './components/addPopup.vue';
 import powerPopup from './components/powerPopup.vue';
 import addAlias from './components/addAlias.vue';
+import { register } from "@/api/index";
 
 //自定义组件
 Vue.component('jlPopup', jlPopup);
@@ -24,18 +25,22 @@ Vue.use(ElementUI);
 // 全局路由守卫
 router.beforeEach((to, from, next) => {
 	// 获取得token 
-	let token = localStorage.getItem('Authorization')
+	// debugger;
+	let token = localStorage.getItem('Authorization');
+	// console.info
 	// 如果已经登录，那我不干涉你，让你随便访问
 	if (token) {
 		// 判断得是否拥有得token 
-
 		// if (to.path == '/login') {
 		// 	if (from.path == '/passWord') {
 		// 		return
 		// 	}
 		// 	next({ path: '/home' })
 		// }
-		next()
+		if(localStorage.getItem('checked') == true) {
+			next({ path: '/home' });
+		}
+		next();
 	} else {
 		if (to.path !== '/login') {
 			// 如果没有登录，但你访问其他需要登录的页面，那我就让你跳到登录页面去

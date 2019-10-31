@@ -1,45 +1,38 @@
 <template>
   <div class="home">
     <el-container>
-      <!-- 侧边栏 -->
+      <!-- 侧边栏  :router="true"  :default-openeds="[gethcsubmenuKey()]"-->
       <el-aside width="auto">
         <el-menu
-          :router="true"
-          :default-active="$route.path"
+          ref="menu"
           :collapse="isCollapse"
           class="el-menu-admin"
           @open="handleOpen"
           @close="handleClose"
-          :default-openeds= 'openMenu'
           background-color="#545c64"
-          text-color="#fff"
+          text-color="#ffffff"
           active-text-color="#ffd04b"
         >
           <div class="logo">
             <img src="../assets/img/download_logo.png" />
           </div>
-            <el-menu-item index="home">
+          <el-submenu v-for="(submenu,i) in meunList"
+           :key="i"
+           :index="''+submenu.id"
+           >
             <template slot="title">
-              <i class="el-icon-s-home"></i>
-              <span>首页</span>
+              <i :class="submenu.icon"></i>
+              <span>{{submenu.title}}</span>
             </template>
-          </el-menu-item>
-          <el-submenu v-for="(index,i) in meunList" :key="i" :index="'das'+i" >
-            <template slot="title">
-              <i :class="index.icon"></i>
-              <span>{{index.title}}</span>
-            </template>
-            <el-menu-item :class="childNum == a&&tabNum==i? '':'showColor'" v-for="(item,a) in index.data" :key="a" 
-            @click="jump(item.url,a,i, item.optiond)">
+            <el-menu-item 
+            :class="childNum == a&&tabNum==i? '':'showColor'" 
+            v-for="(item,a) in submenu.data" 
+            :key="a" 
+            :index="''+item.id"
+            @click="jump(item.url,a,i, item.optiond,item.id)">
               {{item.title}}
               </el-menu-item>
           </el-submenu>
-          <el-menu-item index="passWord">
-            <template slot="title">
-              <i class="el-icon-lock"></i>
-              <span>修改密码</span>
-            </template>
-          </el-menu-item>
           <!-- <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-loading"></i>
@@ -171,12 +164,14 @@ export default {
       tabNum:0,
       userName: "",
       isAllowS: false,
-      openMenu: [2],
+      submenuKey:"",  //展开的二级menu的index
+      itemKey:"",   // 展开的三级irem的index
     };
   },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
+      this.submenuKey = ''+key;
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
@@ -191,12 +186,35 @@ export default {
     editWord() {
       this.$router.push({ name: "passWord" });
     },
-    jump(path,i,index,optiond){
+    jump(path,i,index,optiond,itemKey){
       //是否有权限;
       this.isAllows = (optiond == "operability");
       this.tabNum=index;
       this.childNum=i;
       this.$router.push({name:path, query: {isAllows: this.isAllows}});
+      this.itemKey = ''+itemKey;
+      //这里缓存 submenuKey
+      localStorage.setItem("submenuKey",this.submenuKey);
+      //这里缓存 itemkey
+      localStorage.setItem("itemKey",this.itemKey);
+    },
+    gethcitemKey(){ //获取缓存itemkey
+      var a = localStorage.getItem("itemKey");
+      if(a!=null){
+        return a;
+      }else{
+        return '0';
+      }
+      
+    },
+    gethcsubmenuKey(){ //获取缓存submenuKey
+      var a = localStorage.getItem("submenuKey");
+      if(a!=null){
+        return a;
+      }else{
+        return '0';
+      }
+      
     }
   },
   mounted() {},
@@ -209,7 +227,7 @@ export default {
         console.info('菜单导航栏接口不通');
       }
     });
-  }
+  },
 };
 </script>
 
