@@ -6,6 +6,7 @@
         <el-menu
           ref="menu"
           :collapse="isCollapse"
+          :default-active="gethcitemKey()"
           class="el-menu-admin"
           @open="handleOpen"
           @close="handleClose"
@@ -16,35 +17,31 @@
           <div class="logo">
             <img src="../assets/img/download_logo.png" />
           </div>
-          <el-menu-item index="home" @click="jumpHome">
+          <el-menu-item :index="home" @click="jumpHome" @open="jumpHome">
             <template slot="title">
               <i class="el-icon-s-home"></i>
               <span>首页</span>
             </template>
           </el-menu-item>
-          <el-submenu v-for="(submenu,i) in meunList"
-           :key="i"
-           :index="''+submenu.id"
-           >
+          <el-submenu v-for="(submenu,i) in meunList" :key="i" :index="''+submenu.id">
             <template slot="title">
               <i :class="submenu.icon"></i>
               <span>{{submenu.title}}</span>
             </template>
-            <el-menu-item 
-            :class="childNum == a&&tabNum==i? '':'showColor'" 
-            v-for="(item,a) in submenu.data" 
-            :key="a" 
-            :index="''+item.id"
-            @click="jump(item.url,a,i, item.optiond,item.id)">
-              {{item.title}}
-              </el-menu-item>
+            <!-- :class="childNum == a&&tabNum==i? '':'showColor'"  -->
+            <el-menu-item
+              v-for="(item,a) in submenu.data"
+              :key="a"
+              :index="''+item.id"
+              @click="jump(item.url,a,i, item.optiond,item.id)"
+            >{{item.title}}</el-menu-item>
           </el-submenu>
-          <el-menu-item index="passWord" @click="jumpPassWord">
-              <template slot="title">
-                <i class="el-icon-lock"></i>
-                <span>修改密码</span>
-              </template>
-            </el-menu-item>
+          <el-menu-item :index="passWord" @click="jumpPassWord">
+            <template slot="title">
+              <i class="el-icon-lock"></i>
+              <span>修改密码</span>
+            </template>
+          </el-menu-item>
           <!-- <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-loading"></i>
@@ -134,7 +131,7 @@
             <el-menu-item index="/method">评标办法维护</el-menu-item>
             <el-menu-item index="/maintenance">等级维护</el-menu-item>
             <el-menu-item index="/maintain">公告维护</el-menu-item>
-          </el-submenu> -->
+          </el-submenu>-->
         </el-menu>
       </el-aside>
       <el-container>
@@ -173,17 +170,19 @@ export default {
       meunList: null,
       childList: [],
       childNum: 0,
-      tabNum:0,
+      tabNum: 0,
       userName: "",
       isAllowS: false,
-      submenuKey:"",  //展开的二级menu的index
-      itemKey:"",   // 展开的三级irem的index
+      submenuKey: "", //展开的二级menu的index
+      itemKey: "", // 展开的三级irem的index
+      home: "9910",
+      passWord: "9911"
     };
   },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
-      this.submenuKey = ''+key;
+      this.submenuKey = "" + key;
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
@@ -198,17 +197,17 @@ export default {
     editWord() {
       this.$router.push({ name: "passWord" });
     },
-    jump(path,i,index,optiond,itemKey){
+    jump(path, i, index, optiond, itemKey) {
       //是否有权限;
-      this.isAllows = (optiond == "operability");
-      this.tabNum=index;
-      this.childNum=i;
-      this.$router.push({name:path, query: {isAllows: this.isAllows}});
-      this.itemKey = ''+itemKey;
+      this.isAllows = optiond == "operability";
+      this.tabNum = index;
+      this.childNum = i;
+      this.$router.push({ name: path, query: { isAllows: this.isAllows } });
+      this.itemKey = "" + itemKey;
       //这里缓存 submenuKey
-      localStorage.setItem("submenuKey",this.submenuKey);
+      localStorage.setItem("submenuKey", this.submenuKey);
       //这里缓存 itemkey
-      localStorage.setItem("itemKey",this.itemKey);
+      localStorage.setItem("itemKey", this.itemKey);
     },
     jumpHome() {
      this.$router.push({ name: "home" });
@@ -216,33 +215,32 @@ export default {
     jumpPassWord() {
       this.$router.push({ name: "passWord" });
     },
-    gethcitemKey(){ //获取缓存itemkey
+    gethcitemKey() {
+      //获取缓存itemkey
       var a = localStorage.getItem("itemKey");
-      if(a!=null){
+      if (a != null) {
         return a;
-      }else{
-        return '0';
+      } else {
+        return "0";
       }
-      
     },
-    gethcsubmenuKey(){ //获取缓存submenuKey
+    gethcsubmenuKey() {
+      //获取缓存submenuKey
       var a = localStorage.getItem("submenuKey");
-      if(a!=null){
+      if (a != null) {
         return a;
-      }else{
-        return '0';
+      } else {
+        return "0";
       }
-      
     }
   },
-  mounted() {},
   beforeMount() {
     List().then(res => {
       if (res.code == "1") {
         this.meunList = res.data.menu;
         this.userName = res.data.adminName;
       } else {
-        console.info('菜单导航栏接口不通');
+        console.info("菜单导航栏接口不通");
       }
     });
   },
@@ -307,7 +305,7 @@ export default {
     border-radius: 50%;
     margin-right: 37px;
   }
-  .showColor{
+  .showColor {
     color: #fff !important;
   }
 }

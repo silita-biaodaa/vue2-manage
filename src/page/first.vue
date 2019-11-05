@@ -40,9 +40,9 @@
         <el-col class="ft14 text-r mr100">合计 :&nbsp;&nbsp;{{total?total:0}}条</el-col>
       </el-row>
     </div>
-    <div class="charts" v-if="showEcharts">
+    <el-row class="charts" v-if="showEcharts">
       <div id="myChart" :style="{width:'100%',height: '100%'}"></div>
-    </div>
+    </el-row>
   </div>
 </template>
 
