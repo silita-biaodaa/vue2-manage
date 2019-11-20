@@ -147,6 +147,7 @@ export default {
 .login_page {
   background: url("../assets/img/bg_login.png") no-repeat center center;
   background-size: 100% 100%;
+  min-width: 1148px;
   .login_top {
     background-color: @fc;
     height: 64px;
