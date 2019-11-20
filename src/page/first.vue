@@ -1,14 +1,40 @@
 <template>
   <div class="first">
-    <el-row :span="24" class="drc color-f62 mb20 ft18 blod">
-      <el-col :span="8">昨日新增公告：{{ yesterdayCounts }}</el-col>
-      <el-col :span="8">今日新增公告：{{ todayCounts }}</el-col>
-      <el-col :span="8">全国公告总数：{{ totalCounts }}</el-col>
-    </el-row>
-    <el-divider></el-divider>
-    <div class="mb50">
+    <div class="public_top bg-fff mb20">
+      <div class="fs16 color-150 top_title pl30 fw600">总体概括</div>
+      <div class="dfrca top_num">
+        <div class="dfcc w33 w33_right">
+          <div class="top_img mr20">
+            <img src="../assets/img/icon17.png" alt="">
+          </div>
+          <div>
+            <div class="fs18 color-150 fw600">{{ yesterdayCounts }}</div>
+            <div class="fs14 color-999">昨日新增公告</div>
+          </div>
+        </div>
+        <div class="dfcc w33 w33_right">
+          <div class="top_img mr20">
+            <img src="../assets/img/icon4.png" alt="">
+          </div>
+          <div>
+            <div class="fs18 color-150 fw600">{{ yesterdayCounts }}</div>
+            <div class="fs14 color-999">昨日新增公告</div>
+          </div>
+        </div>
+        <div class="dfcc w33 w33_right">
+          <div class="top_img mr20">
+            <img src="../assets/img/icon21.png" alt="">
+          </div>
+          <div>
+            <div class="fs18 color-150 fw600">{{ yesterdayCounts }}</div>
+            <div class="fs14 color-999">昨日新增公告</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-fff pt20 first_table pl30 pr30 pb20">
       <el-row :span="24" type="flex" class="row-bg" justify="space-around">
-        <el-col :span="12" class="ft16">
+        <el-col :span="8" class="fs16 color-150 fw600">
           省份：
           <el-select v-model="province" placeholder="请选择" style="width:35%" @change="changetable">
             <el-option
@@ -19,7 +45,7 @@
             ></el-option>
           </el-select>
         </el-col>
-        <el-col :span="12" class="ft16">
+        <el-col :span="12" class="fs16 color-150 fw600">
           公告抓取日期:
           <el-date-picker
             v-model="newtime"
@@ -35,13 +61,13 @@
             @clear="clearDate"
           ></el-date-picker>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col class="ft14 text-r mr100">合计 :&nbsp;&nbsp;{{total?total:0}}条</el-col>
+        <el-col :span="4" class="fs14 color-150 text-r mr100">合计 :&nbsp;&nbsp;{{total?total:0}}条</el-col>
       </el-row>
     </div>
-    <el-row class="charts" v-if="showEcharts">
-      <div id="myChart" :style="{width:'100%',height: '100%'}"></div>
+    <el-row v-loading="loading" style="height: 100%;" class="bg-fff pt30">
+      <div class="charts" v-if="showEcharts">
+        <div id="myChart" :style="{width:'100%',height: '100%'}"></div>
+      </div>
     </el-row>
   </div>
 </template>
@@ -78,6 +104,7 @@ export default {
       loading: false,
       code: "",
       list: "",
+      loading: true,
     };
   },
   mounted() {
@@ -209,6 +236,7 @@ export default {
           "height",
           `${this.autoHeight}`
         );
+        this.loading = false;
       myChart.getDom().childNodes[0].childNodes[0].style.height = `${this.autoHeight}px`;
       //改变大小后重新加载图表;
       myChart.resize();
@@ -237,6 +265,39 @@ export default {
 <style lang="less" scoped>
 @import "../style/mixin";
 .first {
+  width: 100%;
+  height: 100%;
+  .public_top {
+    height: 176px;
+    .top_title {
+      height: 62px;
+      line-height: 62px;
+      border-bottom: 1px solid @bgColor;
+    }
+    .top_num {
+      height: 112px;
+      .w33 {
+        width: 33.33%;
+        height: 58px;
+      }
+      .w33_right {
+        border-right: 1px solid @bgColor;
+      }
+      .top_img {
+        width: 42px;
+        height: 42px;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+  .first_table {
+    border-bottom: 1px solid @bgColor;
+    height: 88px;
+    line-height: 88px;
+  }
   .charts {
     max-height: 800px;
     overflow-x: hidden;

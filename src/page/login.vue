@@ -1,34 +1,41 @@
 <template >
   <div class="login_page fillcontain" @keyup.enter="submitForm('loginForm')">
+    <div class="login_top dfrcb">
+      <div class="login_top_left drc color-150">
+        <div class="login_img">
+          <img :src="logo" alt="">
+        </div>
+        <div class="ml20">标大大后台管理系统</div>
+      </div>
+      <div class="login_top_right">亲爱的用户,欢迎您~</div>
+    </div>
     <transition name="form-fade" mode="in-out">
       <section class="form_contianer" v-show="showLogin">
-        <div class="manage_tip text-c">
-          <p>标大大后台管理系统</p>
-        </div>
+        <div class="mb30 login_form color-150 fs28">登录</div>
         <el-form :model="loginForm" :rules="rules" ref="loginForm">
+          <div class="color-150 fs18 mb10">账号</div>
           <el-form-item prop="phone">
-            <el-input v-model.number="loginForm.phone" placeholder="手机号">
-              <span>dsfsf</span>
+            <el-input v-model.number="loginForm.phone" placeholder="手机号" class="fs18 color-999">
             </el-input>
           </el-form-item>
+          <div class="color-150 fs18 mb10">登录密码</div>
           <el-form-item prop="password">
-            <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
+            <el-input type="password" placeholder="请输入登录密码" v-model="loginForm.password" class="fs18 color-999"></el-input>
           </el-form-item>
-          <el-checkbox class="mb20 ft16" v-model="checked" @click="seleckLogin">点击免15天登陆</el-checkbox>
+          <el-checkbox class="mb40 fs18 color-666" v-model="checked" @click="seleckLogin">点击免15天登陆</el-checkbox>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登录</el-button>
+            <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn fs24 fw600">登录</el-button>
           </el-form-item>
         </el-form>
-        <p class="tip text-c">温馨提示：</p>
-        <p class="tip text-c">注册过的用户可凭账号密码登录</p>
+        <p class="fs18 color-666">提示：忘记密码请联系管理员：</p>
       </section>
     </transition>
-    <input
+    <!-- <input
       type="text"
       autofocus="autofocus"
       class="logo-put"
       @keyup.enter="submitForm('loginForm')"
-    />
+    /> -->
   </div>
 </template>
 
@@ -52,6 +59,7 @@ export default {
       yAxisData: [],
       seriesData: [],
       checked: false,
+      logo: require("../assets/img/logo.png"),
     };
   },
   mounted() {
@@ -130,44 +138,55 @@ export default {
   },
   created() {
     // this.getTableNum();
-  }
+  },
 };
 </script>
 
 <style lang="less" scoped>
 @import "../style/mixin";
 .login_page {
-  background-color: #324057;
+  background: url("../assets/img/bg_login.png") no-repeat center center;
+  background-size: 100% 100%;
+  .login_top {
+    background-color: @fc;
+    height: 64px;
+    padding: 0 360px;
+    .login_top_left {
+      font-size: 20px;
+      .login_img {
+        width: 45px;
+        height: 38px;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .login_top_right {
+      font-size: 18px;
+      color: #5A5A5A;
+    }
+  }
 }
 .logo-put {
   opacity: 0;
 }
-.manage_tip {
-  position: absolute;
-  width: 100%;
-  top: -100px;
-  left: 0;
-  p {
-    font-size: 34px;
-    color: #fff;
-  }
-}
 
 .form_contianer {
-  .wh(320px, 260px);
-  .ctp(320px, 260px);
-  padding: 25px;
+  .wh(460px, 490px);
+  .ctp(460px, 490px);
+  padding: 20px 30px;
   border-radius: 5px;
   background-color: #fff;
   .submit_btn {
     width: 100%;
     font-size: 16px;
+    background-color: @mainColor;
+    border-color: @mainColor;
   }
-}
-
-.tip {
-  font-size: 12px;
-  color: red;
+  button {
+    height: 60px;
+  }
 }
 
 .form-fade-enter-active,

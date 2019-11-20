@@ -10,13 +10,19 @@
           class="el-menu-admin"
           @open="handleOpen"
           @close="handleClose"
-          background-color="#545c64"
+          background-color="#fff"
           text-color="#ffffff"
           active-text-color="#ffd04b"
         >
-          <div class="logo">
-            <img src="../assets/img/download_logo.png" />
+        <div class="dfrcb bg-000">
+          <div class="drc">
+            <div class="logo">
+              <img src="../assets/img/logo_white.png" />
+            </div>
+            <div class="color-fff fs18">标大大</div>
           </div>
+          <!-- <i class="myicon myicon-menu toggle-btn" @click="toggleCollapse"></i> -->
+        </div>
           <el-menu-item :index="home" @click="jumpHome" @open="jumpHome">
             <template slot="title">
               <i class="el-icon-s-home"></i>
@@ -137,10 +143,14 @@
       <el-container>
         <!-- header部分 -->
         <el-header>
-          <i class="myicon myicon-menu toggle-btn" @click="toggleCollapse"></i>
           <div class="system-title">后台运营系统</div>
           <el-dropdown menu-align="start">
-            <div class="color-fff userName">{{userName}}</div>
+            <div class="drc">
+              <div>
+                <img src="../assets/img/logo_white.png" alt="">
+              </div>
+              <div class="color-fff userName">{{userName}}</div>
+            </div>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="singout">
                 <el-button type="text" @click="logout">退出</el-button>
@@ -253,6 +263,12 @@ export default {
 @import "../style/mixin";
 .home {
   height: 100%;
+  ul {
+    border-right: 1px solid #000000;
+  }
+ ul,li {
+    background-color: @mainColor !important;
+  }
   .el-menu-admin:not(.el-menu--collapse) {
     width: 200px;
     min-height: 400px;
@@ -261,24 +277,24 @@ export default {
     height: 100%;
   }
   .el-aside {
-    background-color: #545c64;
+    background-color: @mainColor;
   }
   .el-header {
     display: flex;
+    height: 64px !important;
     justify-content: space-between;
     align-items: center;
-    background-color: #545c64;
+    background-color: #000000;
   }
 
   .logo {
-    height: 60px;
+    height: 64px;
     padding: 10px 20px;
     // width: 200px;
     // background: url(../assets/img/download_logo.png);
     // background-size: contain;
     // background-repeat: no-repeat;
     box-sizing: border-box;
-    background-color: #fff;
     img {
       height: 44px;
     }

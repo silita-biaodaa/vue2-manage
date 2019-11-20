@@ -18,7 +18,7 @@
 
 //transform上下左右居中
 .ctt {  
-	position: absolute;
+	position: absolute; 
 	top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -119,12 +119,64 @@
 }
 .cp{cursor: pointer;}
 //字体大小
-.ft14 {font-size: 14px;}
-.ft16 {font-size: 16px;}
-.ft18 {font-size: 18px;}
-.ft20 {font-size: 20px;}
-.ft22 {font-size: 22px;}
-.ft24 {font-size: 24px;}
+.fs10 {
+	font-size: 12px;
+	font-family: "siyuan-l";
+	transform: scale(0.85);
+	display: inline-block;
+	position: absolute;
+	width: max-content;
+	width: 320px;
+	margin-left: -16px;
+  }
+  .fs12 {
+	font-size: 12px;
+  }
+  .fs13 {
+	font-size: 13px;
+  }
+  .fs14 {
+	font-size: 14px;
+  }
+  .fs16 {
+	font-size: 16px;
+  }
+  .fs18 {
+	font-size: 18px;
+  }
+  .fs20 {
+	font-size: 20px;
+  }
+  .fs24 {
+	font-size: 24px;
+  }
+  .fs26 {
+	font-size: 26px;
+  }
+  .fs28 {
+	font-size: 28px;
+  }
+  .fs30 {
+	font-size: 30px;
+  }
+  .fs34 {
+	font-size: 34px;
+  }
+  .fs40 {
+	font-size: 40px;
+  }
+  .fs45 {
+	font-size: 45px;
+  }
+  .fs50 {
+	font-size: 50px;
+  }
+  .fs52 {
+	font-size: 52px;
+  }
+.fw500{font-weight: 500;}
+.fw600{font-weight: 600;}
+.fw700{font-weight: 700;}
 //字体加粗
 .blod {font-weight: 700;}
 //外边距样式;
@@ -146,6 +198,7 @@
 .bg-f62{background: #F62135;}
 .bg-00a{background: #00AD59;}
 .bg-409{ background: #409eff;}
+.bg-000{background: #000000;}
 /* 字体颜色 */
 .color-red{color:#C96148}
 .color-666{color: #666;}
@@ -158,14 +211,60 @@
 .color-409 {color: #409eff;}
 .color-60 {color: #606266};
 .color-f62 {color: #F62135}
+.color-150 {color: #150000;}
+.color-38 {color: #383838;}
+.color-224 {color: #244CD7;}
+.color-000{color: #000000;}
+//单个单词表示默认颜色
+@themeColor: #339966;
+@tintThemeColor: #07ac4e;
+@darkThemeColor: #277740;
+@defaultColor: #333333;
+@whiteColor: #ffffff;
+@brightColor: #f2f2f2;
+@lightColor: #f8f8f8;
+@tintColor: #eeeeee;
+@lightBorderColor: #e8e8e8;
+@grayColor: #aaaaaa;
+@darkGrayColor: #6b6363;
+@lightGrayColor: #9a9a9a;
+@clarityGrayColor: rgba(0, 0, 0, 0.45);
+@greenColor: #339966;
+@darkGreenColor: #277740;
+@tintGreenColor: #49de94;
+@blueColor: #198bcc;
+@darkBlueColor: #096ca5;
+@golddenColor: #f5ae07;
+@darkGolddenColor: #c88f08;
+@orangeColor: #f66120;
+@darkOrangeColor: #da5015;
+@redColor: #d82323;
+@darkRedColor: #be1616;
+@bgColor: #f4f4f4;
+@mainColor: #383838;
+@fontColor: #244CD7;
+
+// 文字颜色
+@titleColor: #333333;
+@subTitleColor: #555555;
+@contentColor: #555555;
+@subContentColor: #999999;
+
+// 文字大小
+@titleSize: 20px;
+@subTitleSize: 16px;
+@contentSize: 14px;
+@subContentSize: 12px;
+
 //table表格公共样式
 .public_table_list {
-	padding: 0 40px;
-	border: 1px solid #ffffff;
+	padding: 0 30px;
+	border: 1px solid @whiteColor;
+	border-right: none;
+	background-color: @whiteColor;
 	.public_table {
-		margin-top: 5px;
 		border-top: 1px solid #EBEEF5 !important;
 		border-left: 1px solid #EBEEF5 !important;
-		border-right: 1px solid #EBEEF5 !important;
+		// border-right: 1px solid #EBEEF5 !important;
 	}
 }
