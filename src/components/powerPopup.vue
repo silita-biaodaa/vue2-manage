@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog" v-show="showMask">
+  <div class="dialog" v-if="showMask">
     <div class="dialog-container"  @keyup.enter="submitForm('ruleForm')">
       <div class="dfrcb ft20 mb10">
         <div style="margin: 0 auto;">权限管理</div>

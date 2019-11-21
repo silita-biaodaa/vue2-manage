@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog userPopup" v-show="showMask">
+  <div class="dialog userPopup" v-if="showMask">
     <el-form :model="ruleForm" ref="ruleForm">
       <div class="dialog-container">
         <div class="dfrcb ft20 dialog_top">

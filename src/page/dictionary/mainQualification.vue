@@ -268,7 +268,7 @@
       </el-row>
     </div>
     <!-- 增加以及修改弹窗 -->
-    <div class="dialog" v-show="showMask">
+    <div class="dialog" v-if="showMask">
       <div class="dialog-container">
         <div @keyup.enter.native="submitForm('ruleForm')">
           <div class="dialog_title dfrcb pl20 pr20">
@@ -282,7 +282,6 @@
               :rules="rules"
               :label-position="labelPosition"
               label-width="100px"
-              v-show="showMask"
             >
               <el-form-item label="资质类别：" prop="qualType">
                 <el-select v-model="ruleForm.qualType" @change="choseQual" placeholder="请选择资质类别">
@@ -336,7 +335,7 @@
       </div>
     </div>
     <!-- 修改资质弹窗 -->
-    <div class="dialog" v-show="aliasMask">
+    <div class="dialog" v-if="aliasMask">
       <div class="dialog-container">
         <div @keyup.enter.native="changeSubmitForm('ruleFormChange')">
           <div class="dialog_title dfrcb pl20 pr20">
@@ -407,7 +406,7 @@
       </div>
     </div>
     <!-- 修改等级 -->
-    <div class="dialog" v-show="changeLevel">
+    <div class="dialog" v-if="changeLevel">
       <div class="dialog-container level pb40">
         <div @keyup.enter.native="levelSubmitForm">
           <div class="dialog_title dfrcb pl20 pr20">
@@ -425,7 +424,7 @@
       </div>
     </div>
     <!-- 修改属性 -->
-    <div class="dialog" v-show="changeMode">
+    <div class="dialog" v-if="changeMode">
       <div class="dialog-container mode pb40">
         <div @keyup.enter.native="modeSubmitForm">
           <div class="dialog_title dfrcb pl20 pr20">

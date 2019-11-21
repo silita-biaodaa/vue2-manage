@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog" v-show="showMask">
+  <div class="dialog" v-if="showMask">
     <div class="dialog-container pb40">
       <div @keyup.enter.native="submitForm('ruleForm')">
         <div class="dfrcb dialog_title pl30 pr30">

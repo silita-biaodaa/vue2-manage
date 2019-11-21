@@ -96,7 +96,7 @@
         </div>
       </el-col>
     </el-row>
-    <div class="dialog" v-show="showMask">
+    <div class="dialog" v-if="showMask">
       <div class="dialog-container pb40">
         <div class="mb10" @keyup.enter="submitForm('ruleForm')">
           <div class="dfrcb dialog_title pl30 pr30">

@@ -161,7 +161,7 @@
       </el-row>
     </div>
     <!-- 增加弹窗 -->
-    <div class="dialog" v-show="showMask || showAlias">
+    <div class="dialog" v-if="showMask || showAlias">
       <div class="dialog-container pb40">
         <div @keyup.enter="submitForm('ruleForm')">
           <div class="dfrcb dialog_title pl30 pr30">
@@ -175,14 +175,14 @@
             :label-position="labelPosition"
             label-width="100px"
           >
-            <el-form-item label="评标办法:" prop="name" v-show="showMask" class="dialog_form">
+            <el-form-item label="评标办法:" prop="name" v-if="showMask" class="dialog_form">
               <el-input
                 placeholder="请输入需要增加的评标办法"
                 clearable
                 v-model="ruleForm.name"
               ></el-input>
             </el-form-item>
-            <el-form-item label="评标办法别名:" prop="name" v-show="showAlias" label-width="120px" class="dialog_form">
+            <el-form-item label="评标办法别名:" prop="name" v-if="showAlias" label-width="120px" class="dialog_form">
               <el-input
                 placeholder="请输入需要增加的评标办法别名"
                 clearable
@@ -198,7 +198,7 @@
       </div>
     </div>
     <!-- 修改弹窗 -->
-    <div class="dialog" v-show="changeMask || changeAlias">
+    <div class="dialog" v-if="changeMask || changeAlias">
       <div class="dialog-container pb40">
         <div class="mb10" @keyup.enter="submitFormChange('ruleFormChange')">
           <div class="dfrcb dialog_title pl30 pr30">
@@ -212,10 +212,10 @@
             :label-position="labelPosition"
             label-width="100px"
           >
-            <el-form-item label="评标办法:" prop="name" v-show="changeMask" class="dialog_form">
+            <el-form-item label="评标办法:" prop="name" v-if="changeMask" class="dialog_form">
               <el-input clearable v-model="ruleFormChange.name"></el-input>
             </el-form-item>
-            <el-form-item label="评标办法别名:" prop="name" v-show="changeAlias" label-width="120px" class="dialog_form">
+            <el-form-item label="评标办法别名:" prop="name" v-if="changeAlias" label-width="120px" class="dialog_form">
               <el-input clearable v-model="ruleFormChange.name"></el-input>
             </el-form-item>
             <el-form-item class="text-c handle_btn">

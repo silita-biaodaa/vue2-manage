@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog" v-show="showMask">
+  <div class="dialog" v-if="showMask">
     <div class="dialog-container">
       <div class="dfrcb ft20 mb10">
         <div style="margin: 0 auto;">新增账号</div>
