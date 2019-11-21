@@ -148,7 +148,7 @@
       <el-container>
         <!-- header部分 -->
         <el-header>
-          <div class="system-title">后台运营系统</div>
+          <div class="system-title">标大大后台管理系统</div>
           <el-dropdown menu-align="start">
             <div class="drc">
               <div>
@@ -273,9 +273,6 @@ export default {
     border-right: 1px solid #000000;
     min-width: 135px !important;
     // li {
-      .is-opened {
-        color: red !important;
-      }
     // }
   }
  ul,li {
@@ -321,8 +318,9 @@ export default {
     line-height: 60px;
   }
   .system-title {
-    font-size: 28px;
+    font-size: 18px;
     color: white;
+    margin-left: 50px;
   }
   .welcome {
     color: white;

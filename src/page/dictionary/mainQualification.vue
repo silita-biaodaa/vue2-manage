@@ -695,6 +695,7 @@ export default {
           } else {
             this.levelBtn = true;
           }
+          console.info('')
           this.levelData = data;
         } else {
           console.info("资质等级接口不通");
@@ -855,6 +856,8 @@ export default {
     },
     checkIndex(index) {
       this.activeIndex = index;
+      this.getLevelList();
+      this.getModeList();
     },
     //点击资质等级
     noticeLevel() {
