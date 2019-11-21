@@ -856,8 +856,11 @@ export default {
     },
     checkIndex(index) {
       this.activeIndex = index;
-      this.getLevelList();
-      this.getModeList();
+      if(index == '2') {
+        this.getLevelList();
+      }else if(index == '3') {
+        this.getModeList();
+      }
     },
     //点击资质等级
     noticeLevel() {
