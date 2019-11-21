@@ -27,7 +27,7 @@
             <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn fs24 fw600">登录</el-button>
           </el-form-item>
         </el-form>
-        <p class="fs18 color-666">提示：忘记密码请联系管理员：</p>
+        <p class="fs18 color-666">提示：忘记密码请联系管理员</p>
       </section>
     </transition>
     <!-- <input
