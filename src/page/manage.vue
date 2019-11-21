@@ -298,7 +298,6 @@ export default {
     align-items: center;
     background-color: #000000;
   }
-
   .logo {
     height: 64px;
     padding: 10px 20px;
@@ -336,6 +335,13 @@ export default {
   }
   .showColor {
     color: #fff !important;
+  }
+}
+ .el-dropdown-menu__item {
+   padding: 0 !important;
+  .el-button {
+    width: 96px !important;
+    height: 36px !important;
   }
 }
 </style>

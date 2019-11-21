@@ -297,4 +297,13 @@ input[type="password"]:focus {
     background-color: @mainColor !important;
   }
 }
+.home {
+   .el-dropdown-menu__item {
+    padding: 0 !important;
+    .button {
+      width: 96px !important;
+      height: 36px !important;
+    }
+  }
+}
 </style>

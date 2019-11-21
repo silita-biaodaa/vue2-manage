@@ -1,7 +1,7 @@
 <template>
   <div class="dialog userPopup" v-if="showMask">
     <el-form :model="ruleForm" ref="ruleForm">
-      <div class="dialog-container">
+      <div class="dialog-container pb40">
         <div class="dfrcb ft20 dialog_top">
           <div class="dialog-title ml30">查看详情</div>
           <i class="el-icon-close fs14 mr30"></i>
@@ -460,6 +460,7 @@ export default {
     }
   }
   .user_table {
+    height: 650px;
     overflow-x: hidden;
     overflow-y: scroll;
     padding: 0 50px;
@@ -501,15 +502,15 @@ export default {
     border: 1px solid #ddd;
     border-bottom: none;
   }
-  .popup_scollbar {
-    max-height: 110px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    border: 1px solid #ffffff;
-  }
-  .popup_scollbar::-webkit-scrollbar {
-    display: none;
-  }
+  // .popup_scollbar {
+  //   max-height: 110px;
+  //   overflow-x: hidden;
+  //   overflow-y: scroll;
+  //   border: 1px solid #ffffff;
+  // }
+  // .popup_scollbar::-webkit-scrollbar {
+  //   display: none;
+  // }
   .popup_btn {
     width: 100%;
     display: flex;
