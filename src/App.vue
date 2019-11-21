@@ -292,4 +292,9 @@ input[type="password"]:focus {
     }
   }
 }
+.el-menu--vertical {
+  .el-menu-item {
+    background-color: @mainColor !important;
+  }
+}
 </style>

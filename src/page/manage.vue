@@ -272,6 +272,11 @@ export default {
   ul {
     border-right: 1px solid #000000;
     min-width: 135px !important;
+    // li {
+      .is-opened {
+        color: red !important;
+      }
+    // }
   }
  ul,li {
     background-color: @mainColor !important;
