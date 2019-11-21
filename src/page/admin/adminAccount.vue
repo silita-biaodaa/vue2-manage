@@ -1,0 +1,454 @@
+<template>
+  <div class="adminAccount">
+    <el-row :span="24" type="flex" justify="space-between" align="middle" class="adminAccount_top">
+      <el-col :span="12">
+        <el-input
+          placeholder="请输入手机号码"
+          clearable
+          v-model="firm"
+          style="width:50%"
+          @click="searchData"
+          v-on:input="clear"
+        >
+          <i slot="prefix" class="el-input__icon el-icon-search"></i>
+        </el-input>
+        <el-button type="primary" class="fl-left" @click="searchData">查询</el-button>
+      </el-col>
+      <el-col :span="8" v-show="isAllows">
+        <span @click="addAccount">添加账号</span>
+      </el-col>
+    </el-row>
+    <el-row class="public_table_list">
+      <el-col :span="24">
+        <el-table class="public_table" :data="tableData">
+          <el-table-column label="序号" align="center" type="index"></el-table-column>
+          <el-table-column label="姓名" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.realName }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="手机号" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.phone }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="部门" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.department }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="岗位" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.post }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="角色" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.desc }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="注册时间" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.created }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center">
+            <template slot-scope="scope">
+              <span class="handle_authority" @click="editRole(scope.$index, scope.row)" v-show="isAllows">编辑</span>
+              <span
+                class="handle_cancel"
+                @click="openMask(scope.$index, scope.row)"
+                v-show="isAllows"
+              >{{ scope.row.locks }}</span>
+              <span class="handle_set" @click="setWord(scope.$index, scope.row)" v-show="isAllows">重置为初始密码</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+    <div class="block pl50 mt30">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page="1"
+        :page-sizes="[15, 30, 45, 60]"
+        :page-size="15"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+      ></el-pagination>
+    </div>
+    <div class="dialog" v-show="edit">
+      <div class="dialog-container">
+        <div class="dfrcb ft20 mb10">
+          <div style="margin: 0 auto;">编辑账号</div>
+          <i class="el-icon-close" @click="closeMask"></i>
+        </div>
+        <div @keyup.enter="submitFormEdit('ruleFormEdit')">
+          <el-form
+            :label-position="labelPosition"
+            label-width="100px"
+            :model="ruleFormEdit"
+            :rules="rulesEdit"
+            ref="ruleFormEdit"
+          >
+            <el-form-item label="姓名：" prop="name">
+              <el-input v-model="ruleFormEdit.name" placeholder="请输入姓名"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号：" prop="phone">
+              <el-input
+                v-model="ruleFormEdit.phone"
+                placeholder="请输入手机号"
+                autocomplete="new-password"
+                :disabled="true"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="部门：" prop="depart">
+              <el-input v-model="ruleFormEdit.depart" placeholder="请输入部门"></el-input>
+            </el-form-item>
+            <el-form-item label="岗位：" prop="jobs">
+              <el-input v-model="ruleFormEdit.jobs" placeholder="请输入岗位"></el-input>
+            </el-form-item>
+            <el-row type="flex">
+              <el-col :span="4" class="role_list">
+                角色：
+                <el-select v-model="desc" class="ml10">
+                  <el-option
+                    v-for="item in role"
+                    :key="item.rid"
+                    :label="item.desc"
+                    :value="item.desc"
+                  ></el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+            <el-form-item class="popup_form_btn pl20">
+              <div class="popup_btn color-fff" @click="submitFormEdit('ruleFormEdit')">保存</div>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </div>
+    <addPopup :showMask="true" v-model="sendVal" :roleInfo="roleInfo" @refesh="handleRefesh"></addPopup>
+  </div>
+</template>
+<script>
+import { manageList, manageLock, setPassWord, roleAll, updateAccount } from "@/api/index";
+import { timestampToTime } from "../../public";
+import { fail } from 'assert';
+export default {
+  data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入名称"));
+      } else {
+        if (this.ruleFormEdit.name !== "") {
+          this.$refs.ruleFormEdit.validateField("confirmPsd");
+        }
+        callback();
+      }
+    };
+    return {
+      firm: "",
+      tableData: [],
+      total: 0,
+      pagesize: 15, // 当前页面条数
+      pagenum: 1, //当前页面数
+      sendVal: "",
+      roleInfo: null,
+      list: null, //清空添加所有值
+      role: "",
+      desc: "",
+      edit: false,
+      roleList: null,
+      ruleFormEdit: {
+        name: "",
+        phone: "",
+        depart: "",
+        jobs: ""
+      },
+      rulesEdit: {
+        name: [{ required: true, validator: validatePass, trigger: "blur" }],
+        depart: [{ message: "请输入部门", trigger: "blur" }],
+        jobs: [{ message: "请输入岗位", trigger: "blur" }]
+      },
+      labelPosition: "right",
+      isAllows: null, //接受路由可操作的值;
+    };
+  },
+  methods: {
+    accountList() {
+      const params = {
+        currentPage: this.pagenum,
+        pageSize: this.pagesize,
+        phone: this.firm
+      };
+      manageList(params).then(res => {
+        if (res.code == "1") {
+          const { list, total } = res.data;
+          if (list.length > 0) {
+            for (let i of list) {
+              if (i.created) {
+                i.created = timestampToTime(i.created).slice(0, 10);
+              }
+            }
+          }
+          this.tableData = list;
+          this.total = total;
+        } else {
+          console.info("管理员账号接口不通");
+        }
+      });
+    },
+    getRole() {
+      roleAll().then(res => {
+        if (res.code == "1") {
+          this.role = res.data;
+        } else {
+          console.info("获取角色列表接口不通");
+        }
+      });
+    },
+    openMask(index, row) {
+      this.$confirm(
+        `是否${row.locks == "未锁定" ? "锁定" : "解锁"}该管理员账号？`,
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }
+      )
+        .then(() => {
+          manageLock({
+            uid: row.uid,
+            lock: row.locks == "未锁定" ? 1 : 0
+          }).then(res => {
+            if (res.code == "1") {
+              this.$message({
+                type: "success",
+                message: `${row.locks == "未锁定" ? "锁定" : "解锁"}成功!`
+              });
+              this.accountList();
+            } else {
+              console.info("管理员锁定接口不通");
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: `已取消${row.locks == "未锁定" ? "锁定" : "解锁"}`
+          });
+        });
+    },
+    handleCurrentChange(val) {
+      // 当前页改变的函数
+      this.pagenum = val;
+      this.accountList();
+    },
+    handleSizeChange(val) {
+      // 每页条数发生改变时做出的函数
+      this.pagesize = val;
+      this.accountList();
+    },
+    addAccount() {
+      this.sendVal = true;
+    },
+    searchData() {
+      this.pagenum = 1;
+      this.accountList();
+    },
+    clear() {
+      if (this.firm == "") {
+        this.accountList();
+      }
+    },
+    editRole(index, row) {
+      this.edit = true;
+      const { realName, phone, department, post, desc } = row;
+      this.roleList = row;
+      this.ruleFormEdit = {
+        name: realName,
+        phone: phone,
+        depart: department,
+        jobs: post
+      };
+      this.desc = desc;
+    },
+    closeMask() {
+      this.edit = false;
+      this.ruleFormEdit = {
+        name: "",
+        phone: "",
+        depart: "",
+        jobs: ""
+      };
+    },
+    setWord(index, row) {
+      const params = {
+        uid: row.uid,
+        password: "12345678",
+        phone: row.phone
+      };
+      this.$confirm(`是否重置该管理员密码`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          setPassWord(params).then(res => {
+            if (res.code == "1") {
+              this.$message({
+                type: "success",
+                message: `重置密码成功!`
+              });
+              this.accountList();
+            } else {
+              console.info("重置密码接口不通");
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: `已取消重置该管理员密码`
+          });
+        });
+    },
+    submitFormEdit(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          const { realName, desc, department, post } = this.roleList;
+          const { name, depart, jobs } = this.ruleFormEdit;
+          if(department == undefined || post == undefined) {
+            this.roleList.department="",this.roleList.post="";
+          }
+          //没改时点击保存按钮筛选;
+          if(realName == name && desc == this.desc && this.roleList.department == depart && this.roleList.post == jobs) {
+            this.edit = false;
+          }else {
+            for (let i of this.role) {
+              if (this.desc == i.desc) {
+                this.id = i.rid;
+              }
+            }
+            const { name, phone, passWord, depart, jobs } = this.ruleFormEdit;
+            const params = {
+              realName: name,
+              phone: phone,
+              department: depart,
+              post: jobs,
+              rid: this.id,
+              uid: this.roleList.uid,
+            };
+            updateAccount(params).then(res => {
+              if(res.code == '1') {
+                this.$message({
+                  type: "success",
+                  message: "编辑成功!"
+                });
+                this.edit = false;
+                //向父组件传值，若为关闭则刷新页面;
+                setTimeout(() => {
+                  return this.accountList();
+                }, 100);
+              }else {
+                console.info('编辑账号接口不通');
+              }
+            });
+          }
+        }
+      });
+    },
+    handleRefesh(showMask) {
+      if (!showMask) {
+        setTimeout(() => {
+          return this.accountList();
+        }, 100);
+      }
+    }
+  },
+  created() {
+    this.accountList();
+    this.getRole();
+    this.isAllows = this.$route.query.isAllows;
+  }
+};
+</script>
+<style lang="less" scoped>
+@import "../../style/mixin";
+.adminAccount {
+  .adminAccount_top {
+    margin-bottom: 30px;
+    padding: 0 30px;
+    .fl-left {
+      margin-left: 30px;
+    }
+    .el-col-8 {
+      text-align: center;
+      padding-right: 30px;
+      span {
+        .sc(16px, #409eff);
+        cursor: pointer;
+      }
+    }
+  }
+  .handle_authority,
+  .handle_cancel,
+  .handle_set {
+    .sc(14px, #409eff);
+    cursor: pointer;
+  }
+  .block {
+    padding: 0 30px;
+    margin-top: 30px;
+  }
+  .dialog {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10;
+    border-radius: 10px;
+    .dialog-container {
+      width: 500px;
+      background: #eeeeee;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      position: relative;
+      padding: 20px;
+      .popup_form {
+        .el-form-item__content {
+          margin-left: 0 !important;
+        }
+      }
+    }
+    .popup_btn {
+      background-color: #409eff;
+      width: 100%;
+      text-align: center;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+    .el-form-item {
+      padding-right: 20px;
+    }
+    .role_list {
+      width: 100%;
+      height: 100%;
+      font-size: 14px;
+      color: #606266;
+      padding-left: 45px;
+      margin-bottom: 22px;
+    }
+    .popup_form_btn {
+      width: 60%;
+      margin: 0 auto;
+    }
+  }
+}
+</style>
