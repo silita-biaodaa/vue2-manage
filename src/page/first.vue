@@ -17,8 +17,8 @@
             <img src="../assets/img/icon4.png" alt="">
           </div>
           <div>
-            <div class="fs18 color-150 fw600">{{ yesterdayCounts }}</div>
-            <div class="fs14 color-999">昨日新增公告</div>
+            <div class="fs18 color-150 fw600">{{ todayCounts }}</div>
+            <div class="fs14 color-999">今日新增公告</div>
           </div>
         </div>
         <div class="dfcc w33 w33_right">
@@ -26,8 +26,8 @@
             <img src="../assets/img/icon21.png" alt="">
           </div>
           <div>
-            <div class="fs18 color-150 fw600">{{ yesterdayCounts }}</div>
-            <div class="fs14 color-999">昨日新增公告</div>
+            <div class="fs18 color-150 fw600">{{ totalCounts }}</div>
+            <div class="fs14 color-999">全国公告总数</div>
           </div>
         </div>
       </div>

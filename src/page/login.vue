@@ -22,7 +22,7 @@
           <el-form-item prop="password">
             <el-input type="password" placeholder="请输入登录密码" v-model="loginForm.password" class="fs18 color-999"></el-input>
           </el-form-item>
-          <el-checkbox class="mb40 fs18 color-666" v-model="checked" @click="seleckLogin">点击免15天登陆</el-checkbox>
+          <!-- <el-checkbox class="mb40 fs18 color-666" v-model="checked" @click="seleckLogin">点击免15天登陆</el-checkbox> -->
           <el-form-item>
             <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn fs24 fw600">登录</el-button>
           </el-form-item>

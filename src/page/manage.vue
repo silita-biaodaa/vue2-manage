@@ -14,12 +14,17 @@
           text-color="#ffffff"
           active-text-color="#ffd04b"
         >
-        <div class="dfrcb bg-000">
+        <div class="dfrcb bg-000 h64">
           <div class="drc">
             <div class="logo">
               <img src="../assets/img/logo_white.png" />
             </div>
-            <div class="color-fff fs18">标大大</div>
+            <div class="color-fff fs18" :class="{'hide': isCollapse}">标大大</div>
+          </div>
+          <div class="cp" @click="toggleCollapse">
+            <img :class="{'hide': isCollapse}" src="../assets/img/pack.png" alt="">
+            <img :class="{'hide': !isCollapse}" src="../assets/img/up.png" alt="">
+            <div class="color-fff">{{isCollapse ? "展开":"收起"}}</div>
           </div>
           <!-- <i class="myicon myicon-menu toggle-btn" @click="toggleCollapse"></i> -->
         </div>
@@ -147,9 +152,9 @@
           <el-dropdown menu-align="start">
             <div class="drc">
               <div>
-                <img src="../assets/img/logo_white.png" alt="">
+                <img src="../assets/img/user.png" alt="">
               </div>
-              <div class="color-fff userName">{{userName}}</div>
+              <div class="color-fff userName ml10">{{userName}}</div>
             </div>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="singout">
@@ -199,6 +204,7 @@ export default {
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse;
+      console.info('this.isCollapse',this.isCollapse);
     },
     logout() {
       localStorage.removeItem("Authorization");
@@ -265,6 +271,7 @@ export default {
   height: 100%;
   ul {
     border-right: 1px solid #000000;
+    min-width: 135px !important;
   }
  ul,li {
     background-color: @mainColor !important;
@@ -273,6 +280,9 @@ export default {
     width: 200px;
     min-height: 400px;
   }
+  .h64 {
+      height: 65px;
+    }
   .el-container {
     height: 100%;
   }
