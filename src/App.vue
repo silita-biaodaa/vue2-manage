@@ -156,8 +156,8 @@ input[type="password"]:focus {
     }
   }
 }
-.userPopup {
-  .el-message-box {
+// .userPopup {
+  .msgBox {
     width: 632px !important;
     height: 470px;
     display: flex;
@@ -247,7 +247,7 @@ input[type="password"]:focus {
       background-color: @color;
     }
   }
-}
+// }
 .evaluation,
 .mainQualification,
 .level,

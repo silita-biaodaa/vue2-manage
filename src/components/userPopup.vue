@@ -135,7 +135,7 @@
         </div>
         <el-form-item class="keep_btn">
           <div class="popup_btn mt30">
-            <div class="fs18 color-999 cp" @click="closeMask">取消</div>
+            <div v-if="allow || feed" class="fs18 color-999 cp" @click="closeMask">取消</div>
             <button
               type="primary"
               @click="submitForm('ruleForm')"
@@ -249,7 +249,9 @@ export default {
       });
     },
     sendDays() {
+      console.info('el-message-box',document.getElementsByClassName('.el-message-box'));
       const h = this.$createElement;
+      console.info('h0',h);
       // 置空备注
       //自动聚焦
       if (this.$parent.activeUser) {
@@ -272,6 +274,7 @@ export default {
           h("input", { style: "text-align: center;" }),
           h("span", null, "天体验会员")
         ]),
+        customClass: "msgBox",
         showCancelButton: true,
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -379,7 +382,7 @@ export default {
         this.member();
       }
     }
-  }
+  },
 };
 </script>
 <style lang="less" scoped>

@@ -199,7 +199,7 @@
     </div>
     <!-- 修改弹窗 -->
     <div class="dialog" v-show="changeMask || changeAlias">
-      <div class="dialog-container">
+      <div class="dialog-container pb40">
         <div class="mb10" @keyup.enter="submitFormChange('ruleFormChange')">
           <div class="dfrcb dialog_title pl30 pr30">
             <div class="fs16 color-150 fw600">{{changeMask ? "修改评标办法":"修改评标办法别名"}}</div>
