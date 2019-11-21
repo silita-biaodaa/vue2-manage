@@ -1,7 +1,7 @@
 <template>
   <div class="first">
     <div class="public_top bg-fff mb20">
-      <div class="fs16 color-150 top_title pl30 fw600">总体概括</div>
+      <div class="fs16 color-150 top_title pl30 fw600">总体概况</div>
       <div class="dfrca top_num">
         <div class="dfcc w33 w33_right">
           <div class="top_img mr20">
@@ -64,7 +64,7 @@
         <el-col :span="4" class="fs14 color-150 text-r mr100">合计 :&nbsp;&nbsp;{{total?total:0}}条</el-col>
       </el-row>
     </div>
-    <el-row v-loading="loading" style="height: 100%;" class="bg-fff pt30">
+    <el-row v-loading="loading" style="height: 100%;min-height: 200px;" class="bg-fff pt30">
       <div class="charts" v-if="showEcharts">
         <div id="myChart" :style="{width:'100%',height: '100%'}"></div>
       </div>
@@ -266,7 +266,6 @@ export default {
 @import "../style/mixin";
 .first {
   width: 100%;
-  height: 100%;
   .public_top {
     height: 176px;
     .top_title {

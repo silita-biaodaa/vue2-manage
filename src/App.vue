@@ -91,11 +91,12 @@ input[type="password"]:focus {
 .el-range-editor.is-active:hover {
   border-color: @color !important;
 }
-// .fl-right {
-  .el-input--prefix .el-input__inner{
-    background-color: #F3F5F9;
-  }
-// }
+.el-input--prefix .el-input__inner{
+  background-color: #F3F5F9;
+}
+.el-input .el-input__inner {
+  background-color: #F3F5F9;
+}
 .dialog {
   tr {
     border-top-color: @border-color;
@@ -247,9 +248,6 @@ input[type="password"]:focus {
     }
   }
 }
-.evaluation .dialog .el-form-item {
-  padding: 0 !important;
-}
 .evaluation,
 .mainQualification,
 .level,
@@ -270,6 +268,27 @@ input[type="password"]:focus {
     .el-table th.is-leaf {
       border: none !important;
       padding: 5px 0;
+    }
+  }
+}
+.passWord {
+  .el-card__header {
+    padding: 20px 30px !important;
+  }
+  .el-card__body {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 113px;
+    .el-form-item__label {
+      font-size: 16px;
+      color: #150000;
+    }
+    .el-input {
+      width: 400px;
+    }
+    .el-input__inner {
+      height: 48px;
+      width: 400px;
     }
   }
 }
