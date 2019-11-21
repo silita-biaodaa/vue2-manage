@@ -128,10 +128,10 @@ input[type="password"]:focus {
           .el-textarea {
             .el-textarea__inner {
               width: 938px;
-              height: 96px;
+              height: 40px;
               padding: 0;
               resize: none;
-              min-height: 96px !important;
+              min-height: 40px !important;
               overflow-y: scroll;
               overflow: auto;
             }
