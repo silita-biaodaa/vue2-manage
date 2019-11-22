@@ -28,7 +28,7 @@
           </div>
           <!-- <i class="myicon myicon-menu toggle-btn" @click="toggleCollapse"></i> -->
         </div>
-          <el-menu-item index="1" @click="jumpHome" @open="jumpHome">
+          <el-menu-item index="1" @click="jumpHome('1')">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
           </el-menu-item>
@@ -45,7 +45,7 @@
               @click="jump(item.url,a,i, item.optiond,item.id)"
             >{{item.title}}</el-menu-item>
           </el-submenu>
-          <el-menu-item index="2" @click="jumpPassWord">
+          <el-menu-item index="2" @click="jumpPassWord('2')">
             <i class="el-icon-lock"></i>
             <span slot="title">修改密码</span>
           </el-menu-item>
@@ -186,8 +186,7 @@ export default {
       isAllowS: false,
       submenuKey: "", //展开的二级menu的index
       itemKey: "", // 展开的三级irem的index
-      home: "9910",
-      passWord: "9911"
+      number: "1",
     };
   },
   methods: {
@@ -221,11 +220,13 @@ export default {
       //这里缓存 itemkey
       localStorage.setItem("itemKey", this.itemKey);
     },
-    jumpHome() {
+    jumpHome(itemKey) {
      this.$router.push({ name: "home" });
+     localStorage.setItem("itemKey", itemKey);
     },
-    jumpPassWord() {
+    jumpPassWord(itemKey) {
       this.$router.push({ name: "passWord" });
+      localStorage.setItem("itemKey", itemKey);
     },
     gethcitemKey() {
       //获取缓存itemkey
@@ -234,6 +235,7 @@ export default {
         return a;
       } else {
         return "1";
+        localStorage.setItem("itemKey", this.number);
       }
     },
     gethcsubmenuKey() {
