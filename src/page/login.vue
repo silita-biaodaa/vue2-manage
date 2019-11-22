@@ -74,6 +74,7 @@ export default {
   methods: {
     // ...mapActions(['getAdminData']),
     submitForm(formName) {
+      localStorage.removeItem("itemKey");
       this.$refs[formName].validate(valide => {
         // 只有校验通过，才执行函数
         if (valide) {

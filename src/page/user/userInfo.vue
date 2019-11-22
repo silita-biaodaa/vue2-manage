@@ -137,7 +137,7 @@
             >
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
-            <button @click="searchData" class="fl-left">搜索</button>
+            <button @click="searchData" class="fl-left cp">搜索</button>
           </el-col>
         </el-row>
       </div>

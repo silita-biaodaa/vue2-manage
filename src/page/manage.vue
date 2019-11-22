@@ -28,11 +28,9 @@
           </div>
           <!-- <i class="myicon myicon-menu toggle-btn" @click="toggleCollapse"></i> -->
         </div>
-          <el-menu-item :index="home" @click="jumpHome" @open="jumpHome">
-            <template slot="title">
-              <i class="el-icon-s-home"></i>
-              <span>首页</span>
-            </template>
+          <el-menu-item index="1" @click="jumpHome" @open="jumpHome">
+            <i class="el-icon-s-home"></i>
+            <span slot="title">首页</span>
           </el-menu-item>
           <el-submenu v-for="(submenu,i) in meunList" :key="i" :index="''+submenu.id">
             <template slot="title">
@@ -47,11 +45,9 @@
               @click="jump(item.url,a,i, item.optiond,item.id)"
             >{{item.title}}</el-menu-item>
           </el-submenu>
-          <el-menu-item :index="passWord" @click="jumpPassWord">
-            <template slot="title">
-              <i class="el-icon-lock"></i>
-              <span>修改密码</span>
-            </template>
+          <el-menu-item index="2" @click="jumpPassWord">
+            <i class="el-icon-lock"></i>
+            <span slot="title">修改密码</span>
           </el-menu-item>
           <!-- <el-submenu index="2">
             <template slot="title">
@@ -237,7 +233,7 @@ export default {
       if (a != null) {
         return a;
       } else {
-        return "0";
+        return "1";
       }
     },
     gethcsubmenuKey() {

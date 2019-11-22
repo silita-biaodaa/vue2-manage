@@ -1,7 +1,7 @@
 <template>
   <div class="dialog userPopup" v-if="showMask">
     <el-form :model="ruleForm" ref="ruleForm">
-      <div class="dialog-container pb40">
+      <div class="dialog-container pb30">
         <div class="dfrcb ft20 dialog_top">
           <div class="dialog-title ml30">查看详情</div>
           <i class="el-icon-close fs14 mr30"></i>
@@ -133,8 +133,8 @@
             <i class="iconfont icon-close"></i>
           </div>
         </div>
-        <el-form-item class="keep_btn">
-          <div class="popup_btn mt30">
+        <el-form-item class="keep_btn mt20">
+          <div class="popup_btn">
             <div v-if="allow || feed" class="fs18 color-999 cp" @click="closeMask">取消</div>
             <button
               type="primary"
@@ -397,7 +397,7 @@ export default {
   z-index: 10;
   .dialog-container {
     width: 1180px;
-    height: 800px;
+    height: 770px;
     background: @whiteColor;
     position: absolute;
     top: 50%;

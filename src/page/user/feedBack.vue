@@ -105,7 +105,7 @@
           >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
-          <button type="primary" class="ml10 search" @click="searchData">搜索</button>
+          <button type="primary" class="ml10 search cp" @click="searchData">搜索</button>
         </el-col>
       </el-row>
     </div>
