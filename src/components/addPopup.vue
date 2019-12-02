@@ -1,11 +1,11 @@
 <template>
   <div class="dialog" v-if="showMask">
-    <div class="dialog-container">
-      <div class="dfrcb ft20 mb10">
-        <div style="margin: 0 auto;">新增账号</div>
-        <i class="el-icon-close" @click="hideMask"></i>
+    <div class="dialog-container info_form">
+      <div class="dfrcb ft20 pl30 pr30 dialog_top">
+        <div class="fs16 color-150 fw600">新增账号</div>
+        <i class="el-icon-close fs16 cp" @click="hideMask"></i>
       </div>
-      <div @keyup.enter="submitForm('ruleForm')">
+      <div @keyup.enter="submitForm('ruleForm')" class="dialog_form fs16 color-150">
         <el-form
           :label-position="labelPosition"
           label-width="100px"
@@ -25,19 +25,20 @@
           <el-form-item label="岗位：" prop="jobs">
             <el-input v-model="ruleForm.jobs" placeholder="请输入岗位"></el-input>
           </el-form-item>
-          <el-row type="flex">
-            <el-col :span="4" class="role_list">
-              角色：
-              <el-select v-model="desc" class="ml10">
-                <el-option
-                  v-for="item in role"
-                  :key="item.rid"
-                  :label="item.desc"
-                  :value="item.desc"
-                ></el-option>
-              </el-select>
-            </el-col>
-          </el-row>
+          <el-form-item label="角色：">
+            <el-row type="flex">
+              <el-col :span="4" class="role_list">
+                <el-select v-model="desc">
+                  <el-option
+                    v-for="item in role"
+                    :key="item.rid"
+                    :label="item.desc"
+                    :value="item.desc"
+                  ></el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+          </el-form-item>
           <el-form-item class="popup_form_btn pl20">
             <div class="popup_btn color-fff mb20" @click="submitForm('ruleForm')">保存</div>
           </el-form-item>
@@ -205,15 +206,23 @@ export default {
   background: rgba(0, 0, 0, 0.6);
   z-index: 10;
   .dialog-container {
-    width: 500px;
-    background: #eeeeee;
+    width:632px;
+    height:536px;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 21px 0px rgba(0,0,0,0.5);
+    border-radius:12px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     position: relative;
-    padding: 20px;
-    border-radius: 10px;
+    .dialog_top {
+      height: 66px;
+      border-bottom: 1px solid #dddfe4;
+    }
+    .dialog_form {
+      padding: 30px 60px 0 50px;
+    }
     .popup_form {
       .el-form-item__content {
         margin-left: 0 !important;
@@ -221,10 +230,12 @@ export default {
     }
   }
   .popup_btn {
-    background-color: #409eff;
-    width: 100%;
+    background-color: @mainColor;
+    width: 128px;
+    height: 40px;
+    border-radius: 20px;
     text-align: center;
-    margin-right: 20px;
+    margin: 0 auto;
     cursor: pointer;
   }
   .el-form-item {
@@ -235,8 +246,10 @@ export default {
     height: 100%;
     font-size: 14px;
     color: #606266;
-    padding-left: 45px;
     margin-bottom: 22px;
+    .el-select {
+      width: 100%;
+    }
   }
   .popup_form_btn {
     width: 60%;

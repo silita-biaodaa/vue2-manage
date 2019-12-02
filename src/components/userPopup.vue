@@ -1,6 +1,6 @@
 <template>
   <div class="dialog userPopup" v-if="showMask">
-    <el-form :model="ruleForm" ref="ruleForm">
+    <el-form :model="ruleForm" ref="ruleForm" v-if="showMask">
       <div class="dialog-container pb30">
         <div class="dfrcb ft20 dialog_top">
           <div class="dialog-title ml30">查看详情</div>
@@ -249,9 +249,7 @@ export default {
       });
     },
     sendDays() {
-      console.info('el-message-box',document.getElementsByClassName('.el-message-box'));
       const h = this.$createElement;
-      console.info('h0',h);
       // 置空备注
       //自动聚焦
       if (this.$parent.activeUser) {
@@ -358,7 +356,7 @@ export default {
     },
     headClass() {
       return "text-align: center;background:#DDDFE4;color: #000000";
-    }
+    },
   },
   mounted() {
     this.showMask = this.value;

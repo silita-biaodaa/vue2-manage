@@ -1,8 +1,8 @@
 <template>
-  <div class="adminRecord">
-    <div class="mb30">
+  <div class="adminRecord bg-fff">
+    <div class="mb30 adminRecord_top pl30 pr30">
       <el-row type="flex" class="row-bg" justify="space-between" :span="24">
-        <el-col :span="4" class="ft16">
+        <el-col :span="4" class="fs16 color-150 fw600">
           操作：
           <el-select v-model="value" style="width: 60%" @change="changetable">
             <el-option
@@ -24,67 +24,67 @@
           >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
-          <el-button type="primary" class="fl-left" @click="searchData">查询</el-button>
+          <button type="primary" class="fl-left color-fff fs16" @click="searchData">查询</button>
         </el-col>
       </el-row>
     </div>
-    <el-row class="public_table_list">
-      <el-col :span="24">
-        <el-table class="public_table" :data="tableData">
-          <el-table-column label="序号" align="center" type="index"></el-table-column>
-          <el-table-column label="操作时间" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.optTime }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="姓名" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.realName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="部门" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.department }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="岗位" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.post }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.optType }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="详情" align="center">
-            <template slot-scope="scope">
-              <div class="text-l">
+    <div class="bg-fff pb20 pl30 pr30">
+      <el-row>
+        <el-col :span="24">
+          <el-table border :data="tableData" :header-cell-style="headClass">
+            <el-table-column label="序号" align="center" type="index"></el-table-column>
+            <el-table-column label="操作时间" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.optTime }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="姓名" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.realName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="部门" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.department }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="岗位" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.post }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.optType }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="详情" align="center">
+              <template slot-scope="scope">
                 <span>{{ scope.row.optDesc }}</span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="用户" align="center">
-            <template slot-scope="scope">
-              <div
-                class="color-409 user_info"
-                @click="openMask(scope.$index, scope.row)"
-              >{{ scope.row.operand }}</div>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
-    </el-row>
-    <div class="block pl50 mt30">
-      <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="1"
-        :page-sizes="[15, 30, 45, 60]"
-        :page-size="15"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-      ></el-pagination>
+              </template>
+            </el-table-column>
+            <el-table-column label="用户" align="center">
+              <template slot-scope="scope">
+                <div
+                  class="color-224 user_info dfcc"
+                  @click="openMask(scope.$index, scope.row)"
+                ><img src="../../assets/img/user_img.png" alt=""><span class="ml10">{{ scope.row.operand }}</span></div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+      <div class="block pl50 mt30">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="1"
+          :page-sizes="[15, 30, 45, 60]"
+          :page-size="15"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </div>
     </div>
     <jlPopup
       :showMask="true"
@@ -192,6 +192,9 @@ export default {
       if (this.firm == "") {
         this.operateList();
       }
+    },
+    headClass() {
+      return "text-align: center;background:#DDDFE4;color: #000000;";
     }
   },
   created() {
@@ -202,6 +205,19 @@ export default {
 <style lang="less" scoped>
 @import "../../style/mixin";
 .adminRecord {
+  height: 100%;
+  width: 100%;
+  .adminRecord_top {
+    height: 88px;
+    line-height: 88px;
+    border-bottom: 1px solid #DDDFE4;
+    .fl-left {
+      height: 48px;
+      width: 64px;
+      background-color: @mainColor;
+      margin-left: 35px;
+    }
+  }
   .fl-right {
     text-align: right;
     .el-button {
@@ -210,6 +226,9 @@ export default {
   }
   .user_info {
     cursor: pointer;
+    span {
+      border-bottom: 1px solid @fontColor;
+    }
   }
 }
 </style>

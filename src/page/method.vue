@@ -73,8 +73,6 @@
         /*  mounted() {
               this.loadNode();
           },*/
-
-
         watch: {
             filterText(val) {
                 this.$refs.tree.filter(val);

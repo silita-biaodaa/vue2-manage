@@ -13,7 +13,7 @@ export default {};
 @import "./style/mixin";
 @border-color: #ffffff;
 @color: #dddfe4;
-@font_Color: #B6B6B6;
+@font_Color: #b6b6b6;
 @inputHeight: 48px;
 .el-header {
   min-width: 1330px;
@@ -91,11 +91,11 @@ input[type="password"]:focus {
 .el-range-editor.is-active:hover {
   border-color: @color !important;
 }
-.el-input--prefix .el-input__inner{
-  background-color: #F3F5F9;
+.el-input--prefix .el-input__inner {
+  background-color: #f3f5f9;
 }
 .el-input .el-input__inner {
-  background-color: #F3F5F9;
+  background-color: #f3f5f9;
 }
 .dialog {
   tr {
@@ -156,98 +156,96 @@ input[type="password"]:focus {
     }
   }
 }
-// .userPopup {
-  .msgBox {
-    width: 632px !important;
-    height: 470px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    box-shadow: 0px 0px 21px 0px rgba(0, 0, 0, 0.5);
-    border-radius: 12px;
-    p {
-      padding-top: 80px;
-      div {
-        text-align: center;
-        color: @mainColor;
-        font-size: 16px;
-        margin-bottom: 24px;
-      }
-    }
-    .el-button {
-      border: none !important;
-    }
-    .el-message-box__header {
-      padding: 0;
-    }
-    .el-message-box__content {
-      padding: 0;
-      color: #150000 !important;
-    }
-    .el-message-box__btns {
-      padding: 0;
+.msgBox {
+  width: 632px !important;
+  height: 470px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-shadow: 0px 0px 21px 0px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  p {
+    padding-top: 80px;
+    div {
       text-align: center;
-      margin-top: 150px;
-    }
-    .el-button--small,
-    .el-button--small.is-round {
-      padding: 0;
-      font-size: 18px;
-      color: @subContentColor;
-      margin-right: 30px;
-    }
-    .el-button--primary {
-      background-color: none !important;
-      border-color: none !important;
-      width: 128px;
-      height: 40px;
-      background: rgba(56, 56, 56, 1);
-      border-radius: 20px;
-    }
-    .el-button--primary:focus,
-    .el-button--primary:hover {
-      background: rgba(56, 56, 56, 1) !important;
-      border-color: none !important;
-      color: @subContentColor !important;
-    }
-    .el-message-box__headerbtn:focus .el-message-box__close,
-    .el-message-box__headerbtn:hover .el-message-box__close {
-      color: #909399;
-    }
-    .el-message-box .el-button:focus,
-    .el-message-box .el-button:hover {
-      background: @mainColor !important;
-    }
-    .el-button:focus,
-    .el-button:hover {
-      border-color: none !important;
-      color: @subContentColor !important;
-    }
-    .el-message-box__title {
-      height: 66px;
-      line-height: 66px;
-      border-bottom: 1px solid @color;
-      span {
-        font-size: 16px;
-        margin-left: 30px;
-        color: #150000;
-        font-weight: 700;
-      }
-    }
-    span {
-      font-size: 15px;
-    }
-    input {
-      border: 1px solid #ddd;
-      height: 48px;
-      width: 94px;
-      border-radius: 6px;
-      margin: 0 5px;
-      margin-left: 202px;
-      background-color: @color;
+      color: @mainColor;
+      font-size: 16px;
+      margin-bottom: 24px;
     }
   }
-// }
+  .el-button {
+    border: none !important;
+  }
+  .el-message-box__header {
+    padding: 0;
+  }
+  .el-message-box__content {
+    padding: 0;
+    color: #150000 !important;
+  }
+  .el-message-box__btns {
+    padding: 0;
+    text-align: center;
+    margin-top: 150px;
+  }
+  .el-button--small,
+  .el-button--small.is-round {
+    padding: 0;
+    font-size: 18px;
+    color: @subContentColor;
+    margin-right: 30px;
+  }
+  .el-button--primary {
+    background-color: none !important;
+    border-color: none !important;
+    width: 128px;
+    height: 40px;
+    background: rgba(56, 56, 56, 1);
+    border-radius: 20px;
+  }
+  .el-button--primary:focus,
+  .el-button--primary:hover {
+    background: rgba(56, 56, 56, 1) !important;
+    border-color: none !important;
+    color: @subContentColor !important;
+  }
+  .el-message-box__headerbtn:focus .el-message-box__close,
+  .el-message-box__headerbtn:hover .el-message-box__close {
+    color: #909399;
+  }
+  .el-message-box .el-button:focus,
+  .el-message-box .el-button:hover {
+    background: @mainColor !important;
+  }
+  .el-button:focus,
+  .el-button:hover {
+    border-color: none !important;
+    color: @subContentColor !important;
+  }
+  .el-message-box__title {
+    height: 66px;
+    line-height: 66px;
+    border-bottom: 1px solid @color;
+    span {
+      font-size: 16px;
+      margin-left: 30px;
+      color: #150000;
+      font-weight: 700;
+    }
+  }
+  span {
+    font-size: 15px;
+  }
+  input {
+    border: 1px solid #ddd;
+    height: 48px;
+    width: 94px;
+    border-radius: 6px;
+    margin: 0 5px;
+    margin-left: 202px;
+    background-color: @color;
+  }
+}
 .evaluation,
 .mainQualification,
 .level,
@@ -271,7 +269,8 @@ input[type="password"]:focus {
     }
   }
 }
-.passWord {
+.passWord,
+.info_form {
   .el-card__header {
     padding: 20px 30px !important;
   }
@@ -292,18 +291,13 @@ input[type="password"]:focus {
     }
   }
 }
+.el-form-item__label {
+  font-size: 16px !important;
+  color: #150000 !important;
+}
 .el-menu--vertical {
   .el-menu-item {
     background-color: @mainColor !important;
-  }
-}
-.home {
-   .el-dropdown-menu__item {
-    padding: 0 !important;
-    .button {
-      width: 96px !important;
-      height: 36px !important;
-    }
   }
 }
 </style>

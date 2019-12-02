@@ -199,7 +199,6 @@ export default {
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse;
-      console.info('this.isCollapse',this.isCollapse);
     },
     logout() {
       localStorage.removeItem("Authorization");

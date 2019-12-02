@@ -1,6 +1,6 @@
 <template>
-  <div class="adminAccount">
-    <el-row :span="24" type="flex" justify="space-between" align="middle" class="adminAccount_top">
+  <div class="adminAccount bg-fff">
+    <el-row :span="24" type="flex" justify="space-between" align="middle" class="adminAccount_top pl30 pr30 mb30">
       <el-col :span="12">
         <el-input
           placeholder="请输入手机号码"
@@ -12,78 +12,83 @@
         >
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
-        <el-button type="primary" class="fl-left" @click="searchData">查询</el-button>
+        <button type="primary" class="fl-left color-fff fs16 cp" @click="searchData">查询</button>
       </el-col>
-      <el-col :span="8" v-show="isAllows">
-        <span @click="addAccount">添加账号</span>
-      </el-col>
-    </el-row>
-    <el-row class="public_table_list">
-      <el-col :span="24">
-        <el-table class="public_table" :data="tableData">
-          <el-table-column label="序号" align="center" type="index"></el-table-column>
-          <el-table-column label="姓名" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.realName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="手机号" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.phone }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="部门" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.department }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="岗位" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.post }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="角色" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.desc }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="注册时间" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.created }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center">
-            <template slot-scope="scope">
-              <span class="handle_authority" @click="editRole(scope.$index, scope.row)" v-show="isAllows">编辑</span>
-              <span
-                class="handle_cancel"
-                @click="openMask(scope.$index, scope.row)"
-                v-show="isAllows"
-              >{{ scope.row.locks }}</span>
-              <span class="handle_set" @click="setWord(scope.$index, scope.row)" v-show="isAllows">重置为初始密码</span>
-            </template>
-          </el-table-column>
-        </el-table>
+      <el-col :span="2" v-show="isAllows">
+        <div class="fs14 color-224 drc cp">
+          <img src="../../assets/img/add_img.png" alt />
+          <span @click="addAccount" class="ml10">添加账号</span>
+        </div>
       </el-col>
     </el-row>
-    <div class="block pl50 mt30">
-      <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="1"
-        :page-sizes="[15, 30, 45, 60]"
-        :page-size="15"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-      ></el-pagination>
+    <div class="bg-fff pb20 pl30 pr30">
+      <el-row>
+        <el-col :span="24">
+          <el-table class="public_table" border :data="tableData" :header-cell-style="headClass">
+            <el-table-column label="序号" align="center" type="index"></el-table-column>
+            <el-table-column label="姓名" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.realName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="手机号" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.phone }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="部门" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.department }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="岗位" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.post }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="角色" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.desc }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="注册时间" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.created }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+              <template slot-scope="scope">
+                <span class="handle_authority" @click="editRole(scope.$index, scope.row)" v-show="isAllows">编辑</span>
+                <span
+                  class="handle_cancel"
+                  @click="openMask(scope.$index, scope.row)"
+                  v-show="isAllows"
+                >{{ scope.row.locks }}</span>
+                <span class="handle_set" @click="setWord(scope.$index, scope.row)" v-show="isAllows">重置为初始密码</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+      <div class="block pl50 mt30">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="1"
+          :page-sizes="[15, 30, 45, 60]"
+          :page-size="15"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </div>
     </div>
     <div class="dialog" v-show="edit">
       <div class="dialog-container">
-        <div class="dfrcb ft20 mb10">
-          <div style="margin: 0 auto;">编辑账号</div>
-          <i class="el-icon-close" @click="closeMask"></i>
+        <div class="dfrcb pl30 pr30 dialog_top">
+          <div class="fs16 color-150 fw600">编辑账号</div>
+          <i class="el-icon-close fs16 cp" @click="closeMask"></i>
         </div>
-        <div @keyup.enter="submitFormEdit('ruleFormEdit')">
+        <div @keyup.enter="submitFormEdit('ruleFormEdit')" class="dialog_form fs16 color-150">
           <el-form
             :label-position="labelPosition"
             label-width="100px"
@@ -108,19 +113,20 @@
             <el-form-item label="岗位：" prop="jobs">
               <el-input v-model="ruleFormEdit.jobs" placeholder="请输入岗位"></el-input>
             </el-form-item>
-            <el-row type="flex">
-              <el-col :span="4" class="role_list">
-                角色：
-                <el-select v-model="desc" class="ml10">
-                  <el-option
-                    v-for="item in role"
-                    :key="item.rid"
-                    :label="item.desc"
-                    :value="item.desc"
-                  ></el-option>
-                </el-select>
-              </el-col>
-            </el-row>
+            <el-form-item label="角色：">
+              <el-row type="flex">
+                <el-col :span="4" class="role_list">
+                  <el-select v-model="desc">
+                    <el-option
+                      v-for="item in role"
+                      :key="item.rid"
+                      :label="item.desc"
+                      :value="item.desc"
+                    ></el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+            </el-form-item>
             <el-form-item class="popup_form_btn pl20">
               <div class="popup_btn color-fff" @click="submitFormEdit('ruleFormEdit')">保存</div>
             </el-form-item>
@@ -366,6 +372,9 @@ export default {
           return this.accountList();
         }, 100);
       }
+    },
+    headClass() {
+      return "text-align: center;background:#DDDFE4;color: #000000;";
     }
   },
   created() {
@@ -378,17 +387,23 @@ export default {
 <style lang="less" scoped>
 @import "../../style/mixin";
 .adminAccount {
+  width: 100%;
+  height: 100%;
   .adminAccount_top {
-    margin-bottom: 30px;
-    padding: 0 30px;
+    height: 88px;
+    line-height: 88px;
+    border-bottom: 1px solid #DDDFE4;
     .fl-left {
       margin-left: 30px;
+      height: 48px;
+      width: 64px;
+      background-color: @mainColor;
     }
     .el-col-8 {
       text-align: center;
       padding-right: 30px;
       span {
-        .sc(16px, #409eff);
+        .sc(16px, @fontColor);
         cursor: pointer;
       }
     }
@@ -396,8 +411,9 @@ export default {
   .handle_authority,
   .handle_cancel,
   .handle_set {
-    .sc(14px, #409eff);
+    .sc(14px, @fontColor);
     cursor: pointer;
+    border-bottom: 1px solid @fontColor;
   }
   .block {
     padding: 0 30px;
@@ -413,14 +429,23 @@ export default {
     z-index: 10;
     border-radius: 10px;
     .dialog-container {
-      width: 500px;
-      background: #eeeeee;
+      width:632px;
+      height:536px;
+      background:rgba(255,255,255,1);
+      box-shadow:0px 0px 21px 0px rgba(0,0,0,0.5);
+      border-radius:12px;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       position: relative;
-      padding: 20px;
+      .dialog_top {
+        height: 66px;
+        border-bottom: 1px solid #dddfe4;
+      }
+      .dialog_form {
+        padding: 30px 60px 0 50px;
+      }
       .popup_form {
         .el-form-item__content {
           margin-left: 0 !important;
@@ -428,10 +453,12 @@ export default {
       }
     }
     .popup_btn {
-      background-color: #409eff;
-      width: 100%;
+      background-color: @mainColor;
+      width: 128px;
+      height: 40px;
+      border-radius: 20px;
       text-align: center;
-      margin-right: 20px;
+      margin: 0 auto;
       cursor: pointer;
     }
     .el-form-item {
@@ -442,8 +469,10 @@ export default {
       height: 100%;
       font-size: 14px;
       color: #606266;
-      padding-left: 45px;
       margin-bottom: 22px;
+      .el-select {
+        width: 100%;
+      }
     }
     .popup_form_btn {
       width: 60%;

@@ -1,58 +1,63 @@
 <template>
-  <div class="adminRole">
-    <div class="mb30">
-      <el-row :span="24" type="flex" justify="space-between" align="middle" class="adminRole_top">
-        <el-col :span="8" class="ft14 text-l">
+  <div class="adminRole bg-fff">
+    <div class="mb30 adminRole_top pl30 pr30">
+      <el-row :span="24" type="flex" justify="space-between" align="middle">
+        <el-col :span="8" class="fs16 color-150 fw600 text-l">
           角色名称：
           <el-select v-model="desc" class="ml10" style="width: 60%" @change="changetable">
             <el-option v-for="item in role" :key="item.rid" :label="item.desc" :value="item.desc"></el-option>
           </el-select>
         </el-col>
-        <el-col :span="2">
-          <span @click="addRole">添加角色</span>
+        <el-col :span="3">
+          <div class="fs14 color-224 drc cp">
+            <img src="../../assets/img/add_img.png" alt />
+            <span @click="addRole" class="ml10">添加角色</span>
+          </div>
         </el-col>
       </el-row>
     </div>
-    <el-row class="public_table_list">
-      <el-col :span="24">
-        <el-table class="public_table" :data="tableData">
-          <el-table-column label="序号" align="center" type="index"></el-table-column>
-          <el-table-column label="角色名称" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.desc }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="创建时间" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.created }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center">
-            <template slot-scope="scope">
-              <span class="handle_authority" @click="editRole(scope.$index, scope.row)">编辑权限</span>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
-    </el-row>
-    <div class="block pl50 mt30">
-      <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="1"
-        :page-sizes="[15, 30, 45, 60]"
-        :page-size="15"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-      ></el-pagination>
+    <div class="bg-fff pb20 pl30 pr30">
+      <el-row>
+        <el-col :span="24">
+          <el-table border :data="tableData" :header-cell-style="headClass">
+            <el-table-column label="序号" align="center" type="index"></el-table-column>
+            <el-table-column label="角色名称" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.desc }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="创建时间" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.created }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+              <template slot-scope="scope">
+                <span class="handle_authority" @click="editRole(scope.$index, scope.row)">编辑权限</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+      <div class="block mt30">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="1"
+          :page-sizes="[15, 30, 45, 60]"
+          :page-size="15"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </div>
     </div>
     <div class="dialog" v-show="edit">
       <div class="dialog-container">
-        <div class="dfrcb ft20 mb10">
-          <div style="margin: 0 auto;">编辑权限</div>
-          <i class="el-icon-close" @click="closeMask"></i>
+        <div class="dfrcb ft20 pl30 pr30 dialog_top">
+          <div class="fs16 color-150 fw600">新增账号</div>
+          <i class="el-icon-close fs16 cp" @click="closeMask"></i>
         </div>
-        <div @keyup.enter="submitForm('ruleFormEdit')">
+        <div @keyup.enter="submitForm('ruleFormEdit')" class="dialog_form">
           <el-form
             :label-position="labelPosition"
             label-width="100px"
@@ -60,27 +65,29 @@
             :rules="rulesEdit"
             ref="ruleFormEdit"
           >
-            <el-row type="flex">
-              <el-col class="ft14 color-60 ml20">
-                角色名称：
-                <el-select
-                  v-model="rolePower"
-                  class="ml10"
-                  style="width: 60%"
-                  @change="changetable"
-                >
-                  <el-option
-                    v-for="item in role"
-                    :key="item.rid"
-                    :label="item.desc"
-                    :value="item.desc"
-                  ></el-option>
-                </el-select>
-              </el-col>
-            </el-row>
+            <div class="form_top">
+              <el-row type="flex">
+                <el-col class="fs16 color-150 ml20">
+                  角色名称：
+                  <el-select
+                    v-model="rolePower"
+                    class="ml10"
+                    style="width: 60%"
+                    @change="changetable"
+                  >
+                    <el-option
+                      v-for="item in role"
+                      :key="item.rid"
+                      :label="item.desc"
+                      :value="item.desc"
+                    ></el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
             <el-form-item class="popup_form">
               <div class="pl20">
-                <div class="popup_title">权限:</div>
+                <div class="fs16 color-150">权限:</div>
                 <div class="bg-fff popup_scollbar">
                   <el-tree
                     :data="powerData"
@@ -122,8 +129,8 @@
                 </div>
               </div>
             </el-form-item>
-            <el-form-item class="popup_form_btn pl20">
-              <div class="popup_btn color-fff" @click="submitForm('ruleFormEdit')">保存</div>
+            <el-form-item class="popup_form_btn">
+              <div class="popup_btn text-c color-fff" @click="submitForm('ruleFormEdit')">保存</div>
             </el-form-item>
           </el-form>
         </div>
@@ -355,6 +362,9 @@ export default {
           return false;
         }
       });
+    },
+    headClass() {
+      return "text-align: center;background:#DDDFE4;color: #000000;";
     }
   },
   created() {
@@ -367,16 +377,19 @@ export default {
 <style lang="less" scoped>
 @import "../../style/mixin";
 .adminRole {
+  height: 100%;
+  width: 100%;
   .adminRole_top {
-    margin-bottom: 5px;
-    padding: 0 30px;
+    height: 88px;
+    line-height: 88px;
+    border-bottom: 1px solid #dddfe4;
     .fl-left {
       margin-left: 30px;
     }
     .el-col-2 {
       padding-right: 30px;
       span {
-        .sc(16px, #409eff);
+        .sc(16px, @fontColor);
         cursor: pointer;
       }
     }
@@ -391,8 +404,9 @@ export default {
   .handle_authority,
   .handle_cancel,
   .handle_set {
-    .sc(14px, #409eff);
+    .sc(14px, @fontColor);
     cursor: pointer;
+    border-bottom: 1px solid @fontColor;
   }
   .block {
     padding: 0 30px;
@@ -407,40 +421,51 @@ export default {
     background: rgba(0, 0, 0, 0.6);
     z-index: 10;
     .dialog-container {
-      width: 500px;
-      background: #eeeeee;
-      position: absolute;
+      width: 920px;
+      height: 769px;
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0px 0px 21px 0px rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       position: relative;
-      padding: 20px;
-      .popup_form {
-        .el-form-item__content {
-          margin-left: 0 !important;
-        }
-        .popup_title {
-          color: #606266;
-        }
+      .dialog_top {
+        height: 66px;
+        border-bottom: 1px solid #dddfe4;
       }
-      .popup_scollbar {
-        background-color: #ffffff;
-        .el-tree {
-          max-height: 400px;
+      .dialog_form {
+        padding: 0 60px;
+        .form_top {
+          height: 96px;
+          line-height: 96px;
+          border-bottom: 1px solid #DDDFE4;
         }
-        .custom-tree-node {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          font-size: 14px;
-          padding-right: 8px;
+        .popup_form {
+          border-bottom: 1px solid #DDDFE4;
+          .el-form-item__content {
+            margin-left: 0 !important;
+          }
         }
-        .select_power {
-          display: inline-block;
-          width: 12px;
-          height: 12px;
-          border-radius: 6px;
+        .popup_scollbar {
+          background-color: #ffffff;
+          .el-tree {
+            max-height: 500px;
+          }
+          .custom-tree-node {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            padding-right: 8px;
+          }
+          .select_power {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 6px;
+          }
         }
       }
     }
@@ -448,23 +473,25 @@ export default {
       border: 1px solid #ddd;
     }
     .popup_scollbar {
-      max-height: 500px;
+      height: 480px;
+      min-height: 480px;
       overflow-x: hidden;
       overflow-y: scroll;
     }
     .popup_scollbar::-webkit-scrollbar {
       display: none;
     }
-    .popup_btn {
-      background-color: #409eff;
-      width: 100%;
-      text-align: center;
-      margin-right: 20px;
+    .popup_form_btn {
+      background-color: @mainColor;
+      width: 128px;
+      height: 40px;
+      border-radius: 20px;
+      margin: 0 auto;
       cursor: pointer;
     }
-    .el-form-item {
-      padding-right: 20px;
-    }
+    // .el-form-item {
+    //   padding-right: 20px;
+    // }
     .role_list {
       width: 100%;
       height: 100%;

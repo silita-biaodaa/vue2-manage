@@ -126,7 +126,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row class="pl20">
+      <el-row>
         <el-col :span="24">
           <el-table
             class="table"

@@ -283,7 +283,7 @@
               :label-position="labelPosition"
               label-width="100px"
             >
-              <el-form-item label="资质类别：" prop="qualType">
+              <el-form-item label="资质类别：" prop="qualType" label-width="120px">
                 <el-select v-model="ruleForm.qualType" @change="choseQual" placeholder="请选择资质类别">
                   <el-option
                     v-for="item in typeList"
@@ -293,19 +293,19 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="资质大类：" prop="quaBig">
+              <el-form-item label="资质大类：" prop="quaBig" label-width="120px">
                 <el-input v-model="ruleForm.quaBig" placeholder="请输入资质大类名称"></el-input>
               </el-form-item>
-              <el-form-item label="资质小类：" prop="quaTiny">
+              <el-form-item label="资质小类：" prop="quaTiny" label-width="120px">
                 <el-input v-model="ruleForm.quaTiny" placeholder="请输入资质小类名称"></el-input>
               </el-form-item>
-              <el-form-item label="资质名称：" prop="quaName">
+              <el-form-item label="资质名称：" prop="quaName" label-width="120px">
                 <el-input v-model="ruleForm.quaName" placeholder="请输入资质名称"></el-input>
               </el-form-item>
-              <el-form-item label="标准名称：" prop="benchName">
+              <el-form-item label="标准名称：" prop="benchName" label-width="120px">
                 <el-input v-model="ruleForm.benchName" placeholder="请输入资质标准名称"></el-input>
               </el-form-item>
-              <el-form-item label="等级类型：" prop="levelType">
+              <el-form-item label="等级类型：" prop="levelType" label-width="120px">
                 <el-select v-model="ruleForm.levelType" placeholder="请选择资质类型">
                   <el-option
                     v-for="item in levelsType"
@@ -315,7 +315,7 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="资质类型：" prop="bizType">
+              <el-form-item label="资质类型：" prop="bizType" label-width="120px">
                 <el-select v-model="ruleForm.bizType" placeholder="请选择资质类型">
                   <el-option
                     v-for="item in qualType"
