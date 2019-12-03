@@ -269,8 +269,6 @@ export default {
   ul {
     border-right: 1px solid #000000;
     min-width: 135px !important;
-    // li {
-    // }
   }
  ul,li {
     background-color: @mainColor !important;

@@ -248,12 +248,12 @@
               ></el-pagination>
             </div>
           </el-col>
-          <el-col class="changeLevel pt20 pl20 pb40" v-show="activeIndex == '2'">
+          <el-col class="changeLevel pt20 pl20 pb40" v-show="activeIndex == '2'" v-if="levelBtn">
             <ul class="fs14 color-000">
               <li v-for="(item,i) in levelData" :key="i" class="mb10">{{item.name}}</li>
             </ul>
             <div class="text-c levelBottomBtn cp"  @click="changeLevelBtn">
-              <button class="fs16 color-fff" plain v-if="levelBtn" v-show="isAllows">修改等级</button>
+              <button class="fs16 color-fff" plain v-show="isAllows">修改等级</button>
             </div>
           </el-col>
           <el-col class="changeMode pt20 pl20 pb40" v-show="activeIndex == '3'">
@@ -350,7 +350,7 @@
             :label-position="labelPosition"
             label-width="100px"
           >
-              <el-form-item label="资质类别：" prop="qualType">
+              <el-form-item label="资质类别：" prop="qualType" label-width="120px">
                 <el-select
                   v-model="ruleFormChange.qualType"
                   @change="choseQual"
@@ -364,19 +364,19 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="资质大类：" prop="quaBig">
+              <el-form-item label="资质大类：" prop="quaBig" label-width="120px">
                 <el-input class="form_ipt" v-model="ruleFormChange.quaBig"></el-input>
               </el-form-item>
-              <el-form-item label="资质小类：" prop="quaTiny">
+              <el-form-item label="资质小类：" prop="quaTiny" label-width="120px">
                 <el-input class="form_ipt" v-model="ruleFormChange.quaTiny"></el-input>
               </el-form-item>
-              <el-form-item label="资质名称：" prop="quaName">
+              <el-form-item label="资质名称：" prop="quaName" label-width="120px">
                 <el-input class="form_ipt" v-model="ruleFormChange.quaName"></el-input>
               </el-form-item>
-              <el-form-item label="标准名称：" prop="benchName">
+              <el-form-item label="标准名称：" prop="benchName" label-width="120px">
                 <el-input class="form_ipt" v-model="ruleFormChange.benchName"></el-input>
               </el-form-item>
-              <el-form-item label="等级类型：" prop="levelType">
+              <el-form-item label="等级类型：" prop="levelType" label-width="120px">
                 <el-select v-model="ruleFormChange.levelType" placeholder="请选择等级类型">
                   <el-option
                     v-for="item in levelsType"
@@ -386,7 +386,7 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="资质类型：" prop="bizType">
+              <el-form-item label="资质类型：" prop="bizType" label-width="120px">
                 <el-select v-model="ruleFormChange.bizType" placeholder="请选择资质类型">
                   <el-option
                     v-for="item in qualType"

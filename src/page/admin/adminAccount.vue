@@ -1,6 +1,12 @@
 <template>
   <div class="adminAccount bg-fff">
-    <el-row :span="24" type="flex" justify="space-between" align="middle" class="adminAccount_top pl30 pr30 mb30">
+    <el-row
+      :span="24"
+      type="flex"
+      justify="space-between"
+      align="middle"
+      class="adminAccount_top pl30 pr30 mb30"
+    >
       <el-col :span="12">
         <el-input
           placeholder="请输入手机号码"
@@ -26,45 +32,64 @@
         <el-col :span="24">
           <el-table class="public_table" border :data="tableData" :header-cell-style="headClass">
             <el-table-column label="序号" align="center" type="index"></el-table-column>
-            <el-table-column label="姓名" align="center">
+            <el-table-column label="姓名" align="center" width="180">
               <template slot-scope="scope">
                 <span>{{ scope.row.realName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="手机号" align="center">
+            <el-table-column label="手机号" align="center" width="180">
               <template slot-scope="scope">
                 <span>{{ scope.row.phone }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="部门" align="center">
+            <el-table-column label="部门" align="center" width="150">
               <template slot-scope="scope">
                 <span>{{ scope.row.department }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="岗位" align="center">
+            <el-table-column label="岗位" align="center" width="150">
               <template slot-scope="scope">
                 <span>{{ scope.row.post }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="角色" align="center">
+            <el-table-column label="角色" align="center" width="150">
               <template slot-scope="scope">
                 <span>{{ scope.row.desc }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="注册时间" align="center">
+            <el-table-column label="注册时间" align="center" width="180">
               <template slot-scope="scope">
                 <span>{{ scope.row.created }}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" align="center">
               <template slot-scope="scope">
-                <span class="handle_authority" @click="editRole(scope.$index, scope.row)" v-show="isAllows">编辑</span>
-                <span
-                  class="handle_cancel"
-                  @click="openMask(scope.$index, scope.row)"
-                  v-show="isAllows"
-                >{{ scope.row.locks }}</span>
-                <span class="handle_set" @click="setWord(scope.$index, scope.row)" v-show="isAllows">重置为初始密码</span>
+                <div class="dfcc user_info">
+                  <div
+                    class="color-224 dfcc cp"
+                    @click="editRole(scope.$index, scope.row)"
+                    v-show="isAllows"
+                  >
+                    <img src="../../assets/img/add_img.png" alt />
+                    <span class="handle_authority ml10">编辑</span>
+                  </div>
+                  <div
+                    class="color-224 dfcc ml30 cp"
+                    @click="openMask(scope.$index, scope.row)"
+                    v-show="isAllows"
+                  >
+                    <img src="../../assets/img/open_img.png" alt />
+                    <span class="handle_cancel ml10">{{ scope.row.locks }}</span>
+                  </div>
+                  <div
+                    class="color-224 dfcc ml30 cp"
+                    @click="setWord(scope.$index, scope.row)"
+                    v-show="isAllows"
+                  >
+                    <img src="../../assets/img/set_img.png" alt />
+                    <span class="handle_set ml10">重置为初始密码</span>
+                  </div>
+                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -138,9 +163,15 @@
   </div>
 </template>
 <script>
-import { manageList, manageLock, setPassWord, roleAll, updateAccount } from "@/api/index";
+import {
+  manageList,
+  manageLock,
+  setPassWord,
+  roleAll,
+  updateAccount
+} from "@/api/index";
 import { timestampToTime } from "../../public";
-import { fail } from 'assert';
+import { fail } from "assert";
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -178,7 +209,7 @@ export default {
         jobs: [{ message: "请输入岗位", trigger: "blur" }]
       },
       labelPosition: "right",
-      isAllows: null, //接受路由可操作的值;
+      isAllows: null //接受路由可操作的值;
     };
   },
   methods: {
@@ -219,9 +250,8 @@ export default {
         `是否${row.locks == "未锁定" ? "锁定" : "解锁"}该管理员账号？`,
         "提示",
         {
-          confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          confirmButtonText: "确定",
         }
       )
         .then(() => {
@@ -296,10 +326,9 @@ export default {
         password: "12345678",
         phone: row.phone
       };
-      this.$confirm(`是否重置该管理员密码`, "提示", {
+      this.$confirm(`是否重置该管理员密码?`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
       })
         .then(() => {
           setPassWord(params).then(res => {
@@ -326,13 +355,18 @@ export default {
         if (valid) {
           const { realName, desc, department, post } = this.roleList;
           const { name, depart, jobs } = this.ruleFormEdit;
-          if(department == undefined || post == undefined) {
-            this.roleList.department="",this.roleList.post="";
+          if (department == undefined || post == undefined) {
+            (this.roleList.department = ""), (this.roleList.post = "");
           }
           //没改时点击保存按钮筛选;
-          if(realName == name && desc == this.desc && this.roleList.department == depart && this.roleList.post == jobs) {
+          if (
+            realName == name &&
+            desc == this.desc &&
+            this.roleList.department == depart &&
+            this.roleList.post == jobs
+          ) {
             this.edit = false;
-          }else {
+          } else {
             for (let i of this.role) {
               if (this.desc == i.desc) {
                 this.id = i.rid;
@@ -345,10 +379,10 @@ export default {
               department: depart,
               post: jobs,
               rid: this.id,
-              uid: this.roleList.uid,
+              uid: this.roleList.uid
             };
             updateAccount(params).then(res => {
-              if(res.code == '1') {
+              if (res.code == "1") {
                 this.$message({
                   type: "success",
                   message: "编辑成功!"
@@ -358,8 +392,8 @@ export default {
                 setTimeout(() => {
                   return this.accountList();
                 }, 100);
-              }else {
-                console.info('编辑账号接口不通');
+              } else {
+                console.info("编辑账号接口不通");
               }
             });
           }
@@ -392,7 +426,7 @@ export default {
   .adminAccount_top {
     height: 88px;
     line-height: 88px;
-    border-bottom: 1px solid #DDDFE4;
+    border-bottom: 1px solid #dddfe4;
     .fl-left {
       margin-left: 30px;
       height: 48px;
@@ -408,11 +442,13 @@ export default {
       }
     }
   }
+  .user_info {
+    min-width: 355px;
+  }
   .handle_authority,
   .handle_cancel,
   .handle_set {
     .sc(14px, @fontColor);
-    cursor: pointer;
     border-bottom: 1px solid @fontColor;
   }
   .block {
@@ -429,11 +465,11 @@ export default {
     z-index: 10;
     border-radius: 10px;
     .dialog-container {
-      width:632px;
-      height:536px;
-      background:rgba(255,255,255,1);
-      box-shadow:0px 0px 21px 0px rgba(0,0,0,0.5);
-      border-radius:12px;
+      width: 632px;
+      height: 536px;
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0px 0px 21px 0px rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
       position: absolute;
       top: 50%;
       left: 50%;

@@ -97,6 +97,10 @@ input[type="password"]:focus {
 .el-input .el-input__inner {
   background-color: #f3f5f9;
 }
+.el-message-box .el-button:focus,
+  .el-message-box .el-button:hover {
+    background: none !important;
+  }
 .dialog {
   tr {
     border-top-color: @border-color;
@@ -156,16 +160,20 @@ input[type="password"]:focus {
     }
   }
 }
-.msgBox {
+.el-message-box {
   width: 632px !important;
-  height: 470px;
+  height: 398px;
   display: flex;
   flex-direction: row;
   align-items: center;
   box-shadow: 0px 0px 21px 0px rgba(0, 0, 0, 0.5);
   border-radius: 12px;
+  padding-bottom: 0 !important;
   p {
     padding-top: 80px;
+    text-align: center;
+    color: @mainColor;
+    font-size: 16px;
     div {
       text-align: center;
       color: @mainColor;
@@ -186,7 +194,7 @@ input[type="password"]:focus {
   .el-message-box__btns {
     padding: 0;
     text-align: center;
-    margin-top: 150px;
+    margin-top: 142px;
   }
   .el-button--small,
   .el-button--small.is-round {
@@ -213,14 +221,11 @@ input[type="password"]:focus {
   .el-message-box__headerbtn:hover .el-message-box__close {
     color: #909399;
   }
-  .el-message-box .el-button:focus,
-  .el-message-box .el-button:hover {
-    background: @mainColor !important;
-  }
   .el-button:focus,
   .el-button:hover {
     border-color: none !important;
     color: @subContentColor !important;
+    background-color: none !important;
   }
   .el-message-box__title {
     height: 66px;
@@ -244,6 +249,24 @@ input[type="password"]:focus {
     margin: 0 5px;
     margin-left: 202px;
     background-color: @color;
+  }
+}
+.msgBox {
+  height: 470px !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-shadow: 0px 0px 21px 0px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  p {
+    padding-top: 80px;
+    text-align: left;
+    div {
+      text-align: center;
+      color: @mainColor;
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
   }
 }
 .evaluation,

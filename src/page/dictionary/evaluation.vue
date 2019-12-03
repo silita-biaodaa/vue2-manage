@@ -182,7 +182,7 @@
                 v-model="ruleForm.name"
               ></el-input>
             </el-form-item>
-            <el-form-item label="评标办法别名:" prop="name" v-if="showAlias" label-width="120px" class="dialog_form">
+            <el-form-item label="评标办法别名:" prop="name" v-if="showAlias" label-width="140px" class="dialog_form">
               <el-input
                 placeholder="请输入需要增加的评标办法别名"
                 clearable
@@ -215,7 +215,7 @@
             <el-form-item label="评标办法:" prop="name" v-if="changeMask" class="dialog_form">
               <el-input clearable v-model="ruleFormChange.name"></el-input>
             </el-form-item>
-            <el-form-item label="评标办法别名:" prop="name" v-if="changeAlias" label-width="120px" class="dialog_form">
+            <el-form-item label="评标办法别名:" prop="name" v-if="changeAlias" label-width="140px" class="dialog_form">
               <el-input clearable v-model="ruleFormChange.name"></el-input>
             </el-form-item>
             <el-form-item class="text-c handle_btn">

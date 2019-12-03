@@ -68,7 +68,7 @@
                 <div
                   class="color-224 user_info dfcc"
                   @click="openMask(scope.$index, scope.row)"
-                ><img src="../../assets/img/user_img.png" alt=""><span class="ml10">{{ scope.row.operand }}</span></div>
+                ><img src="../../assets/img/user_img.png" alt="" :class="{'hide':scope.row.operand == ''}"><span class="ml10">{{ scope.row.operand }}</span></div>
               </template>
             </el-table-column>
           </el-table>

@@ -351,7 +351,6 @@ export default {
         this.$confirm("您已处理过该信息", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
         })
           .then(() => {})
           .catch(() => {
@@ -361,10 +360,9 @@ export default {
             });
           });
       } else {
-        this.$confirm(`确认本条信息已处理`, "提示", {
+        this.$confirm(`确认本条信息已处理?`, "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
         })
           .then(() => {
             operateState({ id: row.id, state: row.state == "1" ? 2 : "" }).then(

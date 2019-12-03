@@ -2,7 +2,7 @@
   <div class="dialog" v-if="showMask">
     <div class="dialog-container">
       <div class="dfrcb ft20 pl30 pr30 dialog_top">
-        <div class="fs16 color-150 fw600">新增账号</div>
+        <div class="fs16 color-150 fw600">权限管理</div>
         <i class="el-icon-close fs16 cp" @click="hideMask"></i>
       </div>
       <div class="dialog_form" @keyup.enter="submitForm('ruleForm')">
