@@ -309,7 +309,7 @@ input[type="password"]:focus {
       width: 400px;
     }
     .el-input__inner {
-      height: 48px;
+      height: @inputHeight;
       width: 400px;
     }
   }
@@ -317,11 +317,16 @@ input[type="password"]:focus {
 .el-form-item__label {
   font-size: 16px !important;
   color: #150000 !important;
+  height: @inputHeight;
+  line-height: @inputHeight !important;
 }
 .el-menu--vertical {
   .el-menu-item {
     background-color: @mainColor !important;
   }
+}
+.el-button--text {
+  color: @fontColor !important;
 }
 //radio选择样式;
 .el-radio__input.is-checked .el-radio__inner {
@@ -335,14 +340,43 @@ input[type="password"]:focus {
   border-color: @fontColor !important;
 }
 //全局全选样式修改;
-// .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-//   background-color: @fontColor !important;
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: @fontColor !important;
+  border-color: @fontColor !important;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label {
+  color: @fontColor !important;
+}
+.el-checkbox__inner:hover,.el-checkbox__input.is-focus .el-checkbox__inner {
+  border-color: @fontColor !important;
+}
+//分页样式修改;
+.el-pagination__sizes .el-input .el-input__inner:hover  {
+  border-color: none !important;
+}
+// .el-select .el-input.is-focus .el-input__inner,.el-input.is-active .el-input__inner, .el-input__inner:focus {
 //   border-color: @fontColor !important;
 // }
-// .el-checkbox__input.is-checked+.el-checkbox__label {
-//   color: @fontColor !important;
-// }
-// .el-checkbox__inner:hover {
-//   border-color: @fontColor !important;
+.el-select-dropdown__item.selected,.el-pager li:hover,.el-pager li.active,.el-pagination button:hover {
+  color: @fontColor !important;
+}
+//loading颜色改变
+.el-loading-spinner .path {
+  stroke: @fontColor !important;
+}
+//权限管理树状图样式;
+.el-tree {
+  // border: 1px solid #DDDFE4;
+  .el-tree-node__content {
+      height: 48px;
+    }
+  .el-tree-node__children {
+    border-top: 1px solid #DDDFE4;
+    border-left: 1px solid #DDDFE4;
+    border-right: 1px solid #DDDFE4;
+  }
+}
+// .el-tree:first-child {
+//   background-color: red;
 // }
 </style>

@@ -20,7 +20,7 @@
       <el-row>
         <el-col :span="24">
           <el-table border :data="tableData" :header-cell-style="headClass">
-            <el-table-column label="序号" align="center" type="index"></el-table-column>
+            <el-table-column label="序号" align="center" type="index" width="60"></el-table-column>
             <el-table-column label="角色名称" align="center">
               <template slot-scope="scope">
                 <span>{{ scope.row.desc }}</span>
@@ -74,6 +74,7 @@
                     class="ml10"
                     style="width: 60%"
                     @change="changetable"
+                    disabled="true"
                   >
                     <el-option
                       v-for="item in role"
@@ -86,7 +87,7 @@
               </el-row>
             </div>
             <el-form-item class="popup_form">
-              <div class="pl20">
+              <div class="pl20 pr20">
                 <div class="fs16 color-150">权限:</div>
                 <div class="bg-fff popup_scollbar">
                   <el-tree

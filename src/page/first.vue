@@ -180,12 +180,13 @@ export default {
     },
     getCharts(yAxisData,seriesData) {
       var option = {
-        color: ["#3398DB"],
+        color: ["#00759D"],
         grid: {
           left: "3%",
-          bottom: '4%',
-          height: '96%',
-          containLabel: true
+          bottom: '2%',
+          height: '98%',
+          containLabel: true,
+          backgroundColor: 'red',
         },
         xAxis: {
           type: "value",

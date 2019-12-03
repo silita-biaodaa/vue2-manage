@@ -31,7 +31,7 @@
       <el-row>
         <el-col :span="24">
           <el-table class="public_table" border :data="tableData" :header-cell-style="headClass">
-            <el-table-column label="序号" align="center" type="index"></el-table-column>
+            <el-table-column label="序号" align="center" type="index" width="60"></el-table-column>
             <el-table-column label="姓名" align="center" width="180">
               <template slot-scope="scope">
                 <span>{{ scope.row.realName }}</span>

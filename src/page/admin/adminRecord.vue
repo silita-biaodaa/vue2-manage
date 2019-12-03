@@ -32,7 +32,7 @@
       <el-row>
         <el-col :span="24">
           <el-table border :data="tableData" :header-cell-style="headClass">
-            <el-table-column label="序号" align="center" type="index"></el-table-column>
+            <el-table-column label="序号" align="center" type="index" width="60"></el-table-column>
             <el-table-column label="操作时间" align="center">
               <template slot-scope="scope">
                 <span>{{ scope.row.optTime }}</span>

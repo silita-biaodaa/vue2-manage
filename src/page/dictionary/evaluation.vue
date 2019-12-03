@@ -57,7 +57,7 @@
             border
             :header-cell-style="headClass"
           >
-            <el-table-column label="序号" align="center" type="selection"></el-table-column>
+            <el-table-column label="序号" align="center" type="selection" width="60"></el-table-column>
             <el-table-column label="地区" align="center">
               <template slot-scope="scope">
                 <span>{{ scope.row.region }}</span>
@@ -136,7 +136,7 @@
             border
             :header-cell-style="headClass"
           >
-            <el-table-column label="序号" align="center" type="selection"></el-table-column>
+            <el-table-column label="序号" align="center" type="selection" width="60"></el-table-column>
             <el-table-column label="别名名称" align="center">
               <template slot-scope="scope">
                 <span>{{ scope.row.name }}</span>
