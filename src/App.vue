@@ -323,4 +323,26 @@ input[type="password"]:focus {
     background-color: @mainColor !important;
   }
 }
+//radio选择样式;
+.el-radio__input.is-checked .el-radio__inner {
+  border-color: @fontColor !important;
+  background: @fontColor !important;
+}
+.el-radio__input.is-checked+.el-radio__label {
+  color: @fontColor !important;
+}
+.el-radio__inner:hover {
+  border-color: @fontColor !important;
+}
+//全局全选样式修改;
+// .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+//   background-color: @fontColor !important;
+//   border-color: @fontColor !important;
+// }
+// .el-checkbox__input.is-checked+.el-checkbox__label {
+//   color: @fontColor !important;
+// }
+// .el-checkbox__inner:hover {
+//   border-color: @fontColor !important;
+// }
 </style>

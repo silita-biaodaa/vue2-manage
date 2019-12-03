@@ -33,7 +33,7 @@
             <button type="primary" class="ml30 fw600 fs16 cp search" @click="searchData">查询</button>
           </el-col>
           <el-col :span="8">
-            <div class="add_delete text-c dfcc color-fff">
+            <div class="add_delete drfe color-fff">
               <div class="mr10 cp dfcc add fs16 fw600" @click="addWays" v-show="isAllows">
                 <img src="../../assets/img/add_icon.png" alt="">
                 <div class="ml10">添加评标办法</div>

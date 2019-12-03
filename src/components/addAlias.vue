@@ -38,7 +38,6 @@ export default {
   data() {
     return {
       showMask: false,
-      repeated: true,
       labelPosition: "right",
       radio: "",
       ruleForm: {
@@ -57,9 +56,7 @@ export default {
       this.$emit("refesh", this.showMask);
     },
     submitForm(formName) {
-      if(this.repeated) {
-        this.repeated = false;
-        this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           const params = {
             stdCode: this.$parent.code,
@@ -68,7 +65,6 @@ export default {
           };
           addAliasName(params).then(res => {
             if (res.code == "1") {
-              this.repeated = true;
               this.$message({
                 type: "success",
                 message: "添加成功!"
@@ -77,7 +73,6 @@ export default {
               this.ruleForm.name = "";
               this.cancelMask();
             } else {
-              this.repeated = true;
               this.$message({
                 type: "warning",
                 message: res.msg
@@ -87,7 +82,6 @@ export default {
           });
         }
       });
-      }
     }
   },
   mounted() {

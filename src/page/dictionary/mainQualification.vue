@@ -191,12 +191,12 @@
                     <i
                       class="el-icon-caret-top ft14 color-666"
                       @click="checkTime"
-                      v-bind:class="{ 'color-409': isActive, active: hasCheck }"
+                      v-bind:class="{ 'color-224': isActive, active: hasCheck }"
                     ></i>
                     <i
                       class="el-icon-caret-bottom ft14 color-666"
                       @click="checkTime"
-                      v-bind:class="{ 'color-409': !isActive, active: hasCheck }"
+                      v-bind:class="{ 'color-224': !isActive, active: hasCheck }"
                     ></i>
                   </div>
                 </div>
@@ -206,12 +206,12 @@
                     <i
                       class="el-icon-caret-top ft14 color-666"
                       @click="checkCombine"
-                      v-bind:class="{ 'color-409': isCombine, active: checked }"
+                      v-bind:class="{ 'color-224': isCombine, active: checked }"
                     ></i>
                     <i
                       class="el-icon-caret-bottom ft14 color-666"
                       @click="checkCombine"
-                      v-bind:class="{ 'color-409': !isCombine, active: checked }"
+                      v-bind:class="{ 'color-224': !isCombine, active: checked }"
                     ></i>
                   </div>
                 </div>
