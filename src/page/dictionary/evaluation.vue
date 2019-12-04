@@ -435,7 +435,6 @@ export default {
       this.$confirm("此操作将永久删除该评标办法名称, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
       })
         .then(() => {
           this.infoList(row.id);
@@ -479,7 +478,6 @@ export default {
           this.$confirm("此操作将永久删除该评标办法名称, 是否继续?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
-            type: "warning"
           })
             .then(() => {
               this.infoList(ids);
@@ -513,7 +511,6 @@ export default {
           this.$confirm("此操作将永久删除该评标办法名称, 是否继续?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
-            type: "warning"
           })
             .then(() => {
               this.aliasList(idsStr);
@@ -667,7 +664,6 @@ export default {
       this.$confirm("此操作将永久删除该评标办法别名名称, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
       })
         .then(() => {
           this.aliasList(row.id);

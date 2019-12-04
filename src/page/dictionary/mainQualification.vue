@@ -1032,7 +1032,6 @@ export default {
       this.$confirm("此操作将永久删除该资质名称, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
       })
         .then(() => {
           deteleQual({ id: row.id }).then(res => {
@@ -1202,7 +1201,6 @@ export default {
         this.$confirm("此操作将永久删除该资质别名名称, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
         })
           .then(() => {
             deleteQualAlias({ ids: ids }).then(res => {
