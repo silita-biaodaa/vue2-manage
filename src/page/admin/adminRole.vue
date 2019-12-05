@@ -184,8 +184,6 @@ export default {
       roleAll().then(res => {
         if (res.code == "1") {
           this.role = res.data;
-          console.log(this.role);
-          
         } else {
           console.info("获取角色列表接口不通");
         }

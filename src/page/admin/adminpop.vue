@@ -7,17 +7,23 @@
         <i class="el-icon-close fs16 cp" @click="closeMask"></i>
       </div>
       <!-- 列表 -->
-      <div class="dialog_form">
-        <el-form
+      <el-form
           :label-position="labelPosition"
           label-width="100px"
           :model="ruleFormEdit"
           :rules="rulesEdit"
           ref="ruleFormEdit"
         >
+      <div class="dialog_form">
           <div class="form_top">
-            角色名称：
-            <input type="text" :disabled="disabled" v-model="roleName" />
+            <el-form-item label="角色名称：" prop="roleName" label-width="120px" class="pt30">
+              <el-input
+                v-model="ruleFormEdit.roleName"
+                placeholder="请输入姓名"
+                :disabled="disabled"
+                style="width: 60%;"
+              ></el-input>
+            </el-form-item>
           </div>
 
           <div class="form_title">权限</div>
@@ -30,9 +36,9 @@
               v-if="el.title != '首页' && el.title != '修改密码' "
               :class="el.show ? 'show' : 'close'"
             >
-              <div class="form_list">
+              <div class="form_list" @click="opClose(el)">
                 <div class="list-left">
-                  <div @click="listup(el)">
+                  <div @click.stop="listup(el)">
                     <img src="../../assets/img/water.png" v-if="el.allshow  == false" alt />
                     <img src="../../assets/img/all.png" v-else alt />
                   </div>
@@ -40,7 +46,7 @@
                   <span>全选</span>
                   <span class="lits-title">{{el.title}}</span>
                 </div>
-                <div @click="opClose(el)">
+                <div>
                   <img src="../../assets/img/upper.png" v-if="el.show" alt />
                   <img src="../../assets/img/lower.png" v-else alt />
                 </div>
@@ -68,11 +74,13 @@
               </div>
             </div>
           </div>
-        </el-form>
       </div>
-      <div class="form_btn">
-        <div class="role-btn" @click="savelist">保存</div>
-      </div>
+      <el-form-item class="popup_form_btn">
+        <div class="form_btn handle_btn">
+          <div class="role-btn" @click="submitForm('ruleFormEdit')">保存</div>
+        </div>
+      </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -86,12 +94,11 @@ export default {
       rolePower: "",
       role: [],
       ruleFormEdit: {
-        roles: ""
+        roleName: "",
       },
       rulesEdit: {
-        roles: [{ required: true, message: "请输入角色名称", trigger: "blur" }]
+        roleName: [{ required: true, message: "请输入角色名称", trigger: "blur" }]
       },
-      roleName: "",
       detail: {},
       list: [],
       disabled: false
@@ -134,7 +141,7 @@ export default {
             if (i.data.length >= 1) {
               for (var o of i.data) {
                 i.show = false;
-                o.optiond == null;
+                o.optiond = null;
                 i.allshow = false;
               }
             } else {
@@ -199,43 +206,86 @@ export default {
         }
       }
     },
-    savelist() {
-      let arr = [];
-      for (var i of this.list) {
-        if (i.data.length >= 1) {
-          for (var o of i.data) {
-            if (o.optiond != null) {
-              arr.push(o.id + "/" + o.optiond);
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        let arr = [];
+        for (var i of this.list) {
+          if (i.data.length >= 1) {
+            for (var o of i.data) {
+              if (o.optiond != null) {
+                arr.push(o.id + "/" + o.optiond);
+              }
             }
           }
         }
-      }
-      let str = arr.join(",");
-      if (this.type == 1) {
-        editPower({
-          rid: this.detail.rid,
-          desc: this.detail.desc,
-          ids: str
-        }).then(res => {
-          if (res.code == 1) {
-            this.$emit("closePop", { txt: "1" });
-          }
-        });
-      } else {
-        if (this.roleName.trim() == "") {
-          this.$message({
-            message: "请输入角色名称",
-            type: "warning"
+        let str = arr.join(",");
+        if (this.type == 1) {
+          editPower({
+            rid: this.detail.rid,
+            desc: this.detail.desc,
+            ids: str
+          }).then(res => {
+            if (res.code == 1) {
+              this.$emit("closePop", { txt: "1" });
+            }
           });
-          return;
-        }
-        powerRole({ desc: this.roleName, ids: str }).then(res => {
-          if (res.code == 1) {
-            this.$emit("closePop", { txt: "2" });
+        } else {
+          if (this.ruleFormEdit.roleName.trim() == "") {
+            return;
           }
-        });
-      }
+          powerRole({ desc: this.ruleFormEdit.roleName, ids: str }).then(
+            res => {
+              if (res.code == 1) {
+                this.$emit("closePop", { txt: "2" });
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: "warning"
+                });
+              }
+            }
+          );
+        }
+      });
     },
+    // savelist() {
+    //   let arr = [];
+    //   for (var i of this.list) {
+    //     if (i.data.length >= 1) {
+    //       for (var o of i.data) {
+    //         if (o.optiond != null) {
+    //           arr.push(o.id + "/" + o.optiond);
+    //         }
+    //       }
+    //     }
+    //   }
+    //   let str = arr.join(",");
+    //   if (this.type == 1) {
+    //     editPower({
+    //       rid: this.detail.rid,
+    //       desc: this.detail.desc,
+    //       ids: str
+    //     }).then(res => {
+    //       if (res.code == 1) {
+    //         this.$emit("closePop", { txt: "1" });
+    //       }
+    //     });
+    //   } else {
+    //     if (this.ruleFormEdit.roleName.trim() == "") {
+    //       return;
+    //     }
+    //     powerRole({ desc: this.ruleFormEdit.roleName, ids: str }).then(res => {
+    //       if (res.code == 1) {
+    //         this.$emit("closePop", { txt: "2" });
+    //       }else {
+    //         this.$message({
+    //           message: res.msg,
+    //           type: "warning"
+    //         })
+    //       }
+    //     });
+    //   }
+    // },
     opClose(el) {
       el.show = !el.show;
     }
@@ -252,7 +302,7 @@ export default {
   created() {
     if (this.type == 1) {
       this.detail = this.obj;
-      this.roleName = this.detail.desc;
+      this.ruleFormEdit.roleName = this.detail.desc;
       this.gainList();
       this.disabled = true;
     } else {
@@ -307,26 +357,6 @@ export default {
         border-bottom: 1px solid #dddfe4;
         .el-form-item__content {
           margin-left: 0 !important;
-        }
-      }
-      .popup_scollbar {
-        background-color: #ffffff;
-        .el-tree {
-          max-height: 500px;
-        }
-        .custom-tree-node {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          font-size: 14px;
-          padding-right: 8px;
-        }
-        .select_power {
-          display: inline-block;
-          width: 12px;
-          height: 12px;
-          border-radius: 6px;
         }
       }
     }
@@ -394,6 +424,7 @@ export default {
     align-items: center;
     justify-content: center;
     height: 96px;
+    margin-right: 100px;
     .role-btn {
       width: 128px;
       height: 40px;

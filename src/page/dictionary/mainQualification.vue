@@ -85,9 +85,9 @@
             <button type="primary" class="ml10 search cp" @click="searchData">搜索</button>
           </el-col>
           <el-col :span="8" class="addAlias">
-            <div class="addAlias_btn dfcc cp" @click="addQualList">
+            <div class="addAlias_btn dfcc cp" @click="addQualList" v-show="isAllows">
               <img src="../../assets/img/add_icon.png" alt />
-              <div class="fs16 color-fff fw600 ml10 cp" v-show="isAllows">添加资质</div>
+              <div class="fs16 color-fff fw600 ml10 cp">添加资质</div>
             </div>
           </el-col>
         </el-row>
@@ -252,16 +252,16 @@
             <ul class="fs14 color-000">
               <li v-for="(item,i) in levelData" :key="i" class="mb10">{{item.name}}</li>
             </ul>
-            <div class="text-c levelBottomBtn cp"  @click="changeLevelBtn">
-              <button class="fs16 color-fff" plain v-show="isAllows">修改等级</button>
+            <div class="text-c levelBottomBtn cp"  @click="changeLevelBtn" v-show="isAllows">
+              <button class="fs16 color-fff" plain>修改等级</button>
             </div>
           </el-col>
           <el-col class="changeMode pt20 pl20 pb40" v-show="activeIndex == '3'">
             <ul class="fs14 color-000">
               <li v-for="(item,i) in modeData" class="mb10" :key="i">{{item.name}}</li>
             </ul>
-            <div class="text-c modeBottomBtn cp" @click="changeModeBtn">
-              <button class="fs16 color-fff" plain v-show="isAllows">修改属性</button>
+            <div class="text-c modeBottomBtn cp" @click="changeModeBtn" v-show="isAllows">
+              <button class="fs16 color-fff" plain>修改属性</button>
             </div>
           </el-col>
         </el-col>
