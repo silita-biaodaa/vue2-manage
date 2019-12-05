@@ -4,7 +4,7 @@
       <el-row :span="24" type="flex" justify="space-between" align="middle">
         <el-col :span="8" class="fs16 color-150 fw600 text-l">
           角色名称：
-          <el-select v-model="desc" clearable class="ml10" style="width: 60%" @change="changetable">
+          <el-select v-model="desc" class="ml10" style="width: 60%" @change="changetable">
             <el-option v-for="item in role" :key="item.rid" :label="item.desc" :value="item.desc"></el-option>
           </el-select>
         </el-col>
@@ -20,7 +20,7 @@
       <el-row>
         <el-col :span="24">
           <el-table border :data="tableData" :header-cell-style="headClass">
-            <el-table-column label="序号" align="center" type="index" width="60"></el-table-column>
+            <el-table-column label="序号" align="center" type="index"></el-table-column>
             <el-table-column label="角色名称" align="center">
               <template slot-scope="scope">
                 <span>{{ scope.row.desc }}</span>
@@ -51,7 +51,7 @@
         ></el-pagination>
       </div>
     </div>
-    <div class="dialog" v-show="edit">
+    <!-- <div class="dialog" v-show="edit">
       <div class="dialog-container">
         <div class="dfrcb ft20 pl30 pr30 dialog_top">
           <div class="fs16 color-150 fw600">权限管理</div>
@@ -74,7 +74,6 @@
                     class="ml10"
                     style="width: 60%"
                     @change="changetable"
-                    :disabled="true"
                   >
                     <el-option
                       v-for="item in role"
@@ -86,58 +85,19 @@
                 </el-col>
               </el-row>
             </div>
-            <el-form-item class="popup_form">
-              <div class="pl20 pr20">
-                <div class="fs16 color-150">权限:</div>
-                <div class="bg-fff popup_scollbar">
-                  <el-tree
-                    :data="powerData"
-                    show-checkbox
-                    :props="defaultProps"
-                    default-expand-all
-                    ref="tree"
-                    node-key="id"
-                    :default-checked-keys="showId"
-                  >
-                    <span class="custom-tree-node" slot-scope="{ node, data }">
-                      <span class="ml10">{{ node.label }}</span>
-                      <span>
-                        <span :class="data.id > 10000 ? '': 'hidden'">
-                          <input
-                            type="radio"
-                            class="select_power"
-                            :checked="data.optiond == 'read' || data.currentStage == '1' ? true: false"
-                            :name="data.id"
-                            @click="() => 
-                    ready(node,data)"
-                          />
-                          <span>只读</span>
-                        </span>
-                        <span :class="data.id > 10000 ? '': 'hidden'">
-                          <input
-                            type="radio"
-                            class="select_power ml10"
-                            :checked="data.optiond == 'operability' || data.currentStage == '2' ? true: false"
-                            :name="data.id"
-                            @click="() => 
-                    operate(node,data)"
-                          />
-                          <span>可操作</span>
-                        </span>
-                      </span>
-                    </span>
-                  </el-tree>
+     
+            <div class="dialog_list" >
+                <div class="dialog_title" >
+                  权限
                 </div>
-              </div>
-            </el-form-item>
-            <el-form-item class="popup_form_btn">
-              <div class="popup_btn text-c color-fff" @click="submitForm('ruleFormEdit')">保存</div>
-            </el-form-item>
+                
+            </div>
           </el-form>
         </div>
       </div>
-    </div>
-    <powerPopup :showMask="true" v-model="sendVal" @refesh="handleRefesh" :isAllows="isAllows"></powerPopup>
+    </div> -->
+    <admin-pop  v-if="edit" :obj="roleObj" :type='type'  @closePop='closeList'   ></admin-pop>
+
   </div>
 </template>
 <script>
@@ -151,6 +111,7 @@ import {
   editPower
 } from "@/api/index";
 import { timestampToTime } from "../../public";
+import adminpop from '@/page/admin/adminpop'
 export default {
   data() {
     return {
@@ -181,20 +142,20 @@ export default {
       rolePower: "", //选择角色权限;
       showId: [],
       rid: "", //角色id;
-      isAllows: null
+      isAllows: null,
+      roleObj:{},
+      rName:'',
+      type:1
     };
   },
   methods: {
     roleList() {
-      console.info('this.desc',this.desc);
-      if (this.desc !== "") {
+      if (this.desc) {
         for (let i of this.role) {
           if (this.desc == i.desc) {
             this.id = i.rid;
           }
         }
-      }else {
-        this.id = "";
       }
       const params = {
         currentPage: this.pagenum,
@@ -223,13 +184,17 @@ export default {
       roleAll().then(res => {
         if (res.code == "1") {
           this.role = res.data;
+          console.log(this.role);
+          
         } else {
           console.info("获取角色列表接口不通");
         }
       });
     },
     addRole() {
-      this.sendVal = true;
+      this.roleObj = {}
+       this.type = 2
+      this.edit = true;
     },
     changetable() {
       this.pagenum = 1;
@@ -265,38 +230,53 @@ export default {
       }
     },
     editRole(index, row) {
-      this.$refs.tree.setCheckedNodes([]);
-      this.showId = [];
+      // this.$refs.tree.setCheckedNodes([]);
+      // this.showId = [];
+      
+      this.roleObj = row
       this.edit = true;
-      this.rid = row.rid;
-      this.rolePower = row.desc;
-      searchPower({ rid: row.rid }).then(res => {
-        if (res.code == "1") {
-          for (let i = 0; i < res.data.length; i++) {
-            for (let j = 0; j < res.data[i].data.length; j++) {
-              if (res.data[i].data[j].optiond == null) {
-                //默认3为空;1为只读;2为可操作;
-                res.data[i].data[j].currentStage = "3";
-              }
-            }
-          }
-          this.powerData = res.data;
-          for (let i of res.data) {
-            for (let j of i.data) {
-              if (j.optiond !== null) {
-                this.showId.push(j.id);
-              }
-            }
-          }
-        } else {
-          console.info("查询可编辑权限不通");
-        }
-      });
+      this.type = 1
+      // console.log(row);
+      
+      // this.rid = row.rid;
+      // this.rolePower = row.desc;
+      // searchPower({ rid: row.rid }).then(res => {
+      //   if (res.code == "1") {
+      //     for (let i = 0; i < res.data.length; i++) {
+      //       for (let j = 0; j < res.data[i].data.length; j++) {
+      //         if (res.data[i].data[j].optiond == null) {
+      //           //默认3为空;1为只读;2为可操作;
+      //           res.data[i].data[j].currentStage = "3";
+      //         }
+      //       }
+      //     }
+      //     this.powerData = res.data;
+      //     for (let i of res.data) {
+      //       for (let j of i.data) {
+      //         if (j.optiond !== null) {
+      //           this.showId.push(j.id);
+      //         }
+      //       }
+      //     }
+      //   } else {
+      //     console.info("查询可编辑权限不通");
+      //   }
+      // });
     },
-    closeMask() {
+    closeList(o) {  // 关闭窗口
+      if(o.txt == '1') {
+        this.$message({
+          message: '权限更新成功',
+          type: 'success'
+        });
+      } else if(o.txt == '2') {
+        this.$message({
+          message: '添加角色成功',
+          type: 'success'
+        });
+         this.roleList()
+      }
       this.edit = false;
-      this.powerData = [];
-      this.showId = [];
     },
     operate(node, data) {
       data.currentStage = "2";
@@ -371,6 +351,9 @@ export default {
       return "text-align: center;background:#DDDFE4;color: #000000;";
     }
   },
+  components:{
+    'admin-pop':adminpop
+  },
   created() {
     this.roleList();
     this.getRole();
@@ -416,97 +399,107 @@ export default {
     padding: 0 30px;
     margin-top: 30px;
   }
-  .dialog {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 10;
-    .dialog-container {
-      width: 920px;
-      height: 769px;
-      background: rgba(255, 255, 255, 1);
-      box-shadow: 0px 0px 21px 0px rgba(0, 0, 0, 0.5);
-      border-radius: 12px;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      position: relative;
-      .dialog_top {
-        height: 66px;
-        border-bottom: 1px solid #dddfe4;
-      }
-      .dialog_form {
-        padding: 0 60px;
-        .form_top {
-          height: 96px;
-          line-height: 96px;
-          border-bottom: 1px solid #DDDFE4;
-        }
-        .popup_form {
-          border-bottom: 1px solid #DDDFE4;
-          .el-form-item__content {
-            margin-left: 0 !important;
-          }
-        }
-        .popup_scollbar {
-          background-color: #ffffff;
-          .el-tree {
-            max-height: 500px;
-          }
-          .custom-tree-node {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 14px;
-            padding-right: 8px;
-          }
-          .select_power {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 6px;
-          }
-        }
-      }
-    }
-    .popup_table {
-      border: 1px solid #ddd;
-    }
-    .popup_scollbar {
-      height: 480px;
-      min-height: 480px;
-      overflow-x: hidden;
-      overflow-y: scroll;
-    }
-    .popup_scollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .popup_form_btn {
-      background-color: @mainColor;
-      width: 128px;
-      height: 40px;
-      border-radius: 20px;
-      margin: 0 auto;
-      cursor: pointer;
-    }
-    // .el-form-item {
-    //   padding-right: 20px;
-    // }
-    .role_list {
-      width: 100%;
-      height: 100%;
-      font-size: 14px;
-      color: #606266;
-      padding-left: 45px;
-      margin-bottom: 22px;
-    }
-    .hidden {
-      display: none;
-    }
-  }
+  // .dialog {
+  //   position: fixed;
+  //   top: 0;
+  //   bottom: 0;
+  //   left: 0;
+  //   right: 0;
+  //   background: rgba(0, 0, 0, 0.6);
+  //   z-index: 10;
+  //   .dialog-container {
+  //     width: 920px;
+  //     height: 769px;
+  //     background: rgba(255, 255, 255, 1);
+  //     box-shadow: 0px 0px 21px 0px rgba(0, 0, 0, 0.5);
+  //     border-radius: 12px;
+  //     top: 50%;
+  //     left: 50%;
+  //     transform: translate(-50%, -50%);
+  //     position: relative;
+  //     .dialog_top {
+  //       height: 66px;
+  //       border-bottom: 1px solid #dddfe4;
+  //     }
+  //     .dialog_form {
+  //       padding: 0 60px;
+  //       border-bottom: 1px solid #dddfe4;
+  //       .form_top {
+  //         height: 96px;
+  //         line-height: 96px;
+  //         border-bottom: 1px solid #DDDFE4;
+  //       }
+  //       .popup_form {
+  //         border-bottom: 1px solid #DDDFE4;
+  //         .el-form-item__content {
+  //           margin-left: 0 !important;
+  //         }
+  //       }
+  //       .popup_scollbar {
+  //         background-color: #ffffff;
+  //         .el-tree {
+  //           max-height: 500px;
+  //         }
+  //         .custom-tree-node {
+  //           flex: 1;
+  //           display: flex;
+  //           align-items: center;
+  //           justify-content: space-between;
+  //           font-size: 14px;
+  //           padding-right: 8px;
+  //         }
+  //         .select_power {
+  //           display: inline-block;
+  //           width: 12px;
+  //           height: 12px;
+  //           border-radius: 6px;
+  //         }
+  //       }
+  //       .dialog_list {
+  //         //  border-bottom: 1px solid #dddfe4;
+  //         //  padding: 0 60px;
+  //          .dialog_title {
+  //            line-height: 57px;
+  //            font-size: 16px;
+  //            color: #150000;
+  //          }
+  //       }
+  //     }
+  //   }
+  //   .popup_table {
+  //     border: 1px solid #ddd;
+  //   }
+  //   .popup_scollbar {
+  //     height: 480px;
+  //     min-height: 480px;
+  //     overflow-x: hidden;
+  //     overflow-y: scroll;
+  //   }
+  //   .popup_scollbar::-webkit-scrollbar {
+  //     display: none;
+  //   }
+  //   .popup_form_btn {
+  //     background-color: @mainColor;
+  //     width: 128px;
+  //     height: 40px;
+  //     border-radius: 20px;
+  //     margin: 0 auto;
+  //     cursor: pointer;
+  //   }
+  //   // .el-form-item {
+  //   //   padding-right: 20px;
+  //   // }
+  //   .role_list {
+  //     width: 100%;
+  //     height: 100%;
+  //     font-size: 14px;
+  //     color: #606266;
+  //     padding-left: 45px;
+  //     margin-bottom: 22px;
+  //   }
+  //   .hidden {
+  //     display: none;
+  //   }
+  // }
 }
 </style>
