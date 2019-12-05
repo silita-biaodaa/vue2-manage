@@ -19,7 +19,7 @@
             <div class="logo">
               <img src="../assets/img/logo_white.png" />
             </div>
-            <div class="color-fff fs18" :class="{'hide': isCollapse}">标大大</div>
+            <div class="color-fff fs18" :class="{'hide': isCollapse}" style="min-width: 54px;">标大大</div>
           </div>
           <div class="cp" @click="toggleCollapse">
             <img :class="{'hide': isCollapse}" src="../assets/img/pack.png" alt="">

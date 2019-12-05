@@ -4,7 +4,7 @@
       <el-row :span="24" type="flex" justify="space-between" align="middle">
         <el-col :span="8" class="fs16 color-150 fw600 text-l">
           角色名称：
-          <el-select v-model="desc" class="ml10" style="width: 60%" @change="changetable">
+          <el-select v-model="desc" clearable class="ml10" style="width: 60%" @change="changetable">
             <el-option v-for="item in role" :key="item.rid" :label="item.desc" :value="item.desc"></el-option>
           </el-select>
         </el-col>
@@ -74,7 +74,7 @@
                     class="ml10"
                     style="width: 60%"
                     @change="changetable"
-                    disabled="true"
+                    :disabled="true"
                   >
                     <el-option
                       v-for="item in role"
@@ -186,12 +186,15 @@ export default {
   },
   methods: {
     roleList() {
-      if (this.desc) {
+      console.info('this.desc',this.desc);
+      if (this.desc !== "") {
         for (let i of this.role) {
           if (this.desc == i.desc) {
             this.id = i.rid;
           }
         }
+      }else {
+        this.id = "";
       }
       const params = {
         currentPage: this.pagenum,

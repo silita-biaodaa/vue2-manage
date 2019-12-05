@@ -232,14 +232,11 @@ input[type="password"]:focus {
     line-height: 66px;
     border-bottom: 1px solid @color;
     span {
-      font-size: 16px;
+      font-size: 18px;
       margin-left: 30px;
       color: #150000;
       font-weight: 700;
     }
-  }
-  span {
-    font-size: 15px;
   }
   input {
     border: 1px solid #ddd;
@@ -354,9 +351,11 @@ input[type="password"]:focus {
 .el-pagination__sizes .el-input .el-input__inner:hover  {
   border-color: none !important;
 }
-// .el-select .el-input.is-focus .el-input__inner,.el-input.is-active .el-input__inner, .el-input__inner:focus {
-//   border-color: @fontColor !important;
-// }
+.el-pagination {
+  .el-select .el-input.is-focus .el-input__inner,.el-input.is-active .el-input__inner, .el-input__inner:focus {
+    border-color: @fontColor !important;
+  }
+}
 .el-select-dropdown__item.selected,.el-pager li:hover,.el-pager li.active,.el-pagination button:hover {
   color: @fontColor !important;
 }

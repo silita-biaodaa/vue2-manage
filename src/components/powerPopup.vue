@@ -14,18 +14,20 @@
           ref="ruleForm"
         >
           <div class="form_top">
-            <el-row type="flex">
-              <el-col class="fs16 color-150 ml20" style="margin-top: 28px;">
+            <!-- <el-row>
+              <el-col class="fs16 color-150 ml20"> -->
                 <el-form-item label="角色名称：" prop="role" label-width="120">
                   <el-input
                     v-model="ruleForm.role"
                     placeholder="请输入"
                     autocomplete="new-password"
-                    style="width: 60%;"
                   ></el-input>
                 </el-form-item>
-              </el-col>
-            </el-row>
+                <!-- <el-form-item label="角色名称：" prop="name" label-width="120">
+                  <el-input v-model="ruleForm.role" placeholder="请输入"></el-input>
+                </el-form-item> -->
+              <!-- </el-col>
+            </el-row> -->
           </div>
           <el-form-item class="popup_form">
             <div class="pl20">

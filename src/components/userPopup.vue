@@ -1,6 +1,6 @@
 <template>
-  <div class="dialog userPopup" v-if="showMask">
-    <el-form :model="ruleForm" ref="ruleForm" v-if="showMask">
+  <div class="dialog userPopup" v-if="showMask" @keyup.enter="submitForm('ruleForm')">
+    <el-form :model="ruleForm" ref="ruleForm">
       <div class="dialog-container pb30">
         <div class="dfrcb ft20 dialog_top">
           <div class="dialog-title ml30">查看详情</div>
