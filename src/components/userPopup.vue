@@ -135,7 +135,7 @@
         </div>
         <el-form-item class="keep_btn mt20">
           <div class="popup_btn">
-            <div v-if="allow || feed" class="fs18 color-999 cp" @click="closeMask">取消</div>
+            <div v-if="allow || feed" class="fs18 color-999 cp" @click.prevent="closeMask">取消</div>
             <button
               type="primary"
               @click="submitForm('ruleForm')"

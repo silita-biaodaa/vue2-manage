@@ -25,7 +25,6 @@
               ></el-input>
             </el-form-item>
           </div>
-
           <div class="form_title">权限</div>
 
           <div class="form_Alist">
@@ -77,7 +76,7 @@
       </div>
       <el-form-item class="popup_form_btn">
         <div class="form_btn handle_btn">
-          <div class="role-btn" @click="submitForm('ruleFormEdit')">保存</div>
+          <div class="role-btn" @click.prevent="submitForm('ruleFormEdit')">保存</div>
         </div>
       </el-form-item>
       </el-form>

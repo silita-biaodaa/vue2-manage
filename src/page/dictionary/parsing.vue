@@ -126,7 +126,7 @@
             </el-form-item>
             <el-form-item class="text-c handle_btn">
               <button class="handle_cancle bg-fff fs18 color-999 cp" plain @click="cancelMask">取消</button>
-              <button class="handle_confirm color-fff fs18 ml30 cp" type="primary" @click="submitForm('ruleForm')">确定</button>
+              <button class="handle_confirm color-fff fs18 ml30 cp" type="primary" @click.prevent="submitForm('ruleForm')">确定</button>
             </el-form-item>
           </el-form>
         </div>

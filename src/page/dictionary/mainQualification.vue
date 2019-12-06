@@ -327,7 +327,7 @@
               </el-form-item>
               <el-form-item class="text-c handle_btn">
                 <button class="bg-fff fs18 color-999 mr30 cp" plain @click="cancelMask">取消</button>
-                <button class="confirm_btn bg-fff color-fff fs18 cp" type="primary" @click="submitForm('ruleForm')">确定</button>
+                <button class="confirm_btn bg-fff color-fff fs18 cp" type="primary" @click.prevent="submitForm('ruleForm')">确定</button>
               </el-form-item>
             </el-form>
           </div>
@@ -398,7 +398,7 @@
               </el-form-item>
               <el-form-item class="text-c handle_btn">
                 <button class="bg-fff fs18 color-999 mr30 cp" plain @click="cancelMask">取消</button>
-                <button class="confirm_btn bg-fff color-fff fs18 cp" type="primary" @click="changeSubmitForm('ruleFormChange')">确定</button>
+                <button class="confirm_btn bg-fff color-fff fs18 cp" type="primary" @click.prevent="changeSubmitForm('ruleFormChange')">确定</button>
               </el-form-item>
             </el-form>
           </div>
@@ -418,7 +418,7 @@
           </el-checkbox-group>
           <div class="text-c mt10 handle_btn">
             <button class="bg-fff fs18 color-999 mr30 cp" plain @click="cancelMask">取消</button>
-            <button class="confirm_btn bg-fff color-fff fs18 cp" type="primary" @click="levelSubmitForm">确定</button>
+            <button class="confirm_btn bg-fff color-fff fs18 cp" type="primary" @click.prevent="levelSubmitForm">确定</button>
           </div>
         </div>
       </div>
@@ -436,7 +436,7 @@
           </el-checkbox-group>
           <div class="text-c handle_btn">
             <button class="bg-fff fs18 color-999 mr30 cp" plain @click="cancelMask">取消</button>
-            <button class="confirm_btn bg-fff color-fff fs18 cp" type="primary" @click="modeSubmitForm">确定</button>
+            <button class="confirm_btn bg-fff color-fff fs18 cp" type="primary" @click.prevent="modeSubmitForm">确定</button>
           </div>
         </div>
       </div>

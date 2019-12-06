@@ -40,7 +40,7 @@
             </el-row>
           </el-form-item>
           <el-form-item class="popup_form_btn pl20">
-            <div class="popup_btn color-fff mb20" @click="submitForm('ruleForm')">保存</div>
+            <div class="popup_btn color-fff mb20" @click.prevent="submitForm('ruleForm')">保存</div>
           </el-form-item>
         </el-form>
       </div>
