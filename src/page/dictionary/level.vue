@@ -4,12 +4,12 @@
       <el-row class="table_list mt20">
         <el-col>
           <el-table class="table cp" :data="tableData" ref="multiple" @row-click="openDetails" :header-cell-style="headClass">
-            <el-table-column label="等级名称" align="center">
+            <el-table-column label="等级名称" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.name }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="类型" align="center">
+            <el-table-column label="类型" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.typology == "1" ? "一类":"二类" }}</span>
               </template>

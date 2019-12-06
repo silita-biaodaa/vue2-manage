@@ -84,37 +84,37 @@
       <el-row>
         <el-col class="fs14 color-000" :span="24">
           <el-table class="public_table" border :data="tableData" :header-cell-style="headClass">
-          <el-table-column label="手机" align="center">
+          <el-table-column label="手机" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.phoneNo }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="姓名" align="center">
+          <el-table-column label="姓名" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.loginName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="登录天数" align="center">
+          <el-table-column label="登录天数" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.loginCount }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="注册时间" align="center">
+          <el-table-column label="注册时间" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.created }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="用户类别" align="center">
+          <el-table-column label="用户类别" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.userType }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="会员到期日" align="center">
+          <el-table-column label="会员到期日" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.expiredDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center">
+          <el-table-column label="操作" align="center" :resizable="false">
             <template slot-scope="scope">
               <span class="look_info cp" @click="openMask(scope.$index, scope.row)">查看详情</span>
             </template>

@@ -155,12 +155,12 @@
       <el-row>
         <el-col class="fs14 color-000" :span="24">
           <el-table border :data="tableData" :header-cell-style="headClass">
-            <el-table-column label="订单号" align="center">
+            <el-table-column label="订单号" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.orderNo }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="手机" align="center">
+            <el-table-column label="手机" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span
                   class="color-224 cp"
@@ -169,32 +169,32 @@
                 >{{ scope.row.phoneNo }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="金额" align="center">
+            <el-table-column label="金额" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.money }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="实收" align="center">
+            <el-table-column label="实收" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.truePay }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="订单类别" align="center">
+            <el-table-column label="订单类别" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.orderType }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="渠道" align="center">
+            <el-table-column label="渠道" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.tradeType }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="付款状态" align="center">
+            <el-table-column label="付款状态" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.payStatus }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="订单时间" align="center">
+            <el-table-column label="订单时间" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.createTime }}</span>
               </template>

@@ -59,22 +59,22 @@
               </div>
               <div class="popup_scollbar">
                 <el-table class="popup_table" :data="memberData" :header-cell-style="headClass">
-                  <el-table-column label="时间" align="center">
+                  <el-table-column label="时间" align="center" :resizable="false">
                     <template slot-scope="scope">
                       <span>{{ scope.row.created }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="用户行为" align="center">
+                  <el-table-column label="用户行为" align="center" :resizable="false">
                     <template slot-scope="scope">
                       <span>{{ scope.row.behavior }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="获得会员权益" align="center">
+                  <el-table-column label="获得会员权益" align="center" :resizable="false">
                     <template slot-scope="scope">
                       <span>{{ scope.row.vipDay }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="会员到期日" align="center">
+                  <el-table-column label="会员到期日" align="center" :resizable="false">
                     <template slot-scope="scope">
                       <span>{{ scope.row.expiredDate }}</span>
                     </template>
@@ -95,32 +95,32 @@
                   align="center"
                   :header-cell-style="headClass"
                 >
-                  <el-table-column label="手机" align="center">
+                  <el-table-column label="手机" align="center" :resizable="false">
                     <template slot-scope="scope">
                       <span>{{ scope.row.phoneNo }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="姓名" align="center">
+                  <el-table-column label="姓名" align="center" :resizable="false">
                     <template slot-scope="scope">
                       <span>{{ scope.row.loginName }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="所在公司" align="center">
+                  <el-table-column label="所在公司" align="center" :resizable="false">
                     <template slot-scope="scope">
                       <span>{{ scope.row.inCompany }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="注册时间" align="center">
+                  <el-table-column label="注册时间" align="center" :resizable="false">
                     <template slot-scope="scope">
                       <span>{{ scope.row.created }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="用户类别" align="center">
+                  <el-table-column label="用户类别" align="center" :resizable="false">
                     <template slot-scope="scope">
                       <span>{{ scope.row.userType }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="VIP到期时间" align="center">
+                  <el-table-column label="VIP到期时间" align="center" :resizable="false">
                     <template slot-scope="scope">
                       <span>{{ scope.row.expiredDate }}</span>
                     </template>

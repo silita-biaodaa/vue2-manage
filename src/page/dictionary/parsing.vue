@@ -58,22 +58,22 @@
     <el-row class="public_table_list">
       <el-col :span="24">
         <el-table class="public_table" border :data="tableData" :header-cell-style="headClass">
-          <el-table-column label="别名" align="center">
+          <el-table-column label="别名" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.jointAilas }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="标准名称" align="center">
+          <el-table-column label="标准名称" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.quaLevel }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="类型" align="center">
+          <el-table-column label="类型" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.createBy }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center">
+          <el-table-column label="操作" align="center" :resizable="false">
             <template slot-scope="scope">
               <span
                 class="handle_authority cp color-409"

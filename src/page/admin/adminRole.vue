@@ -20,18 +20,18 @@
       <el-row>
         <el-col :span="24">
           <el-table border :data="tableData" :header-cell-style="headClass">
-            <el-table-column label="序号" align="center" type="index"></el-table-column>
-            <el-table-column label="角色名称" align="center">
+            <el-table-column label="序号" align="center" type="index" width="60" :resizable="false"></el-table-column>
+            <el-table-column label="角色名称" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.desc }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="创建时间" align="center">
+            <el-table-column label="创建时间" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.created }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span class="handle_authority" @click="editRole(scope.$index, scope.row)">编辑权限</span>
               </template>

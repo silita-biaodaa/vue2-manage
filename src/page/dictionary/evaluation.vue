@@ -57,18 +57,18 @@
             border
             :header-cell-style="headClass"
           >
-            <el-table-column label="序号" align="center" type="selection" width="60"></el-table-column>
-            <el-table-column label="地区" align="center">
+            <el-table-column label="序号" align="center" type="selection" width="60" :resizable="false"></el-table-column>
+            <el-table-column label="地区" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.region }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="评标办法名称" align="center">
+            <el-table-column label="评标办法名称" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.name }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span
                   class="handle_delete color-409"
@@ -136,13 +136,13 @@
             border
             :header-cell-style="headClass"
           >
-            <el-table-column label="序号" align="center" type="selection" width="60"></el-table-column>
-            <el-table-column label="别名名称" align="center">
+            <el-table-column label="序号" align="center" type="selection" width="60" :resizable="false"></el-table-column>
+            <el-table-column label="别名名称" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.name }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span
                   class="handle_delete cp"

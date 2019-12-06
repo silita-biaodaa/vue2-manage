@@ -102,32 +102,32 @@
             @row-click="openDetails"
             :header-cell-style="headClass"
           >
-            <el-table-column label="资质类别" align="center">
+            <el-table-column label="资质类别" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.qualType }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="资质大类" align="center">
+            <el-table-column label="资质大类" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.quaBig }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="资质小类" align="center">
+            <el-table-column label="资质小类" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.quaTiny }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="资质名称" align="center">
+            <el-table-column label="资质名称" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.quaName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="资质标准名称" align="center">
+            <el-table-column label="资质标准名称" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.benchName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span
                   class="handle_delete color-409 cp"

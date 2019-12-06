@@ -32,38 +32,38 @@
       <el-row>
         <el-col :span="24">
           <el-table border :data="tableData" :header-cell-style="headClass">
-            <el-table-column label="序号" align="center" type="index" width="60"></el-table-column>
-            <el-table-column label="操作时间" align="center">
+            <el-table-column label="序号" align="center" type="index" width="60" :resizable="false"></el-table-column>
+            <el-table-column label="操作时间" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.optTime }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="姓名" align="center">
+            <el-table-column label="姓名" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.realName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="部门" align="center">
+            <el-table-column label="部门" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.department }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="岗位" align="center">
+            <el-table-column label="岗位" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.post }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.optType }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="详情" align="center">
+            <el-table-column label="详情" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.optDesc }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="用户" align="center">
+            <el-table-column label="用户" align="center" :resizable="false">
               <template slot-scope="scope">
                 <div
                   class="color-224 user_info dfcc"

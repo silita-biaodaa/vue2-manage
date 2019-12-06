@@ -113,7 +113,7 @@
       <el-row>
         <el-col class="fs14 color-000" :span="24">
           <el-table border :data="tableData" :header-cell-style="headClass">
-            <el-table-column label="手机" align="center">
+            <el-table-column label="手机" align="center" :resizable="false">
             <template slot-scope="scope">
               <span
                 style="color: #244CD7;border-bottom: 1px solid #244CD7;"
@@ -122,29 +122,29 @@
               >{{ scope.row.phoneNo }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="用户类别" align="center">
+          <el-table-column label="用户类别" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.userType }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="意见类别" align="center">
+          <el-table-column label="意见类别" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.type }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="反馈内容" align="center">
+          <el-table-column label="反馈内容" align="center" :resizable="false">
             <template slot-scope="scope">
               <div class="text-l">
                 <span>{{ scope.row.problem }}</span>
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="反馈时间" align="center">
+          <el-table-column label="反馈时间" align="center" :resizable="false">
             <template slot-scope="scope">
               <span>{{ scope.row.startTime }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="备注" align="center">
+          <el-table-column label="备注" align="center" :resizable="false">
             <template slot-scope="scope">
               <el-input
                 class="feedback_input"
@@ -155,7 +155,7 @@
               >{{scope.row.remark?scope.row.remark : ""}}</el-input>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center">
+          <el-table-column label="操作" align="center" :resizable="false">
             <template slot-scope="scope">
               <span
                 class="feedBack_state"
