@@ -15,6 +15,10 @@ export default {};
 @color: #dddfe4;
 @font_Color: #b6b6b6;
 @inputHeight: 48px;
+/* 解决element-ui的table表格控件表头与内容列不对齐问题 */
+.el-table th.gutter{
+  display: table-cell !important;
+}
 .el-header {
   min-width: 1330px;
 }
