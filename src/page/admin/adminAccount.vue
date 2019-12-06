@@ -62,7 +62,7 @@
                 <span>{{ scope.row.created }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" :resizable="false">
+            <el-table-column label="操作" align="center" width="calc(100% - 1050)" :resizable="false">
               <template slot-scope="scope">
                 <div class="dfcc user_info">
                   <div
