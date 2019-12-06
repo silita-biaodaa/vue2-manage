@@ -31,38 +31,38 @@
       <el-row>
         <el-col :span="24">
           <el-table class="public_table" border :data="tableData" :header-cell-style="headClass">
-            <el-table-column label="序号" align="center" type="index" width="60" :resizable="false"></el-table-column>
-            <el-table-column label="姓名" align="center" width="180" :resizable="false">
+            <el-table-column label="序号" align="center" type="index" :resizable="false"></el-table-column>
+            <el-table-column label="姓名" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.realName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="手机号" align="center" width="180" :resizable="false">
+            <el-table-column label="手机号" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.phone }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="部门" align="center" width="150" :resizable="false">
+            <el-table-column label="部门" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.department }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="岗位" align="center" width="150" :resizable="false">
+            <el-table-column label="岗位" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.post }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="角色" align="center" width="150" :resizable="false">
+            <el-table-column label="角色" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.desc }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="注册时间" align="center" width="180" :resizable="false">
+            <el-table-column label="注册时间" align="center" :resizable="false">
               <template slot-scope="scope">
                 <span>{{ scope.row.created }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" width="calc(100% - 1050)" :resizable="false">
+            <el-table-column label="操作" align="center" :resizable="false">
               <template slot-scope="scope">
                 <div class="dfcc user_info">
                   <div
