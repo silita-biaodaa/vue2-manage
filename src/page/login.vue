@@ -56,8 +56,8 @@ export default {
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       },
       showLogin: false,
-      yAxisData: [],
-      seriesData: [],
+      yAxisData: [], //图表y轴数据;
+      seriesData: [], //图表x轴数据;
       checked: false,
       logo: require("../assets/img/logo.png"),
     };

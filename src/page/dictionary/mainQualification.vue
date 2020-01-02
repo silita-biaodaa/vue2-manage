@@ -473,19 +473,17 @@ export default {
   data() {
     return {
       firm: "",
-      level1: "",
-      level2: "",
-      level3: "",
-      level4: "",
-      level5: "",
-      levelList1: [],
-      levelList2: [],
-      levelList3: [],
-      levelList4: [],
-      levelList5: [],
-      checkBox1: false,
-      checkBox2: false,
-      checkBox3: false,
+      level1: "", //一级筛选值
+      level2: "",//二级筛选值
+      level3: "",//三级筛选值
+      level4: "",//四级筛选值
+      levelList1: [], //资质筛选一级列表;
+      levelList2: [],//资质筛选二级列表;
+      levelList3: [],//资质筛选三级列表;
+      levelList4: [],//资质筛选四级列表;
+      checkBox1: false, //二级筛选框展示参数;
+      checkBox2: false, //三级筛选框展示参数;
+      checkBox3: false, //四级筛选框展示参数;
       sources1: "",
       sources2: "",
       sources3: "",
@@ -504,7 +502,7 @@ export default {
       firm: "",
       checkList: [],
       showMask: false,
-      showAlias: false,
+      showAlias: false, //别名弹窗
       changeMask: false, //修改弹窗
       ruleForm: {
         qualType: "",
@@ -532,7 +530,7 @@ export default {
           { required: true, message: "请选择资质类别", trigger: "blur" }
         ]
       },
-      ruleFormChange: {
+      ruleFormChange: { //添加资质表单;
         qualType: "",
         quaBig: "",
         quaTiny: "",
@@ -541,7 +539,7 @@ export default {
         levelType: "",
         bizType: ""
       },
-      rulesChange: {
+      rulesChange: { //表单过滤值
         qualType: [
           { required: true, message: "请选择资质类别", trigger: "blur" }
         ],
@@ -562,7 +560,7 @@ export default {
       ids: "",
       type: "",
       typeList: [],
-      qualType: [
+      qualType: [ //资质属性
         {
           id: "0",
           value: "公告和企信"
@@ -576,7 +574,7 @@ export default {
           value: "企信"
         }
       ],
-      levelsType: [
+      levelsType: [ //等级属性
         {
           id: "0",
           value: "不分等级"
@@ -599,16 +597,16 @@ export default {
       sendVal: "",
       levelData: [], //资质等级;
       modeData: [], //资质属性;
-      changeLevel: false,
-      changeMode: false,
-      levelBtn: true,
+      changeLevel: false, //等级弹窗
+      changeMode: false, //属性弹窗
+      levelBtn: true, //等级按钮,当不分等级时修改按钮消失;
       checkAll: false,
       checkedMode: [], //属性列表
-      checkModeList: [],
+      checkModeList: [], //选择属性列表
       checkedLevel: ["特级"], //等级列表
       levels: [],
       modes: ["公告", "企信"],
-      isIndeterminate: true,
+      isIndeterminate: true, 
       checkValue: "",
       checkModeValue: "",
       checkForm: [],
@@ -623,24 +621,27 @@ export default {
       repeated: true, //防止重复触发事件;
       checkAll: false,
       checkedAlias: [],
-      isIndeterminate: false,
+      isIndeterminate: false, 
       aliasTableList: [] //当前对应的资质的资质名称;
     };
   },
   methods: {
+    //资质名称维护列表;
     mainQualList() {
       const params = {
         pageNo: this.pagenum,
         pageSize: this.pagesize,
         benchName: this.firm,
-        ids: this.ids
+        ids: this.ids //筛选资质id
       };
       qualList(params).then(res => {
         if (res.code == "1") {
           const { data, total } = res;
+          //表格数据;
           this.tableData = data;
           this.total = total;
           if (data.length > 0) {
+            // 赋值,修改样式;
             var tr = document.getElementsByTagName("tr");
             for (let i = 0; i < tr.length - 1; i++) {
               tr[i].style.backgroundColor = "#fff";
@@ -694,7 +695,7 @@ export default {
           } else {
             this.levelBtn = true;
           }
-          console.info('')
+          //等级属性;
           this.levelData = data;
         } else {
           console.info("资质等级接口不通");
@@ -738,6 +739,7 @@ export default {
             ? "asc"
             : "desc"
       };
+      //资质别名列表
       aliasList(params).then(res => {
         if (res.code == "1") {
           const { list, total } = res.data;
@@ -806,6 +808,7 @@ export default {
           this.levelList1 = data;
           this.sources1 = this.level1;
           this.ids = this.level1;
+          //判断下一级资质是否有值,否则不展示;
           if (data !== undefined && this.sources1 !== "") {
             for (let i of data) {
               if (this.level1 == i.id) {
@@ -889,6 +892,7 @@ export default {
               bizType,
               levelType
             } = this.ruleForm;
+            //填写大类必须有小类;
             if (quaTiny !== "" && quaBig == "") {
               this.$message({
                 type: "warning",
@@ -907,6 +911,7 @@ export default {
                 bizType: bizType,
                 levelType: levelType
               };
+              //添加别名接口;
               addQual(params).then(res => {
                 if (res.code == "1") {
                   this.repeated = true;
@@ -1002,6 +1007,7 @@ export default {
         });
       }
     },
+    //关闭弹窗，清空所有值;
     cancelMask() {
       this.showMask = false;
       this.aliasMask = false;
@@ -1019,6 +1025,7 @@ export default {
       };
       this.checkedAlias = [];
     },
+    //查询值;
     searchData() {
       this.mainQualList();
       this.aliasInfo("");
@@ -1301,6 +1308,7 @@ export default {
             }
           }
         }
+        //修改等级
         changeLevelList({ quaCode: this.code, codes: result }).then(res => {
           if (res.code == "1") {
             this.repeated = true;

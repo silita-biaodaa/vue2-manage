@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/page/login'
 import Manage from '@/page/manage'
-import Tender from '@/page/tender'
+import Tender from '@/page/tender' //招标
 import Bin from '@/page/bin'
 import UserList from '@/page/userlist'
 import Quality from '@/page/quality'
@@ -22,16 +22,16 @@ import Rease from '@/page/rease'
 import Quillediter from '@/page/QuillEditor'
 import Detail from '@/page/detail'
 import Relevance from '@/page/relevance'
-import Recycle from '@/page/recycle'
+import Recycle from '@/page/recycle' //回收站
 import Bidding from '@/page/bidding'
-import PassWord from '@/page/passWord'
+import PassWord from '@/page/passWord' //修改密码
 
 Vue.use(Router)
 
 const routes = [
 	{
-		path: '/',
-		redirect: '/login'
+		path: '/', //登录页面
+		redirect: '/login' 
 	},
 	{
 		path: '/login',
@@ -49,12 +49,12 @@ const routes = [
 		name: 'manage',
 		children: [
 			{
-				path: '/tender',
+				path: '/tender', //招标
 				component: Tender,
 				name: 'tender'
 			},
 			{
-				path: '/addgoods',
+				path: '/addgoods', //中标
 				component: Addgoods,
 				name: 'addGoods'
 			},
@@ -72,11 +72,6 @@ const routes = [
 				path: '/home',
 				component: Home,
 				name: 'home'
-			},
-			{
-				path: '/showCSS',
-				component: resolve => require(['@/page/showCSS.vue'], resolve),
-				name: 'showCSS'
 			},
 			{
 				path: '/userlist',
@@ -189,62 +184,62 @@ const routes = [
 			// 	component: resolve => require(['@/page/user/user.vue'], resolve)
 			// },
 			{
-				path: '/userInfo',
+				path: '/userInfo', //用户信息
 				name: 'userInfo',
 				component: resolve => require(['@/page/user/userInfo.vue'], resolve)
 			},
 			{
-				path: '/activeUser',
+				path: '/activeUser', //活跃用户
 				name: 'activeUser',
 				component: resolve => require(['@/page/user/activeUser.vue'], resolve)
 			},
 			{
-				path: '/orderManage',
+				path: '/orderManage', //订单管理
 				name: 'orderManage',
 				component: resolve => require(['@/page/user/orderManage.vue'], resolve)
 			},
 			{
-				path: '/feedBack',
+				path: '/feedBack', //意见反馈
 				name: 'feedBack',
 				component: resolve => require(['@/page/user/feedBack.vue'], resolve)
 			},
 			{
-				path: '/financial',
+				path: '/financial', 
 				name: 'financial',
 				component: resolve => require(['@/page/business/financial.vue'], resolve)
 			},
 			{
-				path: '/adminAccount',
+				path: '/adminAccount', //管理账号
 				name: 'adminAccount',
 				component: resolve => require(['@/page/admin/adminAccount.vue'], resolve)
 			},
 			{
-				path: '/adminRecord',
-				name: 'adminRecord',
+				path: '/adminRecord', //管理权限
+				name: 'adminRecord', 
 				component: resolve => require(['@/page/admin/adminRecord.vue'], resolve)
 			},
 			{
-				path: '/adminRole',
+				path: '/adminRole', //添加角色
 				name: 'adminRole',
 				component: resolve => require(['@/page/admin/adminRole.vue'], resolve)
 			},
 			{
-				path: '/evaluation', 
+				path: '/evaluation', //评标办法名称
 				name: 'evaluation',
 				component: resolve => require(['@/page/dictionary/evaluation.vue'], resolve)
 			},
 			{
-				path: '/mainQualification',
+				path: '/mainQualification', //资质名称维护
 				name: 'mainQualification',
 				component: resolve => require(['@/page/dictionary/mainQualification.vue'], resolve)
 			},
 			{
-				path: '/level',
+				path: '/level', //资质等级维护
 				name: 'level',
 				component: resolve => require(['@/page/dictionary/level.vue'], resolve)
 			},
 			{
-				path: '/parsing',
+				path: '/parsing', //资质解析词典
 				name: 'parsing',
 				component: resolve => require(['@/page/dictionary/parsing.vue'], resolve)
 			}

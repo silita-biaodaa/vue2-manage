@@ -115,7 +115,7 @@ export default {
       pagenum: 1, //当前页面数
       total: null, //条数
       sendVal: "",
-      aliasName: "",
+      aliasName: "", //别名名称;
       code: "",
       firm: "",
       multipleAlias: [],
@@ -132,6 +132,7 @@ export default {
     };
   },
   methods: {
+    //获取等级列表数据
     getLevelList() {
       levelListData({
         currentPage: this.pagenum,
@@ -143,6 +144,7 @@ export default {
           this.total = total;
           if (list !== undefined) {
             if (list.length > 0) {
+              //列表第一条展示样式;
               var tr = document.getElementsByTagName("tr");
               for (let i = 0; i < tr.length; i++) {
                 tr[i].style.backgroundColor = "#fff";
@@ -162,6 +164,7 @@ export default {
         }
       });
     },
+    //获取等级别名;
     getLevelAlias(code) {
       const params = {
         currentPage: 1,
@@ -171,6 +174,7 @@ export default {
         rank: this.radio,
         sort: this.radio == 'createTime'? (this.isActive ? 'asc' : 'desc'): (this.isCombine ? 'asc' : 'desc')
       };
+      //等级别名列表;
       levelAlias(params).then(res => {
         if (res.code == "1") {
           const { list } = res.data;
@@ -286,6 +290,7 @@ export default {
         this.getLevelAlias(this.code);
       }
     },
+    //按照时间和拼音排序;
     checkRadio() {
       if (this.radio == "code") {
         this.hasCheck = true;

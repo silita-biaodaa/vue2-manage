@@ -97,11 +97,10 @@ export default {
           new Date().getDate()
         )
       ],
-      yAxisData: [],
-      seriesData: [],
-      showEcharts: true,
+      yAxisData: [], //y轴数据;
+      seriesData: [], //x轴数据;
+      showEcharts: true, //图表加载;
       total: "",
-      loading: false,
       code: "",
       list: "",
       loading: true,
@@ -112,6 +111,7 @@ export default {
     this.$nextTick(function() {});
   },
   methods: {
+    //统计公告数据
     noticeTotal() {
       noticeNum({}).then(res => {
         if (res.code == "1") {
@@ -124,6 +124,7 @@ export default {
         }
       });
     },
+    //省份接口筛选;
     getArea() {
       listArea({ areaParentId: 0 }).then(res => {
         if (res.code == "1") {
@@ -135,10 +136,7 @@ export default {
         }
       });
     },
-    resizeCharts(chartBox) {
-      myChart.style.width = chartBox.style.width + "px";
-      myChart.style.height = chartBox.style.height + "px";
-    },
+    //渲染表格数据;
     getTableNum() {
       this.yAxisData = [];
       this.seriesData = [];
@@ -160,6 +158,7 @@ export default {
         startDate: startDate,
         endDate: endDate
       };
+      //获取表格展示数据;
       siteNoticeNum(params).then(res => {
         if (res.code == "1") {
           const { list, sumTotal } = res.data;
@@ -178,6 +177,7 @@ export default {
         }
       });
     },
+    //表格;
     getCharts(yAxisData,seriesData) {
       var option = {
         color: ["#00759D"],
@@ -225,8 +225,10 @@ export default {
           }
         ]
       };
+      //动态添加表格高度;
       var chartBox = document.getElementsByClassName("charts")[0];
       var myChart = echarts.init(document.getElementById("myChart"));
+      //赋值;
       myChart.setOption(option);
       this.autoHeight = yAxisData.length * 35 + 50;
       myChart.getDom().style.height = `${this.autoHeight}px`;
@@ -238,10 +240,12 @@ export default {
           `${this.autoHeight}`
         );
         this.loading = false;
+        //高度赋值;
       myChart.getDom().childNodes[0].childNodes[0].style.height = `${this.autoHeight}px`;
       //改变大小后重新加载图表;
       myChart.resize();
       var categoryList = this.list;
+      //点击y轴跳转相对应的地址;
       myChart.on('click',function(param){
         for(let i of categoryList) {
           if(param.value == i.name) {

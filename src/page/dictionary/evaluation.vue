@@ -279,6 +279,7 @@ export default {
     };
   },
   methods: {
+    //获取省份;
     getArea() {
       listArea({ areaParentId: 0 }).then(res => {
         if (res.code == "1") {
@@ -308,6 +309,7 @@ export default {
           }
           this.tableData = data;
           if (data.length > 0) {
+            //第一条数据样式展示;
             var tr = document.getElementsByTagName("tr");
               for (let i = 0; i < tr.length - 1; i++) {
                 tr[i].style.backgroundColor = "#fff";
@@ -330,6 +332,7 @@ export default {
         }
       });
     },
+    //删除评标办法;
     infoList(ids) {
       deleteInfo({ ids: ids }).then(res => {
         if (res.code == "1") {
@@ -349,6 +352,7 @@ export default {
         }
       });
     },
+    //删除评标办法别名
     aliasList(idsStr) {
       deleteAlias({ idsStr: idsStr }).then(res => {
         if (res.code == "1") {
@@ -368,6 +372,7 @@ export default {
         }
       });
     },
+    //获取评标办法别名;
     getAlias(nameCode) {
       const params = {
         stdCode: nameCode,
@@ -419,6 +424,7 @@ export default {
     addAlias() {
       this.showAlias = true;
     },
+    //取消清空值;
     cancelMask() {
       if (this.showMask) {
         this.showMask = false;
@@ -590,6 +596,7 @@ export default {
         }
       });
     },
+    //提交表单;
     submitFormChange(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

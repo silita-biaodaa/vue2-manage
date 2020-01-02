@@ -6,6 +6,7 @@
         <el-row type="flex">
           <el-col :span="7">
             <div class="dfrca w33_right">
+              <!-- 昨日订单 -->
               <div class="drc">
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon14.png" alt />
@@ -15,6 +16,7 @@
                   <div class="fs14 color-999">昨日订单</div>
                 </div>
               </div>
+              <!-- 今日订单 -->
               <div class="drc">
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon1.png" alt />
@@ -28,6 +30,7 @@
           </el-col>
           <el-col :span="7" class="w33_right">
             <div class="dfrca">
+              <!-- 昨日已付 -->
               <div class="dfcc">
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon19.png" alt />
@@ -37,6 +40,7 @@
                   <div class="fs14 color-999">昨日已付</div>
                 </div>
               </div>
+              <!-- 今日已付 -->
               <div class="dfcc">
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon7.png" alt />
@@ -50,6 +54,7 @@
           </el-col>
           <el-col :span="7" class="w33_right">
             <div class="dfrca">
+              <!-- 今日应收 -->
               <div class="dfcc">
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon8.png" alt />
@@ -59,6 +64,7 @@
                   <div class="fs14 color-999">今日应收</div>
                 </div>
               </div>
+              <!-- 今日实收 -->
               <div class="dfcc">
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon6.png" alt />
@@ -71,6 +77,7 @@
             </div>
           </el-col>
           <el-col :span="3">
+            <!-- 总资金 -->
             <div class="dfcc">
               <div class="top_img mr20">
                 <img src="../../assets/img/icon13.png" alt />
@@ -231,7 +238,7 @@ export default {
   data() {
     return {
       userList: "",
-      orderTypes: [
+      orderTypes: [ //订单类别;
         {
           label: "全部",
           value: ""
@@ -247,9 +254,29 @@ export default {
         {
           label: "续费会员",
           value: "2"
-        }
+        },
+        {
+          label: "重庆人员专查",
+          value: "3"
+        },
+        {
+          label: "重庆企业专查",
+          value: "4"
+        },
+        {
+          label: "住建专查",
+          value: "5"
+        },
+        {
+          label: "公路专查",
+          value: "6"
+        },
+        {
+          label: "水利专查",
+          value: "7"
+        },
       ],
-      states: [
+      states: [ //付款状态
         {
           value: "",
           label: "全部"
@@ -271,7 +298,7 @@ export default {
           label: "已失效"
         }
       ],
-      channels: [
+      channels: [//渠道
         {
           value: "",
           label: "全部"
@@ -302,13 +329,14 @@ export default {
       orderType: "全部",
       pagesize: 15, // 当前页面条数
       pagenum: 1, //当前页面数
-      tableData: [],
-      personList: null,
-      hideMask: "hideMask",
+      tableData: [], //表格数据
+      personList: null, //传给子组件的值;
+      hideMask: "hideMask", 
       sendVal: ""
     };
   },
   methods: {
+    //订单列表展示;
     orderList() {
       const params = {
         pageNo: this.pagenum,
@@ -326,6 +354,7 @@ export default {
           this.total = total;
           if (data.length) {
             for (let i of data) {
+              // timestampToTime()筛选日期;
               i.createTime = timestampToTime(i.createTime);
               i.money = parseFloat(i.money).toFixed(2);
               i.truePay = parseFloat(i.truePay).toFixed(2);
@@ -337,10 +366,12 @@ export default {
         }
       });
     },
+    //订单统计接口渲染;
     orderTotal() {
       orderNum({}).then(res => {
         if (res.code == "1") {
           const { data } = res;
+          //保留两位小数点;
           data.totalMoney = data.totalMoney.toFixed(2);
           data.todayReceivable = data.todayReceivable.toFixed(2);
           data.todayTrueMoney = data.todayTrueMoney.toFixed(2);
@@ -350,6 +381,7 @@ export default {
         }
       });
     },
+    //切换刷新列表;
     changetable() {
       this.pagenum = 1;
       setTimeout(() => {
@@ -380,6 +412,7 @@ export default {
       this.sendVal = true;
       this.personList = row;
     },
+    //关闭弹窗刷新列表;
     handleRefesh(showMask) {
       if (showMask) {
         setTimeout(() => {
@@ -387,6 +420,7 @@ export default {
         }, 100);
       }
     },
+    //表格头部样式;
     headClass() {
       return "text-align: center;background:#DDDFE4;color: #000000";
     }

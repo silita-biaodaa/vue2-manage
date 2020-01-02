@@ -265,6 +265,7 @@ export default {
           document.getElementsByTagName("input")[8].value = "";
         }
       }
+      //增送会员弹窗;
       this.$msgbox({
         title: "赠送会员",
         message: h("p", null, [
@@ -325,6 +326,7 @@ export default {
         }
       });
     },
+    //添加备注提交表单;
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

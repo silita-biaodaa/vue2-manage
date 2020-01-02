@@ -6,6 +6,7 @@
         <el-row type="flex">
           <el-col :span="10">
             <div class="dfrca w33_right">
+              <!-- 昨日注册 -->
               <div class="drc">
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon20.png" alt />
@@ -19,6 +20,7 @@
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon9.png" alt />
                 </div>
+                <!-- 今日注册 -->
                 <div>
                   <div class="fs18 color-150 fw600">{{ todayCount }}</div>
                   <div class="fs14 color-999">今日注册</div>
@@ -28,6 +30,7 @@
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon12.png" alt />
                 </div>
+                <!-- 总注册用户 -->
                 <div>
                   <div class="fs18 color-150 fw600">{{ userTotal }}</div>
                   <div class="fs14 color-999">总注册用户</div>
@@ -36,6 +39,7 @@
             </div>
           </el-col>
           <el-col :span="10" class="w33_right">
+            <!-- 昨日付费 -->
             <div class="dfrca">
               <div class="dfcc">
                 <div class="top_img mr20">
@@ -46,6 +50,7 @@
                   <div class="fs14 color-999">昨日付费</div>
                 </div>
               </div>
+              <!-- 今日付费 -->
               <div class="dfcc">
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon3.png" alt />
@@ -55,6 +60,7 @@
                   <div class="fs14 color-999">今日付费</div>
                 </div>
               </div>
+              <!-- 总付费用户 -->
               <div class="dfcc">
                 <div class="top_img mr20">
                   <img src="../../assets/img/icon11.png" alt />
@@ -66,6 +72,7 @@
               </div>
             </div>
           </el-col>
+          <!-- 过期用户 -->
           <el-col :span="4">
             <div class="dfcc">
               <div class="top_img mr20">
@@ -80,6 +87,7 @@
         </el-row>
       </div>
     </div>
+    <!-- 统计表格 -->
     <div class="bg-fff pb30">
       <div class="pt20 pb20 pl20 pr20 userInfo_top">
         <el-row class="bg-fff mb20">
@@ -259,14 +267,15 @@ export default {
       total: null, //总数
       pagesize: 15, // 当前页面条数
       pagenum: 1, //当前页面数
-      tableData: [],
+      tableData: [], //表格数据;
       sendVal: false,
       personList: null, //个人用户信息,
       userTotal: "",
-      isAllows: null
+      isAllows: null //权限管理;
     };
   },
   methods: {
+    // 用户统计列表赋值
     userInfo() {
       userNum({}).then(res => {
         if (res.code == "1") {
@@ -291,6 +300,7 @@ export default {
         }
       });
     },
+    //用户列表数据展示;
     userInfoList() {
       const params = {
         currentPage: this.pagenum,

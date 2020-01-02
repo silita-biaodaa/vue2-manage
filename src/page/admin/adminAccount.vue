@@ -174,6 +174,7 @@ import { timestampToTime } from "../../public";
 import { fail } from "assert";
 export default {
   data() {
+    //表单验证
     var validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入名称"));
@@ -186,33 +187,34 @@ export default {
     };
     return {
       firm: "",
-      tableData: [],
+      tableData: [], //表格数据列表
       total: 0,
       pagesize: 15, // 当前页面条数
       pagenum: 1, //当前页面数
-      sendVal: "",
+      sendVal: "", //自定义组件传值;
       roleInfo: null,
       list: null, //清空添加所有值
-      role: "",
+      role: "", //角色列表;
       desc: "",
-      edit: false,
-      roleList: null,
-      ruleFormEdit: {
+      edit: false, //编辑窗口是否展示;
+      roleList: null, //角色列表
+      ruleFormEdit: { //表单值
         name: "",
         phone: "",
         depart: "",
         jobs: ""
       },
-      rulesEdit: {
+      rulesEdit: { //验证
         name: [{ required: true, validator: validatePass, trigger: "blur" }],
         depart: [{ message: "请输入部门", trigger: "blur" }],
         jobs: [{ message: "请输入岗位", trigger: "blur" }]
       },
-      labelPosition: "right",
+      labelPosition: "right", //表单样式靠右;
       isAllows: null //接受路由可操作的值;
     };
   },
   methods: {
+    //管理账号列表;
     accountList() {
       const params = {
         currentPage: this.pagenum,
@@ -225,6 +227,7 @@ export default {
           if (list.length > 0) {
             for (let i of list) {
               if (i.created) {
+                //筛选时间timestampToTime方法;
                 i.created = timestampToTime(i.created).slice(0, 10);
               }
             }
@@ -236,6 +239,7 @@ export default {
         }
       });
     },
+    //添加角色;
     getRole() {
       roleAll().then(res => {
         if (res.code == "1") {
@@ -245,6 +249,7 @@ export default {
         }
       });
     },
+    //锁定用户
     openMask(index, row) {
       this.$confirm(
         `是否${row.locks == "未锁定" ? "锁定" : "解锁"}该管理员账号？`,
@@ -299,8 +304,10 @@ export default {
         this.accountList();
       }
     },
+    //编辑角色权限
     editRole(index, row) {
       this.edit = true;
+      //获取当前行的数据;
       const { realName, phone, department, post, desc } = row;
       this.roleList = row;
       this.ruleFormEdit = {
@@ -311,6 +318,7 @@ export default {
       };
       this.desc = desc;
     },
+    //关闭弹窗，清空值;
     closeMask() {
       this.edit = false;
       this.ruleFormEdit = {
@@ -320,6 +328,7 @@ export default {
         jobs: ""
       };
     },
+    //重置密码;
     setWord(index, row) {
       const params = {
         uid: row.uid,
@@ -350,6 +359,7 @@ export default {
           });
         });
     },
+    //提交订单表单;
     submitFormEdit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -381,6 +391,7 @@ export default {
               rid: this.id,
               uid: this.roleList.uid
             };
+            //更新列表的值;
             updateAccount(params).then(res => {
               if (res.code == "1") {
                 this.$message({
@@ -400,9 +411,11 @@ export default {
         }
       });
     },
+    //接受子组件传值,刷新列表
     handleRefesh(showMask) {
       if (!showMask) {
         setTimeout(() => {
+          //表格列表刷新赋值;
           return this.accountList();
         }, 100);
       }
@@ -455,6 +468,7 @@ export default {
     padding: 0 30px;
     margin-top: 30px;
   }
+  //弹窗样式
   .dialog {
     position: fixed;
     top: 0;

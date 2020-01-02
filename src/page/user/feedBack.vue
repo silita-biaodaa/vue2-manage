@@ -204,11 +204,11 @@ export default {
       tableData: [], //意见反馈列表数据
       pagesize: 15, // 当前页面条数
       pagenum: 1, //当前页面数
-      firm: "",
-      personList: null,
+      firm: "", //输入框的值;
+      personList: null, //传给父组件的值;
       sendVal: "",
       hideMask: "hideMask", //是否从意见反馈页面点击查看详情;
-      userType: [
+      userType: [//用户类别
         {
           values: "",
           label: "全部"
@@ -230,7 +230,7 @@ export default {
           label: "过期"
         }
       ],
-      ideaType: [
+      ideaType: [//意见类别
         {
           values: "",
           label: "全部"
@@ -248,7 +248,7 @@ export default {
           label: "吐槽"
         }
       ],
-      status: [
+      status: [//状态
         {
           values: "",
           label: "全部"
@@ -267,6 +267,7 @@ export default {
     };
   },
   methods: {
+    //意见反馈统计数量;
     feedNumber() {
       feedCount().then(res => {
         if (res.code == "1") {
@@ -279,6 +280,7 @@ export default {
         }
       });
     },
+    //意见反馈列表;
     feedBackList() {
       const params = {
         currentPage: this.pagenum,
@@ -346,6 +348,7 @@ export default {
       this.sendVal = true;
       this.personList = row;
     },
+    //是否处理该信息;
     changeState(index, row) {
       if (row.state == "2") {
         this.$confirm("您已处理过该信息", "提示", {
