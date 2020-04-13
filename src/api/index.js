@@ -1,12 +1,13 @@
 import axios from 'axios'
-
+import Vue from 'vue'
+Vue.prototype.$http = axios
 // const baseURL = 'http://192.168.1.161:8080/biaodaa-back/'
 // const baseURL = 'http://192.168.1.131:8080/'
 const baseURL = 'http://pre-admin.biaodaa.com/'
 // const baseURL = 'http://admin.biaodaa.com/'
 
 
-axios.defaults.baseURL = baseURL
+axios.defaults.baseURL = baseURL;
 
 axios.interceptors.request.use(function (config) {
     // 将token给到一个前后台约定好的key中，作为请求发送
@@ -631,4 +632,11 @@ export const addAnalysisAlias = params => {
 //资质解析删除
 export const deleteAnalysis = params => {
     return axios.post('analysis/del',params).then(res => res.data);
+}
+
+
+
+//资质解析删除
+export const fromData = params => {
+    return axios.post('api/v1/custom/list/form',params).then(res => res.data);
 }

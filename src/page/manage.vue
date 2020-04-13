@@ -191,11 +191,9 @@ export default {
   },
   methods: {
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
       this.submenuKey = "" + key;
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse;

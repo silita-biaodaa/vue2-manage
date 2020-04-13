@@ -28,11 +28,11 @@ module.exports = {
     assetsSubDirectory: 'static', // 静态文件夹
     assetsPublicPath: '/',  // 发布路径
     proxyTable: {   //常用来配置代理的API的地方
-      '/proxy':{
+      '/api':{
         target:'http://admin.biaodaa.com',
         changeOrigin:true,
         pathRewrite:{
-          '^/proxy':''
+          '^/api':''
         }
       }
     },

@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
 import { register, List, searchPower, siteNoticeNum } from "@/api/index";
 import { checkPhone, setCookie, removeCookie, getCookies, timestampToTime } from "../public";
 

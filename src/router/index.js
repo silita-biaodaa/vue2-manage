@@ -242,13 +242,29 @@ const routes = [
 				path: '/parsing', //资质解析词典
 				name: 'parsing',
 				component: resolve => require(['@/page/dictionary/parsing.vue'], resolve)
-			}
+			},
+			{//定制表单
+				path:'/fromData',
+				name:'fromData',
+				component:resolve => require(['@/page/data/fromData.vue'],resolve)
+			},
+			{//订单管理
+				path:'/orderData',
+				name:'orderData',
+				component:resolve => require(['@/page/data/orderData.vue'],resolve)
+			},
+			{//客户管理
+				path:'/customerData',
+				name:'customerData',
+				component:resolve => require(['@/page/data/customerData.vue'],resolve)
+			},
 		]
 	}
 ]
 
 
 export default new Router({
+	mode:'history',
 	routes,
 	strict: process.env.NODE_ENV !== 'production',
 })
