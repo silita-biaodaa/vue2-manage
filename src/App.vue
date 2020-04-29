@@ -379,6 +379,16 @@ input[type="password"]:focus {
     border-right: 1px solid #DDDFE4;
   }
 }
+
+input:-ms-input-placeholder,textarea:-ms-input-placeholder {
+    color:#B6B6B6;
+}
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {
+    color:#B6B6B6;
+}
+input::-moz-input-placeholder,textarea::-moz-input-placeholder {
+    color:#B6B6B6;
+}
 // .el-tree:first-child {
 //   background-color: red;
 // }

@@ -183,7 +183,7 @@ export default {
       childNum: 0,
       tabNum: 0,
       userName: "",
-      isAllowS: false,
+      isAllowS: true,
       submenuKey: "", //展开的二级menu的index
       itemKey: "", // 展开的三级irem的index
       number: "1",

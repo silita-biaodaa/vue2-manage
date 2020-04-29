@@ -37,7 +37,7 @@
                     ></el-date-picker>
                 </div>
             </div>
-            <div class="right">总收入：123456元</div>
+            <div class="right fs16 color-282">总收入：{{price}}元</div>
         </div>
         <div class="pl30 pr30 pb30 pt20 mian">
             <div class="serarch-box mb20">
@@ -54,7 +54,12 @@
                 </el-table-column>
                 <el-table-column label="手机号" align="center" :resizable="false">
                     <template slot-scope="scope">
-                        <span class="href">{{ scope.row.phone }}</span>
+                        <template v-if="scope.row.biaoUserId">
+                            <span style="color: #244CD7;border-bottom: 1px solid #244CD7;" class="cp" @click="openMask(scope.row)">{{ scope.row.phone }}</span>
+                        </template>
+                        <template v-else>
+                            <span>{{ scope.row.phone }}</span>
+                        </template>
                     </template>
                 </el-table-column>
                 <el-table-column label="称呼" align="center" :resizable="false">
@@ -69,12 +74,32 @@
                 </el-table-column>
                 <el-table-column label="交货状态" align="center" :resizable="false">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.finishState | finishState }}</span>
+                        <select  class="list-select" v-model="scope.row.finishState" placeholder="请选择" @change="changeData(scope.row)">
+                            <option v-for="item in finishList" :key="item.id" :value="item.id">{{item.value}}</option>
+                        </select>
+                        <!-- <el-select class="list-select" v-model="scope.row.finishState" placeholder="请选择" style="width:100px" @change="changeData(scope.row)">
+                            <el-option
+                                v-for="item in finishList"
+                                :key="item.id"
+                                :label="item.value"
+                                :value="item.id"
+                            ></el-option>
+                        </el-select> -->
                     </template>
                 </el-table-column>
                 <el-table-column label="付款状态" align="center" :resizable="false">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.payState | payState }}</span>
+                        <select  class="list-select" v-model="scope.row.payState" placeholder="请选择"  @change="changeData(scope.row)">
+                            <option v-for="item in payList" :key="item.id" :value="item.id">{{item.value}}</option>
+                        </select>
+                        <!-- <el-select class="list-select"  v-model="scope.row.payState" placeholder="请选择" style="width:100px" @change="changeData(scope.row)">
+                            <el-option
+                                v-for="item in payList"
+                                :key="item.id"
+                                :label="item.value"
+                                :value="item.id"
+                            ></el-option>
+                        </el-select> -->
                     </template>
                 </el-table-column>
                 <el-table-column label="定制内容" align="center" :resizable="false">
@@ -105,6 +130,12 @@
                 ></el-pagination>
             </div>
         </div>
+        <jlPopup
+        v-model="sendVal"
+        :showMask="true"
+        :personList="personList"
+        :hideMask="true"
+        ></jlPopup>
     </div>
 </template>
 <script>
@@ -124,9 +155,6 @@ export default {
             },
             payList:[
                 {
-                    value:'全部',
-                    id:''
-                },{
                     value:'未付款',
                     id:0
                 },{
@@ -142,9 +170,6 @@ export default {
             ],
             finishList:[
                 {
-                    value:'全部',
-                    id:''
-                },{
                     value:'未处理',
                     id:0
                 },{
@@ -158,6 +183,9 @@ export default {
             time:'',
             list:[],
             total:0,
+            price:0,
+            personList:null,
+            sendVal:'',
 
         };
     },
@@ -172,6 +200,14 @@ export default {
     },
     created() {
         // console.group('创建完毕状态===============》created');
+        let that=this;
+        this.$http({
+            method:'post',
+            url:'/api/v1/custom/total/price',
+            data:{}
+        }).then(res =>{
+            that.price=res.data.data;
+        })
         this.ajax()
     },
     beforeMount() {
@@ -195,39 +231,44 @@ export default {
     destroyed() {
         // console.group('销毁完成状态===============》destroyed');
     },
-    filters:{
-        payState: function(val) {
-            switch (val) {
-                case 0:
-                    return "未付款";
-                break;
-                case 1:
-                    return "已付定金";
-                break;
-                case 2:
-                    return "已付款";
-                break;
-                case 3:
-                    return "已退款";
-                break;
-            }
-        },
-        finishState: function(val) {
-            switch (val) {
-                case 0:
-                    return "未处理";
-                break;
-                case 1:
-                    return "正在导出";
-                break;
-                case 2:
-                    return "已交付";
-                break;
-            }
-        },
-    },
+    // filters:{
+    //     payState: function(val) {
+    //         switch (val) {
+    //             case 0:
+    //                 return "未付款";
+    //             break;
+    //             case 1:
+    //                 return "已付定金";
+    //             break;
+    //             case 2:
+    //                 return "已付款";
+    //             break;
+    //             case 3:
+    //                 return "已退款";
+    //             break;
+    //         }
+    //     },
+    //     finishState: function(val) {
+    //         switch (val) {
+    //             case 0:
+    //                 return "未处理";
+    //             break;
+    //             case 1:
+    //                 return "正在导出";
+    //             break;
+    //             case 2:
+    //                 return "已交付";
+    //             break;
+    //         }
+    //     },
+    // },
     methods: {
         // 方法 集合
+        openMask(row) {
+            this.sendVal = true;
+            row.pkid=row.biaoUserId;
+            this.personList = row;
+        },
         headClass() {
             return "text-align: center;background:#DDDFE4;color: #000000;";
         },
@@ -254,6 +295,16 @@ export default {
             }).then(res =>{
                 that.list=res.data.data.list;
                 that.total=res.data.data.total;
+            })
+        },
+        changeData(data){
+            let that=this;
+            this.$http({
+                method:'post',
+                url:'/api/v1/custom/update/order',
+                data:data
+            }).then(res =>{
+                that.$alert('操作成功');
             })
         }
     }

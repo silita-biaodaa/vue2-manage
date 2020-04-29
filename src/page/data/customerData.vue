@@ -1,6 +1,6 @@
 <!-- 模型： DOM 结构 -->
 <template>
-    <div class="customerData bg-fff">
+    <div class="data28 customerData bg-fff">
         <div class="pl30 pr30 pb30 pt20 mian">
             <div class="serarch-box mb20">
                 <el-input placeholder="输入手机号码" v-model="data.phone" style="width:300px">
@@ -11,7 +11,12 @@
             <el-table class="public_table" border :data="list" :header-cell-style="headClass">
                 <el-table-column label="手机号" align="center" :resizable="false">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.phone }}</span>
+                        <template v-if="scope.row.biaoUserId">
+                            <span style="color: #244CD7;border-bottom: 1px solid #244CD7;" class="cp" @click="openMask(scope.row)">{{ scope.row.phone }}</span>
+                        </template>
+                        <template v-else>
+                            <span>{{ scope.row.phone }}</span>
+                        </template>
                     </template>
                 </el-table-column>
                 <el-table-column label="称呼" align="center" :resizable="false">
@@ -62,6 +67,12 @@
                 ></el-pagination>
             </div>
         </div>
+        <jlPopup
+        v-model="sendVal"
+        :showMask="true"
+        :personList="personList"
+        :hideMask="true"
+        ></jlPopup>
     </div>
 </template>
 <script>
@@ -77,6 +88,8 @@ export default {
             },
             list:[],
             total:0,
+            personList:null,
+            sendVal:'',
 
         };
     },
@@ -116,6 +129,11 @@ export default {
     },
     methods: {
         // 方法 集合
+        openMask(row) {
+            this.sendVal = true;
+            row.pkid=row.biaoUserId;
+            this.personList = row;
+        },
         headClass() {
             return "text-align: center;background:#DDDFE4;color: #000000;";
         },

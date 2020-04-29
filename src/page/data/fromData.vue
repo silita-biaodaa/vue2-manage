@@ -1,11 +1,12 @@
 <!-- 模型： DOM 结构 -->
 <template>
-    <div class="fromData bg-fff">
+    <div class="data28 fromData bg-fff">
         <div class="pl30 pr30 top-box dfrcb">
             <div class="left dfrcb">
                 <div class="dfrcb" style="width:246px;margin-right:60px">
                     <h4 class="color-150 fs16">状态</h4>
-                    <el-select v-model="data.state" placeholder="请选择" style="width:180px">
+                    <el-select v-model="data.state" placeholder="全部" style="width:180px">
+                        <el-option :key="''" :label="'全部'"></el-option>
                         <el-option
                             v-for="item in ztList"
                             :key="item.id"
@@ -14,7 +15,7 @@
                         ></el-option>
                     </el-select>
                 </div>
-                <div class="dfrcb" style="width:493px">
+                <div class="dfrcb" style="width:450px">
                     <h4 class="color-150 fs16">提交时间</h4>
                     <el-date-picker
                         v-model="time"
@@ -26,7 +27,7 @@
                     ></el-date-picker>
                 </div>
             </div>
-            <div class="right color-fff cp dfcc" @click="mask=true">
+            <div class="right color-fff cp dfcc" @click="showmask1">
                 <img src="../../assets/img/add_icon.png" alt />
                 <div class="ml10 fs16 fw600">生成订单</div>
             </div>
@@ -39,14 +40,19 @@
                 <button class="searchBtn fw600 fs16 cp color-fff" @click="ajax">搜索</button>
             </div>
             <el-table class="public_table fs14" border :data="list" :header-cell-style="headClass">
-                <el-table-column label="姓名" align="center" :resizable="false">
+                <el-table-column label="姓名" align="center" :resizable="false" width="120">
                     <template slot-scope="scope">
                         <span>{{ scope.row.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="手机号" align="center" :resizable="false">
+                <el-table-column label="手机号" align="center" :resizable="false" width="120">
                     <template slot-scope="scope">
-                        <span class="href" @click="jump(scope.row.phone)">{{ scope.row.phone }}</span>
+                        <template v-if="scope.row.biaoUserId">
+                            <span style="color: #244CD7;border-bottom: 1px solid #244CD7;" class="cp" @click="openMask(scope.row)">{{ scope.row.phone }}</span>
+                        </template>
+                        <template v-else>
+                            <span>{{ scope.row.phone }}</span>
+                        </template>
                     </template>
                 </el-table-column>
                 <el-table-column label="定制内容" align="center" :resizable="false">
@@ -54,30 +60,34 @@
                         <span>{{ scope.row.queryContent }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="提交时间" align="center" :resizable="false">
+                <el-table-column label="提交时间" align="center" :resizable="false"  width="180">
                     <template slot-scope="scope">
                         <span>{{ scope.row.creted }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="备注" align="center" :resizable="false">
                     <template slot-scope="scope">
+                    <div class="drc">
                         <textarea class="bor bg-f4 color-666 fs14" v-model="scope.row.remark"></textarea>
+                        <p class="cp ml20 fs14 color-409" @click="update(scope.row)">确定</p>
+                    </div>
+                        
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" :resizable="false">
                     <template slot-scope="scope">
-                        <el-select v-model="scope.row.state" placeholder="请选择" style="width:100px">
+                        <select  class="list-select" v-model="scope.row.state" placeholder="请选择" @change="update(scope.row)">
+                            <option v-for="item in ztList" :key="item.id" :value="item.id">{{item.value}}</option>
+                        </select>
+                        <!-- <el-select class="list-select" v-model="scope.row.state" placeholder="请选择" style="width:100px">
                             <el-option
                                 v-for="item in ztList"
                                 :key="item.id"
                                 :label="item.value"
                                 :value="item.id"
                             ></el-option>
-                        </el-select>
-                        <div>
-                            <span class="cp operation fs14" @click="submitFn(scope.row)">生成订单</span>
-                            <span class="cp ml20 fs14 color-409" @click="update(scope.row)">更改状态</span>
-                        </div>
+                        </el-select> -->
+                        <span class="cp ml40 operation fs14" @click="showMaskFn(scope.row)">生成订单</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -101,29 +111,35 @@
                 </h5>
                 <div class="from-box">
                     <div class="ipt-box dfrcb mb20">
-                        <font class="color-150">手机号码</font>
+                        <font class="color-150 fs16">手机号码</font>
                         <el-input style="width:400px" placeholder="请输入手机号码" v-model="submitData.phone"></el-input>
                     </div>
                     <div class="ipt-box dfrcb mb20">
-                        <font class="color-150">客户称呼</font>
+                        <font class="color-150 fs16">客户称呼</font>
                         <el-input style="width:400px" placeholder="请输入客户称呼"  v-model="submitData.name"></el-input>
                     </div>
                     <div class="ipt-box dfrcb mb20">
-                        <font class="color-150">订单价格</font>
+                        <font class="color-150 fs16">订单价格</font>
                         <el-input style="width:400px" placeholder="请输入订单价格" v-model="submitData.price"></el-input>
                     </div>
                     <div class="text-box dfrb mb20">
-                        <font class="color-150">查询内容</font>
+                        <font class="color-150 fs16">查询内容</font>
                         <textarea class="bor" placeholder="请输入查询内容" v-model="submitData.content"></textarea>
                     </div>
                     <div class="text-box dfrb mb20">
-                        <font class="color-150">备注</font>
+                        <font class="color-150 fs16">备注</font>
                         <textarea class="bor" placeholder="请输入备注" v-model="submitData.remark"></textarea>
                     </div>
                 </div>
-                <button class="btn cp" @click="submitFn(submitData)">确认</button>
+                <button class="btn cp fs16" :class="isTap?'ban':''" @click="submitFn(submitData)">确认</button>
             </div>
         </div>
+        <jlPopup
+        v-model="sendVal"
+        :showMask="true"
+        :personList="personList"
+        :hideMask="true"
+        ></jlPopup>
     </div>
 </template>
 <script>
@@ -134,9 +150,6 @@ export default {
             // 数据模型a
             ztList: [
                 {
-                    value:'全部',
-                    id:''
-                },{
                     value:'未处理',
                     id:0
                 },{
@@ -168,7 +181,11 @@ export default {
                 price:'',
                 content:'',
                 remark:''
-            }
+            },
+            isTap:false,
+            personList:null,
+            sendVal:'',
+
         };
     },
     watch: {
@@ -207,6 +224,11 @@ export default {
     },
     methods: {
         // 方法 集合
+        openMask(row) {
+            this.sendVal = true;
+            row.pkid=row.biaoUserId;
+            this.personList = row;
+        },
         headClass() {
             return "text-align: center;background:#DDDFE4;color: #000000;";
         },
@@ -236,6 +258,10 @@ export default {
             })
         },
         submitFn(data){
+            if(this.isTap){
+                return false
+            }
+            this.isTap=true;
             let that=this;
             // let data=this.submitData;
             this.$http({
@@ -246,6 +272,7 @@ export default {
                 if(that.mask){
                     that.mask=false
                 }
+                that.isTap=false;
                 that.$alert('生成成功');
             })
         },
@@ -265,8 +292,20 @@ export default {
                 that.$alert('更改成功');
             })
         },
-        jump(p){
-            // this.$router.push({ path: "/customerData" ,query:{phone:p}});
+        showMaskFn(data){
+            this.submitData=data;
+            this.mask=true;
+        },
+        showmask1(){
+            this.mask=true;
+            let d={
+                phone:'',
+                name:'',
+                price:'',
+                content:'',
+                remark:''
+            }
+            this.submitData=JSON.parse(JSON.stringify(d));
         }
     }
 };
@@ -342,6 +381,8 @@ export default {
     height: 100%;
     min-height: 60px;
     padding: 4px;
+    width: 230px;
+    display: block;
 }
 // .cell /deep/ .href{
 //     cursor: pointer;
@@ -351,4 +392,5 @@ export default {
 .cell /deep/ .operation{
     color: #FF4343;
 }
+
 </style>

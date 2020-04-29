@@ -376,7 +376,7 @@ export default {
     //父组件中获取的数据
     personList() {
       if (this.$parent.personList) {
-        this.allow = this.$parent.isAllows;
+        this.allow = this.$route.query.isAllows;
         this.person();
         this.invit();
         this.member();
